@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, Monitor, Smartphone, Globe, Zap, Star } from 'lucide-react';
+import { ExternalLink, Monitor, Smartphone, Globe, Zap, Star, AlertCircle } from 'lucide-react';
 
 export default function HomePage() {
   const [activeProject, setActiveProject] = useState(0);
+  const [iframeErrors, setIframeErrors] = useState<{[key: string]: boolean}>({});
 
   const projects = [
     {
@@ -15,67 +16,133 @@ export default function HomePage() {
       tech: ["WebGL", "Real-time Processing", "3D Animation", "Computer Vision"],
       color: "from-cyan-500 to-blue-600",
       icon: "📸",
-      featured: true
+      featured: true,
+      embedSafe: true
     },
     {
       id: 'u-request-songs',
-      title: "U Request Songs",
+      title: "Song Request App - uRequest Live",
       description: "Interactive DJ platform with crowd engagement, real-time voting, and live music streaming",
       url: "http://urequestsongs.com",
       category: "Entertainment Platform",
       tech: ["React", "WebSockets", "Audio Processing", "Real-time Voting"],
       color: "from-purple-500 to-pink-600",
       icon: "🎵",
-      featured: true
+      featured: true,
+      embedSafe: false // This site likely blocks iframe embedding
     },
     {
       id: 'fusion-events',
-      title: "Fusion Events",
+      title: "Fusion Events Website",
       description: "Professional event services platform with integrated booking, portfolio showcase, and client management",
       url: "https://www.fusion-events.ca",
       category: "Business Platform",
       tech: ["Next.js", "CRM Integration", "Performance Optimization", "SEO"],
       color: "from-emerald-500 to-teal-600",
       icon: "🎪",
-      featured: true
+      featured: true,
+      embedSafe: true
     },
     {
-      id: 'business-platform',
-      title: "Custom Business Platform",
-      description: "Enterprise-grade business management solution with advanced analytics and reporting dashboard",
+      id: 'game-show',
+      title: "Interactive Game Show Platform",
+      description: "Engaging game show application with real-time scoring, audience participation, and interactive elements",
       url: "https://splendid-cannoli-324007.netlify.app/",
-      category: "Enterprise Solution",
-      tech: ["Custom Development", "Data Visualization", "Enterprise Security", "Analytics"],
+      category: "Entertainment Platform",
+      tech: ["React", "Real-time Updates", "Interactive UI", "Game Logic"],
       color: "from-orange-500 to-red-600",
-      icon: "📊",
-      featured: false
-    },
-    {
-      id: 'mobile-event-app',
-      title: "Mobile Event Management",
-      description: "Comprehensive mobile event management with real-time updates, notifications, and attendee engagement",
-      url: "https://capable-alfajores-d0dff2.netlify.app/",
-      category: "Mobile Application",
-      tech: ["React Native", "Push Notifications", "Offline Sync", "Real-time Updates"],
-      color: "from-indigo-500 to-purple-600",
-      icon: "📱",
-      featured: false
-    },
-    {
-      id: 'interactive-mobile',
-      title: "Interactive Mobile Experience",
-      description: "Engaging mobile-first application with touch-optimized interactions and progressive web app features",
-      url: "https://lucky-centaur-ce715c.netlify.app/",
-      category: "Progressive Web App",
-      tech: ["PWA", "Touch Gestures", "Mobile Optimization", "Service Workers"],
-      color: "from-rose-500 to-pink-600",
       icon: "🎮",
-      featured: false
+      featured: false,
+      embedSafe: true
+    },
+    {
+      id: 'crm-platform',
+      title: "CRM Management System",
+      description: "Comprehensive customer relationship management platform with advanced analytics and automation",
+      url: "https://capable-alfajores-d0dff2.netlify.app/",
+      category: "Business Solution",
+      tech: ["React", "Data Analytics", "CRM Integration", "Automation"],
+      color: "from-indigo-500 to-purple-600",
+      icon: "📊",
+      featured: false,
+      embedSafe: true
+    },
+    {
+      id: 'music-studio',
+      title: "Music Studio Application",
+      description: "Professional music studio management app with booking, project tracking, and client communication",
+      url: "https://lucky-centaur-ce715c.netlify.app/",
+      category: "Creative Platform",
+      tech: ["React", "Audio Processing", "Project Management", "Client Portal"],
+      color: "from-rose-500 to-pink-600",
+      icon: "🎼",
+      featured: false,
+      embedSafe: true
     }
   ];
 
   const featuredProjects = projects.filter(p => p.featured);
   const allProjects = projects;
+
+  const handleIframeError = (projectId: string) => {
+    setIframeErrors(prev => ({ ...prev, [projectId]: true }));
+  };
+
+  const IframeEmbed = ({ project, height = "h-80", scale = false }: { 
+    project: typeof projects[0], 
+    height?: string,
+    scale?: boolean 
+  }) => {
+    const hasError = iframeErrors[project.id];
+    
+    if (!project.embedSafe || hasError) {
+      return (
+        <div className={`${height} bg-gradient-to-br ${project.color} rounded-xl flex flex-col items-center justify-center text-white p-6`}>
+          <AlertCircle className="w-12 h-12 mb-4 opacity-80" />
+          <h4 className="text-lg font-semibold mb-2">{project.title}</h4>
+          <p className="text-sm opacity-90 text-center mb-4">
+            {!project.embedSafe 
+              ? "This site doesn't allow embedding for security reasons" 
+              : "Unable to load preview"}
+          </p>
+          <a 
+            href={project.url} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 bg-white/20 rounded-lg hover:bg-white/30 transition-colors"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Visit Live Site
+          </a>
+        </div>
+      );
+    }
+
+    return (
+      <div className="relative overflow-hidden rounded-xl bg-white">
+        <iframe
+          src={project.url}
+          className={`w-full ${height} border-0 ${scale ? 'transform scale-75 origin-top-left' : ''}`}
+          style={scale ? { width: '133.33%', height: '64px' } : undefined}
+          title={project.title}
+          sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+          onError={() => handleIframeError(project.id)}
+          onLoad={(e) => {
+            // Check if iframe loaded successfully
+            try {
+              const iframe = e.target as HTMLIFrameElement;
+              if (iframe.contentDocument === null) {
+                handleIframeError(project.id);
+              }
+            } catch (error) {
+              handleIframeError(project.id);
+            }
+          }}
+        />
+        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/5 to-transparent"></div>
+      </div>
+    );
+  };
 
   return (
     <div className="relative z-10 pointer-events-none">
@@ -211,7 +278,7 @@ export default function HomePage() {
                       </span>
                     ))}
                   </div>
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 mb-6">
                     {featuredProjects.map((_, idx) => (
                       <button
                         key={idx}
@@ -224,6 +291,15 @@ export default function HomePage() {
                       />
                     ))}
                   </div>
+                  <a 
+                    href={featuredProjects[activeProject].url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-semibold hover:scale-105 transition-transform"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Open Full Application
+                  </a>
                 </div>
                 <div className="relative">
                   <div className="bg-black/40 rounded-2xl p-4 border border-white/20 shadow-2xl">
@@ -246,15 +322,7 @@ export default function HomePage() {
                         <ExternalLink className="w-4 h-4 text-gray-400" />
                       </a>
                     </div>
-                    <div className="relative overflow-hidden rounded-xl bg-white">
-                      <iframe
-                        src={featuredProjects[activeProject].url}
-                        className="w-full h-80 border-0"
-                        title={featuredProjects[activeProject].title}
-                        sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
-                      />
-                      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/5 to-transparent"></div>
-                    </div>
+                    <IframeEmbed project={featuredProjects[activeProject]} />
                   </div>
                 </div>
               </div>
@@ -322,7 +390,7 @@ export default function HomePage() {
                         </div>
                         <div className="flex-1 bg-white/10 rounded px-2 py-0.5 text-xs text-gray-400 flex items-center gap-1">
                           <Globe className="w-2 h-2" />
-                          Live Application
+                          {project.embedSafe ? 'Live Preview' : 'External Link'}
                         </div>
                         <a 
                           href={project.url} 
@@ -333,16 +401,7 @@ export default function HomePage() {
                           <ExternalLink className="w-3 h-3 text-gray-400" />
                         </a>
                       </div>
-                      <div className="relative overflow-hidden rounded-lg bg-white">
-                        <iframe
-                          src={project.url}
-                          className="w-full h-48 border-0 transform scale-75 origin-top-left"
-                          style={{ width: '133.33%', height: '64px' }}
-                          title={project.title}
-                          sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
-                        />
-                        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/10 to-transparent"></div>
-                      </div>
+                      <IframeEmbed project={project} height="h-48" scale={true} />
                     </div>
                   </div>
                 </motion.div>
