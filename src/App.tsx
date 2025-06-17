@@ -58,7 +58,7 @@ export default function FusionInteractiveWebsite() {
   };
   
   return (
-    <div className="relative min-h-screen text-white overflow-x-hidden">
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white overflow-x-hidden">
       {/* Loading Screen */}
       {isLoading && (
         <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
@@ -72,6 +72,27 @@ export default function FusionInteractiveWebsite() {
       
       {/* Navigation */}
       <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      
+      {/* Global WebGL Canvas Background */}
+      <div className="fixed inset-0 z-0">
+        <Canvas 
+          camera={{ position: [0, 1, 8], fov: 75 }}
+          gl={{ 
+            antialias: true, 
+            alpha: true,
+            powerPreference: "high-performance"
+          }}
+          style={{ background: 'transparent' }}
+          dpr={[1, 2]}
+        >
+          <Suspense fallback={null}>
+            <Scene scrollY={scrollY} currentPage={currentPage} />
+          </Suspense>
+        </Canvas>
+        
+        {/* Canvas Loading Fallback */}
+        {isLoading && <SceneLoader />}
+      </div>
       
       {/* Page Content */}
       <div className="relative z-10">
@@ -141,6 +162,39 @@ export default function FusionInteractiveWebsite() {
         a:focus-visible {
           outline: 2px solid #3b82f6;
           outline-offset: 2px;
+        }
+        
+        /* Ensure sections with backgrounds are properly layered */
+        section {
+          position: relative;
+          z-index: 1;
+        }
+        
+        /* Make content sections semi-transparent to show particles */
+        .bg-white {
+          background-color: rgba(255, 255, 255, 0.95);
+        }
+        
+        .bg-gray-100 {
+          background-color: rgba(243, 244, 246, 0.95);
+        }
+        
+        .bg-gray-900 {
+          background-color: rgba(17, 24, 39, 0.95);
+        }
+        
+        /* Keep gradient backgrounds opaque but slightly transparent */
+        .bg-gradient-to-br {
+          position: relative;
+        }
+        
+        .bg-gradient-to-br::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: inherit;
+          opacity: 0.95;
+          z-index: -1;
         }
       `}</style>
     </div>
