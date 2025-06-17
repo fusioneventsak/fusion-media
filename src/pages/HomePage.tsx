@@ -112,7 +112,7 @@ export default function HomePage() {
             'Real-time photo processing and customizable animations',
             'Custom branding, analytics, and lead generation'
           ]}
-          backgroundColor="bg-gradient-to-br from-purple-50 to-pink-50"
+          backgroundColor="transparent"
           textColor="text-gray-900"
           accentColor="text-purple-600"
         />
@@ -131,7 +131,7 @@ export default function HomePage() {
             'Advanced data visualization and business analytics',
             'Secure cloud-based architecture with enterprise-grade security'
           ]}
-          backgroundColor="bg-white"
+          backgroundColor="transparent"
           textColor="text-gray-900"
           accentColor="text-blue-600"
         />
@@ -150,7 +150,7 @@ export default function HomePage() {
             'Custom branding for artists, venues, and event organizers',
             'Comprehensive analytics and audience engagement insights'
           ]}
-          backgroundColor="bg-gray-900"
+          backgroundColor="transparent"
           textColor="text-white"
           accentColor="text-cyan-400"
         />
@@ -169,7 +169,7 @@ export default function HomePage() {
             'Leaderboards, scoring systems, and competition management',
             'Multi-device compatibility and responsive design'
           ]}
-          backgroundColor="bg-gradient-to-br from-indigo-50 to-blue-50"
+          backgroundColor="transparent"
           textColor="text-gray-900"
           accentColor="text-indigo-600"
         />
@@ -188,15 +188,17 @@ export default function HomePage() {
             'E-commerce integration and payment processing',
             'Advanced analytics, conversion tracking, and performance monitoring'
           ]}
-          backgroundColor="bg-gradient-to-br from-green-50 to-emerald-50"
+          backgroundColor="transparent"
           textColor="text-gray-900"
           accentColor="text-green-600"
         />
       </div>
 
       {/* Technology & Process Section */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-gray-100 pointer-events-auto">
-        <div className="max-w-7xl w-full">
+      <section className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto">
+        {/* Subtle background for readability */}
+        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
+        <div className="relative z-10 max-w-7xl w-full">
           <motion.div
             className="text-center mb-20"
             initial={{ opacity: 0, y: 50 }}
@@ -204,13 +206,13 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-4xl md:text-6xl font-light text-gray-900 mb-8 leading-tight">
+            <h2 className="text-4xl md:text-6xl font-light text-white mb-8 leading-tight">
               How we{' '}
               <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 work faster
               </span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
               Our AI-assisted approach combines cutting-edge tools with decades of experience 
               to deliver exceptional results in record time.
             </p>
@@ -247,8 +249,8 @@ export default function HomePage() {
               >
                 <div className="text-6xl mb-6">{item.icon}</div>
                 <div className="text-sm font-mono text-gray-400 mb-3">{item.number}</div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">{item.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{item.description}</p>
+                <h3 className="text-2xl font-semibold text-white mb-4">{item.title}</h3>
+                <p className="text-gray-300 leading-relaxed">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -260,8 +262,8 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center px-8 py-4 bg-white rounded-full shadow-lg border border-gray-200">
-              <span className="text-gray-600 mr-4">Ready to experience the difference?</span>
+            <div className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-md rounded-full shadow-lg border border-white/20">
+              <span className="text-gray-300 mr-4">Ready to experience the difference?</span>
               <motion.button
                 className="px-6 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors"
                 whileHover={{ scale: 1.05 }}
@@ -275,8 +277,10 @@ export default function HomePage() {
       </section>
 
       {/* Call to Action Section */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-gray-900 pointer-events-auto">
-        <div className="max-w-5xl w-full text-center">
+      <section className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto">
+        {/* Subtle background for readability */}
+        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
+        <div className="relative z-10 max-w-5xl w-full text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
