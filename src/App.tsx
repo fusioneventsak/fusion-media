@@ -57,11 +57,8 @@ export default function FusionInteractiveWebsite() {
     }
   };
   
-  // Only show 3D background on home page and certain sections
-  const show3DBackground = currentPage === 'home';
-  
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white overflow-x-hidden">
+    <div className="relative min-h-screen text-white overflow-x-hidden">
       {/* Loading Screen */}
       {isLoading && (
         <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
@@ -76,40 +73,8 @@ export default function FusionInteractiveWebsite() {
       {/* Navigation */}
       <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
       
-      {/* Conditional WebGL Canvas Background - Only for home page hero sections */}
-      {show3DBackground && (
-        <div className="fixed inset-0 z-0" style={{ height: '100vh' }}>
-          <Canvas 
-            camera={{ position: [0, 1, 8], fov: 75 }}
-            gl={{ 
-              antialias: true, 
-              alpha: true,
-              powerPreference: "high-performance"
-            }}
-            style={{ background: 'transparent' }}
-            dpr={[1, 2]}
-          >
-            <Suspense fallback={null}>
-              <Scene scrollY={scrollY} currentPage={currentPage} />
-            </Suspense>
-          </Canvas>
-          
-          {/* Canvas Loading Fallback */}
-          {isLoading && <SceneLoader />}
-          
-          {/* Gradient overlay to fade out the 3D background */}
-          <div 
-            className="absolute bottom-0 left-0 right-0 pointer-events-none"
-            style={{
-              height: '200px',
-              background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%)'
-            }}
-          />
-        </div>
-      )}
-      
       {/* Page Content */}
-      <div className="relative">
+      <div className="relative z-10">
         {renderCurrentPage()}
       </div>
       
@@ -151,33 +116,6 @@ export default function FusionInteractiveWebsite() {
           background: linear-gradient(135deg, #2563eb, #7c3aed);
         }
         
-        /* Gradient text utilities */
-        .gradient-text-blue {
-          background: linear-gradient(135deg, #3b82f6, #06b6d4);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-        
-        .gradient-text-purple {
-          background: linear-gradient(135deg, #8b5cf6, #ec4899);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-        
-        /* Enhanced backdrop blur support */
-        .backdrop-blur-custom {
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
-        }
-        
-        /* Canvas container optimizations */
-        canvas {
-          display: block;
-          touch-action: manipulation;
-        }
-        
         /* Performance optimizations */
         .pointer-events-none {
           pointer-events: none;
@@ -198,52 +136,11 @@ export default function FusionInteractiveWebsite() {
           animation: float 6s ease-in-out infinite;
         }
         
-        @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
-          50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
-        }
-        
-        .animate-pulse-glow {
-          animation: pulse-glow 2s ease-in-out infinite;
-        }
-        
-        /* Radial gradient utility */
-        .bg-gradient-radial {
-          background: radial-gradient(circle, var(--tw-gradient-from) 0%, var(--tw-gradient-to) 100%);
-        }
-        
-        /* Text shadow utilities */
-        .text-shadow {
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .text-shadow-lg {
-          text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-        }
-        
         /* Enhanced focus states */
         button:focus-visible,
         a:focus-visible {
           outline: 2px solid #3b82f6;
           outline-offset: 2px;
-        }
-        
-        /* Loading animations */
-        @keyframes shimmer {
-          0% { background-position: -200px 0; }
-          100% { background-position: calc(200px + 100%) 0; }
-        }
-        
-        .animate-shimmer {
-          animation: shimmer 2s linear infinite;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-          background-size: 200px 100%;
-        }
-
-        /* Ensure sections with different backgrounds are properly layered */
-        section {
-          position: relative;
-          z-index: 1;
         }
       `}</style>
     </div>
