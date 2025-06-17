@@ -201,7 +201,6 @@ export default function FullWidthLaptopShowcase({
           </motion.div>
         </div>
       </div>
-    </div>
     </section>
   );
 }
