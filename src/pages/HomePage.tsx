@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import FullWidthLaptopShowcase from '../components/FullWidthLaptopShowcase';
+import FullWidthLaptopShowcase from '../components/Laptop';
 
 export default function HomePage() {
   return (
