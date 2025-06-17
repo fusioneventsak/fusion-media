@@ -170,31 +170,36 @@ export default function FusionInteractiveWebsite() {
           z-index: 1;
         }
         
-        /* Make content sections semi-transparent to show particles */
+        /* Make all backgrounds transparent to show particles */
         .bg-white {
-          background-color: rgba(255, 255, 255, 0.95);
+          background-color: transparent !important;
         }
         
         .bg-gray-100 {
-          background-color: rgba(243, 244, 246, 0.95);
+          background-color: transparent !important;
         }
         
         .bg-gray-900 {
-          background-color: rgba(17, 24, 39, 0.95);
+          background-color: transparent !important;
         }
         
-        /* Keep gradient backgrounds opaque but slightly transparent */
         .bg-gradient-to-br {
-          position: relative;
+          background: transparent !important;
         }
         
-        .bg-gradient-to-br::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: inherit;
-          opacity: 0.95;
-          z-index: -1;
+        /* Add subtle backdrop blur to content areas for readability */
+        section {
+          backdrop-filter: blur(2px);
+          -webkit-backdrop-filter: blur(2px);
+        }
+        
+        /* Enhance text readability over particles */
+        .text-white {
+          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .text-gray-900 {
+          text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
         }
       `}</style>
     </div>
