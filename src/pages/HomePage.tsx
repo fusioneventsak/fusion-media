@@ -29,7 +29,7 @@ export default function HomePage() {
       color: "from-purple-500 to-pink-600",
       icon: "🎵",
       featured: true,
-      embedSafe: false // This site likely blocks iframe embedding
+      embedSafe: false // This site blocks iframe embedding
     },
     {
       id: 'fusion-events',
@@ -88,16 +88,18 @@ export default function HomePage() {
     setIframeErrors(prev => ({ ...prev, [projectId]: true }));
   };
 
-  const IframeEmbed = ({ project, height = "h-80", scale = false }: { 
+  const IframeEmbed = ({ project, isFeatured = false }: { 
     project: typeof projects[0], 
-    height?: string,
-    scale?: boolean 
+    isFeatured?: boolean
   }) => {
     const hasError = iframeErrors[project.id];
     
+    // 16:9 aspect ratio classes
+    const aspectRatioClass = isFeatured ? "aspect-video" : "aspect-video";
+    
     if (!project.embedSafe || hasError) {
       return (
-        <div className={`${height} bg-gradient-to-br ${project.color} rounded-xl flex flex-col items-center justify-center text-white p-6`}>
+        <div className={`${aspectRatioClass} bg-gradient-to-br ${project.color} rounded-xl flex flex-col items-center justify-center text-white p-6`}>
           <AlertCircle className="w-12 h-12 mb-4 opacity-80" />
           <h4 className="text-lg font-semibold mb-2">{project.title}</h4>
           <p className="text-sm opacity-90 text-center mb-4">
@@ -119,25 +121,14 @@ export default function HomePage() {
     }
 
     return (
-      <div className="relative overflow-hidden rounded-xl bg-white">
+      <div className={`relative overflow-hidden rounded-xl bg-white ${aspectRatioClass}`}>
         <iframe
           src={project.url}
-          className={`w-full ${height} border-0 ${scale ? 'transform scale-75 origin-top-left' : ''}`}
-          style={scale ? { width: '133.33%', height: '64px' } : undefined}
+          className="absolute inset-0 w-full h-full border-0"
           title={project.title}
-          sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
+          loading="lazy"
           onError={() => handleIframeError(project.id)}
-          onLoad={(e) => {
-            // Check if iframe loaded successfully
-            try {
-              const iframe = e.target as HTMLIFrameElement;
-              if (iframe.contentDocument === null) {
-                handleIframeError(project.id);
-              }
-            } catch (error) {
-              handleIframeError(project.id);
-            }
-          }}
         />
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/5 to-transparent"></div>
       </div>
@@ -322,7 +313,7 @@ export default function HomePage() {
                         <ExternalLink className="w-4 h-4 text-gray-400" />
                       </a>
                     </div>
-                    <IframeEmbed project={featuredProjects[activeProject]} />
+                    <IframeEmbed project={featuredProjects[activeProject]} isFeatured={true} />
                   </div>
                 </div>
               </div>
@@ -401,7 +392,7 @@ export default function HomePage() {
                           <ExternalLink className="w-3 h-3 text-gray-400" />
                         </a>
                       </div>
-                      <IframeEmbed project={project} height="h-48" scale={true} />
+                      <IframeEmbed project={project} />
                     </div>
                   </div>
                 </motion.div>
@@ -426,8 +417,8 @@ export default function HomePage() {
               </div>
               <div className="text-center">
                 <Smartphone className="w-8 h-8 text-purple-400 mx-auto mb-3" />
-                <div className="text-purple-400 font-semibold mb-2">Responsive Design</div>
-                <p className="text-gray-400">See how our applications adapt perfectly to different screen sizes and devices.</p>
+                <div className="text-purple-400 font-semibold mb-2">16:9 Desktop View</div>
+                <p className="text-gray-400">All embeds are optimized for desktop viewing with proper aspect ratios for the best experience.</p>
               </div>
               <div className="text-center">
                 <ExternalLink className="w-8 h-8 text-pink-400 mx-auto mb-3" />
