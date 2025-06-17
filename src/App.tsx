@@ -57,6 +57,9 @@ export default function FusionInteractiveWebsite() {
     }
   };
   
+  // Only show 3D background on home page and certain sections
+  const show3DBackground = currentPage === 'home';
+  
   return (
     <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-black to-blue-900 text-white overflow-x-hidden">
       {/* Loading Screen */}
@@ -73,29 +76,40 @@ export default function FusionInteractiveWebsite() {
       {/* Navigation */}
       <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
       
-      {/* Fixed WebGL Canvas Background */}
-      <div className="fixed inset-0 z-0">
-        <Canvas 
-          camera={{ position: [0, 1, 8], fov: 75 }}
-          gl={{ 
-            antialias: true, 
-            alpha: true,
-            powerPreference: "high-performance"
-          }}
-          style={{ background: 'transparent' }}
-          dpr={[1, 2]}
-        >
-          <Suspense fallback={null}>
-            <Scene scrollY={scrollY} currentPage={currentPage} />
-          </Suspense>
-        </Canvas>
-        
-        {/* Canvas Loading Fallback */}
-        {isLoading && <SceneLoader />}
-      </div>
+      {/* Conditional WebGL Canvas Background - Only for home page hero sections */}
+      {show3DBackground && (
+        <div className="fixed inset-0 z-0" style={{ height: '100vh' }}>
+          <Canvas 
+            camera={{ position: [0, 1, 8], fov: 75 }}
+            gl={{ 
+              antialias: true, 
+              alpha: true,
+              powerPreference: "high-performance"
+            }}
+            style={{ background: 'transparent' }}
+            dpr={[1, 2]}
+          >
+            <Suspense fallback={null}>
+              <Scene scrollY={scrollY} currentPage={currentPage} />
+            </Suspense>
+          </Canvas>
+          
+          {/* Canvas Loading Fallback */}
+          {isLoading && <SceneLoader />}
+          
+          {/* Gradient overlay to fade out the 3D background */}
+          <div 
+            className="absolute bottom-0 left-0 right-0 pointer-events-none"
+            style={{
+              height: '200px',
+              background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 100%)'
+            }}
+          />
+        </div>
+      )}
       
       {/* Page Content */}
-      <div className="relative z-10">
+      <div className="relative">
         {renderCurrentPage()}
       </div>
       
@@ -164,24 +178,6 @@ export default function FusionInteractiveWebsite() {
           touch-action: manipulation;
         }
         
-        /* Laptop screen styling */
-        .laptop-screen {
-          transition: all 0.3s ease;
-        }
-        
-        .laptop-screen:hover {
-          transform: scale(1.02);
-        }
-        
-        /* Phone screen styling */
-        .phone-screen {
-          transition: all 0.3s ease;
-        }
-        
-        .phone-screen:hover {
-          transform: scale(1.05);
-        }
-        
         /* Performance optimizations */
         .pointer-events-none {
           pointer-events: none;
@@ -242,6 +238,12 @@ export default function FusionInteractiveWebsite() {
           animation: shimmer 2s linear infinite;
           background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
           background-size: 200px 100%;
+        }
+
+        /* Ensure sections with different backgrounds are properly layered */
+        section {
+          position: relative;
+          z-index: 1;
         }
       `}</style>
     </div>
