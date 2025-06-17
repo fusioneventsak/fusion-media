@@ -1,11 +1,82 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import Laptop3D from '../components/Laptop';
-import Phone3D from '../components/Phone';
+import { ExternalLink, Monitor, Smartphone, Globe, Zap, Star } from 'lucide-react';
 
 export default function HomePage() {
+  const [activeProject, setActiveProject] = useState(0);
+
+  const projects = [
+    {
+      id: 'selfie-holosphere',
+      title: "Selfie Holosphere",
+      description: "Interactive 3D photo collage experience with real-time processing and immersive visualization",
+      url: "https://selfieholosphere.com/collage/1lr9qn",
+      category: "Interactive Experience",
+      tech: ["WebGL", "Real-time Processing", "3D Animation", "Computer Vision"],
+      color: "from-cyan-500 to-blue-600",
+      icon: "📸",
+      featured: true
+    },
+    {
+      id: 'u-request-songs',
+      title: "U Request Songs",
+      description: "Interactive DJ platform with crowd engagement, real-time voting, and live music streaming",
+      url: "http://urequestsongs.com",
+      category: "Entertainment Platform",
+      tech: ["React", "WebSockets", "Audio Processing", "Real-time Voting"],
+      color: "from-purple-500 to-pink-600",
+      icon: "🎵",
+      featured: true
+    },
+    {
+      id: 'fusion-events',
+      title: "Fusion Events",
+      description: "Professional event services platform with integrated booking, portfolio showcase, and client management",
+      url: "https://www.fusion-events.ca",
+      category: "Business Platform",
+      tech: ["Next.js", "CRM Integration", "Performance Optimization", "SEO"],
+      color: "from-emerald-500 to-teal-600",
+      icon: "🎪",
+      featured: true
+    },
+    {
+      id: 'business-platform',
+      title: "Custom Business Platform",
+      description: "Enterprise-grade business management solution with advanced analytics and reporting dashboard",
+      url: "https://splendid-cannoli-324007.netlify.app/",
+      category: "Enterprise Solution",
+      tech: ["Custom Development", "Data Visualization", "Enterprise Security", "Analytics"],
+      color: "from-orange-500 to-red-600",
+      icon: "📊",
+      featured: false
+    },
+    {
+      id: 'mobile-event-app',
+      title: "Mobile Event Management",
+      description: "Comprehensive mobile event management with real-time updates, notifications, and attendee engagement",
+      url: "https://capable-alfajores-d0dff2.netlify.app/",
+      category: "Mobile Application",
+      tech: ["React Native", "Push Notifications", "Offline Sync", "Real-time Updates"],
+      color: "from-indigo-500 to-purple-600",
+      icon: "📱",
+      featured: false
+    },
+    {
+      id: 'interactive-mobile',
+      title: "Interactive Mobile Experience",
+      description: "Engaging mobile-first application with touch-optimized interactions and progressive web app features",
+      url: "https://lucky-centaur-ce715c.netlify.app/",
+      category: "Progressive Web App",
+      tech: ["PWA", "Touch Gestures", "Mobile Optimization", "Service Workers"],
+      color: "from-rose-500 to-pink-600",
+      icon: "🎮",
+      featured: false
+    }
+  ];
+
+  const featuredProjects = projects.filter(p => p.featured);
+  const allProjects = projects;
+
   return (
     <div className="relative z-10 pointer-events-none">
       {/* Hero Section */}
@@ -44,17 +115,19 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.8 }}
           >
             <motion.button 
-              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold"
+              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold flex items-center gap-2"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
+              <Globe className="w-5 h-5" />
               View Our Portfolio
             </motion.button>
             <motion.button 
-              className="px-8 py-4 border-2 border-white/30 rounded-full font-semibold hover:bg-white/10 transition-colors duration-200"
+              className="px-8 py-4 border-2 border-white/30 rounded-full font-semibold hover:bg-white/10 transition-colors duration-200 flex items-center gap-2"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
+              <Zap className="w-5 h-5" />
               Start Your Project
             </motion.button>
           </motion.div>
@@ -79,6 +152,230 @@ export default function HomePage() {
                 <div className="text-gray-400">{stat.label}</div>
               </motion.div>
             ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Featured Portfolio Section */}
+      <section className="min-h-screen flex items-center justify-center px-8 py-20">
+        <div className="max-w-7xl w-full pointer-events-auto">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-5xl font-bold mb-6 bg-gradient-to-r from-pink-400 to-red-500 bg-clip-text text-transparent">
+              Live Portfolio Showcase
+            </h2>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto">
+              Experience our work firsthand. These are live, fully functional applications you can interact with right here. 
+              No mockups, no screenshots – just real applications in action.
+            </p>
+          </motion.div>
+
+          {/* Featured Project Spotlight */}
+          <motion.div 
+            className="mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <div className="bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-xl rounded-3xl p-8 border border-white/10 shadow-2xl">
+              <div className="grid lg:grid-cols-2 gap-8 items-center">
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="text-4xl">{featuredProjects[activeProject].icon}</div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                        <span className="text-sm text-yellow-400 font-medium">Featured Project</span>
+                      </div>
+                      <h3 className="text-3xl font-bold text-white">{featuredProjects[activeProject].title}</h3>
+                    </div>
+                  </div>
+                  <div className="mb-4">
+                    <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r ${featuredProjects[activeProject].color} text-white`}>
+                      {featuredProjects[activeProject].category}
+                    </span>
+                  </div>
+                  <p className="text-gray-300 text-lg mb-6 leading-relaxed">
+                    {featuredProjects[activeProject].description}
+                  </p>
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {featuredProjects[activeProject].tech.map((tech, idx) => (
+                      <span key={idx} className="px-3 py-1 bg-white/10 text-gray-300 rounded-lg text-sm border border-white/20">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex gap-3">
+                    {featuredProjects.map((_, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setActiveProject(idx)}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          idx === activeProject 
+                            ? 'bg-white scale-125' 
+                            : 'bg-white/30 hover:bg-white/50'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="relative">
+                  <div className="bg-black/40 rounded-2xl p-4 border border-white/20 shadow-2xl">
+                    <div className="flex items-center gap-2 mb-3 px-2">
+                      <div className="flex gap-1.5">
+                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                      </div>
+                      <div className="flex-1 bg-white/10 rounded-lg px-3 py-1 text-sm text-gray-400 flex items-center gap-2">
+                        <Globe className="w-3 h-3" />
+                        {featuredProjects[activeProject].url}
+                      </div>
+                      <a 
+                        href={featuredProjects[activeProject].url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="p-1 hover:bg-white/10 rounded transition-colors"
+                      >
+                        <ExternalLink className="w-4 h-4 text-gray-400" />
+                      </a>
+                    </div>
+                    <div className="relative overflow-hidden rounded-xl bg-white">
+                      <iframe
+                        src={featuredProjects[activeProject].url}
+                        className="w-full h-80 border-0"
+                        title={featuredProjects[activeProject].title}
+                        sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+                      />
+                      <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/5 to-transparent"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* All Projects Grid */}
+          <motion.div 
+            className="mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <h3 className="text-3xl font-bold text-center mb-12 text-white">Complete Portfolio</h3>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {allProjects.map((project, index) => (
+                <motion.div 
+                  key={project.id}
+                  className="group bg-white/5 backdrop-blur-sm rounded-2xl overflow-hidden border border-white/10 hover:border-white/20 transition-all duration-300"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  {/* Project Header */}
+                  <div className="p-6 pb-4">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="text-2xl">{project.icon}</div>
+                      <div>
+                        <h4 className="text-lg font-semibold text-white group-hover:text-cyan-300 transition-colors">
+                          {project.title}
+                        </h4>
+                        <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r ${project.color} text-white`}>
+                          {project.category}
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {project.tech.slice(0, 3).map((tech, idx) => (
+                        <span key={idx} className="px-2 py-0.5 bg-white/10 text-gray-400 rounded text-xs">
+                          {tech}
+                        </span>
+                      ))}
+                      {project.tech.length > 3 && (
+                        <span className="px-2 py-0.5 bg-white/10 text-gray-400 rounded text-xs">
+                          +{project.tech.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Embedded Application */}
+                  <div className="px-6 pb-6">
+                    <div className="bg-black/40 rounded-xl p-3 border border-white/20">
+                      <div className="flex items-center gap-2 mb-2 px-2">
+                        <div className="flex gap-1">
+                          <div className="w-2 h-2 rounded-full bg-red-500"></div>
+                          <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                        </div>
+                        <div className="flex-1 bg-white/10 rounded px-2 py-0.5 text-xs text-gray-400 flex items-center gap-1">
+                          <Globe className="w-2 h-2" />
+                          Live Application
+                        </div>
+                        <a 
+                          href={project.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="p-0.5 hover:bg-white/10 rounded transition-colors"
+                        >
+                          <ExternalLink className="w-3 h-3 text-gray-400" />
+                        </a>
+                      </div>
+                      <div className="relative overflow-hidden rounded-lg bg-white">
+                        <iframe
+                          src={project.url}
+                          className="w-full h-48 border-0 transform scale-75 origin-top-left"
+                          style={{ width: '133.33%', height: '64px' }}
+                          title={project.title}
+                          sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
+                        />
+                        <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/10 to-transparent"></div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Interactive Features */}
+          <motion.div 
+            className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-sm rounded-2xl p-8 border border-blue-500/30"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <h3 className="text-2xl font-bold mb-6 text-blue-300 text-center">🎯 Interactive Portfolio Features</h3>
+            <div className="grid md:grid-cols-3 gap-6 text-sm">
+              <div className="text-center">
+                <Monitor className="w-8 h-8 text-cyan-400 mx-auto mb-3" />
+                <div className="text-cyan-400 font-semibold mb-2">Live Applications</div>
+                <p className="text-gray-400">Every project is a real, functioning application you can interact with directly in your browser.</p>
+              </div>
+              <div className="text-center">
+                <Smartphone className="w-8 h-8 text-purple-400 mx-auto mb-3" />
+                <div className="text-purple-400 font-semibold mb-2">Responsive Design</div>
+                <p className="text-gray-400">See how our applications adapt perfectly to different screen sizes and devices.</p>
+              </div>
+              <div className="text-center">
+                <ExternalLink className="w-8 h-8 text-pink-400 mx-auto mb-3" />
+                <div className="text-pink-400 font-semibold mb-2">Full Experience</div>
+                <p className="text-gray-400">Click the external link icon to open any application in a new tab for the complete experience.</p>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -212,294 +509,6 @@ export default function HomePage() {
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Interactive Portfolio Experience Section */}
-      <section className="min-h-screen flex items-center justify-center px-8">
-        <div className="max-w-7xl w-full text-center pointer-events-auto">
-          <motion.h2 
-            className="text-5xl font-bold mb-8 bg-gradient-to-r from-pink-400 to-red-500 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            Interactive Portfolio Experience
-          </motion.h2>
-          <motion.p 
-            className="text-xl text-gray-300 mb-12 max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Explore our live projects in immersive 3D space. These aren't just mockups – they're real, 
-            functioning applications you can interact with. Rotate the view and experience the quality of our work firsthand.
-          </motion.p>
-          
-          <motion.div 
-            className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-sm rounded-2xl p-8 border border-blue-500/30 mb-12"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <h3 className="text-2xl font-bold mb-4 text-blue-300">🎯 How to Explore</h3>
-            <div className="grid md:grid-cols-3 gap-6 text-sm">
-              <div>
-                <div className="text-cyan-400 font-semibold mb-2">🖱️ Interactive Controls</div>
-                <p className="text-gray-400">Click and drag to rotate the 3D scene. Hover over devices to see them scale up.</p>
-              </div>
-              <div>
-                <div className="text-purple-400 font-semibold mb-2">💻 Live Applications</div>
-                <p className="text-gray-400">Each laptop and phone displays a real, functioning website you can interact with.</p>
-              </div>
-              <div>
-                <div className="text-pink-400 font-semibold mb-2">📱 Responsive Design</div>
-                <p className="text-gray-400">See how our applications adapt perfectly to different screen sizes and devices.</p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Interactive 3D Devices Showcase */}
-          <div className="space-y-16 mb-16">
-            {/* Desktop Applications */}
-            <div>
-              <motion.h3 
-                className="text-3xl font-bold mb-8 text-cyan-400"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-              >
-                💻 Desktop Applications
-              </motion.h3>
-              <div className="grid md:grid-cols-2 gap-8">
-                {[
-                  {
-                    title: "Selfie Holosphere",
-                    description: "Interactive 3D photo collage experience with real-time processing",
-                    url: "https://selfieholosphere.com/collage/1lr9qn",
-                    tech: ["WebGL", "Real-time Processing", "3D Animation"]
-                  },
-                  {
-                    title: "U Request Songs",
-                    description: "Interactive DJ platform with crowd engagement and real-time voting",
-                    url: "http://urequestsongs.com",
-                    tech: ["React", "WebSockets", "Audio Processing"]
-                  },
-                  {
-                    title: "Fusion Events",
-                    description: "Professional event services with integrated booking and portfolio",
-                    url: "https://www.fusion-events.ca",
-                    tech: ["Next.js", "CRM Integration", "Performance Optimization"]
-                  },
-                  {
-                    title: "Custom Business Platform",
-                    description: "Tailored business solutions with advanced analytics and reporting",
-                    url: "https://splendid-cannoli-324007.netlify.app/",
-                    tech: ["Custom Development", "Data Visualization", "Enterprise Security"]
-                  }
-                ].map((project, index) => (
-                  <motion.div 
-                    key={index}
-                    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/8 transition-colors duration-300"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                  >
-                    <div className="mb-4">
-                      <h4 className="text-xl font-semibold text-white mb-2">{project.title}</h4>
-                      <p className="text-gray-300 text-sm mb-4">{project.description}</p>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {project.tech.map((tech, idx) => (
-                          <span key={idx} className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    {/* 3D Laptop with embedded content */}
-                    <div className="h-64 bg-black/20 rounded-lg overflow-hidden border border-white/10">
-                      <Canvas camera={{ position: [0, 1, 4], fov: 75 }}>
-                        <ambientLight intensity={0.6} />
-                        <pointLight position={[5, 5, 5]} intensity={0.8} />
-                        <pointLight position={[-5, -5, -5]} intensity={0.4} color="#4169E1" />
-                        <Laptop3D
-                          position={[0, 0, 0]}
-                          url={project.url}
-                          title={project.title}
-                          isOpen={true}
-                          screenAngle={90}
-                          isPoweredOn={true}
-                        />
-                        <OrbitControls 
-                          enablePan={false} 
-                          enableZoom={false} 
-                          enableRotate={true}
-                          autoRotate={true}
-                          autoRotateSpeed={1}
-                        />
-                      </Canvas>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Mobile Applications */}
-            <div>
-              <motion.h3 
-                className="text-3xl font-bold mb-8 text-purple-400"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-              >
-                📱 Mobile Applications
-              </motion.h3>
-              <div className="grid md:grid-cols-2 gap-8">
-                {[
-                  {
-                    title: "Mobile Event Management",
-                    description: "Comprehensive event management with real-time updates and notifications",
-                    url: "https://capable-alfajores-d0dff2.netlify.app/",
-                    tech: ["React Native", "Push Notifications", "Offline Sync"]
-                  },
-                  {
-                    title: "Interactive Mobile Experience",
-                    description: "Engaging mobile-first application with touch-optimized interactions",
-                    url: "https://lucky-centaur-ce715c.netlify.app/",
-                    tech: ["PWA", "Touch Gestures", "Mobile Optimization"]
-                  }
-                ].map((project, index) => (
-                  <motion.div 
-                    key={index}
-                    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/8 transition-colors duration-300"
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                  >
-                    <div className="mb-4">
-                      <h4 className="text-xl font-semibold text-white mb-2">{project.title}</h4>
-                      <p className="text-gray-300 text-sm mb-4">{project.description}</p>
-                      <div className="flex flex-wrap gap-2 mb-4">
-                        {project.tech.map((tech, idx) => (
-                          <span key={idx} className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded text-xs">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    {/* 3D Phone with embedded content */}
-                    <div className="h-64 bg-black/20 rounded-lg overflow-hidden border border-white/10">
-                      <Canvas camera={{ position: [0, 0, 3], fov: 75 }}>
-                        <ambientLight intensity={0.6} />
-                        <pointLight position={[3, 3, 3]} intensity={0.8} />
-                        <pointLight position={[-3, -3, -3]} intensity={0.4} color="#8B5CF6" />
-                        <Phone3D
-                          position={[0, 0, 0]}
-                          url={project.url}
-                          title={project.title}
-                          isPoweredOn={true}
-                        />
-                        <OrbitControls 
-                          enablePan={false} 
-                          enableZoom={false} 
-                          enableRotate={true}
-                          autoRotate={true}
-                          autoRotateSpeed={1.5}
-                        />
-                      </Canvas>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Featured Project Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {[
-              {
-                title: "Selfie Holosphere",
-                description: "Interactive 3D photo collage experience with real-time processing",
-                tech: ["WebGL", "Real-time Processing", "3D Animation"],
-                icon: "📸"
-              },
-              {
-                title: "U Request Songs",
-                description: "Interactive DJ platform with crowd engagement and real-time voting",
-                tech: ["React", "WebSockets", "Audio Processing"],
-                icon: "🎵"
-              },
-              {
-                title: "Fusion Events",
-                description: "Professional event services with integrated booking and portfolio",
-                tech: ["Next.js", "CRM Integration", "Performance Optimization"],
-                icon: "🎪"
-              },
-              {
-                title: "Custom Applications",
-                description: "Tailored business solutions with advanced analytics and reporting",
-                tech: ["Custom Development", "Data Visualization", "Enterprise Security"],
-                icon: "📊"
-              },
-              {
-                title: "Mobile Event Apps",
-                description: "Cross-platform mobile applications for event management",
-                tech: ["React Native", "Push Notifications", "Offline Sync"],
-                icon: "📱"
-              },
-              {
-                title: "Interactive Experiences",
-                description: "Engaging digital experiences with gamification and interactivity",
-                tech: ["Three.js", "Gamification", "User Analytics"],
-                icon: "🎮"
-              }
-            ].map((project, index) => (
-              <motion.div 
-                key={index}
-                className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/8 transition-colors duration-300"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className="text-4xl mb-4">{project.icon}</div>
-                <h4 className="text-xl font-semibold text-white mb-2">{project.title}</h4>
-                <p className="text-gray-300 text-sm mb-4">{project.description}</p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tech.map((tech, idx) => (
-                    <span key={idx} className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Instructions */}
-          <motion.div 
-            className="bg-black/40 backdrop-blur-sm rounded-xl p-6 border border-white/20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <h4 className="text-lg font-semibold text-yellow-300 mb-3">💡 Pro Tip</h4>
-            <p className="text-gray-300 text-sm">
-              Use your mouse to rotate the 3D scene above and click on any laptop or phone screen to interact with the live applications. 
-              Each device showcases a real project with full functionality - not just screenshots!
-            </p>
-          </motion.div>
         </div>
       </section>
     </div>
