@@ -4,9 +4,9 @@ import FullWidthLaptopShowcase from '../components/Laptop';
 
 export default function HomePage() {
   return (
-    <div className="relative z-10 pointer-events-none">
-      {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center px-8 pt-20">
+    <div className="relative">
+      {/* Hero Section - Uses 3D background */}
+      <section className="min-h-screen flex items-center justify-center px-8 pt-20 relative z-10 pointer-events-none">
         <div className="text-center max-w-6xl pointer-events-auto">
           <motion.div
             className="mb-8"
