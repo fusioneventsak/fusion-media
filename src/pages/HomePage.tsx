@@ -1,13 +1,35 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Canvas } from '@react-three/fiber';
+import { Suspense } from 'react';
+import Scene from '../components/Scene';
 import FullWidthLaptopShowcase from '../components/Laptop';
 
 export default function HomePage() {
   return (
     <div className="relative">
-      {/* Hero Section - Uses 3D background */}
-      <section className="min-h-screen flex items-center justify-center px-8 pt-20 relative z-10 pointer-events-none">
-        <div className="text-center max-w-6xl pointer-events-auto">
+      {/* Hero Section with 3D Background */}
+      <section className="relative min-h-screen flex items-center justify-center px-8 pt-20 bg-gradient-to-br from-gray-900 via-black to-blue-900">
+        {/* 3D Canvas Background - Only for Hero */}
+        <div className="absolute inset-0 z-0">
+          <Canvas 
+            camera={{ position: [0, 1, 8], fov: 75 }}
+            gl={{ 
+              antialias: true, 
+              alpha: true,
+              powerPreference: "high-performance"
+            }}
+            style={{ background: 'transparent' }}
+            dpr={[1, 2]}
+          >
+            <Suspense fallback={null}>
+              <Scene scrollY={0} currentPage="home" />
+            </Suspense>
+          </Canvas>
+        </div>
+
+        {/* Hero Content */}
+        <div className="relative z-10 text-center max-w-6xl pointer-events-auto">
           <motion.div
             className="mb-8"
             initial={{ opacity: 0, y: 30 }}
@@ -185,7 +207,7 @@ export default function HomePage() {
 
       {/* Technology & Process Section */}
       <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-gray-100">
-        <div className="max-w-7xl w-full pointer-events-auto">
+        <div className="max-w-7xl w-full">
           <motion.div
             className="text-center mb-20"
             initial={{ opacity: 0, y: 50 }}
@@ -265,7 +287,7 @@ export default function HomePage() {
 
       {/* Call to Action Section */}
       <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-gray-900">
-        <div className="max-w-5xl w-full text-center pointer-events-auto">
+        <div className="max-w-5xl w-full text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
