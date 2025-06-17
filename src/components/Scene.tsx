@@ -27,7 +27,7 @@ export default function Scene({ scrollY, currentPage }: SceneProps) {
       <pointLight position={[0, 10, -10]} intensity={0.6} color="#FF6B6B" />
       <pointLight position={[0, 0, 0]} intensity={0.8} color="#00FFFF" />
       
-      <ParticleField />
+      <ParticleField scrollY={scrollY} />
       
       <OrbitControls 
         enablePan={false} 
