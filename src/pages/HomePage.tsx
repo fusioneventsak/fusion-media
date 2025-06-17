@@ -1,262 +1,307 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 
 export default function HomePage() {
   return (
     <div className="relative z-10 pointer-events-none">
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center px-8 pt-20">
-        <div className="text-center max-w-5xl pointer-events-auto">
-          <motion.h1 
-            className="text-6xl md:text-8xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
-          >
-            FUSION INTERACTIVE
-          </motion.h1>
-          <motion.h2 
-            className="text-2xl md:text-3xl mb-4 text-cyan-400 font-semibold"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            Custom Web Development & Event Technology Specialists
-          </motion.h2>
-          <motion.p 
-            className="text-lg md:text-xl mb-8 text-gray-300 leading-relaxed max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            Transform your digital presence with cutting-edge custom applications, AI-powered solutions, 
-            immersive event technology, and virtual production that captivates audiences and drives results. 
-            From interactive trade show experiences to enterprise-grade web platforms, we build the impossible.
-          </motion.p>
-          <motion.div 
-            className="flex flex-wrap justify-center gap-4 mb-8"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            <motion.button 
-              className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              View Our Portfolio
-            </motion.button>
-            <motion.button 
-              className="px-8 py-4 border-2 border-white/30 rounded-full font-semibold hover:bg-white/10 transition-colors duration-200"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Start Your Project
-            </motion.button>
-          </motion.div>
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-sm"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.0 }}
-          >
-            {[
-              { number: '500+', label: 'Projects Delivered', color: 'text-cyan-400' },
-              { number: '98%', label: 'Client Satisfaction', color: 'text-purple-400' },
-              { number: '24/7', label: 'Support Available', color: 'text-pink-400' },
-              { number: '10+', label: 'Years Experience', color: 'text-green-400' }
-            ].map((stat, index) => (
-              <motion.div 
-                key={index}
-                className="bg-white/5 backdrop-blur-sm rounded-lg p-3"
-                whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.1)' }}
-              >
-                <div className={`text-2xl font-bold ${stat.color}`}>{stat.number}</div>
-                <div className="text-gray-400">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
+        <div className="text-center max-w-6xl pointer-events-auto">
+          {/* Main Hero Content with Professional Typography */}
+          <div className="relative z-20">
+            {/* Elegant backdrop for text readability */}
+            <div className="absolute -inset-12 bg-gradient-radial from-black/40 via-black/20 to-transparent blur-2xl"></div>
+            <div className="absolute -inset-8 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-transparent blur-xl"></div>
+            
+            <div className="relative">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-light mb-8 leading-tight">
+                <span className="block font-extralight text-white/90 mb-2">FUSION</span>
+                <span className="block font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-300 bg-clip-text text-transparent">
+                  INTERACTIVE
+                </span>
+              </h1>
+              
+              <div className="max-w-4xl mx-auto mb-12">
+                <p className="text-xl md:text-2xl text-gray-200 font-light leading-relaxed mb-6">
+                  Transforming businesses through cutting-edge technology and immersive digital experiences
+                </p>
+                <p className="text-lg md:text-xl text-gray-300 font-light leading-relaxed">
+                  Custom web applications • AI-powered solutions • Interactive event technology • Virtual production
+                </p>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">
+                <button className="group px-10 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-medium text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25">
+                  <span className="flex items-center justify-center">
+                    Explore Our Work
+                    <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </span>
+                </button>
+                <button className="px-10 py-4 border-2 border-white/20 rounded-full font-medium text-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300 hover:scale-105">
+                  Start Your Project
+                </button>
+              </div>
+              
+              {/* Professional Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                {[
+                  { number: '500+', label: 'Projects Delivered', accent: 'from-cyan-400 to-blue-500' },
+                  { number: '150+', label: 'Happy Clients', accent: 'from-purple-400 to-violet-500' },
+                  { number: '10+', label: 'Years Experience', accent: 'from-green-400 to-emerald-500' },
+                  { number: '24/7', label: 'Support Available', accent: 'from-orange-400 to-red-500' }
+                ].map((stat, index) => (
+                  <div key={index} className="group">
+                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
+                      <div className={`text-3xl md:text-4xl font-bold bg-gradient-to-r ${stat.accent} bg-clip-text text-transparent mb-2`}>
+                        {stat.number}
+                      </div>
+                      <div className="text-gray-300 text-sm md:text-base font-light">{stat.label}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Interactive Portfolio Preview Section */}
+      <section className="min-h-screen flex items-center justify-center px-8 bg-gradient-to-b from-transparent to-black/20">
+        <div className="max-w-7xl w-full text-center pointer-events-auto">
+          <div className="relative z-20">
+            <div className="absolute -inset-8 bg-gradient-radial from-purple-900/20 via-blue-900/10 to-transparent blur-2xl"></div>
+            
+            <div className="relative">
+              <h2 className="text-4xl md:text-6xl font-light mb-8 text-white">
+                Experience Our Work
+                <span className="block text-2xl md:text-3xl font-light text-purple-300 mt-4">
+                  in Interactive 3D Space
+                </span>
+              </h2>
+              
+              <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto font-light leading-relaxed">
+                Explore our live projects in immersive 3D. These aren't mockups—they're real, 
+                functioning applications you can interact with directly.
+              </p>
+              
+              <div className="grid md:grid-cols-3 gap-8 mb-16">
+                {[
+                  {
+                    icon: '🎯',
+                    title: 'Interactive Controls',
+                    description: 'Click and drag to rotate the 3D scene. Hover over devices to see them respond.'
+                  },
+                  {
+                    icon: '💻',
+                    title: 'Live Applications',
+                    description: 'Each device displays a real, functioning website you can interact with.'
+                  },
+                  {
+                    icon: '📱',
+                    title: 'Responsive Showcase',
+                    description: 'See how our applications adapt perfectly across all device types.'
+                  }
+                ].map((feature, index) => (
+                  <div key={index} className="group">
+                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105">
+                      <div className="text-4xl mb-4">{feature.icon}</div>
+                      <h3 className="text-xl font-semibold text-white mb-4">{feature.title}</h3>
+                      <p className="text-gray-300 font-light leading-relaxed">{feature.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-sm rounded-3xl p-8 border border-blue-500/20">
+                <h3 className="text-2xl font-semibold text-blue-300 mb-4">🎮 Interactive Guide</h3>
+                <div className="grid md:grid-cols-2 gap-6 text-left">
+                  <div>
+                    <h4 className="text-white font-semibold mb-2">Desktop Controls</h4>
+                    <ul className="text-gray-300 space-y-1 text-sm">
+                      <li>• <strong>Click + Drag:</strong> Rotate the 3D scene</li>
+                      <li>• <strong>Scroll:</strong> Zoom in and out</li>
+                      <li>• <strong>Hover:</strong> Highlight devices</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold mb-2">Touch Controls</h4>
+                    <ul className="text-gray-300 space-y-1 text-sm">
+                      <li>• <strong>Touch + Drag:</strong> Rotate the scene</li>
+                      <li>• <strong>Pinch:</strong> Zoom in and out</li>
+                      <li>• <strong>Tap:</strong> Interact with content</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Expertise Section */}
+      <section className="min-h-screen flex items-center justify-center px-8 bg-gradient-to-b from-black/20 to-black/40">
+        <div className="max-w-7xl w-full pointer-events-auto">
+          <div className="relative z-20">
+            <div className="absolute -inset-8 bg-gradient-radial from-cyan-900/20 via-blue-900/10 to-transparent blur-2xl"></div>
+            
+            <div className="relative">
+              <h2 className="text-4xl md:text-6xl font-light text-center mb-8 text-white">
+                Our Expertise
+              </h2>
+              <p className="text-xl md:text-2xl text-center text-gray-300 mb-16 max-w-4xl mx-auto font-light">
+                We don't just build applications—we create digital experiences that transform businesses 
+                and captivate audiences across every industry.
+              </p>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                  {
+                    title: 'Custom Web Development',
+                    icon: '🌐',
+                    description: 'Enterprise-grade React, Vue, and Angular applications with cutting-edge performance.',
+                    features: ['Progressive Web Apps', 'API Development', 'Cloud Integration', 'Microservices'],
+                    gradient: 'from-blue-500 to-cyan-400'
+                  },
+                  {
+                    title: 'AI & Machine Learning',
+                    icon: '🤖',
+                    description: 'Intelligent systems that add real business value through automation and insights.',
+                    features: ['Chatbot Development', 'Predictive Analytics', 'Computer Vision', 'NLP Solutions'],
+                    gradient: 'from-purple-500 to-pink-400'
+                  },
+                  {
+                    title: 'Event Technology',
+                    icon: '🎪',
+                    description: 'Immersive event experiences with real-time interaction and seamless integration.',
+                    features: ['Interactive Installations', 'Live Streaming', 'Virtual Events', 'Registration Systems'],
+                    gradient: 'from-green-500 to-emerald-400'
+                  },
+                  {
+                    title: 'Mobile Applications',
+                    icon: '📱',
+                    description: 'Native performance with cross-platform efficiency for iOS and Android.',
+                    features: ['React Native', 'Flutter Development', 'Native iOS/Android', 'Mobile-First Design'],
+                    gradient: 'from-orange-500 to-red-400'
+                  },
+                  {
+                    title: 'WebGL & 3D Experiences',
+                    icon: '🎮',
+                    description: 'Immersive 3D web experiences that push the boundaries of what\'s possible.',
+                    features: ['Three.js Development', 'WebGL Applications', 'VR/AR Integration', 'Interactive Games'],
+                    gradient: 'from-violet-500 to-purple-400'
+                  },
+                  {
+                    title: 'Performance & Security',
+                    icon: '⚡',
+                    description: 'Lightning-fast, secure applications built to scale with your business.',
+                    features: ['Performance Optimization', 'Security Audits', 'Load Testing', 'SEO Implementation'],
+                    gradient: 'from-teal-500 to-cyan-400'
+                  }
+                ].map((service, index) => (
+                  <div key={index} className="group h-full">
+                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-500 hover:scale-105 h-full flex flex-col">
+                      <div className="text-4xl mb-6">{service.icon}</div>
+                      <h3 className={`text-2xl font-semibold mb-4 bg-gradient-to-r ${service.gradient} bg-clip-text text-transparent`}>
+                        {service.title}
+                      </h3>
+                      <p className="text-gray-300 mb-6 font-light leading-relaxed flex-grow">
+                        {service.description}
+                      </p>
+                      <div className="space-y-2">
+                        {service.features.map((feature, idx) => (
+                          <div key={idx} className="flex items-center text-sm text-gray-400">
+                            <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${service.gradient} mr-3`}></div>
+                            {feature}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="min-h-screen flex items-center justify-center px-8">
+      <section className="min-h-screen flex items-center justify-center px-8 bg-gradient-to-b from-black/40 to-black/60">
         <div className="max-w-7xl w-full pointer-events-auto">
-          <motion.h2 
-            className="text-5xl font-bold text-center mb-8 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            Why Choose Fusion Interactive?
-          </motion.h2>
-          <motion.p 
-            className="text-xl text-center text-gray-300 mb-16 max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            We don't just build applications – we create digital experiences that transform businesses and captivate audiences.
-          </motion.p>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { icon: '🚀', title: 'Cutting-Edge Technology', description: 'WebGL, AI, machine learning, and the latest frameworks for unparalleled performance.' },
-              { icon: '🎯', title: 'Custom Solutions Only', description: 'No templates, no shortcuts. Every project is built from scratch to your exact specifications.' },
-              { icon: '⚡', title: 'Performance Obsessed', description: 'Lightning-fast load times, smooth animations, and optimized user experiences.' },
-              { icon: '🤖', title: 'AI-Powered Innovation', description: 'Intelligent chatbots, automation, and machine learning that adds real value.' },
-              { icon: '📊', title: 'Data-Driven Results', description: 'Comprehensive analytics and insights that inform every design decision.' },
-              { icon: '🔧', title: 'End-to-End Service', description: 'From concept to launch and beyond, we handle the entire development lifecycle.' },
-              { icon: '🎪', title: 'Event Technology Experts', description: 'Interactive installations, virtual production, and immersive experiences.' },
-              { icon: '🌐', title: 'Scalable Architecture', description: 'Built to grow with your business, from startup to enterprise scale.' },
-              { icon: '🔒', title: 'Enterprise Security', description: 'Bank-level security protocols and GDPR/HIPAA compliance built-in.' }
-            ].map((benefit, index) => (
-              <motion.div 
-                key={index}
-                className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10 hover:bg-white/10 transition-colors duration-300"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className="text-4xl mb-4">{benefit.icon}</div>
-                <h3 className="text-xl font-semibold mb-3 text-white">{benefit.title}</h3>
-                <p className="text-gray-300">{benefit.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="min-h-screen flex items-center justify-center px-8">
-        <div className="max-w-7xl w-full pointer-events-auto">
-          <motion.h2 
-            className="text-5xl font-bold text-center mb-8 bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            Our Expertise & Services
-          </motion.h2>
-          <motion.p 
-            className="text-xl text-center text-gray-300 mb-16 max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            From concept to launch, we deliver comprehensive digital solutions that drive business growth and create unforgettable user experiences.
-          </motion.p>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            {[
-              {
-                title: "🌐 Custom Web Development",
-                description: "React, Vue, Angular, PWAs, APIs - Enterprise-grade applications built with cutting-edge frameworks.",
-                features: ["Progressive Web Apps", "API Development", "Microservices Architecture", "Cloud Integration"]
-              },
-              {
-                title: "🤖 AI & Machine Learning",
-                description: "Intelligent chatbots, predictive analytics, computer vision - AI that adds real business value.",
-                features: ["Chatbot Development", "Predictive Analytics", "Computer Vision", "Natural Language Processing"]
-              },
-              {
-                title: "🎬 Virtual Production & Streaming",
-                description: "Multi-camera setups, live streaming, virtual events - Professional-grade video solutions.",
-                features: ["Live Event Streaming", "Virtual Event Platforms", "Multi-Camera Production", "Interactive Webinars"]
-              },
-              {
-                title: "📱 Mobile & Cross-Platform Apps",
-                description: "iOS, Android, React Native - Native performance with cross-platform efficiency.",
-                features: ["Native iOS/Android", "React Native", "Flutter Development", "Mobile-First Design"]
-              },
-              {
-                title: "🎮 Interactive & 3D Experiences",
-                description: "WebGL, VR/AR, gamification - Immersive experiences that captivate and engage.",
-                features: ["WebGL Development", "VR/AR Applications", "3D Visualization", "Interactive Games"]
-              },
-              {
-                title: "⚡ Performance & Optimization",
-                description: "Speed optimization, SEO, security - Technical excellence that drives results.",
-                features: ["Performance Optimization", "SEO Implementation", "Security Audits", "Load Testing"]
-              }
-            ].map((service, index) => (
-              <motion.div 
-                key={index}
-                className="bg-white/5 backdrop-blur-sm rounded-xl p-8 border border-white/10 hover:bg-white/10 transition-colors duration-300"
-                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <h3 className="text-2xl font-semibold mb-4 text-white">{service.title}</h3>
-                <p className="text-gray-300 mb-6">{service.description}</p>
-                <ul className="space-y-2">
-                  {service.features.map((feature, idx) => (
-                    <li key={idx} className="text-cyan-400 flex items-center">
-                      <span className="w-2 h-2 bg-cyan-400 rounded-full mr-3"></span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Portfolio Preview Section */}
-      <section className="min-h-screen flex items-center justify-center px-8">
-        <div className="max-w-7xl w-full text-center pointer-events-auto">
-          <motion.h2 
-            className="text-5xl font-bold mb-8 bg-gradient-to-r from-pink-400 to-red-500 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            Interactive Portfolio Experience
-          </motion.h2>
-          <motion.p 
-            className="text-xl text-gray-300 mb-12 max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Explore our live projects in immersive 3D space. These aren't just mockups – they're real, 
-            functioning applications you can interact with. Rotate the view and experience the quality of our work firsthand.
-          </motion.p>
-          
-          <motion.div 
-            className="bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-sm rounded-2xl p-8 border border-blue-500/30"
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <h3 className="text-2xl font-bold mb-4 text-blue-300">🎯 How to Explore</h3>
-            <div className="grid md:grid-cols-3 gap-6 text-sm">
-              <div>
-                <div className="text-cyan-400 font-semibold mb-2">🖱️ Interactive Controls</div>
-                <p className="text-gray-400">Click and drag to rotate the 3D scene. Hover over devices to see them scale up.</p>
+          <div className="relative z-20">
+            <div className="absolute -inset-8 bg-gradient-radial from-indigo-900/20 via-purple-900/10 to-transparent blur-2xl"></div>
+            
+            <div className="relative">
+              <h2 className="text-4xl md:text-6xl font-light text-center mb-8 text-white">
+                Why Choose Fusion Interactive?
+              </h2>
+              <p className="text-xl md:text-2xl text-center text-gray-300 mb-16 max-w-4xl mx-auto font-light">
+                We combine technical excellence with creative innovation to deliver solutions 
+                that don't just meet expectations—they exceed them.
+              </p>
+              
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {[
+                  {
+                    icon: '🚀',
+                    title: 'Innovation First',
+                    description: 'We stay ahead of technology trends, implementing cutting-edge solutions that give you a competitive advantage.'
+                  },
+                  {
+                    icon: '🎯',
+                    title: 'Results Driven',
+                    description: 'Every project is measured by its impact on your business goals, user engagement, and bottom line.'
+                  },
+                  {
+                    icon: '🤝',
+                    title: 'True Partnership',
+                    description: 'We work as an extension of your team, ensuring transparent communication and collaborative success.'
+                  },
+                  {
+                    icon: '⚡',
+                    title: 'Performance Obsessed',
+                    description: 'We optimize every aspect of your application for speed, scalability, and exceptional user experience.'
+                  },
+                  {
+                    icon: '🔧',
+                    title: 'End-to-End Service',
+                    description: 'From concept to launch and beyond, we handle the entire development lifecycle with expertise.'
+                  },
+                  {
+                    icon: '🌟',
+                    title: 'Quality Guaranteed',
+                    description: 'Rigorous testing, code reviews, and quality assurance ensure your project exceeds industry standards.'
+                  }
+                ].map((benefit, index) => (
+                  <div key={index} className="group">
+                    <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10 hover:bg-white/10 transition-all duration-300 hover:scale-105 text-center">
+                      <div className="text-5xl mb-6">{benefit.icon}</div>
+                      <h3 className="text-xl font-semibold text-white mb-4">{benefit.title}</h3>
+                      <p className="text-gray-300 font-light leading-relaxed">{benefit.description}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <div>
-                <div className="text-purple-400 font-semibold mb-2">💻 Live Applications</div>
-                <p className="text-gray-400">Each laptop and phone displays a real, functioning website you can interact with.</p>
-              </div>
-              <div>
-                <div className="text-pink-400 font-semibold mb-2">📱 Responsive Design</div>
-                <p className="text-gray-400">See how our applications adapt perfectly to different screen sizes and devices.</p>
+              
+              <div className="mt-16 text-center">
+                <div className="bg-gradient-to-r from-blue-900/40 to-purple-900/40 backdrop-blur-sm rounded-3xl p-12 border border-blue-500/20">
+                  <h3 className="text-3xl font-semibold text-white mb-6">Ready to Transform Your Digital Presence?</h3>
+                  <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto font-light">
+                    Let's discuss how we can bring your vision to life with innovative technology 
+                    and exceptional craftsmanship.
+                  </p>
+                  <div className="flex flex-col sm:flex-row justify-center gap-4">
+                    <button className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-medium text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/25">
+                      Start Your Project
+                    </button>
+                    <button className="px-8 py-4 border-2 border-white/20 rounded-full font-medium text-lg backdrop-blur-sm hover:bg-white/10 transition-all duration-300">
+                      View Case Studies
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
     </div>
