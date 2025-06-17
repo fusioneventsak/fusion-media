@@ -33,8 +33,11 @@ export default function FullWidthLaptopShowcase({
   };
 
   return (
-    <section className={`min-h-screen ${backgroundColor} relative overflow-hidden`}>
-      <div className="max-w-7xl mx-auto px-8 py-20">
+    <section className="min-h-screen relative overflow-hidden">
+      {/* Transparent background with subtle backdrop blur for readability */}
+      <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-8 py-20">
         <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[80vh]">
           
           {/* Content Side */}
