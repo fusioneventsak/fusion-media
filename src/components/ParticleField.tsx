@@ -45,7 +45,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
           
           // Tunnel movement - particles flow towards camera and cycle back
           float tunnelSpeed = scrollOffset * 0.02;
-          pos.z = mod(pos.z + tunnelSpeed, 60.0) - 30.0; // Continuous loop from -30 to +30
+          pos.z = mod(pos.z + tunnelSpeed, 20.0) - 10.0; // Shorter loop from -10 to +10
           
           // Slight spiral effect for visual interest
           float spiral = (pos.z + tunnelSpeed) * 0.1;
@@ -55,21 +55,21 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
           float distance = length(mvPosition.xyz);
           
-          // Size based on distance with much smaller base sizes
-          float perspectiveSize = size * (15.0 / max(distance, 0.5));
+          // Size based on distance with much larger base sizes
+          float perspectiveSize = size * (8.0 / max(distance, 0.1));
           
           // Pulsing effect
           float pulse = 1.0 + sin(time * 2.0 + pos.z * 0.1) * 0.2;
           perspectiveSize *= pulse;
           
-          // Always visible glow - stronger for closer particles
-          vGlow = 1.0 - smoothstep(0.5, 25.0, distance);
-          vGlow = max(vGlow, 0.4); // Always at least 40% visible
+          // Always visible glow - much stronger
+          vGlow = 1.0 - smoothstep(0.1, 12.0, distance);
+          vGlow = max(vGlow, 0.7); // Always at least 70% visible
           
           // Depth-based brightness - closer particles are brighter
-          vGlow *= (1.0 + (30.0 - abs(pos.z)) / 30.0);
+          vGlow *= (1.0 + (10.0 - abs(pos.z)) / 10.0);
           
-          gl_PointSize = max(perspectiveSize * pixelRatio, 1.0); // Minimum size of 1 pixel
+          gl_PointSize = max(perspectiveSize * pixelRatio, 2.0); // Minimum size of 2 pixels
           gl_Position = projectionMatrix * mvPosition;
         }
       `,
@@ -123,10 +123,10 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         void main() {
           vColor = color;
           
-          // Dust tunnel effect
+          // Dust tunnel effect - closer and more visible
           vec3 pos = position;
           float dustSpeed = scrollOffset * 0.015;
-          pos.z = mod(pos.z + dustSpeed, 80.0) - 40.0;
+          pos.z = mod(pos.z + dustSpeed, 25.0) - 12.5; // Shorter dust tunnel
           
           // Gentle swirling
           float swirl = (pos.z + dustSpeed) * 0.05;
@@ -136,11 +136,11 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
           float distance = length(mvPosition.xyz);
           
-          // Always visible dust
-          vOpacity = 1.0 - smoothstep(1.0, 30.0, distance);
-          vOpacity = max(vOpacity, 0.3);
+          // Always visible dust - much stronger
+          vOpacity = 1.0 - smoothstep(0.5, 15.0, distance);
+          vOpacity = max(vOpacity, 0.6); // Higher minimum visibility
           
-          gl_PointSize = size * (10.0 / max(distance, 0.5));
+          gl_PointSize = size * (6.0 / max(distance, 0.1)); // Larger dust
           gl_Position = projectionMatrix * mvPosition;
         }
       `,
@@ -171,16 +171,16 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     const mainDepths = new Float32Array(mainCount);
     
     for (let i = 0; i < mainCount; i++) {
-      // Distribute particles in a cylinder for tunnel effect
+      // Distribute particles in a cylinder for tunnel effect - MUCH CLOSER
       const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * 12 + 2; // Tunnel radius
+      const radius = Math.random() * 4 + 0.5; // Smaller tunnel radius
       
       mainPositions[i * 3] = Math.cos(angle) * radius;
       mainPositions[i * 3 + 1] = Math.sin(angle) * radius;
-      mainPositions[i * 3 + 2] = (Math.random() - 0.5) * 60; // Long tunnel depth
+      mainPositions[i * 3 + 2] = (Math.random() - 0.5) * 20; // Much shorter depth range
       
       // Color variations for depth
-      const depth = Math.abs(mainPositions[i * 3 + 2]) / 30.0;
+      const depth = Math.abs(mainPositions[i * 3 + 2]) / 10.0; // Adjusted for shorter range
       const colorVariation = Math.random() * 0.3 + 0.7;
       
       const colorType = Math.random();
@@ -207,8 +207,8 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         mainColors[i * 3 + 2] = (0.4 + Math.random() * 0.3) * colorVariation;
       }
       
-      // Much smaller sizes with more variance
-      mainSizes[i] = Math.random() * 1.5 + 0.3; // 0.3 to 1.8
+      // Much larger sizes for visibility
+      mainSizes[i] = Math.random() * 3 + 1; // 1 to 4 units
       mainAlphas[i] = 0.7 + Math.random() * 0.3;
       mainDepths[i] = depth;
     }
@@ -221,9 +221,9 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     const focalAlphas = new Float32Array(focalCount);
     
     for (let i = 0; i < focalCount; i++) {
-      focalPositions[i * 3] = (Math.random() - 0.5) * 25;
-      focalPositions[i * 3 + 1] = (Math.random() - 0.5) * 25;
-      focalPositions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+      focalPositions[i * 3] = (Math.random() - 0.5) * 8; // Much closer
+      focalPositions[i * 3 + 1] = (Math.random() - 0.5) * 8;
+      focalPositions[i * 3 + 2] = (Math.random() - 0.5) * 15; // Closer depth
       
       // Bright white/yellow stars
       const warmth = Math.random();
@@ -232,7 +232,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       focalColors[i * 3 + 1] = intensity * (0.9 + warmth * 0.1);
       focalColors[i * 3 + 2] = intensity * (0.7 + warmth * 0.2);
       
-      focalSizes[i] = Math.random() * 2 + 0.5; // 0.5 to 2.5
+      focalSizes[i] = Math.random() * 4 + 1.5; // 1.5 to 5.5 - bigger for visibility
       focalAlphas[i] = 0.8 + Math.random() * 0.2;
     }
     
@@ -243,9 +243,9 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     const dustSizes = new Float32Array(dustCount);
     
     for (let i = 0; i < dustCount; i++) {
-      dustPositions[i * 3] = (Math.random() - 0.5) * 30;
-      dustPositions[i * 3 + 1] = (Math.random() - 0.5) * 30;
-      dustPositions[i * 3 + 2] = (Math.random() - 0.5) * 80;
+      dustPositions[i * 3] = (Math.random() - 0.5) * 12; // Much closer
+      dustPositions[i * 3 + 1] = (Math.random() - 0.5) * 12;
+      dustPositions[i * 3 + 2] = (Math.random() - 0.5) * 25; // Closer depth
       
       // Nebula colors with subtle variations
       const nebulaType = Math.random();
@@ -268,7 +268,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         dustColors[i * 3 + 2] = colorShift;
       }
       
-      dustSizes[i] = Math.random() * 1 + 0.2; // Very small dust
+      dustSizes[i] = Math.random() * 2 + 0.5; // Bigger dust particles
     }
     
     return {
