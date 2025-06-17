@@ -24,11 +24,16 @@ export default function FullWidthLaptopShowcase({
   const [isInView, setIsInView] = useState(false);
 
   const getAccentBgColor = () => {
-    return accentColor.replace('text-', 'bg-');
+    if (accentColor.includes('purple')) return 'bg-purple-600';
+    if (accentColor.includes('blue')) return 'bg-blue-600';
+    if (accentColor.includes('cyan')) return 'bg-cyan-600';
+    if (accentColor.includes('indigo')) return 'bg-indigo-600';
+    if (accentColor.includes('green')) return 'bg-green-600';
+    return 'bg-blue-600';
   };
 
   return (
-    <section className={`min-h-screen ${backgroundColor} relative overflow-hidden pointer-events-auto`}>
+    <section className={`min-h-screen ${backgroundColor} relative overflow-hidden`}>
       <div className="max-w-7xl mx-auto px-8 py-20">
         <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[80vh]">
           
@@ -70,6 +75,7 @@ export default function FullWidthLaptopShowcase({
               className={`inline-flex items-center px-8 py-4 ${getAccentBgColor()} text-white rounded-full font-medium hover:opacity-90 transition-all duration-300 shadow-lg`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => window.open(url, '_blank')}
             >
               View Live Site
               <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,122 +92,106 @@ export default function FullWidthLaptopShowcase({
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <div className="relative" style={{ perspective: '1000px' }}>
+            <div className="relative">
               <motion.div
                 className="transform transition-all duration-1000"
                 animate={isInView ? {
-                  rotateY: [0, 8, -8, 0],
-                  rotateX: [0, 2, -2, 0]
+                  rotateY: [0, 3, -3, 0],
+                  rotateX: [0, 1, -1, 0]
                 } : {}}
                 transition={{
-                  duration: 12,
+                  duration: 8,
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                style={{
-                  transformStyle: 'preserve-3d'
-                }}
               >
-                {/* Large Interactive Laptop */}
-                <div className="relative w-full max-w-5xl mx-auto">
+                {/* Laptop Container */}
+                <div className="relative w-full max-w-4xl mx-auto">
                   {/* Laptop Base */}
-                  <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl shadow-2xl border border-gray-700 p-6 md:p-8 lg:p-12">
+                  <div className="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700 p-4 md:p-6 lg:p-8">
                     
                     {/* Laptop Screen */}
                     <div 
-                      className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl border-4 border-gray-700 shadow-xl mb-6"
+                      className="relative bg-gradient-to-br from-gray-900 to-black rounded-xl border-2 border-gray-700 shadow-xl mb-4"
                       style={{
-                        aspectRatio: '16/10',
-                        transform: 'rotateX(-8deg)',
-                        transformStyle: 'preserve-3d'
+                        aspectRatio: '16/10'
                       }}
                     >
                       {/* Screen Bezel */}
-                      <div className="absolute inset-6 bg-black rounded-xl border border-gray-600 overflow-hidden">
+                      <div className="absolute inset-4 bg-black rounded-lg border border-gray-600 overflow-hidden">
                         
                         {/* Browser Chrome */}
-                        <div className="h-12 bg-gray-800 flex items-center px-6 border-b border-gray-600 relative z-10">
-                          <div className="flex space-x-3">
-                            <div className="w-4 h-4 rounded-full bg-red-500 shadow-sm"></div>
-                            <div className="w-4 h-4 rounded-full bg-yellow-500 shadow-sm"></div>
-                            <div className="w-4 h-4 rounded-full bg-green-500 shadow-sm"></div>
+                        <div className="h-8 bg-gray-800 flex items-center px-4 border-b border-gray-600 relative z-10">
+                          <div className="flex space-x-2">
+                            <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div className="w-3 h-3 rounded-full bg-green-500"></div>
                           </div>
                           <div className="flex-1 text-center">
-                            <div className="text-sm text-gray-300 font-medium truncate px-4">{title}</div>
+                            <div className="text-xs text-gray-300 font-medium truncate px-4">{title}</div>
                           </div>
                           <div className="text-xs text-green-400 flex items-center">
-                            <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                            <span className="w-1.5 h-1.5 bg-green-400 rounded-full mr-1 animate-pulse"></span>
                             LIVE
                           </div>
                         </div>
                         
-                        {/* Website Content - Large and Interactive */}
-                        <div className="relative overflow-hidden" style={{ height: 'calc(100% - 48px)' }}>
+                        {/* Website Content */}
+                        <div className="relative overflow-hidden bg-white" style={{ height: 'calc(100% - 32px)' }}>
                           {!isLoaded && (
-                            <div className="absolute inset-0 bg-gray-900 flex items-center justify-center z-10">
+                            <div className="absolute inset-0 bg-gray-100 flex items-center justify-center z-10">
                               <div className="text-center">
-                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto mb-4"></div>
-                                <div className="text-sm text-gray-400">Loading {title}...</div>
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+                                <div className="text-xs text-gray-600">Loading...</div>
                               </div>
                             </div>
                           )}
                           
                           <iframe
                             src={url}
-                            className="w-full h-full border-none bg-white"
+                            className="w-full h-full border-none"
                             title={title}
-                            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-pointer-lock"
+                            sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
                             onLoad={() => setIsLoaded(true)}
-                            style={{
-                              pointerEvents: 'auto',
-                              userSelect: 'auto',
-                              minHeight: '400px'
-                            }}
+                            loading="lazy"
                           />
                         </div>
                       </div>
                       
-                      {/* Screen Reflection Effect */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-transparent rounded-2xl opacity-40 pointer-events-none"></div>
+                      {/* Screen Reflection */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent rounded-xl pointer-events-none"></div>
                       
                       {/* Camera */}
-                      <div className="absolute top-3 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-gray-800 rounded-full border border-gray-600 shadow-inner">
-                        <div className="w-2 h-2 bg-gray-700 rounded-full absolute top-1 left-1"></div>
+                      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-800 rounded-full border border-gray-600">
+                        <div className="w-1 h-1 bg-gray-700 rounded-full absolute top-0.5 left-0.5"></div>
                       </div>
                     </div>
                     
                     {/* Keyboard Area */}
-                    <div className="bg-gray-700 rounded-xl shadow-inner p-6">
-                      {/* Keyboard Keys */}
-                      <div className="grid grid-cols-14 gap-1 mb-4">
-                        {Array.from({ length: 56 }).map((_, i) => (
+                    <div className="bg-gray-700 rounded-lg shadow-inner p-3">
+                      {/* Simplified Keyboard */}
+                      <div className="grid grid-cols-12 gap-0.5 mb-2">
+                        {Array.from({ length: 36 }).map((_, i) => (
                           <div 
                             key={i} 
-                            className="aspect-square bg-gray-600 rounded border border-gray-500 shadow-sm hover:bg-gray-500 transition-colors"
-                            style={{ minWidth: '8px', minHeight: '8px' }}
+                            className="aspect-square bg-gray-600 rounded-sm border border-gray-500 text-xs"
                           ></div>
                         ))}
                       </div>
                       
                       {/* Spacebar */}
-                      <div className="mx-auto w-48 h-5 bg-gray-600 rounded border border-gray-500 shadow-sm mb-4"></div>
+                      <div className="mx-auto w-24 h-2 bg-gray-600 rounded border border-gray-500 mb-2"></div>
                       
                       {/* Trackpad */}
-                      <div className="mx-auto w-32 h-20 bg-gray-600 rounded-lg border border-gray-500 shadow-inner"></div>
+                      <div className="mx-auto w-16 h-10 bg-gray-600 rounded border border-gray-500"></div>
                     </div>
                     
                     {/* Brand Logo */}
-                    <div className="absolute bottom-6 right-8 text-sm text-gray-400 font-mono opacity-60">FUSION</div>
+                    <div className="absolute bottom-3 right-4 text-xs text-gray-400 font-mono opacity-60">FUSION</div>
                     
                     {/* Power LED */}
-                    <div className="absolute top-6 right-8 w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
-                    
-                    {/* Laptop Shadow */}
-                    <div className="absolute -bottom-6 left-6 right-6 h-12 bg-black/30 rounded-full blur-2xl"></div>
+                    <div className="absolute top-3 right-4 w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                   </div>
-
-                  {/* Additional 3D depth shadow */}
-                  <div className="absolute inset-0 bg-black/20 rounded-3xl transform translate-x-4 translate-y-4 -z-10 blur-sm"></div>
                 </div>
               </motion.div>
             </div>
