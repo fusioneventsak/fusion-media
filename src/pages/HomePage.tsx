@@ -1,5 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import Laptop3D from '../components/Laptop';
+import Phone3D from '../components/Phone';
 
 export default function HomePage() {
   return (
@@ -257,6 +261,167 @@ export default function HomePage() {
               </div>
             </div>
           </motion.div>
+
+          {/* Interactive 3D Devices Showcase */}
+          <div className="space-y-16 mb-16">
+            {/* Desktop Applications */}
+            <div>
+              <motion.h3 
+                className="text-3xl font-bold mb-8 text-cyan-400"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
+                💻 Desktop Applications
+              </motion.h3>
+              <div className="grid md:grid-cols-2 gap-8">
+                {[
+                  {
+                    title: "Selfie Holosphere",
+                    description: "Interactive 3D photo collage experience with real-time processing",
+                    url: "https://selfieholosphere.com/collage/1lr9qn",
+                    tech: ["WebGL", "Real-time Processing", "3D Animation"]
+                  },
+                  {
+                    title: "U Request Songs",
+                    description: "Interactive DJ platform with crowd engagement and real-time voting",
+                    url: "http://urequestsongs.com",
+                    tech: ["React", "WebSockets", "Audio Processing"]
+                  },
+                  {
+                    title: "Fusion Events",
+                    description: "Professional event services with integrated booking and portfolio",
+                    url: "https://www.fusion-events.ca",
+                    tech: ["Next.js", "CRM Integration", "Performance Optimization"]
+                  },
+                  {
+                    title: "Custom Business Platform",
+                    description: "Tailored business solutions with advanced analytics and reporting",
+                    url: "https://splendid-cannoli-324007.netlify.app/",
+                    tech: ["Custom Development", "Data Visualization", "Enterprise Security"]
+                  }
+                ].map((project, index) => (
+                  <motion.div 
+                    key={index}
+                    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/8 transition-colors duration-300"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                  >
+                    <div className="mb-4">
+                      <h4 className="text-xl font-semibold text-white mb-2">{project.title}</h4>
+                      <p className="text-gray-300 text-sm mb-4">{project.description}</p>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {project.tech.map((tech, idx) => (
+                          <span key={idx} className="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* 3D Laptop with embedded content */}
+                    <div className="h-64 bg-black/20 rounded-lg overflow-hidden border border-white/10">
+                      <Canvas camera={{ position: [0, 1, 4], fov: 75 }}>
+                        <ambientLight intensity={0.6} />
+                        <pointLight position={[5, 5, 5]} intensity={0.8} />
+                        <pointLight position={[-5, -5, -5]} intensity={0.4} color="#4169E1" />
+                        <Laptop3D
+                          position={[0, 0, 0]}
+                          url={project.url}
+                          title={project.title}
+                          isOpen={true}
+                          screenAngle={90}
+                          isPoweredOn={true}
+                        />
+                        <OrbitControls 
+                          enablePan={false} 
+                          enableZoom={false} 
+                          enableRotate={true}
+                          autoRotate={true}
+                          autoRotateSpeed={1}
+                        />
+                      </Canvas>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Mobile Applications */}
+            <div>
+              <motion.h3 
+                className="text-3xl font-bold mb-8 text-purple-400"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
+                📱 Mobile Applications
+              </motion.h3>
+              <div className="grid md:grid-cols-2 gap-8">
+                {[
+                  {
+                    title: "Mobile Event Management",
+                    description: "Comprehensive event management with real-time updates and notifications",
+                    url: "https://capable-alfajores-d0dff2.netlify.app/",
+                    tech: ["React Native", "Push Notifications", "Offline Sync"]
+                  },
+                  {
+                    title: "Interactive Mobile Experience",
+                    description: "Engaging mobile-first application with touch-optimized interactions",
+                    url: "https://lucky-centaur-ce715c.netlify.app/",
+                    tech: ["PWA", "Touch Gestures", "Mobile Optimization"]
+                  }
+                ].map((project, index) => (
+                  <motion.div 
+                    key={index}
+                    className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/8 transition-colors duration-300"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                  >
+                    <div className="mb-4">
+                      <h4 className="text-xl font-semibold text-white mb-2">{project.title}</h4>
+                      <p className="text-gray-300 text-sm mb-4">{project.description}</p>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {project.tech.map((tech, idx) => (
+                          <span key={idx} className="px-2 py-1 bg-purple-500/20 text-purple-300 rounded text-xs">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* 3D Phone with embedded content */}
+                    <div className="h-64 bg-black/20 rounded-lg overflow-hidden border border-white/10">
+                      <Canvas camera={{ position: [0, 0, 3], fov: 75 }}>
+                        <ambientLight intensity={0.6} />
+                        <pointLight position={[3, 3, 3]} intensity={0.8} />
+                        <pointLight position={[-3, -3, -3]} intensity={0.4} color="#8B5CF6" />
+                        <Phone3D
+                          position={[0, 0, 0]}
+                          url={project.url}
+                          title={project.title}
+                          isPoweredOn={true}
+                        />
+                        <OrbitControls 
+                          enablePan={false} 
+                          enableZoom={false} 
+                          enableRotate={true}
+                          autoRotate={true}
+                          autoRotateSpeed={1.5}
+                        />
+                      </Canvas>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
 
           {/* Featured Project Cards */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
