@@ -1,9 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import ParticleField from './ParticleField';
-import Laptop3D from './Laptop';
-import Phone3D from './Phone';
 
 interface SceneProps {
   scrollY: number;
@@ -20,9 +18,6 @@ export default function Scene({ scrollY, currentPage }: SceneProps) {
   useFrame(() => {
     camera.position.y = -scrollY * 0.0015;
   });
-  
-  // Only show 3D devices on home page
-  const show3DDevices = currentPage === 'home';
   
   return (
     <>
