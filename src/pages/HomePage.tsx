@@ -1,35 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import { Suspense } from 'react';
-import Scene from '../components/Scene';
 import FullWidthLaptopShowcase from '../components/Laptop';
 
 export default function HomePage() {
   return (
-    <div className="relative">
-      {/* Hero Section with 3D Background */}
-      <section className="relative min-h-screen flex items-center justify-center px-8 pt-20 bg-gradient-to-br from-gray-900 via-black to-blue-900">
-        {/* 3D Canvas Background - Only for Hero */}
-        <div className="absolute inset-0 z-0">
-          <Canvas 
-            camera={{ position: [0, 1, 8], fov: 75 }}
-            gl={{ 
-              antialias: true, 
-              alpha: true,
-              powerPreference: "high-performance"
-            }}
-            style={{ background: 'transparent' }}
-            dpr={[1, 2]}
-          >
-            <Suspense fallback={null}>
-              <Scene scrollY={0} currentPage="home" />
-            </Suspense>
-          </Canvas>
-        </div>
-
+    <div className="relative pointer-events-none">
+      {/* Hero Section - Transparent to show WebGL background */}
+      <section className="relative min-h-screen flex items-center justify-center px-8 pt-20 pointer-events-none">
         {/* Hero Content */}
-        <div className="relative z-10 text-center max-w-6xl">
+        <div className="relative z-10 text-center max-w-6xl pointer-events-auto">
           <motion.div
             className="mb-8"
             initial={{ opacity: 0, y: 30 }}
@@ -118,95 +97,105 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Use Case Showcases */}
+      {/* Use Case Showcases - Semi-transparent to show particles behind */}
       
       {/* 1. Event Engagement Technology */}
-      <FullWidthLaptopShowcase
-        url="https://selfieholosphere.com/collage/1lr9qn"
-        title="Event Engagement Technology"
-        description="Interactive experiences that captivate audiences and create unforgettable moments. From trade shows to festivals, retail activations to corporate events—our engagement platforms drive participation and generate valuable data insights."
-        features={[
-          'Trade shows and corporate events with real-time engagement',
-          'Festivals and concerts with social media integration',
-          'Retail locations and brand activations',
-          'Real-time photo processing and customizable animations',
-          'Custom branding, analytics, and lead generation'
-        ]}
-        backgroundColor="bg-gradient-to-br from-purple-50 to-pink-50"
-        textColor="text-gray-900"
-        accentColor="text-purple-600"
-      />
+      <div className="pointer-events-auto">
+        <FullWidthLaptopShowcase
+          url="https://selfieholosphere.com/collage/1lr9qn"
+          title="Event Engagement Technology"
+          description="Interactive experiences that captivate audiences and create unforgettable moments. From trade shows to festivals, retail activations to corporate events—our engagement platforms drive participation and generate valuable data insights."
+          features={[
+            'Trade shows and corporate events with real-time engagement',
+            'Festivals and concerts with social media integration',
+            'Retail locations and brand activations',
+            'Real-time photo processing and customizable animations',
+            'Custom branding, analytics, and lead generation'
+          ]}
+          backgroundColor="bg-gradient-to-br from-purple-50 to-pink-50"
+          textColor="text-gray-900"
+          accentColor="text-purple-600"
+        />
+      </div>
 
       {/* 2. Custom Business Applications */}
-      <FullWidthLaptopShowcase
-        url="https://splendid-cannoli-324007.netlify.app/"
-        title="Custom Business Applications"
-        description="Tailored internal tools and CRM systems built specifically for your organization's workflow. Streamline operations, improve efficiency, and gain valuable insights with applications designed around your unique business needs and processes."
-        features={[
-          'Custom CRM and database management systems',
-          'Workflow automation and comprehensive reporting',
-          'Team collaboration tools and project management',
-          'Advanced data visualization and business analytics',
-          'Secure cloud-based architecture with enterprise-grade security'
-        ]}
-        backgroundColor="bg-white"
-        textColor="text-gray-900"
-        accentColor="text-blue-600"
-      />
+      <div className="pointer-events-auto">
+        <FullWidthLaptopShowcase
+          url="https://splendid-cannoli-324007.netlify.app/"
+          title="Custom Business Applications"
+          description="Tailored internal tools and CRM systems built specifically for your organization's workflow. Streamline operations, improve efficiency, and gain valuable insights with applications designed around your unique business needs and processes."
+          features={[
+            'Custom CRM and database management systems',
+            'Workflow automation and comprehensive reporting',
+            'Team collaboration tools and project management',
+            'Advanced data visualization and business analytics',
+            'Secure cloud-based architecture with enterprise-grade security'
+          ]}
+          backgroundColor="bg-white"
+          textColor="text-gray-900"
+          accentColor="text-blue-600"
+        />
+      </div>
 
       {/* 3. Audience Engagement Platforms */}
-      <FullWidthLaptopShowcase
-        url="http://urequestsongs.com"
-        title="Audience Engagement Platforms"
-        description="Real-time interaction tools that connect performers with their audience in meaningful ways. From song requests to live polling, these platforms create deeper engagement and memorable experiences for bands, DJs, and entertainers of all kinds."
-        features={[
-          'Live song request systems for bands, DJs, and performers',
-          'Real-time audience voting, polls, and interactive features',
-          'Social media integration and viral sharing capabilities',
-          'Custom branding for artists, venues, and event organizers',
-          'Comprehensive analytics and audience engagement insights'
-        ]}
-        backgroundColor="bg-gray-900"
-        textColor="text-white"
-        accentColor="text-cyan-400"
-      />
+      <div className="pointer-events-auto">
+        <FullWidthLaptopShowcase
+          url="http://urequestsongs.com"
+          title="Audience Engagement Platforms"
+          description="Real-time interaction tools that connect performers with their audience in meaningful ways. From song requests to live polling, these platforms create deeper engagement and memorable experiences for bands, DJs, and entertainers of all kinds."
+          features={[
+            'Live song request systems for bands, DJs, and performers',
+            'Real-time audience voting, polls, and interactive features',
+            'Social media integration and viral sharing capabilities',
+            'Custom branding for artists, venues, and event organizers',
+            'Comprehensive analytics and audience engagement insights'
+          ]}
+          backgroundColor="bg-gray-900"
+          textColor="text-white"
+          accentColor="text-cyan-400"
+        />
+      </div>
 
       {/* 4. Interactive Widgets & Components */}
-      <FullWidthLaptopShowcase
-        url="https://capable-alfajores-d0dff2.netlify.app/"
-        title="Interactive Widgets & Components"
-        description="Gamified experiences and interactive elements that boost engagement on websites and at live events. From custom game shows to educational tools, we create interactive components that entertain, inform, and drive meaningful user participation."
-        features={[
-          'Custom game shows, trivia platforms, and interactive competitions',
-          'Interactive website widgets and embedded components',
-          'Educational modules and training platforms',
-          'Leaderboards, scoring systems, and competition management',
-          'Multi-device compatibility and responsive design'
-        ]}
-        backgroundColor="bg-gradient-to-br from-indigo-50 to-blue-50"
-        textColor="text-gray-900"
-        accentColor="text-indigo-600"
-      />
+      <div className="pointer-events-auto">
+        <FullWidthLaptopShowcase
+          url="https://capable-alfajores-d0dff2.netlify.app/"
+          title="Interactive Widgets & Components"
+          description="Gamified experiences and interactive elements that boost engagement on websites and at live events. From custom game shows to educational tools, we create interactive components that entertain, inform, and drive meaningful user participation."
+          features={[
+            'Custom game shows, trivia platforms, and interactive competitions',
+            'Interactive website widgets and embedded components',
+            'Educational modules and training platforms',
+            'Leaderboards, scoring systems, and competition management',
+            'Multi-device compatibility and responsive design'
+          ]}
+          backgroundColor="bg-gradient-to-br from-indigo-50 to-blue-50"
+          textColor="text-gray-900"
+          accentColor="text-indigo-600"
+        />
+      </div>
 
       {/* 5. Professional Website Development */}
-      <FullWidthLaptopShowcase
-        url="https://www.fusion-events.ca"
-        title="Professional Website Development"
-        description="Beautiful, high-performance websites that drive real business results. Built with modern HTML, CSS, and JavaScript, optimized for speed, SEO, and conversions. Perfect for service businesses, corporate brands, and growing organizations."
-        features={[
-          'Modern, responsive design with mobile-first approach',
-          'SEO optimization and lightning-fast loading speeds',
-          'Content management systems and easy updates',
-          'E-commerce integration and payment processing',
-          'Advanced analytics, conversion tracking, and performance monitoring'
-        ]}
-        backgroundColor="bg-gradient-to-br from-green-50 to-emerald-50"
-        textColor="text-gray-900"
-        accentColor="text-green-600"
-      />
+      <div className="pointer-events-auto">
+        <FullWidthLaptopShowcase
+          url="https://www.fusion-events.ca"
+          title="Professional Website Development"
+          description="Beautiful, high-performance websites that drive real business results. Built with modern HTML, CSS, and JavaScript, optimized for speed, SEO, and conversions. Perfect for service businesses, corporate brands, and growing organizations."
+          features={[
+            'Modern, responsive design with mobile-first approach',
+            'SEO optimization and lightning-fast loading speeds',
+            'Content management systems and easy updates',
+            'E-commerce integration and payment processing',
+            'Advanced analytics, conversion tracking, and performance monitoring'
+          ]}
+          backgroundColor="bg-gradient-to-br from-green-50 to-emerald-50"
+          textColor="text-gray-900"
+          accentColor="text-green-600"
+        />
+      </div>
 
       {/* Technology & Process Section */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-gray-100">
+      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-gray-100 pointer-events-auto">
         <div className="max-w-7xl w-full">
           <motion.div
             className="text-center mb-20"
@@ -286,7 +275,7 @@ export default function HomePage() {
       </section>
 
       {/* Call to Action Section */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-gray-900">
+      <section className="min-h-screen flex items-center justify-center px-8 py-32 bg-gray-900 pointer-events-auto">
         <div className="max-w-5xl w-full text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
