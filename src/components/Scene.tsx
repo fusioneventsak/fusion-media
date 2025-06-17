@@ -2,8 +2,8 @@ import React, { useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import ParticleField from './ParticleField';
-import Laptop3D from './Laptop3D';
-import Phone3D from './Phone3D';
+import Laptop3D from './Laptop';
+import Phone3D from './Phone';
 
 interface SceneProps {
   scrollY: number;
