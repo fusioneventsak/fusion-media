@@ -34,76 +34,14 @@ export default function Scene({ scrollY, currentPage }: SceneProps) {
       
       <ParticleField />
       
-      {show3DDevices && (
-        <>
-          {/* Featured Laptops with enhanced 3D rendering */}
-          <Laptop3D
-            position={[-3.5, 2.5, 0]}
-            url="https://selfieholosphere.com/collage/1lr9qn"
-            title="Selfie Holosphere"
-            description="Interactive 3D photo collage experience"
-            isOpen={true}
-            screenAngle={95}
-            isPoweredOn={true}
-          />
-          
-          <Laptop3D
-            position={[3.5, 2, 0]}
-            url="http://urequestsongs.com"
-            title="U Request Songs"
-            description="Interactive DJ platform"
-            isOpen={true}
-            screenAngle={90}
-            isPoweredOn={true}
-          />
-          
-          <Laptop3D
-            position={[-2.8, -0.5, 0]}
-            url="https://www.fusion-events.ca"
-            title="Fusion Events"
-            description="Professional event services"
-            isOpen={true}
-            screenAngle={85}
-            isPoweredOn={true}
-          />
-          
-          <Laptop3D
-            position={[2.8, -1.5, 0]}
-            url="https://splendid-cannoli-324007.netlify.app/"
-            title="Custom Application"
-            description="Business management platform"
-            isOpen={true}
-            screenAngle={88}
-            isPoweredOn={true}
-          />
-          
-          {/* Enhanced Mobile Phone displays */}
-          <Phone3D
-            position={[-4.5, 0.8, 2.5]}
-            url="https://capable-alfajores-d0dff2.netlify.app/"
-            title="Mobile Event App"
-            description="Comprehensive event management"
-            isPoweredOn={true}
-          />
-          
-          <Phone3D
-            position={[4.5, 0.3, 2.5]}
-            url="https://lucky-centaur-ce715c.netlify.app/"
-            title="Interactive Experience"
-            description="Mobile-first application"
-            isPoweredOn={true}
-          />
-        </>
-      )}
-      
       <OrbitControls 
         enablePan={false} 
         enableZoom={false} 
         enableRotate={true}
         maxPolarAngle={Math.PI / 2}
         minPolarAngle={Math.PI / 2}
-        autoRotate={currentPage === 'home'}
-        autoRotateSpeed={0.3}
+        autoRotate={true}
+        autoRotateSpeed={0.2}
       />
     </>
   );
