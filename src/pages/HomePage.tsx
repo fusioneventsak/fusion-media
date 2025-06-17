@@ -36,7 +36,7 @@ export default function HomePage() {
           </motion.h1>
 
           <motion.p 
-            className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed font-light"
+            className="text-xl md:text-2xl text-white mb-12 max-w-4xl mx-auto leading-relaxed font-light"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
@@ -89,8 +89,8 @@ export default function HomePage() {
                 <div className="text-3xl md:text-4xl font-light text-white mb-2 group-hover:text-blue-400 transition-colors">
                   {stat.number}
                 </div>
-                <div className="text-sm text-gray-300 font-medium mb-1">{stat.label}</div>
-                <div className="text-xs text-gray-400">{stat.description}</div>
+                <div className="text-sm text-white font-medium mb-1">{stat.label}</div>
+                <div className="text-xs text-gray-300">{stat.description}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -113,7 +113,7 @@ export default function HomePage() {
             'Custom branding, analytics, and lead generation'
           ]}
           backgroundColor="transparent"
-          textColor="text-gray-900"
+          textColor="text-white"
           accentColor="text-purple-600"
         />
       </div>
@@ -132,7 +132,7 @@ export default function HomePage() {
             'Secure cloud-based architecture with enterprise-grade security'
           ]}
           backgroundColor="transparent"
-          textColor="text-gray-900"
+          textColor="text-white"
           accentColor="text-blue-600"
         />
       </div>
@@ -170,7 +170,7 @@ export default function HomePage() {
             'Multi-device compatibility and responsive design'
           ]}
           backgroundColor="transparent"
-          textColor="text-gray-900"
+          textColor="text-white"
           accentColor="text-indigo-600"
         />
       </div>
@@ -189,7 +189,7 @@ export default function HomePage() {
             'Advanced analytics, conversion tracking, and performance monitoring'
           ]}
           backgroundColor="transparent"
-          textColor="text-gray-900"
+          textColor="text-white"
           accentColor="text-green-600"
         />
       </div>
@@ -212,7 +212,7 @@ export default function HomePage() {
                 work faster
               </span>
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-xl text-white max-w-3xl mx-auto leading-relaxed font-light">
               Our AI-assisted approach combines cutting-edge tools with decades of experience 
               to deliver exceptional results in record time.
             </p>
@@ -248,9 +248,9 @@ export default function HomePage() {
                 transition={{ duration: 0.6, delay: index * 0.2 }}
               >
                 <div className="text-6xl mb-6">{item.icon}</div>
-                <div className="text-sm font-mono text-gray-400 mb-3">{item.number}</div>
+                <div className="text-sm font-mono text-gray-300 mb-3">{item.number}</div>
                 <h3 className="text-2xl font-semibold text-white mb-4">{item.title}</h3>
-                <p className="text-gray-300 leading-relaxed">{item.description}</p>
+                <p className="text-white leading-relaxed">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -263,7 +263,7 @@ export default function HomePage() {
             transition={{ duration: 0.8 }}
           >
             <div className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-md rounded-full shadow-lg border border-white/20">
-              <span className="text-gray-300 mr-4">Ready to experience the difference?</span>
+              <span className="text-white mr-4">Ready to experience the difference?</span>
               <motion.button
                 className="px-6 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors"
                 whileHover={{ scale: 1.05 }}
@@ -296,7 +296,7 @@ export default function HomePage() {
               into reality?
             </h2>
             
-            <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-xl text-white mb-12 max-w-3xl mx-auto leading-relaxed font-light">
               Let's discuss how our AI-assisted approach can deliver exceptional 
               results for your next project—faster and more efficiently than ever before.
             </p>
@@ -328,7 +328,7 @@ export default function HomePage() {
                 whileHover={{ scale: 1.05 }}
               >
                 <div className="text-2xl font-light text-blue-400 mb-2">Events & Entertainment</div>
-                <p className="text-gray-400 text-sm">25+ years of industry expertise and proven results</p>
+                <p className="text-white text-sm">25+ years of industry expertise and proven results</p>
               </motion.div>
               
               <motion.div
@@ -340,7 +340,7 @@ export default function HomePage() {
                 whileHover={{ scale: 1.05 }}
               >
                 <div className="text-2xl font-light text-purple-400 mb-2">AI-Powered Development</div>
-                <p className="text-gray-400 text-sm">10x faster project delivery with cutting-edge tools</p>
+                <p className="text-white text-sm">10x faster project delivery with cutting-edge tools</p>
               </motion.div>
               
               <motion.div
@@ -352,7 +352,7 @@ export default function HomePage() {
                 whileHover={{ scale: 1.05 }}
               >
                 <div className="text-2xl font-light text-cyan-400 mb-2">Custom Solutions</div>
-                <p className="text-gray-400 text-sm">Tailored specifically to your unique business needs</p>
+                <p className="text-white text-sm">Tailored specifically to your unique business needs</p>
               </motion.div>
             </div>
           </motion.div>
