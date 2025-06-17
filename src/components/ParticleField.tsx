@@ -11,7 +11,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   const focalParticlesRef = useRef<THREE.Points>(null);
   const dustParticlesRef = useRef<THREE.Points>(null);
   
-  // Custom shader material for realistic glowing particles
+  // Enhanced shader with glow effects and tunnel behavior
   const particleShaderMaterial = useMemo(() => {
     return new THREE.ShaderMaterial({
       transparent: true,
@@ -29,34 +29,47 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         uniform float pixelRatio;
         attribute float size;
         attribute float alpha;
+        attribute float depth;
         varying vec3 vColor;
         varying float vAlpha;
         varying float vGlow;
+        varying float vSize;
         
         void main() {
           vColor = color;
           vAlpha = alpha;
+          vSize = size;
           
-          // Apply scroll-based transformation
+          // Create tunnel effect with continuous particle stream
           vec3 pos = position;
-          pos.y += scrollOffset * 0.5;
-          pos.x += sin(scrollOffset * 0.01 + position.y * 0.1) * 2.0;
+          
+          // Tunnel movement - particles flow towards camera and cycle back
+          float tunnelSpeed = scrollOffset * 0.02;
+          pos.z = mod(pos.z + tunnelSpeed, 60.0) - 30.0; // Continuous loop from -30 to +30
+          
+          // Slight spiral effect for visual interest
+          float spiral = (pos.z + tunnelSpeed) * 0.1;
+          pos.x += sin(spiral + pos.y * 0.1) * 0.5;
+          pos.y += cos(spiral + pos.x * 0.1) * 0.3;
           
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          
-          // Much closer distance calculation
           float distance = length(mvPosition.xyz);
-          float perspectiveSize = size * (50.0 / max(distance, 1.0));
           
-          // Enhanced pulsing based on time and scroll
-          float pulse = 1.0 + sin(time * 1.5 + scrollOffset * 0.01 + position.x * 0.4) * 0.3;
+          // Size based on distance with much smaller base sizes
+          float perspectiveSize = size * (15.0 / max(distance, 0.5));
+          
+          // Pulsing effect
+          float pulse = 1.0 + sin(time * 2.0 + pos.z * 0.1) * 0.2;
           perspectiveSize *= pulse;
           
-          // Much brighter glow for close particles
-          vGlow = 1.0 - smoothstep(1.0, 20.0, distance);
-          vGlow = max(vGlow, 0.8);
+          // Always visible glow - stronger for closer particles
+          vGlow = 1.0 - smoothstep(0.5, 25.0, distance);
+          vGlow = max(vGlow, 0.4); // Always at least 40% visible
           
-          gl_PointSize = perspectiveSize * pixelRatio;
+          // Depth-based brightness - closer particles are brighter
+          vGlow *= (1.0 + (30.0 - abs(pos.z)) / 30.0);
+          
+          gl_PointSize = max(perspectiveSize * pixelRatio, 1.0); // Minimum size of 1 pixel
           gl_Position = projectionMatrix * mvPosition;
         }
       `,
@@ -64,6 +77,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         varying vec3 vColor;
         varying float vAlpha;
         varying float vGlow;
+        varying float vSize;
         
         void main() {
           vec2 center = gl_PointCoord - vec2(0.5);
@@ -71,15 +85,17 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
           
           if (dist > 0.5) discard;
           
-          // Much brighter particle rendering
-          float circle = 1.0 - smoothstep(0.0, 0.5, dist);
-          float core = 1.0 - smoothstep(0.0, 0.15, dist);
-          float glow = 1.0 - smoothstep(0.15, 0.5, dist);
+          // Create glow effect with multiple layers
+          float innerCore = 1.0 - smoothstep(0.0, 0.1, dist);
+          float outerCore = 1.0 - smoothstep(0.1, 0.3, dist);
+          float glow = 1.0 - smoothstep(0.3, 0.5, dist);
           
-          float intensity = core * 2.0 + glow * 1.5;
+          // Combine layers for realistic glow
+          float intensity = innerCore * 3.0 + outerCore * 1.5 + glow * 0.8;
           
-          vec3 finalColor = vColor * intensity * vGlow;
-          float finalAlpha = vAlpha * intensity * vGlow;
+          // Apply glow and ensure visibility
+          vec3 finalColor = vColor * intensity * max(vGlow, 0.5);
+          float finalAlpha = vAlpha * intensity * max(vGlow, 0.3);
           
           gl_FragColor = vec4(finalColor, finalAlpha);
         }
@@ -107,18 +123,24 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         void main() {
           vColor = color;
           
-          // Apply scroll-based transformation
+          // Dust tunnel effect
           vec3 pos = position;
-          pos.y += scrollOffset * 0.3;
-          pos.z += sin(scrollOffset * 0.005 + position.x * 0.05) * 1.0;
+          float dustSpeed = scrollOffset * 0.015;
+          pos.z = mod(pos.z + dustSpeed, 80.0) - 40.0;
+          
+          // Gentle swirling
+          float swirl = (pos.z + dustSpeed) * 0.05;
+          pos.x += sin(swirl + time * 0.5) * 0.8;
+          pos.y += cos(swirl + time * 0.3) * 0.6;
           
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-          
           float distance = length(mvPosition.xyz);
-          vOpacity = 1.0 - smoothstep(2.0, 25.0, distance);
-          vOpacity = max(vOpacity, 0.6);
           
-          gl_PointSize = size * (30.0 / max(distance, 1.0));
+          // Always visible dust
+          vOpacity = 1.0 - smoothstep(1.0, 30.0, distance);
+          vOpacity = max(vOpacity, 0.3);
+          
+          gl_PointSize = size * (10.0 / max(distance, 0.5));
           gl_Position = projectionMatrix * mvPosition;
         }
       `,
@@ -133,111 +155,120 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
           if (dist > 0.5) discard;
           
           float alpha = (1.0 - dist * 2.0) * vOpacity;
-          gl_FragColor = vec4(vColor, alpha);
+          gl_FragColor = vec4(vColor, alpha * 0.8);
         }
       `
     });
   }, []);
   
   const particleData = useMemo(() => {
-    // Main particles - much closer to camera
-    const mainCount = 800;
+    // Main particles for tunnel effect
+    const mainCount = 1200;
     const mainPositions = new Float32Array(mainCount * 3);
     const mainColors = new Float32Array(mainCount * 3);
     const mainSizes = new Float32Array(mainCount);
     const mainAlphas = new Float32Array(mainCount);
-    const mainVelocities = new Float32Array(mainCount * 3);
+    const mainDepths = new Float32Array(mainCount);
     
     for (let i = 0; i < mainCount; i++) {
-      // Much closer distribution around the camera
-      const radius = Math.random() * 15 + 5;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.random() * Math.PI;
+      // Distribute particles in a cylinder for tunnel effect
+      const angle = Math.random() * Math.PI * 2;
+      const radius = Math.random() * 12 + 2; // Tunnel radius
       
-      mainPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-      mainPositions[i * 3 + 1] = (Math.random() - 0.5) * 30; // Spread vertically for scroll effect
-      mainPositions[i * 3 + 2] = radius * Math.cos(phi) - 10; // Closer to camera
+      mainPositions[i * 3] = Math.cos(angle) * radius;
+      mainPositions[i * 3 + 1] = Math.sin(angle) * radius;
+      mainPositions[i * 3 + 2] = (Math.random() - 0.5) * 60; // Long tunnel depth
       
-      // Slow movement
-      mainVelocities[i * 3] = (Math.random() - 0.5) * 0.01;
-      mainVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.02;
-      mainVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.01;
+      // Color variations for depth
+      const depth = Math.abs(mainPositions[i * 3 + 2]) / 30.0;
+      const colorVariation = Math.random() * 0.3 + 0.7;
       
-      // Bright colors
       const colorType = Math.random();
       if (colorType < 0.3) {
-        mainColors[i * 3] = 0.8 + Math.random() * 0.2;
-        mainColors[i * 3 + 1] = 0.9 + Math.random() * 0.1;
-        mainColors[i * 3 + 2] = 1.0;
+        // Blue stars with depth variation
+        mainColors[i * 3] = (0.6 + Math.random() * 0.3) * colorVariation;
+        mainColors[i * 3 + 1] = (0.8 + Math.random() * 0.2) * colorVariation;
+        mainColors[i * 3 + 2] = colorVariation;
       } else if (colorType < 0.6) {
-        const intensity = 0.9 + Math.random() * 0.1;
+        // White stars with subtle variations
+        const intensity = (0.8 + Math.random() * 0.2) * colorVariation;
         mainColors[i * 3] = intensity;
-        mainColors[i * 3 + 1] = intensity;
-        mainColors[i * 3 + 2] = intensity;
+        mainColors[i * 3 + 1] = intensity * (0.9 + Math.random() * 0.1);
+        mainColors[i * 3 + 2] = intensity * (0.95 + Math.random() * 0.05);
+      } else if (colorType < 0.8) {
+        // Purple/cyan with depth
+        mainColors[i * 3] = (0.7 + Math.random() * 0.2) * colorVariation;
+        mainColors[i * 3 + 1] = (0.6 + Math.random() * 0.3) * colorVariation;
+        mainColors[i * 3 + 2] = colorVariation;
       } else {
-        mainColors[i * 3] = 1.0;
-        mainColors[i * 3 + 1] = 0.8 + Math.random() * 0.2;
-        mainColors[i * 3 + 2] = 0.6 + Math.random() * 0.4;
+        // Golden particles
+        mainColors[i * 3] = colorVariation;
+        mainColors[i * 3 + 1] = (0.8 + Math.random() * 0.2) * colorVariation;
+        mainColors[i * 3 + 2] = (0.4 + Math.random() * 0.3) * colorVariation;
       }
       
-      mainSizes[i] = Math.random() * 3 + 1;
-      mainAlphas[i] = 0.8 + Math.random() * 0.2;
+      // Much smaller sizes with more variance
+      mainSizes[i] = Math.random() * 1.5 + 0.3; // 0.3 to 1.8
+      mainAlphas[i] = 0.7 + Math.random() * 0.3;
+      mainDepths[i] = depth;
     }
     
-    // Focal particles - very close for immediate impact
-    const focalCount = 200;
+    // Focal particles - bright stars scattered throughout
+    const focalCount = 300;
     const focalPositions = new Float32Array(focalCount * 3);
     const focalColors = new Float32Array(focalCount * 3);
     const focalSizes = new Float32Array(focalCount);
     const focalAlphas = new Float32Array(focalCount);
     
     for (let i = 0; i < focalCount; i++) {
-      focalPositions[i * 3] = (Math.random() - 0.5) * 20;
-      focalPositions[i * 3 + 1] = (Math.random() - 0.5) * 20;
-      focalPositions[i * 3 + 2] = Math.random() * 8 + 2; // Very close to camera
+      focalPositions[i * 3] = (Math.random() - 0.5) * 25;
+      focalPositions[i * 3 + 1] = (Math.random() - 0.5) * 25;
+      focalPositions[i * 3 + 2] = (Math.random() - 0.5) * 50;
       
-      const intensity = 0.95 + Math.random() * 0.05;
+      // Bright white/yellow stars
+      const warmth = Math.random();
+      const intensity = 0.9 + Math.random() * 0.1;
       focalColors[i * 3] = intensity;
-      focalColors[i * 3 + 1] = intensity;
-      focalColors[i * 3 + 2] = intensity;
+      focalColors[i * 3 + 1] = intensity * (0.9 + warmth * 0.1);
+      focalColors[i * 3 + 2] = intensity * (0.7 + warmth * 0.2);
       
-      focalSizes[i] = Math.random() * 4 + 2;
-      focalAlphas[i] = 0.9 + Math.random() * 0.1;
+      focalSizes[i] = Math.random() * 2 + 0.5; // 0.5 to 2.5
+      focalAlphas[i] = 0.8 + Math.random() * 0.2;
     }
     
-    // Dust particles - closer and more responsive
-    const dustCount = 1000;
+    // Dust particles for atmosphere
+    const dustCount = 2000;
     const dustPositions = new Float32Array(dustCount * 3);
     const dustColors = new Float32Array(dustCount * 3);
     const dustSizes = new Float32Array(dustCount);
-    const dustVelocities = new Float32Array(dustCount * 3);
     
     for (let i = 0; i < dustCount; i++) {
-      dustPositions[i * 3] = (Math.random() - 0.5) * 40;
-      dustPositions[i * 3 + 1] = (Math.random() - 0.5) * 40;
-      dustPositions[i * 3 + 2] = (Math.random() - 0.5) * 20;
+      dustPositions[i * 3] = (Math.random() - 0.5) * 30;
+      dustPositions[i * 3 + 1] = (Math.random() - 0.5) * 30;
+      dustPositions[i * 3 + 2] = (Math.random() - 0.5) * 80;
       
-      dustVelocities[i * 3] = (Math.random() - 0.5) * 0.005;
-      dustVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.008;
-      dustVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.005;
-      
-      // Colorful nebula
+      // Nebula colors with subtle variations
       const nebulaType = Math.random();
+      const colorShift = Math.random() * 0.2 + 0.6;
+      
       if (nebulaType < 0.4) {
-        dustColors[i * 3] = 0.6 + Math.random() * 0.4;
-        dustColors[i * 3 + 1] = 0.8 + Math.random() * 0.2;
-        dustColors[i * 3 + 2] = 1.0;
+        // Blue nebula
+        dustColors[i * 3] = 0.4 * colorShift;
+        dustColors[i * 3 + 1] = 0.7 * colorShift;
+        dustColors[i * 3 + 2] = colorShift;
       } else if (nebulaType < 0.7) {
-        dustColors[i * 3] = 0.8 + Math.random() * 0.2;
-        dustColors[i * 3 + 1] = 0.6 + Math.random() * 0.4;
-        dustColors[i * 3 + 2] = 1.0;
+        // Purple nebula
+        dustColors[i * 3] = 0.7 * colorShift;
+        dustColors[i * 3 + 1] = 0.4 * colorShift;
+        dustColors[i * 3 + 2] = 0.9 * colorShift;
       } else {
-        dustColors[i * 3] = 0.9 + Math.random() * 0.1;
-        dustColors[i * 3 + 1] = 0.9 + Math.random() * 0.1;
-        dustColors[i * 3 + 2] = 0.7 + Math.random() * 0.3;
+        // Cyan/white nebula
+        dustColors[i * 3] = 0.6 * colorShift;
+        dustColors[i * 3 + 1] = 0.8 * colorShift;
+        dustColors[i * 3 + 2] = colorShift;
       }
       
-      dustSizes[i] = Math.random() * 2 + 0.5;
+      dustSizes[i] = Math.random() * 1 + 0.2; // Very small dust
     }
     
     return {
@@ -246,7 +277,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         colors: mainColors, 
         sizes: mainSizes, 
         alphas: mainAlphas,
-        velocities: mainVelocities,
+        depths: mainDepths,
         count: mainCount 
       },
       focal: { 
@@ -260,7 +291,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         positions: dustPositions, 
         colors: dustColors, 
         sizes: dustSizes,
-        velocities: dustVelocities,
         count: dustCount 
       }
     };
@@ -268,9 +298,9 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   
   useFrame((state) => {
     const time = state.clock.elapsedTime;
-    const scrollOffset = scrollY * 0.01;
+    const scrollOffset = scrollY; // Direct scroll value for tunnel effect
     
-    // Update shader uniforms with scroll data
+    // Update shader uniforms
     if (particleShaderMaterial) {
       particleShaderMaterial.uniforms.time.value = time;
       particleShaderMaterial.uniforms.scrollOffset.value = scrollOffset;
@@ -280,78 +310,24 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       dustShaderMaterial.uniforms.scrollOffset.value = scrollOffset;
     }
     
-    // Animate main particles with scroll interaction
+    // Gentle rotation for visual interest
     if (mainParticlesRef.current) {
-      const positions = mainParticlesRef.current.geometry.attributes.position.array as Float32Array;
-      
-      for (let i = 0; i < particleData.main.count; i++) {
-        const i3 = i * 3;
-        
-        // Update positions
-        positions[i3] += particleData.main.velocities[i3];
-        positions[i3 + 1] += particleData.main.velocities[i3 + 1];
-        positions[i3 + 2] += particleData.main.velocities[i3 + 2];
-        
-        // Wrapping with closer boundaries
-        const maxDistance = 20;
-        if (positions[i3] > maxDistance) positions[i3] = -maxDistance;
-        if (positions[i3] < -maxDistance) positions[i3] = maxDistance;
-        if (positions[i3 + 1] > maxDistance) positions[i3 + 1] = -maxDistance;
-        if (positions[i3 + 1] < -maxDistance) positions[i3 + 1] = maxDistance;
-        if (positions[i3 + 2] > 5) positions[i3 + 2] = -15;
-        if (positions[i3 + 2] < -15) positions[i3 + 2] = 5;
-        
-        // Scroll-based floating
-        const floatFreq = time * 0.1 + i * 0.01;
-        positions[i3] += Math.sin(floatFreq + scrollOffset) * 0.005;
-        positions[i3 + 1] += Math.cos(floatFreq * 0.8 + scrollOffset * 0.5) * 0.005;
-      }
-      
-      mainParticlesRef.current.geometry.attributes.position.needsUpdate = true;
-      
-      // Rotate based on scroll
-      mainParticlesRef.current.rotation.y = time * 0.002 + scrollOffset * 0.1;
-      mainParticlesRef.current.rotation.x = scrollOffset * 0.05;
+      mainParticlesRef.current.rotation.z = time * 0.001;
     }
     
-    // Animate focal particles with strong scroll response
     if (focalParticlesRef.current) {
-      focalParticlesRef.current.rotation.x = Math.sin(time * 0.02) * 0.1 + scrollOffset * 0.02;
-      focalParticlesRef.current.rotation.y = time * 0.005 + scrollOffset * 0.03;
-      focalParticlesRef.current.rotation.z = Math.sin(time * 0.03 + scrollOffset * 0.01) * 0.05;
-      
-      // Move focal particles based on scroll
-      focalParticlesRef.current.position.z = Math.sin(scrollOffset * 0.01) * 2;
+      focalParticlesRef.current.rotation.y = time * 0.002;
+      focalParticlesRef.current.rotation.x = Math.sin(time * 0.001) * 0.01;
     }
     
-    // Animate dust with scroll interaction
     if (dustParticlesRef.current) {
-      const positions = dustParticlesRef.current.geometry.attributes.position.array as Float32Array;
-      
-      for (let i = 0; i < particleData.dust.count; i++) {
-        const i3 = i * 3;
-        positions[i3] += particleData.dust.velocities[i3];
-        positions[i3 + 1] += particleData.dust.velocities[i3 + 1];
-        positions[i3 + 2] += particleData.dust.velocities[i3 + 2];
-        
-        // Closer wrapping
-        const maxDistance = 25;
-        if (positions[i3] > maxDistance) positions[i3] = -maxDistance;
-        if (positions[i3] < -maxDistance) positions[i3] = maxDistance;
-        if (positions[i3 + 1] > maxDistance) positions[i3 + 1] = -maxDistance;
-        if (positions[i3 + 1] < -maxDistance) positions[i3 + 1] = maxDistance;
-        if (positions[i3 + 2] > 10) positions[i3 + 2] = -10;
-        if (positions[i3 + 2] < -10) positions[i3 + 2] = 10;
-      }
-      
-      dustParticlesRef.current.geometry.attributes.position.needsUpdate = true;
-      dustParticlesRef.current.rotation.y = time * 0.001 + scrollOffset * 0.02;
+      dustParticlesRef.current.rotation.y = time * 0.0005;
     }
   });
   
   return (
     <>
-      {/* Main star field */}
+      {/* Main tunnel particles */}
       <points ref={mainParticlesRef} material={particleShaderMaterial}>
         <bufferGeometry>
           <bufferAttribute
@@ -376,6 +352,12 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
             attach="attributes-alpha"
             count={particleData.main.count}
             array={particleData.main.alphas}
+            itemSize={1}
+          />
+          <bufferAttribute
+            attach="attributes-depth"
+            count={particleData.main.count}
+            array={particleData.main.depths}
             itemSize={1}
           />
         </bufferGeometry>
@@ -408,10 +390,16 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
             array={particleData.focal.alphas}
             itemSize={1}
           />
+          <bufferAttribute
+            attach="attributes-depth"
+            count={particleData.focal.count}
+            array={new Float32Array(particleData.focal.count)} // Default depth
+            itemSize={1}
+          />
         </bufferGeometry>
       </points>
       
-      {/* Nebula dust */}
+      {/* Atmospheric dust */}
       <points ref={dustParticlesRef} material={dustShaderMaterial}>
         <bufferGeometry>
           <bufferAttribute
