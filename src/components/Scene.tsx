@@ -12,31 +12,34 @@ export default function Scene({ scrollY, currentPage }: SceneProps) {
   const { camera, gl } = useThree();
   
   useEffect(() => {
-    // OPTIMAL CAMERA SETTINGS FOR SHARP PARTICLES
-    camera.position.set(0, 0, 10);  // Far enough to see particles clearly
-    camera.fov = 60;                // Narrower FOV for less distortion
-    camera.near = 0.1;              // Standard near plane
-    camera.far = 100;               // Shorter far plane
+    // PERFECT FOCUS CAMERA SETTINGS
+    camera.position.set(0, 0, 8);   // Close enough for sharp focus
+    camera.fov = 50;                // Narrow FOV reduces distortion
+    camera.near = 0.1;              
+    camera.far = 50;                // Shorter far plane
+    camera.focus = 8;               // Focus distance matches camera Z position
     camera.updateProjectionMatrix();
     
-    // SHARP RENDERER SETTINGS
+    // CRYSTAL CLEAR RENDERER SETTINGS
     gl.setClearColor('#000000', 1);
-    gl.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio
+    gl.setPixelRatio(1);            // Force 1:1 pixel ratio for sharpness
+    gl.antialias = false;           // Disable antialiasing that can cause blur
     
-    console.log('📷 Camera at Z=10, particles at Z=-5 to Z=5');
+    console.log('🔍 Camera focused at Z=8, particles at Z=0');
   }, [camera, gl]);
   
   useFrame(() => {
-    // CAMERA STAYS COMPLETELY STILL
-    // No movement = no blur from motion
+    // CAMERA LOCKED IN POSITION - NO MOVEMENT
+    camera.position.set(0, 0, 8);
+    camera.lookAt(0, 0, 0);
   });
   
   return (
     <>
-      {/* BRIGHT LIGHTING */}
-      <ambientLight intensity={1.5} />
+      {/* BRIGHT, DIRECT LIGHTING */}
+      <ambientLight intensity={2.0} />
       
-      {/* Simple particle field */}
+      {/* Sharp particle field */}
       <ParticleField scrollY={scrollY} />
     </>
   );

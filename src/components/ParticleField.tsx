@@ -9,46 +9,40 @@ interface ParticleFieldProps {
 export default function ParticleField({ scrollY }: ParticleFieldProps) {
   const particlesRef = useRef<THREE.Points>(null);
   
-  // SIMPLE, SHARP PARTICLE MATERIAL - NO COMPLEX SHADERS
+  // CRYSTAL CLEAR PARTICLE MATERIAL
   const particleMaterial = useMemo(() => {
     return new THREE.PointsMaterial({
       color: 0xffffff,
-      size: 2,
-      sizeAttenuation: true,
+      size: 3,                    // Larger size for better visibility
+      sizeAttenuation: false,     // NO size attenuation = consistent size
       transparent: true,
-      opacity: 0.8,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-      vertexColors: true
+      opacity: 1.0,               // Full opacity for maximum clarity
+      blending: THREE.NormalBlending, // Normal blending instead of additive
+      depthWrite: true,           // Enable depth writing for proper rendering
+      depthTest: true,            // Enable depth testing
+      fog: false                  // Disable fog effects
     });
   }, []);
   
   const particleData = useMemo(() => {
-    const count = 1000;
+    const count = 800;
     const positions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
     
     for (let i = 0; i < count; i++) {
-      // CLOSE TO CAMERA - particles between Z=-5 and Z=5
-      positions[i * 3] = (Math.random() - 0.5) * 50;     // X: -25 to 25
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 50; // Y: -25 to 25  
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // Z: -5 to 5 (CLOSE!)
-      
-      // BRIGHT WHITE COLORS - NO COMPLEX COLOR MIXING
-      const brightness = 0.7 + Math.random() * 0.3;
-      colors[i * 3] = brightness;     // R
-      colors[i * 3 + 1] = brightness; // G
-      colors[i * 3 + 2] = brightness; // B
+      // PARTICLES AT EXACT SAME DEPTH - NO DEPTH VARIATION
+      positions[i * 3] = (Math.random() - 0.5) * 40;     // X: -20 to 20
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 40; // Y: -20 to 20  
+      positions[i * 3 + 2] = 0;                           // Z: EXACTLY 0 (same focal plane)
     }
     
-    console.log('🌟 Created 1000 particles between Z=-5 and Z=5');
-    return { positions, colors, count };
+    console.log('✨ Created 800 particles at Z=0 (same focal plane)');
+    return { positions, count };
   }, []);
   
   useFrame((state) => {
     if (particlesRef.current) {
-      // VERY SLOW ROTATION - NO JARRING MOVEMENT
-      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.01;
+      // EXTREMELY SLOW ROTATION
+      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.005;
     }
   });
   
@@ -59,12 +53,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
           attach="attributes-position"
           count={particleData.count}
           array={particleData.positions}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          count={particleData.count}
-          array={particleData.colors}
           itemSize={3}
         />
       </bufferGeometry>
