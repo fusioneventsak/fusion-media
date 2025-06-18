@@ -9,69 +9,88 @@ interface SceneProps {
 }
 
 export default function Scene({ scrollY, currentPage }: SceneProps) {
-  const { camera } = useThree();
+  const { camera, gl, scene } = useThree();
   
   useEffect(() => {
-    // Position camera closer to see particles better
-    camera.position.set(0, 0, 5);
+    // Debug camera setup
+    camera.position.set(0, 0, 3); // Very close to origin
     camera.fov = 75;
-    camera.near = 0.1;
+    camera.near = 0.01;
     camera.far = 1000;
     camera.updateProjectionMatrix();
-  }, [camera]);
+    
+    // Debug renderer settings
+    gl.toneMapping = THREE.ACESFilmicToneMapping;
+    gl.toneMappingExposure = 1.5; // Brighter exposure
+    
+    console.log('🎥 Camera setup:', {
+      position: camera.position,
+      fov: camera.fov,
+      near: camera.near,
+      far: camera.far
+    });
+    
+    console.log('🎬 Scene info:', {
+      children: scene.children.length,
+      renderer: gl.capabilities
+    });
+  }, [camera, gl, scene]);
   
   useFrame(() => {
-    // Gentle camera movement based on scroll
-    camera.position.y = -scrollY * 0.001;
-    camera.position.x = Math.sin(scrollY * 0.0005) * 0.5;
+    // Minimal camera movement
+    camera.position.y = -scrollY * 0.0005;
   });
   
   return (
     <>
-      {/* Enhanced lighting setup for particle visibility */}
-      <ambientLight intensity={0.3} color="#ffffff" />
+      {/* MAXIMUM LIGHTING - if you can't see particles now, it's not a lighting issue */}
+      <ambientLight intensity={2.0} color="#ffffff" />
       <directionalLight 
-        position={[10, 10, 5]} 
-        intensity={0.5} 
+        position={[5, 5, 5]} 
+        intensity={2.0} 
+        color="#ffffff"
+      />
+      <directionalLight 
+        position={[-5, -5, -5]} 
+        intensity={1.0} 
         color="#ffffff"
       />
       <pointLight 
         position={[0, 0, 0]} 
-        intensity={0.4} 
+        intensity={2.0} 
         color="#ffffff" 
         distance={50}
       />
       <pointLight 
-        position={[10, 10, 10]} 
-        intensity={0.3} 
+        position={[2, 2, 2]} 
+        intensity={1.5} 
         color="#4080ff" 
-        distance={30}
+        distance={20}
       />
       <pointLight 
-        position={[-10, -10, -10]} 
-        intensity={0.3} 
+        position={[-2, -2, -2]} 
+        intensity={1.5} 
         color="#ff6b6b" 
-        distance={30}
+        distance={20}
       />
       <pointLight 
-        position={[0, 10, -10]} 
-        intensity={0.3} 
+        position={[0, 2, -2]} 
+        intensity={1.5} 
         color="#00ffff" 
-        distance={30}
+        distance={20}
       />
+      
+      {/* Debug: A bright reference object at camera position */}
+      <mesh position={[0, 0, 2.5]}>
+        <boxGeometry args={[0.1, 0.1, 0.1]} />
+        <meshBasicMaterial color="#ff00ff" />
+      </mesh>
       
       <ParticleField scrollY={scrollY} />
       
+      {/* Disable controls temporarily to avoid interference */}
       <OrbitControls 
-        enablePan={false} 
-        enableZoom={false} 
-        enableRotate={true}
-        maxPolarAngle={Math.PI / 2}
-        minPolarAngle={Math.PI / 2}
-        autoRotate={true}
-        autoRotateSpeed={0.1}
-        dampingFactor={0.05}
-        enableDamping={true}
+        enabled={false}
       />
     </>
   );
