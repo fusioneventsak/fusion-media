@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
+import * as THREE from 'three';
 import Navigation from './components/Navigation';
 import Scene from './components/Scene';
 import HomePage from './pages/HomePage';
