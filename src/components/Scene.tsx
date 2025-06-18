@@ -12,34 +12,36 @@ export default function Scene({ scrollY, currentPage }: SceneProps) {
   const { camera, gl } = useThree();
   
   useEffect(() => {
-    // PERFECT FOCUS CAMERA SETTINGS
-    camera.position.set(0, 0, 8);   // Close enough for sharp focus
-    camera.fov = 50;                // Narrow FOV reduces distortion
+    // OPTIMAL CAMERA SETTINGS FOR SHARP PARTICLES
+    camera.position.set(0, 0, 5);   // Closer to particles
+    camera.fov = 60;                // Wider FOV for better view
     camera.near = 0.1;              
-    camera.far = 50;                // Shorter far plane
-    camera.focus = 8;               // Focus distance matches camera Z position
+    camera.far = 100;               
     camera.updateProjectionMatrix();
     
-    // CRYSTAL CLEAR RENDERER SETTINGS
+    // RENDERER SETTINGS FOR MAXIMUM BRIGHTNESS
     gl.setClearColor('#000000', 1);
-    gl.setPixelRatio(1);            // Force 1:1 pixel ratio for sharpness
-    gl.antialias = false;           // Disable antialiasing that can cause blur
+    gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     
-    console.log('🔍 Camera focused at Z=8, particles at Z=0');
+    console.log('🔍 Camera positioned for bright particles');
   }, [camera, gl]);
   
   useFrame(() => {
-    // CAMERA LOCKED IN POSITION - NO MOVEMENT
-    camera.position.set(0, 0, 8);
+    // KEEP CAMERA STEADY
+    camera.position.set(0, 0, 5);
     camera.lookAt(0, 0, 0);
   });
   
   return (
     <>
-      {/* BRIGHT, DIRECT LIGHTING */}
-      <ambientLight intensity={2.0} />
+      {/* MAXIMUM AMBIENT LIGHTING */}
+      <ambientLight intensity={3.0} color="#ffffff" />
       
-      {/* Sharp particle field */}
+      {/* Additional point lights for extra brightness */}
+      <pointLight position={[10, 10, 10]} intensity={2.0} color="#ffffff" />
+      <pointLight position={[-10, -10, -10]} intensity={2.0} color="#ffffff" />
+      
+      {/* Bright particle field */}
       <ParticleField scrollY={scrollY} />
     </>
   );
