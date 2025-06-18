@@ -14,7 +14,7 @@ export default function App() {
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -33,30 +33,43 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
-      {/* 3D Background - Fixed Canvas but with positive z-index */}
+      {/* Enhanced 3D Background */}
       <div className="fixed inset-0 z-0">
         <Canvas
-          camera={{ position: [0, 0, 6], fov: 75 }}
+          camera={{ 
+            position: [0, 0, 10], 
+            fov: 75,
+            near: 0.1,
+            far: 1000
+          }}
           gl={{ 
             antialias: true, 
             alpha: true,
-            powerPreference: "high-performance"
+            powerPreference: "high-performance",
+            preserveDrawingBuffer: false
           }}
           dpr={Math.min(window.devicePixelRatio, 2)}
-          onCreated={({ gl }) => {
+          onCreated={({ gl, camera }) => {
             gl.toneMapping = THREE.ACESFilmicToneMapping;
-            gl.toneMappingExposure = 1.0;
-            console.log('🎨 Canvas created successfully');
+            gl.toneMappingExposure = 1.2;
+            gl.outputColorSpace = THREE.SRGBColorSpace;
+            console.log('🌌 Milky Way canvas created');
+          }}
+          performance={{
+            current: 1,
+            min: 0.5,
+            max: 1,
+            debounce: 200
           }}
         >
           <Scene scrollY={scrollY} currentPage={currentPage} />
         </Canvas>
       </div>
 
-      {/* Navigation - Higher z-index */}
+      {/* Navigation */}
       <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
 
-      {/* Page Content - Pointer events enabled, higher z-index */}
+      {/* Page Content */}
       <main className="relative z-10">
         {renderPage()}
       </main>
