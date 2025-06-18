@@ -32,14 +32,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
-      {/* 3D Background - Fixed Canvas with NEGATIVE z-index */}
-      <div 
-        className="fixed inset-0" 
-        style={{ 
-          zIndex: -1,  // NEGATIVE z-index puts it behind everything
-          pointerEvents: 'none' 
-        }}
-      >
+      {/* 3D Background - Fixed Canvas but with positive z-index */}
+      <div className="fixed inset-0 z-0">
         <Canvas
           camera={{ position: [0, 0, 6], fov: 75 }}
           gl={{ 
@@ -48,22 +42,21 @@ export default function App() {
             powerPreference: "high-performance"
           }}
           dpr={Math.min(window.devicePixelRatio, 2)}
-          style={{ 
-            background: 'transparent',
-            pointerEvents: 'none' 
+          onCreated={({ gl }) => {
+            gl.toneMapping = THREE.ACESFilmicToneMapping;
+            gl.toneMappingExposure = 1.0;
+            console.log('🎨 Canvas created successfully');
           }}
         >
           <Scene scrollY={scrollY} currentPage={currentPage} />
         </Canvas>
       </div>
 
-      {/* Navigation - High z-index */}
-      <div style={{ position: 'relative', zIndex: 50 }}>
-        <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      </div>
+      {/* Navigation - Higher z-index */}
+      <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
 
-      {/* Page Content - High z-index */}
-      <main style={{ position: 'relative', zIndex: 10 }}>
+      {/* Page Content - Pointer events enabled, higher z-index */}
+      <main className="relative z-10">
         {renderPage()}
       </main>
     </div>
