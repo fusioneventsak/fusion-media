@@ -7,152 +7,186 @@ interface ParticleFieldProps {
 }
 
 export default function ParticleField({ scrollY }: ParticleFieldProps) {
-  const pointsRef = useRef<THREE.Points>(null);
-  const materialRef = useRef<THREE.PointsMaterial>(null);
+  const groupRef = useRef<THREE.Group>(null);
+  const instancedMeshRef = useRef<THREE.InstancedMesh>(null);
   
-  // Create ultra-sharp star texture
-  const starTexture = useMemo(() => {
-    const size = 32;
-    const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext('2d')!;
+  // Create beautiful glowing particles using instanced meshes
+  const { particles, tempObject, tempColor } = useMemo(() => {
+    const count = 500; // Manageable count for performance
+    const tempObject = new THREE.Object3D();
+    const tempColor = new THREE.Color();
     
-    // Clear to transparent
-    ctx.clearRect(0, 0, size, size);
-    
-    // Create sharp center point
-    const center = size / 2;
-    const imageData = ctx.createImageData(size, size);
-    const data = imageData.data;
-    
-    for (let x = 0; x < size; x++) {
-      for (let y = 0; y < size; y++) {
-        const dx = x - center;
-        const dy = y - center;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        const index = (y * size + x) * 4;
-        
-        if (distance < 1) {
-          // Sharp center pixel
-          data[index] = 255;     // R
-          data[index + 1] = 255; // G
-          data[index + 2] = 255; // B
-          data[index + 3] = 255; // A
-        } else if (distance < 2) {
-          // Slight glow around center
-          const alpha = Math.max(0, 255 * (2 - distance));
-          data[index] = 255;
-          data[index + 1] = 255;
-          data[index + 2] = 255;
-          data[index + 3] = alpha;
-        } else {
-          // Transparent
-          data[index + 3] = 0;
-        }
-      }
-    }
-    
-    ctx.putImageData(imageData, 0, 0);
-    
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.generateMipmaps = false;
-    texture.minFilter = THREE.NearestFilter;
-    texture.magFilter = THREE.NearestFilter;
-    texture.needsUpdate = true;
-    
-    return texture;
-  }, []);
-  
-  // Create star field with better positioning for sharpness
-  const { positions, colors, sizes } = useMemo(() => {
-    const count = 800; // Fewer but sharper stars
-    const positions = new Float32Array(count * 3);
-    const colors = new Float32Array(count * 3);
-    const sizes = new Float32Array(count);
-    
-    for (let i = 0; i < count; i++) {
-      const i3 = i * 3;
+    const particles = Array.from({ length: count }, (_, i) => {
+      // Create natural star distribution
+      let x, y, z;
       
-      // Position stars in optimal focus range (closer to camera)
-      if (Math.random() < 0.6) {
-        // Main star field - closer to camera for sharp focus
+      if (Math.random() < 0.7) {
+        // Main galaxy disk
         const angle = Math.random() * Math.PI * 2;
-        const radius = Math.random() * 8 + 2; // Much closer
+        const radius = Math.pow(Math.random(), 0.6) * 12;
+        const spiralOffset = radius * 0.15;
         
-        positions[i3] = Math.cos(angle) * radius;
-        positions[i3 + 1] = (Math.random() - 0.5) * 4;
-        positions[i3 + 2] = Math.sin(angle) * radius;
+        x = Math.cos(angle + spiralOffset) * radius;
+        y = (Math.random() - 0.5) * 3; // Flatter galaxy
+        z = Math.sin(angle + spiralOffset) * radius;
       } else {
-        // Background stars - still closer than before
-        positions[i3] = (Math.random() - 0.5) * 12;
-        positions[i3 + 1] = (Math.random() - 0.5) * 8;
-        positions[i3 + 2] = (Math.random() - 0.5) * 6;
+        // Foreground stars
+        x = (Math.random() - 0.5) * 8;
+        y = (Math.random() - 0.5) * 6;
+        z = (Math.random() - 0.5) * 8;
       }
       
-      // Pure white for maximum sharpness
-      colors[i3] = 1;     // R
-      colors[i3 + 1] = 1; // G
-      colors[i3 + 2] = 1; // B
-      
-      // Consistent small sizes for sharp points
-      sizes[i] = Math.random() < 0.05 ? 3 : 1.5;
-    }
+      return {
+        position: new THREE.Vector3(x, y, z),
+        size: Math.random() < 0.1 ? 
+          Math.random() * 0.8 + 0.6 :  // Bright stars
+          Math.random() * 0.4 + 0.2,   // Normal stars
+        color: [
+          '#ffffff', '#ffffff', '#ffffff', // Mostly white
+          '#e8f4ff', '#fff8e1', '#f0f8ff', // Subtle variations
+          '#fffef7', '#f8f8ff'
+        ][Math.floor(Math.random() * 8)],
+        speed: Math.random() * 0.5 + 0.2,
+        phase: Math.random() * Math.PI * 2
+      };
+    });
     
-    console.log('⭐ Created ultra-sharp star field');
-    return { positions, colors, sizes };
+    console.log('✨ Created', count, 'glowing mesh particles');
+    return { particles, tempObject, tempColor };
   }, []);
   
+  // Update instances every frame
   useFrame((state) => {
-    if (pointsRef.current && materialRef.current) {
-      // Minimal rotation to maintain sharpness
-      pointsRef.current.rotation.y = state.clock.elapsedTime * 0.005;
+    if (instancedMeshRef.current && groupRef.current) {
+      const time = state.clock.elapsedTime;
       
-      // Subtle scroll movement
-      pointsRef.current.position.y = scrollY * 0.0008;
-      pointsRef.current.position.x = Math.sin(scrollY * 0.0001) * 0.2;
+      // Smooth galaxy rotation
+      groupRef.current.rotation.y = time * 0.01;
       
-      // Very subtle size variation for twinkling
-      const baseSize = 1.5 + Math.sin(state.clock.elapsedTime * 2) * 0.1;
-      materialRef.current.size = baseSize;
+      // Scroll-based movement
+      groupRef.current.position.y = scrollY * 0.0008;
+      groupRef.current.position.x = Math.sin(scrollY * 0.0002) * 0.5;
+      
+      // Update each particle instance
+      particles.forEach((particle, i) => {
+        // Gentle floating animation
+        const floatY = Math.sin(time * particle.speed + particle.phase) * 0.1;
+        const floatX = Math.cos(time * particle.speed * 0.7 + particle.phase) * 0.05;
+        
+        // Set position with floating animation
+        tempObject.position.copy(particle.position);
+        tempObject.position.y += floatY;
+        tempObject.position.x += floatX;
+        
+        // Scale variation for twinkling
+        const twinkle = 0.8 + Math.sin(time * 2 + particle.phase) * 0.2;
+        tempObject.scale.setScalar(particle.size * twinkle);
+        
+        // Apply transform to instance
+        tempObject.updateMatrix();
+        instancedMeshRef.current!.setMatrixAt(i, tempObject.matrix);
+        
+        // Set color with slight brightness variation
+        tempColor.setStyle(particle.color);
+        const brightness = 0.9 + Math.sin(time * 1.5 + particle.phase) * 0.1;
+        tempColor.multiplyScalar(brightness);
+        instancedMeshRef.current!.setColorAt(i, tempColor);
+      });
+      
+      instancedMeshRef.current.instanceMatrix.needsUpdate = true;
+      if (instancedMeshRef.current.instanceColor) {
+        instancedMeshRef.current.instanceColor.needsUpdate = true;
+      }
     }
   });
   
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
+    <group ref={groupRef}>
+      {/* Instanced mesh for all particles */}
+      <instancedMesh
+        ref={instancedMeshRef}
+        args={[undefined, undefined, particles.length]}
+        castShadow={false}
+        receiveShadow={false}
+      >
+        {/* Sharp sphere geometry for each star */}
+        <sphereGeometry args={[1, 8, 6]} />
+        
+        {/* Glowing material with emissive properties */}
+        <meshStandardMaterial
+          emissive="#ffffff"
+          emissiveIntensity={0.3}
+          color="#ffffff"
+          metalness={0}
+          roughness={0.1}
+          transparent={true}
+          opacity={0.9}
         />
-        <bufferAttribute
-          attach="attributes-color"
-          count={colors.length / 3}
-          array={colors}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attach="attributes-size"
-          count={sizes.length}
-          array={sizes}
-          itemSize={1}
-        />
-      </bufferGeometry>
-      <pointsMaterial
-        ref={materialRef}
-        map={starTexture}
-        size={1.5}
-        sizeAttenuation={false}
-        vertexColors={true}
-        transparent={true}
-        opacity={1.0}
-        alphaTest={0.5}
-        blending={THREE.AdditiveBlending}
-        depthWrite={false}
-        fog={false}
-      />
-    </points>
+      </instancedMesh>
+      
+      {/* Add some larger glowing orbs for variety */}
+      {[...Array(20)].map((_, i) => {
+        const angle = (i / 20) * Math.PI * 2;
+        const radius = 8 + Math.random() * 4;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+        const y = (Math.random() - 0.5) * 2;
+        
+        return (
+          <mesh
+            key={`glow-${i}`}
+            position={[x, y, z]}
+            scale={[0.3, 0.3, 0.3]}
+          >
+            <sphereGeometry args={[1, 12, 8]} />
+            <meshStandardMaterial
+              emissive="#4a90ff"
+              emissiveIntensity={0.4}
+              color="#ffffff"
+              metalness={0}
+              roughness={0}
+              transparent={true}
+              opacity={0.7}
+            />
+          </mesh>
+        );
+      })}
+      
+      {/* Bright central stars */}
+      {[...Array(10)].map((_, i) => {
+        const angle = Math.random() * Math.PI * 2;
+        const radius = Math.random() * 3;
+        const x = Math.cos(angle) * radius;
+        const z = Math.sin(angle) * radius;
+        const y = (Math.random() - 0.5) * 1;
+        
+        return (
+          <mesh
+            key={`bright-${i}`}
+            position={[x, y, z]}
+            scale={[0.8, 0.8, 0.8]}
+          >
+            <sphereGeometry args={[1, 16, 12]} />
+            <meshStandardMaterial
+              emissive="#ffffff"
+              emissiveIntensity={0.6}
+              color="#ffffff"
+              metalness={0}
+              roughness={0}
+              transparent={true}
+              opacity={1}
+            />
+            
+            {/* Add point light for each bright star */}
+            <pointLight
+              intensity={0.3}
+              distance={5}
+              color="#ffffff"
+              decay={2}
+            />
+          </mesh>
+        );
+      })}
+    </group>
   );
 }
