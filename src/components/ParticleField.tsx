@@ -7,94 +7,79 @@ interface ParticleFieldProps {
 }
 
 export default function ParticleField({ scrollY }: ParticleFieldProps) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const particlesRef = useRef<THREE.Points>(null);
+  const groupRef = useRef<THREE.Group>(null);
   
-  // Test: Simple mesh to confirm 3D is working
-  const testMaterial = useMemo(() => {
-    return new THREE.MeshBasicMaterial({ 
-      color: '#ff0000',
-      transparent: true,
-      opacity: 0.8 
-    });
-  }, []);
-
-  // Super simple particle material - larger and brighter
-  const particleMaterial = useMemo(() => {
-    return new THREE.PointsMaterial({
-      color: '#ffffff',
-      size: 0.05,
-      sizeAttenuation: false, // No distance attenuation
-      transparent: true,
-      opacity: 1.0,
-      blending: THREE.AdditiveBlending
-    });
-  }, []);
-
-  // Simple particle positions - much closer to camera
-  const particleData = useMemo(() => {
-    const count = 200;
-    const positions = new Float32Array(count * 3);
+  // Create particles as individual meshes (same method as the working shapes)
+  const particles = useMemo(() => {
+    const particleArray = [];
+    const count = 50; // Start with fewer for performance
     
     for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 3;     // x: -1.5 to 1.5
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 3; // y: -1.5 to 1.5
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 3; // z: -1.5 to 1.5
+      particleArray.push({
+        id: i,
+        position: [
+          (Math.random() - 0.5) * 4,  // x: -2 to 2
+          (Math.random() - 0.5) * 4,  // y: -2 to 2
+          (Math.random() - 0.5) * 4   // z: -2 to 2
+        ] as [number, number, number],
+        color: [
+          '#ffffff', '#ff6b6b', '#4ecdc4', '#45b7d1', 
+          '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8'
+        ][Math.floor(Math.random() * 8)],
+        size: Math.random() * 0.05 + 0.02, // 0.02 to 0.07
+        speed: Math.random() * 2 + 1
+      });
     }
     
-    console.log('🌟 Created', count, 'particles');
-    return { positions, count };
+    console.log('🌟 Created', count, 'mesh particles');
+    return particleArray;
   }, []);
   
   useFrame((state) => {
-    // Rotate test mesh
-    if (meshRef.current) {
-      meshRef.current.rotation.x = state.clock.elapsedTime;
-      meshRef.current.rotation.y = state.clock.elapsedTime * 0.5;
-    }
-    
-    // Rotate particles
-    if (particlesRef.current) {
-      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.2;
+    if (groupRef.current) {
+      // Rotate the entire particle group
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.1;
+      groupRef.current.rotation.x = state.clock.elapsedTime * 0.05;
     }
   });
   
-  console.log('🎬 ParticleField rendering');
-  
   return (
-    <group>
-      {/* Test: Red cube to confirm 3D is working - smaller and closer */}
-      <mesh ref={meshRef} position={[1.5, 0, 0]} material={testMaterial}>
-        <boxGeometry args={[0.2, 0.2, 0.2]} />
-      </mesh>
-      
-      {/* Test: Green cube that's always visible */}
-      <mesh position={[-1.5, 0, 0]}>
-        <boxGeometry args={[0.15, 0.15, 0.15]} />
-        <meshBasicMaterial color="#00ff00" />
-      </mesh>
-      
-      {/* Test: Blue sphere */}
-      <mesh position={[0, 1.5, 0]}>
-        <sphereGeometry args={[0.1, 16, 16]} />
-        <meshBasicMaterial color="#0000ff" />
-      </mesh>
-      
-      {/* Simple particles */}
-      <points ref={particlesRef} material={particleMaterial}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={particleData.count}
-            array={particleData.positions}
-            itemSize={3}
+    <group ref={groupRef}>
+      {/* Render each particle as a small mesh (same as the working shapes) */}
+      {particles.map((particle) => (
+        <mesh 
+          key={particle.id} 
+          position={particle.position}
+          scale={[particle.size, particle.size, particle.size]}
+        >
+          <sphereGeometry args={[1, 8, 8]} />
+          <meshBasicMaterial 
+            color={particle.color} 
+            transparent 
+            opacity={0.8}
           />
-        </bufferGeometry>
-      </points>
+        </mesh>
+      ))}
       
-      {/* Debug: Log that we're rendering */}
+      {/* Test: A few extra visible particles in specific positions */}
+      <mesh position={[0, 0, 1]}>
+        <sphereGeometry args={[0.03, 8, 8]} />
+        <meshBasicMaterial color="#ffff00" />
+      </mesh>
+      
+      <mesh position={[0.5, 0.5, 1]}>
+        <sphereGeometry args={[0.03, 8, 8]} />
+        <meshBasicMaterial color="#ff00ff" />
+      </mesh>
+      
+      <mesh position={[-0.5, -0.5, 1]}>
+        <sphereGeometry args={[0.03, 8, 8]} />
+        <meshBasicMaterial color="#00ffff" />
+      </mesh>
+      
+      {/* Debug log */}
       <mesh position={[0, 0, 0]} visible={false}>
-        <boxGeometry args={[0.1, 0.1, 0.1]} />
+        <boxGeometry args={[0.01, 0.01, 0.01]} />
         <meshBasicMaterial />
       </mesh>
     </group>
