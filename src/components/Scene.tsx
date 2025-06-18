@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
+import * as THREE from 'three';
 import ParticleField from './ParticleField';
 
 interface SceneProps {
