@@ -196,8 +196,6 @@ export default function HomePage() {
 
       {/* Technology & Process Section */}
       <section className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto">
-        {/* Subtle background for readability */}
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm"></div>
         <div className="relative z-10 max-w-7xl w-full">
           <motion.div
             className="text-center mb-20"
@@ -278,8 +276,6 @@ export default function HomePage() {
 
       {/* Call to Action Section */}
       <section className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto">
-        {/* Subtle background for readability */}
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm"></div>
         <div className="relative z-10 max-w-5xl w-full text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
