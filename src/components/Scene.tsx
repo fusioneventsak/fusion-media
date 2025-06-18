@@ -12,65 +12,41 @@ export default function Scene({ scrollY, currentPage }: SceneProps) {
   const { camera, gl, scene } = useThree();
   
   useEffect(() => {
-    // Perfect camera setup for crisp stars
-    camera.position.set(0, 0, 5);
-    camera.fov = 75;
+    // Optimized camera for maximum particle sharpness
+    camera.position.set(0, 0, 8);
+    camera.fov = 60; // Narrower FOV for less distortion
     camera.near = 0.1;
-    camera.far = 200;
+    camera.far = 100;
     camera.updateProjectionMatrix();
     
-    // Look at origin
+    // Ensure camera is looking directly at center
     camera.lookAt(0, 0, 0);
     camera.updateMatrixWorld();
     
-    // Renderer optimizations for crisp particles
-    gl.setClearColor('#000000', 0); // Fully transparent
+    // Renderer settings for crisp pixels
+    gl.setClearColor('#000000', 0);
     gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    gl.antialias = false; // Disable antialiasing for sharper points
     
-    // Disable fog to prevent greyness
+    // Disable fog completely
     scene.fog = null;
     
-    console.log('✨ Crisp star field scene ready');
+    console.log('⭐ Ultra-sharp camera setup complete');
   }, [camera, gl, scene]);
   
   useFrame((state) => {
-    // Gentle camera movement based on scroll
-    const targetY = -scrollY * 0.001;
-    const targetX = Math.sin(scrollY * 0.0002) * 0.3;
+    // Very minimal camera movement to maintain sharpness
+    const targetY = -scrollY * 0.0005;
+    camera.position.y += (targetY - camera.position.y) * 0.02;
     
-    camera.position.y += (targetY - camera.position.y) * 0.05;
-    camera.position.x += (targetX - camera.position.x) * 0.05;
+    // Keep camera perfectly focused on center
+    camera.lookAt(0, 0, 0);
   });
   
   return (
     <>
-      {/* No lighting needed for stars - they emit their own light */}
-      
-      {/* Main crisp star field */}
+      {/* Only the crisp star field - no other elements */}
       <ParticleField scrollY={scrollY} />
-      
-      {/* Subtle distant nebula - very transparent */}
-      <mesh position={[20, 8, -30]} scale={[12, 6, 12]}>
-        <sphereGeometry args={[1, 16, 16]} />
-        <meshBasicMaterial 
-          color="#1a0d4a" 
-          transparent 
-          opacity={0.03}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
-      
-      <mesh position={[-18, -6, -35]} scale={[8, 4, 8]}>
-        <sphereGeometry args={[1, 16, 16]} />
-        <meshBasicMaterial 
-          color="#0d1a4a" 
-          transparent 
-          opacity={0.02}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
     </>
   );
 }
