@@ -9,36 +9,34 @@ interface SceneProps {
 }
 
 export default function Scene({ scrollY, currentPage }: SceneProps) {
-  const { camera, gl, scene } = useThree();
+  const { camera, gl } = useThree();
   
   useEffect(() => {
-    // DEAD SIMPLE CAMERA - CANNOT CAUSE BLUR
-    camera.position.set(0, 0, 3);  // Close to particles
-    camera.fov = 75;               // Standard FOV
-    camera.near = 0.1;             // Standard near
-    camera.far = 1000;             // Standard far
+    // OPTIMAL CAMERA SETTINGS FOR SHARP PARTICLES
+    camera.position.set(0, 0, 10);  // Far enough to see particles clearly
+    camera.fov = 60;                // Narrower FOV for less distortion
+    camera.near = 0.1;              // Standard near plane
+    camera.far = 100;               // Shorter far plane
     camera.updateProjectionMatrix();
     
-    // Look straight ahead
-    camera.lookAt(0, 0, 0);
-    
-    // SIMPLEST RENDERER SETTINGS
+    // SHARP RENDERER SETTINGS
     gl.setClearColor('#000000', 1);
+    gl.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio
     
-    console.log('📷 SIMPLE camera at Z=3, particles at Z=0 to -2');
-  }, [camera, gl, scene]);
+    console.log('📷 Camera at Z=10, particles at Z=-5 to Z=5');
+  }, [camera, gl]);
   
   useFrame(() => {
-    // NO CAMERA MOVEMENT AT ALL
-    // Camera stays locked at (0, 0, 3)
+    // CAMERA STAYS COMPLETELY STILL
+    // No movement = no blur from motion
   });
   
   return (
     <>
-      {/* BRIGHT lighting so we can see everything clearly */}
-      <ambientLight intensity={1} />
+      {/* BRIGHT LIGHTING */}
+      <ambientLight intensity={1.5} />
       
-      {/* Particle field */}
+      {/* Simple particle field */}
       <ParticleField scrollY={scrollY} />
     </>
   );
