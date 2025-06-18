@@ -1,87 +1,65 @@
-import React, { useRef, useMemo } from 'react';
-import { useFrame } from '@react-three/fiber';
+import React, { useState, useEffect } from 'react';
+import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
+import Navigation from './components/Navigation';
+import Scene from './components/Scene';
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import CaseStudiesPage from './pages/CaseStudiesPage';
+import ContactPage from './pages/ContactPage';
 
-interface ParticleFieldProps {
-  scrollY: number;
-}
+export default function App() {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [scrollY, setScrollY] = useState(0);
 
-export default function ParticleField({ scrollY }: ParticleFieldProps) {
-  const groupRef = useRef<THREE.Group>(null);
-  
-  // Create particles as individual meshes (same method as the working shapes)
-  const particles = useMemo(() => {
-    const particleArray = [];
-    const count = 50; // Start with fewer for performance
-    
-    for (let i = 0; i < count; i++) {
-      particleArray.push({
-        id: i,
-        position: [
-          (Math.random() - 0.5) * 4,  // x: -2 to 2
-          (Math.random() - 0.5) * 4,  // y: -2 to 2
-          (Math.random() - 0.5) * 4   // z: -2 to 2
-        ] as [number, number, number],
-        color: [
-          '#ffffff', '#ff6b6b', '#4ecdc4', '#45b7d1', 
-          '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8'
-        ][Math.floor(Math.random() * 8)],
-        size: Math.random() * 0.05 + 0.02, // 0.02 to 0.07
-        speed: Math.random() * 2 + 1
-      });
-    }
-    
-    console.log('🌟 Created', count, 'mesh particles');
-    return particleArray;
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
-  useFrame((state) => {
-    if (groupRef.current) {
-      // Rotate the entire particle group
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.1;
-      groupRef.current.rotation.x = state.clock.elapsedTime * 0.05;
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'about':
+        return <AboutPage />;
+      case 'case-studies':
+        return <CaseStudiesPage />;
+      case 'contact':
+        return <ContactPage />;
+      default:
+        return <HomePage />;
     }
-  });
-  
+  };
+
   return (
-    <group ref={groupRef}>
-      {/* Render each particle as a small mesh (same as the working shapes) */}
-      {particles.map((particle) => (
-        <mesh 
-          key={particle.id} 
-          position={particle.position}
-          scale={[particle.size, particle.size, particle.size]}
+    <div className="min-h-screen bg-black overflow-x-hidden">
+      {/* 3D Background - Fixed Canvas but with positive z-index */}
+      <div className="fixed inset-0 z-0">
+        <Canvas
+          camera={{ position: [0, 0, 6], fov: 75 }}
+          gl={{ 
+            antialias: true, 
+            alpha: true,
+            powerPreference: "high-performance"
+          }}
+          dpr={Math.min(window.devicePixelRatio, 2)}
+          onCreated={({ gl }) => {
+            gl.toneMapping = THREE.ACESFilmicToneMapping;
+            gl.toneMappingExposure = 1.0;
+            console.log('🎨 Canvas created successfully');
+          }}
         >
-          <sphereGeometry args={[1, 8, 8]} />
-          <meshBasicMaterial 
-            color={particle.color} 
-            transparent 
-            opacity={0.8}
-          />
-        </mesh>
-      ))}
-      
-      {/* Test: A few extra visible particles in specific positions */}
-      <mesh position={[0, 0, 1]}>
-        <sphereGeometry args={[0.03, 8, 8]} />
-        <meshBasicMaterial color="#ffff00" />
-      </mesh>
-      
-      <mesh position={[0.5, 0.5, 1]}>
-        <sphereGeometry args={[0.03, 8, 8]} />
-        <meshBasicMaterial color="#ff00ff" />
-      </mesh>
-      
-      <mesh position={[-0.5, -0.5, 1]}>
-        <sphereGeometry args={[0.03, 8, 8]} />
-        <meshBasicMaterial color="#00ffff" />
-      </mesh>
-      
-      {/* Debug log */}
-      <mesh position={[0, 0, 0]} visible={false}>
-        <boxGeometry args={[0.01, 0.01, 0.01]} />
-        <meshBasicMaterial />
-      </mesh>
-    </group>
+          <Scene scrollY={scrollY} currentPage={currentPage} />
+        </Canvas>
+      </div>
+
+      {/* Navigation - Higher z-index */}
+      <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
+
+      {/* Page Content - Pointer events enabled, higher z-index */}
+      <main className="relative z-10">
+        {renderPage()}
+      </main>
+    </div>
   );
 }
