@@ -12,69 +12,75 @@ export default function Scene({ scrollY, currentPage }: SceneProps) {
   const { camera, gl, scene } = useThree();
   
   useEffect(() => {
-    // Set up camera - even closer with sharper focus
-    camera.position.set(0, 0, 2); // Much closer
-    camera.fov = 60; // Narrower field of view for less distortion
+    // Optimized camera setup for particle visibility
+    camera.position.set(0, 0, 10);
+    camera.fov = 75;
     camera.near = 0.1;
-    camera.far = 100; // Reduced far plane
+    camera.far = 1000;
     camera.updateProjectionMatrix();
     
-    // Look directly at the center
+    // Look at origin
     camera.lookAt(0, 0, 0);
-    
-    // Ensure the camera updates
     camera.updateMatrixWorld();
     
-    // Set up renderer
-    gl.setClearColor('#000000', 0); // Transparent background
+    // Renderer optimizations
+    gl.setClearColor('#000000', 0);
+    gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     
-    console.log('🎥 Scene setup complete:', {
-      camera: camera.position,
-      renderer: gl.domElement,
-      sceneChildren: scene.children.length
-    });
-  }, [camera, gl, scene]);
+    console.log('🎥 Milky Way scene setup complete');
+  }, [camera, gl]);
   
-  useFrame(() => {
-    // Minimal camera movement
-    camera.position.y = -scrollY * 0.0005;
+  useFrame((state) => {
+    // Smooth camera movement based on scroll
+    const targetY = -scrollY * 0.002;
+    const targetX = Math.sin(scrollY * 0.0003) * 1;
+    
+    camera.position.y += (targetY - camera.position.y) * 0.1;
+    camera.position.x += (targetX - camera.position.x) * 0.1;
+    
+    // Slight rotation for immersion
+    camera.rotation.z = Math.sin(state.clock.elapsedTime * 0.1) * 0.02;
   });
   
   return (
     <>
-      {/* Maximum lighting */}
-      <ambientLight intensity={1.0} />
-      <directionalLight position={[5, 5, 5]} intensity={1.0} />
-      <pointLight position={[0, 0, 5]} intensity={0.5} />
+      {/* Minimal lighting for particles */}
+      <ambientLight intensity={0.3} />
       
-      {/* Test objects - positioned very close to camera for sharp focus */}
-      <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[0.2, 0.2, 0.2]} />
-        <meshBasicMaterial color="#ff0000" />
-      </mesh>
-      
-      <mesh position={[0.5, 0, 0]}>
-        <sphereGeometry args={[0.1, 16, 16]} />
-        <meshBasicMaterial color="#00ff00" />
-      </mesh>
-      
-      <mesh position={[-0.5, 0, 0]}>
-        <cylinderGeometry args={[0.1, 0.1, 0.2, 8]} />
-        <meshBasicMaterial color="#0000ff" />
-      </mesh>
-      
-      {/* Additional test objects at different depths */}
-      <mesh position={[0, 0.5, 0]}>
-        <boxGeometry args={[0.1, 0.1, 0.1]} />
-        <meshBasicMaterial color="#ffff00" />
-      </mesh>
-      
-      <mesh position={[0, -0.5, 0]}>
-        <boxGeometry args={[0.1, 0.1, 0.1]} />
-        <meshBasicMaterial color="#ff00ff" />
-      </mesh>
-      
+      {/* Main particle field */}
       <ParticleField scrollY={scrollY} />
+      
+      {/* Optional: Add some larger "nebula" effects */}
+      <mesh position={[15, 5, -20]} scale={[8, 4, 8]}>
+        <sphereGeometry args={[1, 16, 16]} />
+        <meshBasicMaterial 
+          color="#4a148c" 
+          transparent 
+          opacity={0.1}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      
+      <mesh position={[-12, -8, -25]} scale={[6, 3, 6]}>
+        <sphereGeometry args={[1, 16, 16]} />
+        <meshBasicMaterial 
+          color="#1a237e" 
+          transparent 
+          opacity={0.08}
+          blending={THREE.AdditiveBlending}
+        />
+      </mesh>
+      
+      {/* Distant background stars */}
+      <mesh position={[0, 0, -50]}>
+        <sphereGeometry args={[50, 32, 32]} />
+        <meshBasicMaterial 
+          color="#0a0a0a"
+          side={THREE.BackSide}
+          transparent
+          opacity={0.3}
+        />
+      </mesh>
     </>
   );
 }
