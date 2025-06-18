@@ -1,94 +1,71 @@
-import React, { useEffect } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import React, { useRef, useMemo } from 'react';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import ParticleField from './ParticleField';
 
-interface SceneProps {
+interface ParticleFieldProps {
   scrollY: number;
-  currentPage: string;
 }
 
-export default function Scene({ scrollY, currentPage }: SceneProps) {
-  const { camera, gl, scene } = useThree();
+export default function ParticleField({ scrollY }: ParticleFieldProps) {
+  const particlesRef = useRef<THREE.Points>(null);
   
-  useEffect(() => {
-    // Debug camera setup
-    camera.position.set(0, 0, 3); // Very close to origin
-    camera.fov = 75;
-    camera.near = 0.01;
-    camera.far = 1000;
-    camera.updateProjectionMatrix();
-    
-    // Debug renderer settings
-    gl.toneMapping = THREE.ACESFilmicToneMapping;
-    gl.toneMappingExposure = 1.5; // Brighter exposure
-    
-    console.log('🎥 Camera setup:', {
-      position: camera.position,
-      fov: camera.fov,
-      near: camera.near,
-      far: camera.far
+  // Simple material that definitely works
+  const simpleMaterial = useMemo(() => {
+    return new THREE.PointsMaterial({
+      size: 0.05,
+      sizeAttenuation: true,
+      transparent: true,
+      opacity: 0.8,
+      blending: THREE.AdditiveBlending,
+      color: '#ffffff'
     });
+  }, []);
+
+  // Simple particle data
+  const particleData = useMemo(() => {
+    const count = 500;
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
     
-    console.log('🎬 Scene info:', {
-      children: scene.children.length,
-      renderer: gl.capabilities
-    });
-  }, [camera, gl, scene]);
+    for (let i = 0; i < count; i++) {
+      // Close to camera
+      positions[i * 3] = (Math.random() - 0.5) * 10;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 10;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 10;
+      
+      // Random colors
+      colors[i * 3] = Math.random();
+      colors[i * 3 + 1] = Math.random();
+      colors[i * 3 + 2] = Math.random();
+    }
+    
+    return { positions, colors, count };
+  }, []);
   
-  useFrame(() => {
-    // Minimal camera movement
-    camera.position.y = -scrollY * 0.0005;
+  useFrame((state) => {
+    if (particlesRef.current) {
+      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.1;
+    }
   });
   
+  console.log('🌟 Simple particles rendering');
+  
   return (
-    <>
-      {/* MAXIMUM LIGHTING - if you can't see particles now, it's not a lighting issue */}
-      <ambientLight intensity={2.0} color="#ffffff" />
-      <directionalLight 
-        position={[5, 5, 5]} 
-        intensity={2.0} 
-        color="#ffffff"
-      />
-      <directionalLight 
-        position={[-5, -5, -5]} 
-        intensity={1.0} 
-        color="#ffffff"
-      />
-      <pointLight 
-        position={[0, 0, 0]} 
-        intensity={2.0} 
-        color="#ffffff" 
-        distance={50}
-      />
-      <pointLight 
-        position={[2, 2, 2]} 
-        intensity={1.5} 
-        color="#4080ff" 
-        distance={20}
-      />
-      <pointLight 
-        position={[-2, -2, -2]} 
-        intensity={1.5} 
-        color="#ff6b6b" 
-        distance={20}
-      />
-      <pointLight 
-        position={[0, 2, -2]} 
-        intensity={1.5} 
-        color="#00ffff" 
-        distance={20}
-      />
-      
-
-      
-      <ParticleField scrollY={scrollY} />
-      
-      {/* Disable controls temporarily to avoid interference */}
-      <OrbitControls 
-        enabled={false}
-      />
-    </>
+    <points ref={particlesRef} material={simpleMaterial}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          count={particleData.count}
+          array={particleData.positions}
+          itemSize={3}
+        />
+        <bufferAttribute
+          attach="attributes-color"
+          count={particleData.count}
+          array={particleData.colors}
+          itemSize={3}
+        />
+      </bufferGeometry>
+    </points>
   );
 }
