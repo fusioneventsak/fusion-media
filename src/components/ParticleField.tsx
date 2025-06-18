@@ -19,11 +19,11 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     });
   }, []);
 
-  // Super simple particle material
+  // Super simple particle material - larger and brighter
   const particleMaterial = useMemo(() => {
     return new THREE.PointsMaterial({
       color: '#ffffff',
-      size: 0.1,
+      size: 0.05,
       sizeAttenuation: false, // No distance attenuation
       transparent: true,
       opacity: 1.0,
@@ -31,15 +31,15 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     });
   }, []);
 
-  // Simple particle positions
+  // Simple particle positions - much closer to camera
   const particleData = useMemo(() => {
-    const count = 100;
+    const count = 200;
     const positions = new Float32Array(count * 3);
     
     for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 5;     // x
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 5; // y
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 5; // z
+      positions[i * 3] = (Math.random() - 0.5) * 3;     // x: -1.5 to 1.5
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 3; // y: -1.5 to 1.5
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 3; // z: -1.5 to 1.5
     }
     
     console.log('🌟 Created', count, 'particles');
@@ -63,20 +63,20 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   
   return (
     <group>
-      {/* Test: Red cube to confirm 3D is working */}
-      <mesh ref={meshRef} position={[2, 0, 0]} material={testMaterial}>
-        <boxGeometry args={[0.5, 0.5, 0.5]} />
+      {/* Test: Red cube to confirm 3D is working - smaller and closer */}
+      <mesh ref={meshRef} position={[1.5, 0, 0]} material={testMaterial}>
+        <boxGeometry args={[0.2, 0.2, 0.2]} />
       </mesh>
       
       {/* Test: Green cube that's always visible */}
-      <mesh position={[-2, 0, 0]}>
-        <boxGeometry args={[0.3, 0.3, 0.3]} />
+      <mesh position={[-1.5, 0, 0]}>
+        <boxGeometry args={[0.15, 0.15, 0.15]} />
         <meshBasicMaterial color="#00ff00" />
       </mesh>
       
       {/* Test: Blue sphere */}
-      <mesh position={[0, 2, 0]}>
-        <sphereGeometry args={[0.2, 16, 16]} />
+      <mesh position={[0, 1.5, 0]}>
+        <sphereGeometry args={[0.1, 16, 16]} />
         <meshBasicMaterial color="#0000ff" />
       </mesh>
       
