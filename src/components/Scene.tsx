@@ -12,73 +12,63 @@ export default function Scene({ scrollY, currentPage }: SceneProps) {
   const { camera, gl, scene } = useThree();
   
   useEffect(() => {
-    // Optimized camera setup for particle visibility
-    camera.position.set(0, 0, 10);
+    // Perfect camera setup for crisp stars
+    camera.position.set(0, 0, 5);
     camera.fov = 75;
     camera.near = 0.1;
-    camera.far = 1000;
+    camera.far = 200;
     camera.updateProjectionMatrix();
     
     // Look at origin
     camera.lookAt(0, 0, 0);
     camera.updateMatrixWorld();
     
-    // Renderer optimizations
-    gl.setClearColor('#000000', 0);
+    // Renderer optimizations for crisp particles
+    gl.setClearColor('#000000', 0); // Fully transparent
     gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     
-    console.log('🎥 Milky Way scene setup complete');
-  }, [camera, gl]);
+    // Disable fog to prevent greyness
+    scene.fog = null;
+    
+    console.log('✨ Crisp star field scene ready');
+  }, [camera, gl, scene]);
   
   useFrame((state) => {
-    // Smooth camera movement based on scroll
-    const targetY = -scrollY * 0.002;
-    const targetX = Math.sin(scrollY * 0.0003) * 1;
+    // Gentle camera movement based on scroll
+    const targetY = -scrollY * 0.001;
+    const targetX = Math.sin(scrollY * 0.0002) * 0.3;
     
-    camera.position.y += (targetY - camera.position.y) * 0.1;
-    camera.position.x += (targetX - camera.position.x) * 0.1;
-    
-    // Slight rotation for immersion
-    camera.rotation.z = Math.sin(state.clock.elapsedTime * 0.1) * 0.02;
+    camera.position.y += (targetY - camera.position.y) * 0.05;
+    camera.position.x += (targetX - camera.position.x) * 0.05;
   });
   
   return (
     <>
-      {/* Minimal lighting for particles */}
-      <ambientLight intensity={0.3} />
+      {/* No lighting needed for stars - they emit their own light */}
       
-      {/* Main particle field */}
+      {/* Main crisp star field */}
       <ParticleField scrollY={scrollY} />
       
-      {/* Optional: Add some larger "nebula" effects */}
-      <mesh position={[15, 5, -20]} scale={[8, 4, 8]}>
+      {/* Subtle distant nebula - very transparent */}
+      <mesh position={[20, 8, -30]} scale={[12, 6, 12]}>
         <sphereGeometry args={[1, 16, 16]} />
         <meshBasicMaterial 
-          color="#4a148c" 
+          color="#1a0d4a" 
           transparent 
-          opacity={0.1}
+          opacity={0.03}
           blending={THREE.AdditiveBlending}
+          depthWrite={false}
         />
       </mesh>
       
-      <mesh position={[-12, -8, -25]} scale={[6, 3, 6]}>
+      <mesh position={[-18, -6, -35]} scale={[8, 4, 8]}>
         <sphereGeometry args={[1, 16, 16]} />
         <meshBasicMaterial 
-          color="#1a237e" 
+          color="#0d1a4a" 
           transparent 
-          opacity={0.08}
+          opacity={0.02}
           blending={THREE.AdditiveBlending}
-        />
-      </mesh>
-      
-      {/* Distant background stars */}
-      <mesh position={[0, 0, -50]}>
-        <sphereGeometry args={[50, 32, 32]} />
-        <meshBasicMaterial 
-          color="#0a0a0a"
-          side={THREE.BackSide}
-          transparent
-          opacity={0.3}
+          depthWrite={false}
         />
       </mesh>
     </>
