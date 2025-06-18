@@ -58,6 +58,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       fragmentShader: `
         varying vec3 vColor;
         varying float vOpacity;
+        varying float vGlow;
         
         void main() {
           // EXACT FRAGMENT SHADER FROM REFERENCE
@@ -65,13 +66,13 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
           if (distanceToCenter > 0.5) discard;
           
           // Soft circular falloff
-          float circle = 1.0 - smoothstep(0.0, 0.5, dist);
+          float circle = 1.0 - smoothstep(0.0, 0.5, distanceToCenter);
           
           // Inner bright core
-          float core = 1.0 - smoothstep(0.0, 0.2, dist);
+          float core = 1.0 - smoothstep(0.0, 0.2, distanceToCenter);
           
           // Outer glow
-          float glow = 1.0 - smoothstep(0.2, 0.5, dist);
+          float glow = 1.0 - smoothstep(0.2, 0.5, distanceToCenter);
           
           // Combine core and glow
           float intensity = core * 0.8 + glow * 0.4;
@@ -372,170 +373,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
             attach="attributes-alpha"
             count={particleData.main.count}
             array={particleData.main.alphas}
-            itemSize={1}
-          />
-        </bufferGeometry>
-      </points>
-      
-      {/* Dust particles */}
-      <points ref={dustParticlesRef} material={dustParticleMaterial}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={particleData.dust.count}
-            array={particleData.dust.positions}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-color"
-            count={particleData.dust.count}
-            array={particleData.dust.colors}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-size"
-            count={particleData.dust.count}
-            array={particleData.dust.sizes}
-            itemSize={1}
-          />
-        </bufferGeometry>
-      </points>
-    </>
-  );
-}
-      const phi = Math.random() * Math.PI;
-      
-      mainPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-      mainPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-      mainPositions[i * 3 + 2] = radius * Math.cos(phi);
-      
-      // Slow movement
-      mainVelocities[i * 3] = (Math.random() - 0.5) * 0.01;
-      mainVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.01;
-      mainVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.01;
-      
-      // Bright white colors with slight variations
-      const intensity = 0.8 + Math.random() * 0.2;
-      mainColors[i * 3] = intensity;
-      mainColors[i * 3 + 1] = intensity;
-      mainColors[i * 3 + 2] = intensity;
-      
-      // Variable sizes
-      mainSizes[i] = Math.random() * 3 + 1;
-    }
-    
-    // Dust particles
-    const dustPositions = new Float32Array(DUST_COUNT * 3);
-    const dustColors = new Float32Array(DUST_COUNT * 3);
-    const dustSizes = new Float32Array(DUST_COUNT);
-    const dustVelocities = new Float32Array(DUST_COUNT * 3);
-    
-    for (let i = 0; i < DUST_COUNT; i++) {
-      dustPositions[i * 3] = (Math.random() - 0.5) * 80;
-      dustPositions[i * 3 + 1] = (Math.random() - 0.5) * 80;
-      dustPositions[i * 3 + 2] = (Math.random() - 0.5) * 80;
-      
-      dustVelocities[i * 3] = (Math.random() - 0.5) * 0.005;
-      dustVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.005;
-      dustVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.005;
-      
-      // Subtle blue-purple colors
-      dustColors[i * 3] = 0.5 + Math.random() * 0.3;
-      dustColors[i * 3 + 1] = 0.6 + Math.random() * 0.3;
-      dustColors[i * 3 + 2] = 0.9 + Math.random() * 0.1;
-      
-      dustSizes[i] = Math.random() * 2 + 0.5;
-    }
-    
-    console.log('✨ Created SHARP particles with custom shaders');
-    return {
-      main: {
-        positions: mainPositions,
-        colors: mainColors,
-        sizes: mainSizes,
-        velocities: mainVelocities,
-        count: MAIN_COUNT
-      },
-      dust: {
-        positions: dustPositions,
-        colors: dustColors,
-        sizes: dustSizes,
-        velocities: dustVelocities,
-        count: DUST_COUNT
-      }
-    };
-  }, []);
-  
-  // ANIMATION LOOP
-  useFrame((state) => {
-    const time = state.clock.getElapsedTime();
-    
-    // Update shader uniforms
-    if (sharpParticleMaterial) {
-      sharpParticleMaterial.uniforms.time.value = time;
-    }
-    if (dustParticleMaterial) {
-      dustParticleMaterial.uniforms.time.value = time;
-    }
-    
-    // Animate main particles
-    if (mainParticlesRef.current) {
-      const positions = mainParticlesRef.current.geometry.attributes.position.array as Float32Array;
-      
-      for (let i = 0; i < particleData.main.count; i++) {
-        const i3 = i * 3;
-        
-        positions[i3] += particleData.main.velocities[i3];
-        positions[i3 + 1] += particleData.main.velocities[i3 + 1];
-        positions[i3 + 2] += particleData.main.velocities[i3 + 2];
-        
-        // Gentle floating motion
-        const floatFreq = time * 0.1 + i * 0.01;
-        positions[i3] += Math.sin(floatFreq) * 0.002;
-        positions[i3 + 1] += Math.cos(floatFreq * 0.7) * 0.002;
-      }
-      
-      mainParticlesRef.current.geometry.attributes.position.needsUpdate = true;
-      mainParticlesRef.current.rotation.y = time * 0.001;
-    }
-    
-    // Animate dust particles
-    if (dustParticlesRef.current) {
-      const positions = dustParticlesRef.current.geometry.attributes.position.array as Float32Array;
-      
-      for (let i = 0; i < particleData.dust.count; i++) {
-        const i3 = i * 3;
-        positions[i3] += particleData.dust.velocities[i3];
-        positions[i3 + 1] += particleData.dust.velocities[i3 + 1];
-        positions[i3 + 2] += particleData.dust.velocities[i3 + 2];
-      }
-      
-      dustParticlesRef.current.geometry.attributes.position.needsUpdate = true;
-      dustParticlesRef.current.rotation.y = time * 0.0005;
-    }
-  });
-  
-  return (
-    <>
-      {/* Main sharp particles */}
-      <points ref={mainParticlesRef} material={sharpParticleMaterial}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={particleData.main.count}
-            array={particleData.main.positions}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-color"
-            count={particleData.main.count}
-            array={particleData.main.colors}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-size"
-            count={particleData.main.count}
-            array={particleData.main.sizes}
             itemSize={1}
           />
         </bufferGeometry>
