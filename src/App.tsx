@@ -37,22 +37,29 @@ export default function App() {
       <div className="fixed inset-0 z-0">
         <Canvas
           camera={{ 
-            position: [0, 0, 10], 
-            fov: 75,
+            position: [15, 3, 15], 
+            fov: 45,
             near: 0.1,
-            far: 1000
+            far: 200
           }}
           gl={{ 
             antialias: true, 
             alpha: true,
             powerPreference: "high-performance",
-            preserveDrawingBuffer: false
+            preserveDrawingBuffer: false,
+            stencil: false,
+            depth: true
           }}
-          dpr={Math.min(window.devicePixelRatio, 2)}
+          dpr={[1, 2]}
           onCreated={({ gl, camera }) => {
             gl.toneMapping = THREE.ACESFilmicToneMapping;
-            gl.toneMappingExposure = 1.2;
+            gl.toneMappingExposure = 1.0;
             gl.outputColorSpace = THREE.SRGBColorSpace;
+            gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            
+            // CRITICAL: Disable texture filtering for sharp particles
+            gl.getContext().disable(gl.getContext().SAMPLE_ALPHA_TO_COVERAGE);
+            
             console.log('🌌 Milky Way canvas created');
           }}
           performance={{
@@ -60,6 +67,11 @@ export default function App() {
             min: 0.5,
             max: 1,
             debounce: 200
+          }}
+          frameloop="always"
+          style={{ 
+            background: 'transparent',
+            imageRendering: 'pixelated' // CRITICAL for sharp particles
           }}
         >
           <Scene scrollY={scrollY} currentPage={currentPage} />
