@@ -13,11 +13,11 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   const particleMaterial = useMemo(() => {
     return new THREE.PointsMaterial({
       color: 0xffffff,
-      size: 3,                    // Larger size for better visibility
+      size: 8,                    // Much larger size for visibility
       sizeAttenuation: false,     // NO size attenuation = consistent size
       transparent: true,
-      opacity: 1.0,               // Full opacity for maximum clarity
-      blending: THREE.NormalBlending, // Normal blending instead of additive
+      opacity: 0.8,               // Slightly transparent for better blending
+      blending: THREE.AdditiveBlending, // Additive blending for glow effect
       depthWrite: true,           // Enable depth writing for proper rendering
       depthTest: true,            // Enable depth testing
       fog: false                  // Disable fog effects
