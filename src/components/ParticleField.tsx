@@ -28,6 +28,9 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     updateSmoothScroll(scrollY);
   }, [scrollY, updateSmoothScroll]);
   
+  // More responsive scroll interpolation
+  const [scrollVelocity, setScrollVelocity] = useState(0);
+  
   // EXACT SHADER MATERIAL FROM YOUR REFERENCE
   const sharpParticleMaterial = useMemo(() => {
     return new THREE.ShaderMaterial({
@@ -304,10 +307,31 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   
   // ENHANCED ANIMATION WITH SMOOTH SCROLL EFFECTS
   useFrame((state) => {
-    // Smooth scroll interpolation with easing
+    // Much more responsive scroll interpolation
     setSmoothScrollY(prev => {
       const diff = targetScrollY - prev;
-      const easingFactor = 0.08; // Adjust for smoothness (lower = smoother)
+      
+      // Dynamic easing based on scroll velocity for better responsiveness
+      const scrollSpeed = Math.abs(diff);
+      let easingFactor;
+      
+      if (scrollSpeed > 100) {
+        // Fast scrolling - be more responsive
+        easingFactor = 0.25;
+      } else if (scrollSpeed > 50) {
+        // Medium scrolling
+        easingFactor = 0.18;
+      } else if (scrollSpeed > 10) {
+        // Slow scrolling
+        easingFactor = 0.15;
+      } else {
+        // Very slow/fine movements
+        easingFactor = 0.12;
+      }
+      
+      // Apply velocity-based smoothing
+      setScrollVelocity(prev => prev * 0.85 + diff * 0.15);
+      
       return prev + diff * easingFactor;
     });
     
@@ -316,8 +340,8 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     
     // SMOOTH SCROLL-BASED EFFECTS
     const scrollProgress = smoothScrollY * 0.001; // Convert scroll to usable value
-    const scrollRotation = scrollProgress * 0.3; // Reduced rotation intensity
-    const scrollTilt = Math.sin(scrollProgress * 1.5) * 0.05; // Reduced tilt
+    const scrollRotation = scrollProgress * 0.2; // Further reduced rotation
+    const scrollTilt = Math.sin(scrollProgress * 1.2) * 0.03; // Further reduced tilt
     
     // Update shader uniforms with smooth scroll
     if (sharpParticleMaterial) {
