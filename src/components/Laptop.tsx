@@ -78,7 +78,7 @@ export default function FullWidthLaptopShowcase({
     setIsLoaded(true);
   };
 
-  // Modify URL to request desktop version when possible
+  // Enhanced desktop URL manipulation
   const getDesktopUrl = (originalUrl: string) => {
     try {
       const urlObj = new URL(originalUrl);
@@ -87,6 +87,7 @@ export default function FullWidthLaptopShowcase({
       urlObj.searchParams.set('desktop', '1');
       urlObj.searchParams.set('mobile', '0');
       urlObj.searchParams.set('view', 'desktop');
+      urlObj.searchParams.set('force_desktop', '1');
       
       // For specific sites that have desktop parameters
       if (urlObj.hostname.includes('youtube.com')) {
@@ -97,11 +98,117 @@ export default function FullWidthLaptopShowcase({
         urlObj.searchParams.set('_fb_noscript', '1');
       }
       
+      // For Netlify apps and custom sites
+      if (urlObj.hostname.includes('netlify.app') || urlObj.hostname.includes('fusion-events.ca')) {
+        urlObj.searchParams.set('viewport', 'desktop');
+        urlObj.searchParams.set('width', '1200');
+      }
+      
       return urlObj.toString();
     } catch {
       return originalUrl;
     }
   };
+
+  // Enhanced iframe post-load processing
+  useEffect(() => {
+    if (iframeRef.current && isLoaded && canEmbed) {
+      const iframe = iframeRef.current;
+      
+      // Wait for iframe to fully load, then try to force desktop view
+      const timer = setTimeout(() => {
+        try {
+          // Try to access and modify iframe content
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+          
+          if (iframeDoc) {
+            console.log('Modifying iframe content for desktop view');
+            
+            // Force desktop viewport
+            let viewport = iframeDoc.querySelector('meta[name="viewport"]');
+            if (viewport) {
+              viewport.setAttribute('content', 'width=1200, initial-scale=1.0, user-scalable=yes');
+            } else {
+              viewport = iframeDoc.createElement('meta');
+              viewport.setAttribute('name', 'viewport');
+              viewport.setAttribute('content', 'width=1200, initial-scale=1.0, user-scalable=yes');
+              if (iframeDoc.head) {
+                iframeDoc.head.appendChild(viewport);
+              }
+            }
+            
+            // Inject desktop-forcing CSS
+            const style = iframeDoc.createElement('style');
+            style.textContent = `
+              html, body {
+                width: 1200px !important;
+                min-width: 1200px !important;
+                max-width: none !important;
+                transform-origin: 0 0 !important;
+              }
+              
+              /* Force desktop layouts */
+              @media (max-width: 1199px) {
+                html, body {
+                  width: 1200px !important;
+                  min-width: 1200px !important;
+                }
+                
+                /* Hide mobile navigation if it exists */
+                .mobile-nav, .mobile-menu, .hamburger, .nav-toggle {
+                  display: none !important;
+                }
+                
+                /* Show desktop navigation */
+                .desktop-nav, .desktop-menu {
+                  display: block !important;
+                }
+                
+                /* Force desktop grid layouts */
+                .container, .wrapper, main, .content {
+                  max-width: 1200px !important;
+                  width: 100% !important;
+                }
+              }
+              
+              /* Disable responsive behavior */
+              * {
+                max-width: none !important;
+              }
+              
+              /* Force desktop header/navigation */
+              header, nav, .header, .navigation {
+                width: 100% !important;
+                min-width: 1200px !important;
+              }
+            `;
+            
+            if (iframeDoc.head) {
+              iframeDoc.head.appendChild(style);
+            }
+            
+            // Try to trigger a resize event to force layout recalculation
+            if (iframe.contentWindow) {
+              iframe.contentWindow.dispatchEvent(new Event('resize'));
+            }
+            
+          }
+        } catch (error) {
+          console.log('Cross-origin restrictions prevent iframe modification, using alternative method');
+          
+          // Alternative: Use CSS transform to scale up mobile content
+          if (iframe) {
+            iframe.style.width = '1200px';
+            iframe.style.height = '675px'; // 16:9 ratio
+            iframe.style.transform = 'scale(0.75)';
+            iframe.style.transformOrigin = '0 0';
+          }
+        }
+      }, 1000); // Wait 1 second for content to load
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isLoaded, canEmbed]);
 
   // Create fallback content for sites that block embedding
   const createFallbackContent = () => {
