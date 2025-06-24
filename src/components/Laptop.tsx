@@ -273,36 +273,73 @@ export default function FullWidthLaptopShowcase({
                     transformOrigin: 'center bottom'
                   }}
                 >
-                  {/* Keyboard Area */}
-                  <div className="absolute inset-4 bg-gray-700 rounded-lg p-3">
+                  {/* Keyboard Area - properly inset */}
+                  <div 
+                    className="absolute bg-gray-700 rounded-lg"
+                    style={{
+                      top: '30px',
+                      left: '30px',
+                      right: '30px',
+                      bottom: '30px',
+                      transform: 'translateZ(-2px)', // Inset into the base
+                      boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.4)'
+                    }}
+                  >
                     {/* Keyboard Keys */}
-                    <div className="grid grid-cols-14 gap-0.5 mb-2">
-                      {Array.from({ length: 42 }).map((_, i) => (
-                        <div 
-                          key={i} 
-                          className="aspect-square bg-gray-600 rounded-sm border border-gray-500 shadow-sm"
-                          style={{
-                            fontSize: '6px',
-                            boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 2px rgba(255,255,255,0.1)'
-                          }}
-                        ></div>
-                      ))}
+                    <div className="p-4">
+                      <div className="grid grid-cols-14 gap-1 mb-3">
+                        {Array.from({ length: 42 }).map((_, i) => (
+                          <div 
+                            key={i} 
+                            className="aspect-square bg-gray-600 rounded-sm border border-gray-500"
+                            style={{
+                              maxWidth: '12px',
+                              maxHeight: '12px',
+                              transform: 'translateZ(1px)', // Keys slightly raised
+                              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 2px rgba(255,255,255,0.1)'
+                            }}
+                          ></div>
+                        ))}
+                      </div>
+                      
+                      {/* Spacebar */}
+                      <div 
+                        className="mx-auto w-24 h-3 bg-gray-600 rounded border border-gray-500 mb-4"
+                        style={{
+                          transform: 'translateZ(1px)',
+                          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(255,255,255,0.1)'
+                        }}
+                      ></div>
+                      
+                      {/* Trackpad */}
+                      <div 
+                        className="mx-auto w-16 h-10 bg-gray-600 rounded border border-gray-500"
+                        style={{
+                          transform: 'translateZ(-1px)', // Trackpad slightly inset
+                          boxShadow: 'inset 0 3px 6px rgba(0,0,0,0.4)'
+                        }}
+                      ></div>
                     </div>
-                    
-                    {/* Spacebar */}
-                    <div className="mx-auto w-32 h-3 bg-gray-600 rounded border border-gray-500 mb-3 shadow-inner"></div>
-                    
-                    {/* Trackpad */}
-                    <div 
-                      className="mx-auto w-20 h-12 bg-gray-600 rounded border border-gray-500"
-                      style={{
-                        boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)'
-                      }}
-                    ></div>
                   </div>
                   
                   {/* Power LED */}
-                  <div className="absolute top-2 right-4 w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
+                  <div 
+                    className="absolute top-4 right-6 w-2 h-2 bg-green-400 rounded-full animate-pulse"
+                    style={{
+                      transform: 'translateZ(1px)',
+                      boxShadow: '0 0 8px rgba(74, 222, 128, 0.8)'
+                    }}
+                  ></div>
+                  
+                  {/* Brand Logo */}
+                  <div 
+                    className="absolute bottom-4 right-6 text-xs text-gray-400 font-mono opacity-60"
+                    style={{
+                      transform: 'translateZ(0.5px)'
+                    }}
+                  >
+                    FUSION
+                  </div>
                 </div>
 
                 {/* Laptop Screen Back */}
