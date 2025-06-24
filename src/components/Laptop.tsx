@@ -132,7 +132,8 @@ export default function FullWidthLaptopShowcase({
   // Handle iframe loading with mobile optimization
   const handleIframeLoad = () => {
     setIsLoaded(true);
-    if (!isMobile) {
+    // Only allow embedding on desktop
+    if (typeof window !== 'undefined' && window.innerWidth >= 768) {
       setCanEmbed(true);
     }
   };
