@@ -66,16 +66,70 @@ export default function FullWidthLaptopShowcase({
     };
   }, [isInView]);
 
-  // Handle iframe loading and errors
-  const handleIframeLoad = () => {
-    setIsLoaded(true);
-    setCanEmbed(true);
-  };
+  // Enhanced iframe handling for desktop view
+  useEffect(() => {
+    if (iframeRef.current && isLoaded) {
+      const iframe = iframeRef.current;
+      
+      try {
+        // Try to access iframe content (will only work for same-origin)
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+        
+        if (iframeDoc) {
+          // Force desktop viewport if we can access the content
+          const viewport = iframeDoc.querySelector('meta[name="viewport"]');
+          if (viewport) {
+            viewport.setAttribute('content', 'width=1200, initial-scale=1.0');
+          } else {
+            // Create desktop viewport meta tag
+            const newViewport = iframeDoc.createElement('meta');
+            newViewport.name = 'viewport';
+            newViewport.content = 'width=1200, initial-scale=1.0';
+            iframeDoc.head?.appendChild(newViewport);
+          }
+          
+          // Force desktop styles
+          const style = iframeDoc.createElement('style');
+          style.textContent = `
+            @media (max-width: 1200px) {
+              html, body {
+                width: 1200px !important;
+                min-width: 1200px !important;
+              }
+            }
+          `;
+          iframeDoc.head?.appendChild(style);
+        }
+      } catch (error) {
+        // Cross-origin restrictions - can't modify content
+        console.log('Cross-origin iframe - using URL parameters for desktop view');
+      }
+    }
+  }, [isLoaded]);
 
-  const handleIframeError = () => {
-    console.log('Website blocking iframe embedding, showing fallback');
-    setCanEmbed(false);
-    setIsLoaded(true);
+  // Modify URL to request desktop version when possible
+  const getDesktopUrl = (originalUrl: string) => {
+    try {
+      const urlObj = new URL(originalUrl);
+      
+      // Add common desktop view parameters
+      urlObj.searchParams.set('desktop', '1');
+      urlObj.searchParams.set('mobile', '0');
+      urlObj.searchParams.set('view', 'desktop');
+      
+      // For specific sites that have desktop parameters
+      if (urlObj.hostname.includes('youtube.com')) {
+        urlObj.searchParams.set('app', 'desktop');
+      }
+      
+      if (urlObj.hostname.includes('facebook.com') || urlObj.hostname.includes('twitter.com')) {
+        urlObj.searchParams.set('_fb_noscript', '1');
+      }
+      
+      return urlObj.toString();
+    } catch {
+      return originalUrl;
+    }
   };
 
   // Create fallback content for sites that block embedding
@@ -331,13 +385,22 @@ export default function FullWidthLaptopShowcase({
                       {canEmbed ? (
                         <iframe
                           ref={iframeRef}
-                          src={url}
+                          src={getDesktopUrl(url)}
                           className="w-full h-full border-none"
                           title={title}
                           sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
                           onLoad={handleIframeLoad}
                           onError={handleIframeError}
                           loading="lazy"
+                          // Force desktop view
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            minWidth: '1200px', // Force minimum desktop width
+                            transform: 'scale(1)', // Ensure proper scaling
+                            transformOrigin: 'top left'
+                          }}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         />
                       ) : (
                         createFallbackContent()
