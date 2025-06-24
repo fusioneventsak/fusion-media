@@ -1,8 +1,17 @@
 import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import FullWidthLaptopShowcase from '../components/Laptop';
 
 export default function HomePage() {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <div className="relative pointer-events-none">
       {/* Hero Section - Transparent to show WebGL background */}
@@ -166,6 +175,9 @@ export default function HomePage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, delay: 0.2 }}
+              style={{
+                transform: `translateY(${scrollY * 0.1}px) translateX(${Math.sin(scrollY * 0.005) * 10}px)`
+              }}
             >
               <div className="relative">
                 <motion.div
@@ -173,27 +185,43 @@ export default function HomePage() {
                   animate={{
                     rotateY: [0, 3, -3, 0],
                     rotateX: [0, 1, -1, 0],
-                    y: [0, -8, 0, 8, 0]
+                    y: [0, -12, 0, 12, 0]
                   }}
                   transition={{
                     duration: 8,
                     repeat: Infinity,
                     ease: "easeInOut"
                   }}
+                  style={{
+                    transform: `scale(1.5) rotateZ(${scrollY * 0.02}deg)`
+                  }}
                 >
                   <img 
                     src="https://www.fusion-events.ca/wp-content/uploads/2025/06/Untitled-512-x-512-px-3.png" 
                     alt="Selfie Holosphere - Interactive Photo Experience Platform"
-                    className="w-full max-w-4xl mx-auto drop-shadow-2xl"
+                    className="w-full max-w-6xl mx-auto drop-shadow-2xl"
                     style={{
-                      filter: 'drop-shadow(0 25px 60px rgba(147, 51, 234, 0.3))'
+                      filter: `drop-shadow(0 25px 60px rgba(147, 51, 234, 0.4)) brightness(${1 + Math.sin(scrollY * 0.01) * 0.1})`
                     }}
                   />
                 </motion.div>
                 
-                {/* Enhanced glow effect */}
+                {/* Enhanced glow effect with scroll interaction */}
                 <div 
-                  className="absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent opacity-30 blur-3xl scale-110 pointer-events-none"
+                  className="absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent blur-3xl scale-150 pointer-events-none"
+                  style={{
+                    opacity: 0.3 + Math.sin(scrollY * 0.008) * 0.1,
+                    transform: `scale(1.5) rotate(${scrollY * 0.05}deg)`
+                  }}
+                ></div>
+                
+                {/* Additional floating particles effect */}
+                <div 
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at ${50 + Math.sin(scrollY * 0.01) * 20}% ${50 + Math.cos(scrollY * 0.01) * 20}%, rgba(147, 51, 234, 0.2) 0%, transparent 50%)`,
+                    transform: `scale(2) rotate(${scrollY * -0.03}deg)`
+                  }}
                 ></div>
               </div>
             </motion.div>
