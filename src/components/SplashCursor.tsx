@@ -1497,7 +1497,24 @@ export default function SplashCursor({
     window.addEventListener(
       "touchmove",
       (e) => {
-        e.preventDefault(); // Prevent scroll interference
+        // DON'T prevent default - let scrolling work naturally
+        // Only create fluid effects, don't block scrolling
+        const touches = e.targetTouches;
+        const pointer = pointers[0];
+        for (let i = 0; i < touches.length; i++) {
+          const posX = scaleByPixelRatio(touches[i].clientX);
+          const posY = scaleByPixelRatio(touches[i].clientY);
+          updatePointerMoveData(pointer, posX, posY, pointer.color);
+        }
+      },
+      { passive: true } // ← CHANGED: passive: true allows scrolling
+    );
+
+    // Alternative approach - only apply fluid effects to canvas area:
+    canvas.addEventListener(
+      "touchmove",
+      (e) => {
+        e.preventDefault(); // Only prevent on canvas
         const touches = e.targetTouches;
         const pointer = pointers[0];
         for (let i = 0; i < touches.length; i++) {
