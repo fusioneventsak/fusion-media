@@ -26,6 +26,23 @@ export default function FullWidthLaptopShowcase({
   const [isLoaded, setIsLoaded] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [canEmbed, setCanEmbed] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Mobile detection with resize handling
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768 || 
+                    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      setIsMobile(mobile);
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Listen for resize events
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const getAccentBgColor = () => {
     if (accentColor.includes('purple')) return 'bg-purple-600';
