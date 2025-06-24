@@ -112,7 +112,7 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
             ? 'max-h-96 opacity-100' 
             : 'max-h-0 opacity-0'
         }`}>
-          <div className="pt-6 pb-4 border-t border-white/10 mt-4">
+          <div className="pt-6 pb-4 border-t border-white/10 mt-4 bg-black/95 backdrop-blur-md rounded-lg mx-4">
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 <button
