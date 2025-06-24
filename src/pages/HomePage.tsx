@@ -102,7 +102,7 @@ export default function HomePage() {
       {/* 1. Event Engagement Technology */}
       <div className="pointer-events-auto">
         <FullWidthLaptopShowcase
-          url="https://selfieholosphere.com/collage/1lr9qn"
+          url="https://selfieholosphere.com/collage/1LR9"
           title="Event Engagement Technology"
           description="Interactive experiences that captivate audiences and create unforgettable moments. From trade shows to festivals, retail activations to corporate events—our engagement platforms drive participation and generate valuable data insights."
           features={[
