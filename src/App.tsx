@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
+import SplashCursor from './components/SplashCursor';
 import Navigation from './components/Navigation';
 import Scene from './components/Scene';
 import HomePage from './pages/HomePage';
@@ -34,6 +35,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
+      {/* Fluid Cursor Effect */}
+      <SplashCursor 
+        DENSITY_DISSIPATION={2.5}
+        VELOCITY_DISSIPATION={1.5}
+        SPLAT_RADIUS={0.15}
+        SPLAT_FORCE={4000}
+        COLOR_UPDATE_SPEED={8}
+      />
+      
       {/* Enhanced 3D Background */}
       <div className="fixed inset-0 z-0">
         <Canvas
