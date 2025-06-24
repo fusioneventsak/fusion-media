@@ -307,7 +307,7 @@ export default function FullWidthLaptopShowcase({
       return (
         <div className="h-full bg-white relative overflow-hidden flex items-center justify-center">
           <img 
-            src="/Untitled (512 x 512 px) (3).png" 
+            src="https://www.fusion-events.ca/wp-content/uploads/2025/06/Untitled-512-x-512-px-3.png" 
             alt="Selfie Holosphere - Interactive Photo Experience Platform"
             className="w-full h-full object-contain"
             style={{ maxWidth: '100%', maxHeight: '100%' }}
