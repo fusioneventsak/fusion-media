@@ -269,11 +269,11 @@ export default function FullWidthLaptopShowcase({
                   style={{
                     width: '400px',
                     height: '280px',
-                    transform: 'rotateX(90deg) translateZ(10px)',
+                    transform: 'rotateX(90deg) rotateY(180deg) translateZ(-10px)', // Added rotateY(180deg) to flip it
                     transformOrigin: 'center bottom'
                   }}
                 >
-                  {/* Keyboard Area - properly inset */}
+                  {/* Keyboard Area - properly inset and oriented */}
                   <div 
                     className="absolute bg-gray-700 rounded-lg"
                     style={{
@@ -281,7 +281,7 @@ export default function FullWidthLaptopShowcase({
                       left: '30px',
                       right: '30px',
                       bottom: '30px',
-                      transform: 'translateZ(-2px)', // Inset into the base
+                      transform: 'translateZ(2px)', // Now raised above the base since we flipped
                       boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.4)'
                     }}
                   >
@@ -326,7 +326,7 @@ export default function FullWidthLaptopShowcase({
                   <div 
                     className="absolute top-4 right-6 w-2 h-2 bg-green-400 rounded-full animate-pulse"
                     style={{
-                      transform: 'translateZ(1px)',
+                      transform: 'translateZ(3px)',
                       boxShadow: '0 0 8px rgba(74, 222, 128, 0.8)'
                     }}
                   ></div>
@@ -335,7 +335,7 @@ export default function FullWidthLaptopShowcase({
                   <div 
                     className="absolute bottom-4 right-6 text-xs text-gray-400 font-mono opacity-60"
                     style={{
-                      transform: 'translateZ(0.5px)'
+                      transform: 'translateZ(2.5px)'
                     }}
                   >
                     FUSION
