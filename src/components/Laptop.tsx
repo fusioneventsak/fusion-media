@@ -45,50 +45,89 @@ export default function FullWidthLaptopShowcase({
     return 'from-blue-500';
   };
 
-  // Optimized mouse movement with throttling and smooth interpolation
+  // Optimized mouse movement with mobile-friendly touch handling
   const [targetMouse, setTargetMouse] = useState({ x: 0, y: 0 });
   const [smoothMouse, setSmoothMouse] = useState({ x: 0, y: 0 });
 
-  // Throttled mouse handler for better performance
+  // Smooth interpolation animation loop (separate from event handling)
   useEffect(() => {
     let animationId: number;
-    let lastTime = 0;
     
-    const handleMouseMove = (e: MouseEvent) => {
-      const currentTime = performance.now();
-      if (currentTime - lastTime < 16) return; // Limit to ~60fps
-      lastTime = currentTime;
-      
-      if (!screenRef.current) return;
-      
-      const rect = screenRef.current.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-      
-      setTargetMouse({ x: x * 0.3, y: y * 0.3 }); // Reduced sensitivity for smoothness
-    };
-
-    // Smooth interpolation animation loop
     const animate = () => {
       setSmoothMouse(prev => ({
-        x: prev.x + (targetMouse.x - prev.x) * 0.08, // Smooth lerp
+        x: prev.x + (targetMouse.x - prev.x) * 0.08,
         y: prev.y + (targetMouse.y - prev.y) * 0.08
       }));
       animationId = requestAnimationFrame(animate);
     };
 
     if (isInView) {
-      document.addEventListener('mousemove', handleMouseMove, { passive: true });
       animationId = requestAnimationFrame(animate);
     }
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
       if (animationId) {
         cancelAnimationFrame(animationId);
       }
     };
   }, [isInView, targetMouse.x, targetMouse.y]);
+
+  // Mouse/touch event handlers - only on screen element
+  useEffect(() => {
+    if (!screenRef.current || !isInView) return;
+
+    const screenElement = screenRef.current;
+    let lastTime = 0;
+    
+    const updateMousePosition = (clientX: number, clientY: number) => {
+      const currentTime = performance.now();
+      if (currentTime - lastTime < 16) return; // Throttle to ~60fps
+      lastTime = currentTime;
+      
+      const rect = screenElement.getBoundingClientRect();
+      const x = ((clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((clientY - rect.top) / rect.height - 0.5) * 2;
+      
+      setTargetMouse({ x: x * 0.3, y: y * 0.3 });
+    };
+
+    // Mouse events (desktop)
+    const handleMouseMove = (e: MouseEvent) => {
+      updateMousePosition(e.clientX, e.clientY);
+    };
+
+    const handleMouseLeave = () => {
+      // Smoothly return to center when mouse leaves
+      setTargetMouse({ x: 0, y: 0 });
+    };
+
+    // Touch events (mobile) - only for the screen interaction
+    const handleTouchMove = (e: TouchEvent) => {
+      // Don't prevent default to allow scrolling
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        updateMousePosition(touch.clientX, touch.clientY);
+      }
+    };
+
+    const handleTouchEnd = () => {
+      // Return to center when touch ends
+      setTargetMouse({ x: 0, y: 0 });
+    };
+
+    // Add events only to the screen element, not document
+    screenElement.addEventListener('mousemove', handleMouseMove, { passive: true });
+    screenElement.addEventListener('mouseleave', handleMouseLeave, { passive: true });
+    screenElement.addEventListener('touchmove', handleTouchMove, { passive: true });
+    screenElement.addEventListener('touchend', handleTouchEnd, { passive: true });
+
+    return () => {
+      screenElement.removeEventListener('mousemove', handleMouseMove);
+      screenElement.removeEventListener('mouseleave', handleMouseLeave);
+      screenElement.removeEventListener('touchmove', handleTouchMove);
+      screenElement.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isInView]);
 
   // Handle iframe loading and errors
   const handleIframeLoad = () => {
