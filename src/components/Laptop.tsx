@@ -129,13 +129,10 @@ export default function FullWidthLaptopShowcase({
     };
   }, [isInView]);
 
-  // Handle iframe loading with mobile optimization
+  // Handle iframe loading 
   const handleIframeLoad = () => {
     setIsLoaded(true);
-    // Only allow embedding on desktop
-    if (typeof window !== 'undefined' && window.innerWidth >= 768) {
-      setCanEmbed(true);
-    }
+    setCanEmbed(true);
   };
 
   const handleIframeError = () => {
@@ -143,14 +140,6 @@ export default function FullWidthLaptopShowcase({
     setCanEmbed(false);
     setIsLoaded(true);
   };
-
-  // Mobile-optimized: Disable heavy iframes on mobile, show fallbacks instead
-  useEffect(() => {
-    if (isMobile) {
-      setCanEmbed(false);
-      setIsLoaded(true);
-    }
-  }, [isMobile]);
 
   // Enhanced desktop URL manipulation
   const getDesktopUrl = (originalUrl: string) => {
@@ -418,7 +407,7 @@ export default function FullWidthLaptopShowcase({
       <div className="relative z-10 w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center min-h-[70vh] lg:min-h-[80vh]">
           
-          {/* Content Side - Mobile Optimized */}
+          {/* Content Side - Responsive */}
           <motion.div 
             className="space-y-6 lg:space-y-8 lg:pr-2 xl:pr-6 2xl:pr-8 max-w-4xl lg:max-w-none order-2 lg:order-1"
             initial={{ opacity: 0, x: -50 }}
@@ -465,7 +454,7 @@ export default function FullWidthLaptopShowcase({
             </motion.button>
           </motion.div>
 
-          {/* Mobile-Optimized Screen Side */}
+          {/* Screen Side */}
           <motion.div 
             className="relative lg:pl-2 xl:pl-6 2xl:pl-8 order-1 lg:order-2"
             initial={{ opacity: 0, y: 20 }}
@@ -477,18 +466,16 @@ export default function FullWidthLaptopShowcase({
               ref={screenRef}
               className="relative w-full mx-auto"
               style={{
-                transform: isMobile 
-                  ? 'none' // Disable 3D transforms on mobile
-                  : `perspective(1200px) rotateX(${smoothMouse.y * 2}deg) rotateY(${smoothMouse.x * 3}deg)`,
+                transform: `perspective(1200px) rotateX(${smoothMouse.y * 2}deg) rotateY(${smoothMouse.x * 3}deg)`,
                 transition: 'none',
                 maxWidth: '100%',
-                willChange: isMobile ? 'auto' : 'transform'
+                willChange: 'transform'
               }}
             >
-              {/* Mobile-Optimized Screen Container */}
+              {/* Screen Container */}
               <motion.div 
                 className="relative"
-                animate={isMobile ? {} : {
+                animate={{
                   rotateY: [0, 0.5, -0.5, 0],
                   y: [0, -8, 0, 8, 0]
                 }}
@@ -498,7 +485,7 @@ export default function FullWidthLaptopShowcase({
                   ease: "easeInOut"
                 }}
                 style={{
-                  willChange: isMobile ? 'auto' : 'transform'
+                  willChange: 'transform'
                 }}
               >
                 {/* Responsive Screen Frame */}
@@ -507,11 +494,9 @@ export default function FullWidthLaptopShowcase({
                   style={{
                     aspectRatio: '16/9',
                     width: '100%',
-                    maxWidth: isMobile ? '100%' : '1200px',
-                    minWidth: isMobile ? '100%' : '700px',
-                    boxShadow: isMobile 
-                      ? '0 10px 25px rgba(0,0,0,0.3)' 
-                      : '0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)',
+                    maxWidth: '1200px',
+                    minWidth: '100%',
+                    boxShadow: '0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)',
                     willChange: 'auto',
                     backfaceVisibility: 'hidden',
                     transform: 'translateZ(0)'
@@ -519,7 +504,7 @@ export default function FullWidthLaptopShowcase({
                 >
                   {/* Screen Content Container */}
                   <div className="absolute inset-2 lg:inset-3 bg-black rounded-lg overflow-hidden">
-                    {/* Mobile-Optimized Browser Chrome */}
+                    {/* Browser Chrome */}
                     <div className="h-8 lg:h-12 bg-gray-800 flex items-center px-3 lg:px-6 border-b border-gray-600 flex-shrink-0">
                       <div className="flex space-x-1 lg:space-x-2">
                         <div className="w-2 h-2 lg:w-4 lg:h-4 rounded-full bg-red-500"></div>
@@ -537,7 +522,7 @@ export default function FullWidthLaptopShowcase({
                       </div>
                     </div>
                     
-                    {/* Mobile-Optimized Content Area */}
+                    {/* Content Area */}
                     <div 
                       className="relative overflow-hidden bg-white"
                       style={{ 
@@ -554,7 +539,7 @@ export default function FullWidthLaptopShowcase({
                         </div>
                       )}
                       
-                      {canEmbed && !isMobile ? (
+                      {canEmbed ? (
                         <div 
                           className="w-full h-full relative overflow-hidden"
                           style={{
@@ -590,55 +575,46 @@ export default function FullWidthLaptopShowcase({
                     </div>
                   </div>
 
-                  {/* Screen Reflection - Hidden on Mobile */}
-                  {!isMobile && (
-                    <div 
-                      className="absolute inset-0 pointer-events-none rounded-2xl"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 100%)'
-                      }}
-                    ></div>
-                  )}
+                  {/* Screen Effects */}
+                  <div 
+                    className="absolute inset-0 pointer-events-none rounded-2xl"
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 100%)'
+                    }}
+                  ></div>
                   
-                  {/* Screen Glow - Simplified on Mobile */}
                   <div 
                     className="absolute -inset-1 pointer-events-none rounded-2xl"
                     style={{
                       background: `linear-gradient(45deg, ${getAccentFromColor().replace('from-', '')} 0%, transparent 50%, transparent 100%)`,
-                      opacity: isMobile ? 0.1 : 0.2,
-                      filter: isMobile ? 'blur(10px)' : 'blur(20px)'
+                      opacity: 0.2,
+                      filter: 'blur(20px)'
                     }}
                   ></div>
                 </div>
               </motion.div>
               
-              {/* Simplified Effects for Mobile */}
-              {!isMobile && (
-                <>
-                  {/* Enhanced Ambient glow effect - Desktop Only */}
-                  <div 
-                    className={`absolute inset-0 bg-gradient-to-br ${getAccentFromColor()} to-transparent opacity-30 blur-3xl scale-110 pointer-events-none`}
-                    style={{
-                      willChange: 'auto',
-                      backfaceVisibility: 'hidden'
-                    }}
-                  ></div>
-                  
-                  {/* Floor Shadow - Desktop Only */}
-                  <div 
-                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-8 pointer-events-none"
-                    style={{
-                      width: '80%',
-                      height: '40px',
-                      background: 'radial-gradient(ellipse, rgba(0,0,0,0.3) 0%, transparent 70%)',
-                      filter: 'blur(15px)',
-                      willChange: 'auto'
-                    }}
-                  ></div>
-                </>
-              )}
+              {/* Enhanced Effects */}
+              <div 
+                className={`absolute inset-0 bg-gradient-to-br ${getAccentFromColor()} to-transparent opacity-30 blur-3xl scale-110 pointer-events-none`}
+                style={{
+                  willChange: 'auto',
+                  backfaceVisibility: 'hidden'
+                }}
+              ></div>
               
-              {/* Interactive hint - Responsive */}
+              <div 
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-8 pointer-events-none"
+                style={{
+                  width: '80%',
+                  height: '40px',
+                  background: 'radial-gradient(ellipse, rgba(0,0,0,0.3) 0%, transparent 70%)',
+                  filter: 'blur(15px)',
+                  willChange: 'auto'
+                }}
+              ></div>
+              
+              {/* Interactive hint */}
               <motion.div 
                 className="absolute bottom-2 lg:bottom-4 left-1/2 transform -translate-x-1/2 text-center z-10"
                 initial={{ opacity: 0, y: 20 }}
@@ -649,7 +625,7 @@ export default function FullWidthLaptopShowcase({
                 }}
               >
                 <span className={`text-xs lg:text-sm ${textColor} opacity-60`}>
-                  {isMobile ? 'Tap to interact ✨' : 'Move your mouse to interact ✨'}
+                  Move your mouse to interact ✨
                 </span>
               </motion.div>
             </div>
