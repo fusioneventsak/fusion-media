@@ -507,35 +507,47 @@ export default function FullWidthLaptopShowcase({
                       )}
                       
                       {canEmbed && !isMobile ? (
-                        <div 
-                          className="w-full h-full relative overflow-hidden"
-                          style={{
-                            willChange: 'auto',
-                            backfaceVisibility: 'hidden'
-                          }}
-                        >
-                          <iframe
-                            ref={iframeRef}
-                            src={getDesktopUrl(url)}
-                            className="absolute inset-0 border-none"
-                            title={title}
-                            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
-                            onLoad={handleIframeLoad}
-                            onError={handleIframeError}
-                            loading="lazy"
+                        url.includes('selfieholosphere.com') ? (
+                          <div className="h-full bg-white relative overflow-hidden flex items-center justify-center">
+                            <img 
+                              src="https://www.fusion-events.ca/wp-content/uploads/2025/06/Untitled-512-x-512-px-3.png" 
+                              alt="Selfie Holosphere - Interactive Photo Experience Platform"
+                              className="w-full h-full object-contain"
+                              style={{ maxWidth: '100%', maxHeight: '100%' }}
+                              onLoad={() => setIsLoaded(true)}
+                            />
+                          </div>
+                        ) : (
+                          <div 
+                            className="w-full h-full relative overflow-hidden"
                             style={{
-                              width: '1400px',
-                              height: '787px',
-                              transform: 'scale(0.85) translateZ(0)',
-                              transformOrigin: '0 0',
-                              border: 'none',
-                              overflow: 'hidden',
                               willChange: 'auto',
                               backfaceVisibility: 'hidden'
                             }}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                          />
-                        </div>
+                          >
+                            <iframe
+                              ref={iframeRef}
+                              src={getDesktopUrl(url)}
+                              className="absolute inset-0 border-none"
+                              title={title}
+                              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
+                              onLoad={handleIframeLoad}
+                              onError={handleIframeError}
+                              loading="lazy"
+                              style={{
+                                width: '1400px',
+                                height: '787px',
+                                transform: 'scale(0.85) translateZ(0)',
+                                transformOrigin: '0 0',
+                                border: 'none',
+                                overflow: 'hidden',
+                                willChange: 'auto',
+                                backfaceVisibility: 'hidden'
+                              }}
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            />
+                          </div>
+                        )
                       ) : (
                         createFallbackContent()
                       )}
