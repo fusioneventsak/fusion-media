@@ -45,26 +45,50 @@ export default function FullWidthLaptopShowcase({
     return 'from-blue-500';
   };
 
-  // Handle mouse movement for 3D effects
+  // Optimized mouse movement with throttling and smooth interpolation
+  const [targetMouse, setTargetMouse] = useState({ x: 0, y: 0 });
+  const [smoothMouse, setSmoothMouse] = useState({ x: 0, y: 0 });
+
+  // Throttled mouse handler for better performance
   useEffect(() => {
+    let animationId: number;
+    let lastTime = 0;
+    
     const handleMouseMove = (e: MouseEvent) => {
+      const currentTime = performance.now();
+      if (currentTime - lastTime < 16) return; // Limit to ~60fps
+      lastTime = currentTime;
+      
       if (!screenRef.current) return;
       
       const rect = screenRef.current.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
       const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
       
-      setMousePosition({ x: x * 0.5, y: y * 0.5 }); // Reduced sensitivity
+      setTargetMouse({ x: x * 0.3, y: y * 0.3 }); // Reduced sensitivity for smoothness
+    };
+
+    // Smooth interpolation animation loop
+    const animate = () => {
+      setSmoothMouse(prev => ({
+        x: prev.x + (targetMouse.x - prev.x) * 0.08, // Smooth lerp
+        y: prev.y + (targetMouse.y - prev.y) * 0.08
+      }));
+      animationId = requestAnimationFrame(animate);
     };
 
     if (isInView) {
-      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mousemove', handleMouseMove, { passive: true });
+      animationId = requestAnimationFrame(animate);
     }
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
     };
-  }, [isInView]);
+  }, [isInView, targetMouse.x, targetMouse.y]);
 
   // Handle iframe loading and errors
   const handleIframeLoad = () => {
@@ -404,33 +428,40 @@ export default function FullWidthLaptopShowcase({
               ref={screenRef}
               className="relative w-full mx-auto"
               style={{
-                transform: `perspective(1000px) rotateX(${mousePosition.y * 3}deg) rotateY(${mousePosition.x * 5}deg)`,
-                transition: 'transform 0.2s ease-out',
-                maxWidth: '100%'
+                transform: `perspective(1200px) rotateX(${smoothMouse.y * 2}deg) rotateY(${smoothMouse.x * 3}deg)`,
+                transition: 'none', // Remove CSS transitions for smoother RAF animation
+                maxWidth: '100%',
+                willChange: 'transform' // Optimize for animations
               }}
             >
-              {/* Floating Screen Container */}
+              {/* Floating Screen Container - Optimized animations */}
               <motion.div 
                 className="relative"
                 animate={{
-                  rotateY: [0, 1, -1, 0],
-                  y: [0, -10, 0, 10, 0]
+                  rotateY: [0, 0.5, -0.5, 0], // Reduced rotation range
+                  y: [0, -8, 0, 8, 0] // Reduced floating range
                 }}
                 transition={{
-                  duration: 8,
+                  duration: 12, // Slower for smoother appearance
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
+                style={{
+                  willChange: 'transform' // GPU acceleration hint
+                }}
               >
-                {/* Screen Frame - Much Larger for Desktop */}
+                {/* Screen Frame - Much Larger for Desktop with Performance Optimizations */}
                 <div 
                   className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl border-4 border-gray-700 overflow-hidden"
                   style={{
                     aspectRatio: '16/9',
                     width: '100%',
-                    maxWidth: '1200px', // Much larger - was 900px
-                    minWidth: '700px', // Increased minimum
-                    boxShadow: '0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)'
+                    maxWidth: '1200px',
+                    minWidth: '700px',
+                    boxShadow: '0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)',
+                    willChange: 'auto', // Let browser optimize
+                    backfaceVisibility: 'hidden', // Prevent flickering
+                    transform: 'translateZ(0)' // Force GPU layer
                   }}
                 >
                   {/* Screen Content */}
@@ -471,7 +502,13 @@ export default function FullWidthLaptopShowcase({
                       )}
                       
                       {canEmbed ? (
-                        <div className="w-full h-full relative overflow-hidden">
+                        <div 
+                          className="w-full h-full relative overflow-hidden"
+                          style={{
+                            willChange: 'auto',
+                            backfaceVisibility: 'hidden'
+                          }}
+                        >
                           <iframe
                             ref={iframeRef}
                             src={getDesktopUrl(url)}
@@ -482,12 +519,14 @@ export default function FullWidthLaptopShowcase({
                             onError={handleIframeError}
                             loading="lazy"
                             style={{
-                              width: '1400px', // Increased from 1200px
-                              height: '787px', // 16:9 ratio for 1400px
-                              transform: 'scale(0.85)', // Adjusted scale
+                              width: '1400px',
+                              height: '787px',
+                              transform: 'scale(0.85) translateZ(0)', // Added translateZ for GPU
                               transformOrigin: '0 0',
                               border: 'none',
-                              overflow: 'hidden'
+                              overflow: 'hidden',
+                              willChange: 'auto',
+                              backfaceVisibility: 'hidden'
                             }}
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                           />
@@ -518,28 +557,36 @@ export default function FullWidthLaptopShowcase({
                 </div>
               </motion.div>
               
-              {/* Enhanced Ambient glow effect */}
+              {/* Enhanced Ambient glow effect - Optimized */}
               <div 
                 className={`absolute inset-0 bg-gradient-to-br ${getAccentFromColor()} to-transparent opacity-30 blur-3xl scale-110 pointer-events-none`}
+                style={{
+                  willChange: 'auto',
+                  backfaceVisibility: 'hidden'
+                }}
               ></div>
               
-              {/* Floor Shadow */}
+              {/* Floor Shadow - Optimized */}
               <div 
-                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-8"
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-8 pointer-events-none"
                 style={{
                   width: '80%',
                   height: '40px',
                   background: 'radial-gradient(ellipse, rgba(0,0,0,0.3) 0%, transparent 70%)',
-                  filter: 'blur(15px)'
+                  filter: 'blur(15px)',
+                  willChange: 'auto'
                 }}
               ></div>
               
-              {/* Interactive hint */}
+              {/* Interactive hint - Optimized */}
               <motion.div 
                 className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center z-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 0.7, y: 0 }}
-                transition={{ duration: 1, delay: 1.5 }}
+                transition={{ duration: 1.2, delay: 2, ease: "easeOut" }}
+                style={{
+                  willChange: 'opacity, transform'
+                }}
               >
                 <span className={`text-sm ${textColor} opacity-60`}>
                   Move your mouse to interact ✨
