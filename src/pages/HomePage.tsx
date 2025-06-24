@@ -100,23 +100,106 @@ export default function HomePage() {
       {/* Use Case Showcases - Semi-transparent to show particles behind */}
       
       {/* 1. Event Engagement Technology */}
-      <div className="pointer-events-auto">
-        <FullWidthLaptopShowcase
-          url="https://selfieholosphere.com/collage/1lr9qn"
-          title="Event Engagement Technology"
-          description="Interactive experiences that captivate audiences and create unforgettable moments. From trade shows to festivals, retail activations to corporate events—our engagement platforms drive participation and generate valuable data insights."
-          features={[
-            'Trade shows and corporate events with real-time engagement',
-            'Festivals and concerts with social media integration',
-            'Retail locations and brand activations',
-            'Real-time photo processing and customizable animations',
-            'Custom branding, analytics, and lead generation'
-          ]}
-          backgroundColor="transparent"
-          textColor="text-white"
-          accentColor="text-purple-600"
-        />
-      </div>
+      <section className="min-h-screen relative overflow-hidden pointer-events-auto">
+        {/* Transparent background with subtle backdrop blur for readability */}
+        <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-8 py-20">
+          <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[80vh]">
+            
+            {/* Content Side */}
+            <motion.div 
+              className="space-y-8 lg:pr-8"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8 }}
+            >
+              <div>
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight">
+                  Event Engagement Technology
+                </h2>
+                <p className="text-lg md:text-xl text-white opacity-70 leading-relaxed font-light mb-8">
+                  Interactive experiences that captivate audiences and create unforgettable moments. From trade shows to festivals, retail activations to corporate events—our engagement platforms drive participation and generate valuable data insights.
+                </p>
+              </div>
+
+              <div className="space-y-6">
+                {[
+                  'Trade shows and corporate events with real-time engagement',
+                  'Festivals and concerts with social media integration',
+                  'Retail locations and brand activations',
+                  'Real-time photo processing and customizable animations',
+                  'Custom branding, analytics, and lead generation'
+                ].map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    className="flex items-start space-x-4"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                  >
+                    <div className="w-2 h-2 rounded-full bg-purple-600 mt-3 flex-shrink-0"></div>
+                    <span className="text-white opacity-80 font-medium leading-relaxed">{feature}</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              <motion.button
+                className="inline-flex items-center px-8 py-4 bg-purple-600 text-white rounded-full font-medium hover:opacity-90 transition-all duration-300 shadow-lg"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.open('https://selfieholosphere.com/collage/1lr9qn', '_blank')}
+              >
+                View Live Site
+                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </motion.button>
+            </motion.div>
+
+            {/* Vector Image Side */}
+            <motion.div 
+              className="relative lg:pl-8"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <div className="relative">
+                <motion.div
+                  className="transform transition-all duration-1000"
+                  animate={{
+                    rotateY: [0, 3, -3, 0],
+                    rotateX: [0, 1, -1, 0],
+                    y: [0, -8, 0, 8, 0]
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <img 
+                    src="https://www.fusion-events.ca/wp-content/uploads/2025/06/Untitled-512-x-512-px-3.png" 
+                    alt="Selfie Holosphere - Interactive Photo Experience Platform"
+                    className="w-full max-w-4xl mx-auto drop-shadow-2xl"
+                    style={{
+                      filter: 'drop-shadow(0 25px 60px rgba(147, 51, 234, 0.3))'
+                    }}
+                  />
+                </motion.div>
+                
+                {/* Enhanced glow effect */}
+                <div 
+                  className="absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent opacity-30 blur-3xl scale-110 pointer-events-none"
+                ></div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* 2. Custom Business Applications */}
       <div className="pointer-events-auto">
