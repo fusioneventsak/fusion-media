@@ -129,10 +129,12 @@ export default function FullWidthLaptopShowcase({
     };
   }, [isInView]);
 
-  // Handle iframe loading and errors
+  // Handle iframe loading with mobile optimization
   const handleIframeLoad = () => {
     setIsLoaded(true);
-    setCanEmbed(true);
+    if (!isMobile) {
+      setCanEmbed(true);
+    }
   };
 
   const handleIframeError = () => {
@@ -140,6 +142,14 @@ export default function FullWidthLaptopShowcase({
     setCanEmbed(false);
     setIsLoaded(true);
   };
+
+  // Mobile-optimized: Disable heavy iframes on mobile, show fallbacks instead
+  useEffect(() => {
+    if (isMobile) {
+      setCanEmbed(false);
+      setIsLoaded(true);
+    }
+  }, [isMobile]);
 
   // Enhanced desktop URL manipulation
   const getDesktopUrl = (originalUrl: string) => {
@@ -405,12 +415,12 @@ export default function FullWidthLaptopShowcase({
       {/* Transparent background with subtle backdrop blur for readability */}
       <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
       
-      <div className="relative z-10 max-w-none mx-auto px-4 lg:px-8 py-20">
-        <div className="grid lg:grid-cols-2 gap-6 xl:gap-12 2xl:gap-16 items-center min-h-[80vh]">
+      <div className="relative z-10 w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center min-h-[70vh] lg:min-h-[80vh]">
           
-          {/* Content Side - Responsive width */}
+          {/* Content Side - Mobile Optimized */}
           <motion.div 
-            className="space-y-8 lg:pr-2 xl:pr-6 2xl:pr-8 max-w-4xl lg:max-w-none"
+            className="space-y-6 lg:space-y-8 lg:pr-2 xl:pr-6 2xl:pr-8 max-w-4xl lg:max-w-none order-2 lg:order-1"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -418,48 +428,48 @@ export default function FullWidthLaptopShowcase({
             onViewportEnter={() => setIsInView(true)}
           >
             <div>
-              <h2 className={`text-4xl md:text-5xl lg:text-6xl font-light ${textColor} mb-6 leading-tight`}>
+              <h2 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light ${textColor} mb-4 lg:mb-6 leading-tight`}>
                 {title}
               </h2>
-              <p className={`text-lg md:text-xl ${textColor} opacity-70 leading-relaxed font-light mb-8`}>
+              <p className={`text-base sm:text-lg lg:text-xl ${textColor} opacity-70 leading-relaxed font-light mb-6 lg:mb-8`}>
                 {description}
               </p>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4 lg:space-y-6">
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
-                  className="flex items-start space-x-4"
+                  className="flex items-start space-x-3 lg:space-x-4"
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
-                  <div className={`w-2 h-2 rounded-full ${getAccentBgColor()} mt-3 flex-shrink-0`}></div>
-                  <span className={`${textColor} opacity-80 font-medium leading-relaxed`}>{feature}</span>
+                  <div className={`w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full ${getAccentBgColor()} mt-2 lg:mt-3 flex-shrink-0`}></div>
+                  <span className={`text-sm sm:text-base ${textColor} opacity-80 font-medium leading-relaxed`}>{feature}</span>
                 </motion.div>
               ))}
             </div>
 
             <motion.button
-              className={`inline-flex items-center px-8 py-4 ${getAccentBgColor()} text-white rounded-full font-medium hover:opacity-90 transition-all duration-300 shadow-lg`}
+              className={`inline-flex items-center px-6 lg:px-8 py-3 lg:py-4 ${getAccentBgColor()} text-white rounded-full font-medium hover:opacity-90 transition-all duration-300 shadow-lg text-sm lg:text-base`}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => window.open(url, '_blank')}
             >
               View Live Site
-              <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="ml-2 w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </motion.button>
           </motion.div>
 
-          {/* Floating Screen Side */}
+          {/* Mobile-Optimized Screen Side */}
           <motion.div 
-            className="relative lg:pl-2 xl:pl-6 2xl:pl-8"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            className="relative lg:pl-2 xl:pl-6 2xl:pl-8 order-1 lg:order-2"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
@@ -467,80 +477,84 @@ export default function FullWidthLaptopShowcase({
               ref={screenRef}
               className="relative w-full mx-auto"
               style={{
-                transform: `perspective(1200px) rotateX(${smoothMouse.y * 2}deg) rotateY(${smoothMouse.x * 3}deg)`,
-                transition: 'none', // Remove CSS transitions for smoother RAF animation
+                transform: isMobile 
+                  ? 'none' // Disable 3D transforms on mobile
+                  : `perspective(1200px) rotateX(${smoothMouse.y * 2}deg) rotateY(${smoothMouse.x * 3}deg)`,
+                transition: 'none',
                 maxWidth: '100%',
-                willChange: 'transform' // Optimize for animations
+                willChange: isMobile ? 'auto' : 'transform'
               }}
             >
-              {/* Floating Screen Container - Optimized animations */}
+              {/* Mobile-Optimized Screen Container */}
               <motion.div 
                 className="relative"
-                animate={{
-                  rotateY: [0, 0.5, -0.5, 0], // Reduced rotation range
-                  y: [0, -8, 0, 8, 0] // Reduced floating range
+                animate={isMobile ? {} : {
+                  rotateY: [0, 0.5, -0.5, 0],
+                  y: [0, -8, 0, 8, 0]
                 }}
                 transition={{
-                  duration: 12, // Slower for smoother appearance
+                  duration: 12,
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
                 style={{
-                  willChange: 'transform' // GPU acceleration hint
+                  willChange: isMobile ? 'auto' : 'transform'
                 }}
               >
-                {/* Screen Frame - Much Larger for Desktop with Performance Optimizations */}
+                {/* Responsive Screen Frame */}
                 <div 
-                  className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl border-4 border-gray-700 overflow-hidden"
+                  className="relative bg-gradient-to-br from-gray-900 to-black rounded-xl lg:rounded-2xl shadow-xl lg:shadow-2xl border-2 lg:border-4 border-gray-700 overflow-hidden"
                   style={{
                     aspectRatio: '16/9',
                     width: '100%',
-                    maxWidth: '1200px',
-                    minWidth: '700px',
-                    boxShadow: '0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)',
-                    willChange: 'auto', // Let browser optimize
-                    backfaceVisibility: 'hidden', // Prevent flickering
-                    transform: 'translateZ(0)' // Force GPU layer
+                    maxWidth: isMobile ? '100%' : '1200px',
+                    minWidth: isMobile ? '100%' : '700px',
+                    boxShadow: isMobile 
+                      ? '0 10px 25px rgba(0,0,0,0.3)' 
+                      : '0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)',
+                    willChange: 'auto',
+                    backfaceVisibility: 'hidden',
+                    transform: 'translateZ(0)'
                   }}
                 >
-                  {/* Screen Content */}
-                  <div className="absolute inset-3 bg-black rounded-lg overflow-hidden">
-                    {/* Browser Chrome */}
-                    <div className="h-12 bg-gray-800 flex items-center px-6 border-b border-gray-600 flex-shrink-0">
-                      <div className="flex space-x-2">
-                        <div className="w-4 h-4 rounded-full bg-red-500"></div>
-                        <div className="w-4 h-4 rounded-full bg-yellow-500"></div>
-                        <div className="w-4 h-4 rounded-full bg-green-500"></div>
+                  {/* Screen Content Container */}
+                  <div className="absolute inset-2 lg:inset-3 bg-black rounded-lg overflow-hidden">
+                    {/* Mobile-Optimized Browser Chrome */}
+                    <div className="h-8 lg:h-12 bg-gray-800 flex items-center px-3 lg:px-6 border-b border-gray-600 flex-shrink-0">
+                      <div className="flex space-x-1 lg:space-x-2">
+                        <div className="w-2 h-2 lg:w-4 lg:h-4 rounded-full bg-red-500"></div>
+                        <div className="w-2 h-2 lg:w-4 lg:h-4 rounded-full bg-yellow-500"></div>
+                        <div className="w-2 h-2 lg:w-4 lg:h-4 rounded-full bg-green-500"></div>
                       </div>
                       <div className="flex-1 text-center">
-                        <div className="max-w-lg mx-auto bg-gray-700 rounded px-4 py-2">
-                          <span className="text-sm text-gray-300">{url}</span>
+                        <div className="max-w-xs lg:max-w-lg mx-auto bg-gray-700 rounded px-2 lg:px-4 py-1 lg:py-2">
+                          <span className="text-xs lg:text-sm text-gray-300 truncate block">{url}</span>
                         </div>
                       </div>
-                      <div className="text-sm text-green-400 flex items-center">
-                        <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
-                        LIVE
+                      <div className="text-xs lg:text-sm text-green-400 flex items-center">
+                        <span className="w-1 h-1 lg:w-2 lg:h-2 bg-green-400 rounded-full mr-1 lg:mr-2 animate-pulse"></span>
+                        <span className="hidden sm:inline">LIVE</span>
                       </div>
                     </div>
                     
-                    {/* Website Content Area - Properly Contained */}
+                    {/* Mobile-Optimized Content Area */}
                     <div 
                       className="relative overflow-hidden bg-white"
                       style={{ 
-                        height: 'calc(100% - 48px)', // Adjusted for larger chrome
+                        height: 'calc(100% - 32px)',
                         width: '100%'
                       }}
                     >
                       {!isLoaded && (
                         <div className="absolute inset-0 bg-gray-900 flex items-center justify-center z-20">
                           <div className="text-center">
-                            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-6"></div>
-                            <div className="text-white text-lg">Loading website...</div>
+                            <div className="animate-spin rounded-full h-8 w-8 lg:h-16 lg:w-16 border-b-2 border-white mx-auto mb-3 lg:mb-6"></div>
+                            <div className="text-white text-sm lg:text-lg">Loading website...</div>
                           </div>
                         </div>
                       )}
                       
-                      {canEmbed ? (
+                      {canEmbed && !isMobile ? (
                         <div 
                           className="w-full h-full relative overflow-hidden"
                           style={{
@@ -560,7 +574,7 @@ export default function FullWidthLaptopShowcase({
                             style={{
                               width: '1400px',
                               height: '787px',
-                              transform: 'scale(0.85) translateZ(0)', // Added translateZ for GPU
+                              transform: 'scale(0.85) translateZ(0)',
                               transformOrigin: '0 0',
                               border: 'none',
                               overflow: 'hidden',
@@ -575,51 +589,58 @@ export default function FullWidthLaptopShowcase({
                       )}
                     </div>
                   </div>
+
+                  {/* Screen Reflection - Hidden on Mobile */}
+                  {!isMobile && (
+                    <div 
+                      className="absolute inset-0 pointer-events-none rounded-2xl"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 100%)'
+                      }}
+                    ></div>
+                  )}
                   
-                  {/* Screen Reflection */}
-                  <div 
-                    className="absolute inset-0 pointer-events-none rounded-2xl"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 100%)'
-                    }}
-                  ></div>
-                  
-                  {/* Screen Glow */}
+                  {/* Screen Glow - Simplified on Mobile */}
                   <div 
                     className="absolute -inset-1 pointer-events-none rounded-2xl"
                     style={{
                       background: `linear-gradient(45deg, ${getAccentFromColor().replace('from-', '')} 0%, transparent 50%, transparent 100%)`,
-                      opacity: 0.2,
-                      filter: 'blur(20px)'
+                      opacity: isMobile ? 0.1 : 0.2,
+                      filter: isMobile ? 'blur(10px)' : 'blur(20px)'
                     }}
                   ></div>
                 </div>
               </motion.div>
               
-              {/* Enhanced Ambient glow effect - Optimized */}
-              <div 
-                className={`absolute inset-0 bg-gradient-to-br ${getAccentFromColor()} to-transparent opacity-30 blur-3xl scale-110 pointer-events-none`}
-                style={{
-                  willChange: 'auto',
-                  backfaceVisibility: 'hidden'
-                }}
-              ></div>
+              {/* Simplified Effects for Mobile */}
+              {!isMobile && (
+                <>
+                  {/* Enhanced Ambient glow effect - Desktop Only */}
+                  <div 
+                    className={`absolute inset-0 bg-gradient-to-br ${getAccentFromColor()} to-transparent opacity-30 blur-3xl scale-110 pointer-events-none`}
+                    style={{
+                      willChange: 'auto',
+                      backfaceVisibility: 'hidden'
+                    }}
+                  ></div>
+                  
+                  {/* Floor Shadow - Desktop Only */}
+                  <div 
+                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-8 pointer-events-none"
+                    style={{
+                      width: '80%',
+                      height: '40px',
+                      background: 'radial-gradient(ellipse, rgba(0,0,0,0.3) 0%, transparent 70%)',
+                      filter: 'blur(15px)',
+                      willChange: 'auto'
+                    }}
+                  ></div>
+                </>
+              )}
               
-              {/* Floor Shadow - Optimized */}
-              <div 
-                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-8 pointer-events-none"
-                style={{
-                  width: '80%',
-                  height: '40px',
-                  background: 'radial-gradient(ellipse, rgba(0,0,0,0.3) 0%, transparent 70%)',
-                  filter: 'blur(15px)',
-                  willChange: 'auto'
-                }}
-              ></div>
-              
-              {/* Interactive hint - Optimized */}
+              {/* Interactive hint - Responsive */}
               <motion.div 
-                className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center z-10"
+                className="absolute bottom-2 lg:bottom-4 left-1/2 transform -translate-x-1/2 text-center z-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 0.7, y: 0 }}
                 transition={{ duration: 1.2, delay: 2, ease: "easeOut" }}
@@ -627,8 +648,8 @@ export default function FullWidthLaptopShowcase({
                   willChange: 'opacity, transform'
                 }}
               >
-                <span className={`text-sm ${textColor} opacity-60`}>
-                  Move your mouse to interact ✨
+                <span className={`text-xs lg:text-sm ${textColor} opacity-60`}>
+                  {isMobile ? 'Tap to interact ✨' : 'Move your mouse to interact ✨'}
                 </span>
               </motion.div>
             </div>
