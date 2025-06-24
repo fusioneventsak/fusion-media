@@ -305,79 +305,13 @@ export default function FullWidthLaptopShowcase({
   const createFallbackContent = () => {
     if (url.includes('selfieholosphere.com')) {
       return (
-        <div className="h-full bg-gradient-to-br from-gray-900 via-purple-900 to-black relative overflow-hidden">
-          {/* Animated background particles */}
-          <div className="absolute inset-0">
-            {[...Array(20)].map((_, i) => (
-              <div
-                key={i}
-                className="absolute w-1 h-1 bg-purple-400 rounded-full animate-pulse"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 3}s`,
-                  animationDuration: `${2 + Math.random() * 2}s`
-                }}
-              />
-            ))}
-          </div>
-          
-          {/* Content */}
-          <div className="relative z-10 p-8 h-full flex flex-col justify-center">
-            <div className="text-center mb-8">
-              <motion.h1 
-                className="text-4xl md:text-6xl font-bold text-white mb-4"
-                animate={{ 
-                  textShadow: ['0 0 20px rgba(124, 58, 237, 0.5)', '0 0 30px rgba(124, 58, 237, 0.8)', '0 0 20px rgba(124, 58, 237, 0.5)']
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                SELFIE HOLOSPHERE
-              </motion.h1>
-              <p className="text-purple-300 text-xl">Interactive Photo Experiences</p>
-            </div>
-            
-            {/* Holographic display */}
-            <div className="flex justify-center space-x-8 mb-8">
-              {[...Array(5)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="relative"
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.5, 1, 0.5]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    delay: i * 0.5
-                  }}
-                >
-                  <div className={`w-16 h-16 rounded-full border-2 border-purple-400 bg-purple-500/20`} />
-                  <div className={`absolute inset-2 rounded-full border border-purple-300 bg-purple-400/10`} />
-                </motion.div>
-              ))}
-            </div>
-            
-            {/* Features */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-white">
-              {[
-                { icon: '✨', text: 'Real-time Processing' },
-                { icon: '📱', text: 'Social Integration' },
-                { icon: '🎪', text: 'Event Technology' },
-                { icon: '📊', text: 'Analytics & Insights' }
-              ].map((feature, index) => (
-                <motion.div
-                  key={index}
-                  className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-lg"
-                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.15)' }}
-                >
-                  <div className="text-2xl mb-2">{feature.icon}</div>
-                  <div className="text-sm">{feature.text}</div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+        <div className="h-full bg-white relative overflow-hidden flex items-center justify-center">
+          <img 
+            src="/Untitled (512 x 512 px) (3).png" 
+            alt="Selfie Holosphere - Interactive Photo Experience Platform"
+            className="w-full h-full object-contain"
+            style={{ maxWidth: '100%', maxHeight: '100%' }}
+          />
         </div>
       );
     }
