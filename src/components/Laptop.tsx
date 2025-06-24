@@ -26,23 +26,6 @@ export default function FullWidthLaptopShowcase({
   const [isLoaded, setIsLoaded] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [canEmbed, setCanEmbed] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-
-  // Mobile detection with resize handling
-  useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 768 || 
-                    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      setIsMobile(mobile);
-    };
-
-    // Initial check
-    checkMobile();
-
-    // Listen for resize events
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const getAccentBgColor = () => {
     if (accentColor.includes('purple')) return 'bg-purple-600';
@@ -305,13 +288,79 @@ export default function FullWidthLaptopShowcase({
   const createFallbackContent = () => {
     if (url.includes('selfieholosphere.com')) {
       return (
-        <div className="h-full bg-white relative overflow-hidden flex items-center justify-center">
-          <img 
-            src="https://www.fusion-events.ca/wp-content/uploads/2025/06/Untitled-512-x-512-px-3.png" 
-            alt="Selfie Holosphere - Interactive Photo Experience Platform"
-            className="w-full h-full object-contain"
-            style={{ maxWidth: '100%', maxHeight: '100%' }}
-          />
+        <div className="h-full bg-gradient-to-br from-gray-900 via-purple-900 to-black relative overflow-hidden">
+          {/* Animated background particles */}
+          <div className="absolute inset-0">
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-purple-400 rounded-full animate-pulse"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`
+                }}
+              />
+            ))}
+          </div>
+          
+          {/* Content */}
+          <div className="relative z-10 p-8 h-full flex flex-col justify-center">
+            <div className="text-center mb-8">
+              <motion.h1 
+                className="text-4xl md:text-6xl font-bold text-white mb-4"
+                animate={{ 
+                  textShadow: ['0 0 20px rgba(124, 58, 237, 0.5)', '0 0 30px rgba(124, 58, 237, 0.8)', '0 0 20px rgba(124, 58, 237, 0.5)']
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                SELFIE HOLOSPHERE
+              </motion.h1>
+              <p className="text-purple-300 text-xl">Interactive Photo Experiences</p>
+            </div>
+            
+            {/* Holographic display */}
+            <div className="flex justify-center space-x-8 mb-8">
+              {[...Array(5)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="relative"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.5, 1, 0.5]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: i * 0.5
+                  }}
+                >
+                  <div className={`w-16 h-16 rounded-full border-2 border-purple-400 bg-purple-500/20`} />
+                  <div className={`absolute inset-2 rounded-full border border-purple-300 bg-purple-400/10`} />
+                </motion.div>
+              ))}
+            </div>
+            
+            {/* Features */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-white">
+              {[
+                { icon: '✨', text: 'Real-time Processing' },
+                { icon: '📱', text: 'Social Integration' },
+                { icon: '🎪', text: 'Event Technology' },
+                { icon: '📊', text: 'Analytics & Insights' }
+              ].map((feature, index) => (
+                <motion.div
+                  key={index}
+                  className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-lg"
+                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.15)' }}
+                >
+                  <div className="text-2xl mb-2">{feature.icon}</div>
+                  <div className="text-sm">{feature.text}</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </div>
       );
     }
@@ -364,8 +413,7 @@ export default function FullWidthLaptopShowcase({
 
   return (
     <section className="min-h-screen relative overflow-hidden">
-      {/* Transparent background with subtle backdrop blur for readability */}
-      <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
+      {/* Removed overlay - transparent background for better particle visibility */}
       
       <div className="relative z-10 w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center min-h-[70vh] lg:min-h-[80vh]">
@@ -507,47 +555,35 @@ export default function FullWidthLaptopShowcase({
                       )}
                       
                       {canEmbed && !isMobile ? (
-                        url.includes('selfieholosphere.com') ? (
-                          <div className="h-full bg-white relative overflow-hidden flex items-center justify-center">
-                            <img 
-                              src="https://www.fusion-events.ca/wp-content/uploads/2025/06/Untitled-512-x-512-px-3.png" 
-                              alt="Selfie Holosphere - Interactive Photo Experience Platform"
-                              className="w-full h-full object-contain"
-                              style={{ maxWidth: '100%', maxHeight: '100%' }}
-                              onLoad={() => setIsLoaded(true)}
-                            />
-                          </div>
-                        ) : (
-                          <div 
-                            className="w-full h-full relative overflow-hidden"
+                        <div 
+                          className="w-full h-full relative overflow-hidden"
+                          style={{
+                            willChange: 'auto',
+                            backfaceVisibility: 'hidden'
+                          }}
+                        >
+                          <iframe
+                            ref={iframeRef}
+                            src={getDesktopUrl(url)}
+                            className="absolute inset-0 border-none"
+                            title={title}
+                            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
+                            onLoad={handleIframeLoad}
+                            onError={handleIframeError}
+                            loading="lazy"
                             style={{
+                              width: '1400px',
+                              height: '787px',
+                              transform: 'scale(0.85) translateZ(0)',
+                              transformOrigin: '0 0',
+                              border: 'none',
+                              overflow: 'hidden',
                               willChange: 'auto',
                               backfaceVisibility: 'hidden'
                             }}
-                          >
-                            <iframe
-                              ref={iframeRef}
-                              src={getDesktopUrl(url)}
-                              className="absolute inset-0 border-none"
-                              title={title}
-                              sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
-                              onLoad={handleIframeLoad}
-                              onError={handleIframeError}
-                              loading="lazy"
-                              style={{
-                                width: '1400px',
-                                height: '787px',
-                                transform: 'scale(0.85) translateZ(0)',
-                                transformOrigin: '0 0',
-                                border: 'none',
-                                overflow: 'hidden',
-                                willChange: 'auto',
-                                backfaceVisibility: 'hidden'
-                              }}
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            />
-                          </div>
-                        )
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          />
+                        </div>
                       ) : (
                         createFallbackContent()
                       )}
