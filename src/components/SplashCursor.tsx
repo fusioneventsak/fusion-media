@@ -1510,22 +1510,6 @@ export default function SplashCursor({
       { passive: true } // ← CHANGED: passive: true allows scrolling
     );
 
-    // Alternative approach - only apply fluid effects to canvas area:
-    canvas.addEventListener(
-      "touchmove",
-      (e) => {
-        e.preventDefault(); // Only prevent on canvas
-        const touches = e.targetTouches;
-        const pointer = pointers[0];
-        for (let i = 0; i < touches.length; i++) {
-          const posX = scaleByPixelRatio(touches[i].clientX);
-          const posY = scaleByPixelRatio(touches[i].clientY);
-          updatePointerMoveData(pointer, posX, posY, pointer.color);
-        }
-      },
-      { passive: false }
-    );
-
     window.addEventListener("touchend", (e) => {
       const touches = e.changedTouches;
       const pointer = pointers[0];
