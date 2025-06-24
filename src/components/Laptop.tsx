@@ -236,11 +236,11 @@ export default function FullWidthLaptopShowcase({
       <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-8 py-20">
-        <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[80vh]">
+        <div className="grid lg:grid-cols-2 gap-8 xl:gap-16 items-center min-h-[80vh]">
           
-          {/* Content Side */}
+          {/* Content Side - Responsive width */}
           <motion.div 
-            className="space-y-8 lg:pr-8"
+            className="space-y-8 lg:pr-4 xl:pr-8"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
@@ -295,10 +295,11 @@ export default function FullWidthLaptopShowcase({
           >
             <div 
               ref={screenRef}
-              className="relative w-full max-w-4xl mx-auto"
+              className="relative w-full mx-auto"
               style={{
                 transform: `perspective(1000px) rotateX(${mousePosition.y * 3}deg) rotateY(${mousePosition.x * 5}deg)`,
-                transition: 'transform 0.2s ease-out'
+                transition: 'transform 0.2s ease-out',
+                maxWidth: '100%'
               }}
             >
               {/* Floating Screen Container */}
@@ -319,13 +320,16 @@ export default function FullWidthLaptopShowcase({
                   className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl border-4 border-gray-700 overflow-hidden"
                   style={{
                     aspectRatio: '16/9',
+                    width: '100%',
+                    maxWidth: '900px', // Much larger on desktop
+                    minWidth: '600px', // Minimum size
                     boxShadow: '0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)'
                   }}
                 >
                   {/* Screen Content */}
                   <div className="absolute inset-3 bg-black rounded-lg overflow-hidden">
                     {/* Browser Chrome */}
-                    <div className="h-10 bg-gray-800 flex items-center px-4 border-b border-gray-600">
+                    <div className="h-10 bg-gray-800 flex items-center px-4 border-b border-gray-600 flex-shrink-0">
                       <div className="flex space-x-2">
                         <div className="w-3 h-3 rounded-full bg-red-500"></div>
                         <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
@@ -342,8 +346,14 @@ export default function FullWidthLaptopShowcase({
                       </div>
                     </div>
                     
-                    {/* Website Content Area */}
-                    <div className="relative" style={{ height: 'calc(100% - 40px)' }}>
+                    {/* Website Content Area - Properly Contained */}
+                    <div 
+                      className="relative overflow-hidden bg-white"
+                      style={{ 
+                        height: 'calc(100% - 40px)',
+                        width: '100%'
+                      }}
+                    >
                       {!isLoaded && (
                         <div className="absolute inset-0 bg-gray-900 flex items-center justify-center z-20">
                           <div className="text-center">
@@ -354,25 +364,25 @@ export default function FullWidthLaptopShowcase({
                       )}
                       
                       {canEmbed ? (
-                        <iframe
-                          ref={iframeRef}
-                          src={getDesktopUrl(url)}
-                          className="w-full h-full border-none"
-                          title={title}
-                          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
-                          onLoad={handleIframeLoad}
-                          onError={handleIframeError}
-                          loading="lazy"
-                          // Force desktop view
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            minWidth: '1200px', // Force minimum desktop width
-                            transform: 'scale(1)', // Ensure proper scaling
-                            transformOrigin: 'top left'
-                          }}
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        />
+                        <div className="w-full h-full relative overflow-hidden">
+                          <iframe
+                            ref={iframeRef}
+                            src={getDesktopUrl(url)}
+                            className="absolute inset-0 w-full h-full border-none"
+                            title={title}
+                            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
+                            onLoad={handleIframeLoad}
+                            onError={handleIframeError}
+                            loading="lazy"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              border: 'none',
+                              overflow: 'hidden'
+                            }}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          />
+                        </div>
                       ) : (
                         createFallbackContent()
                       )}
