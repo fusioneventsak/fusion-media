@@ -192,7 +192,7 @@ export default function HomePage() {
                     ease: "easeInOut"
                   }}
                   style={{
-                    transform: `scale(${1.5 + scrollY * 0.0008}) rotateZ(${scrollY * 0.02}deg)`
+                    transform: `scale(${1.5 + Math.sin(scrollY * 0.002) * 0.05}) rotateZ(${scrollY * 0.01}deg)`
                   }}
                 >
                   {/* Enhanced glow effect - BEHIND the vector */}
@@ -221,7 +221,7 @@ export default function HomePage() {
                     className="w-full max-w-6xl mx-auto drop-shadow-2xl relative z-10"
                     style={{
                       filter: `drop-shadow(0 25px 60px rgba(147, 51, 234, 0.4)) brightness(${1 + Math.sin(scrollY * 0.01) * 0.1})`,
-                      transform: `scale(${1 + scrollY * 0.0005})`
+                      transform: `scale(${1 + Math.sin(scrollY * 0.003) * 0.02})`
                     }}
                   />
                 </motion.div>
