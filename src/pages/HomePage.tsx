@@ -192,36 +192,39 @@ export default function HomePage() {
                     ease: "easeInOut"
                   }}
                   style={{
-                    transform: `scale(1.5) rotateZ(${scrollY * 0.02}deg)`
+                    transform: `scale(${1.5 + scrollY * 0.0008}) rotateZ(${scrollY * 0.02}deg)`
                   }}
                 >
+                  {/* Enhanced glow effect - BEHIND the vector */}
+                  <div 
+                    className="absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent blur-3xl pointer-events-none"
+                    style={{
+                      opacity: 0.3 + Math.sin(scrollY * 0.008) * 0.1,
+                      transform: `scale(1.8) rotate(${scrollY * 0.05}deg)`,
+                      zIndex: -1
+                    }}
+                  ></div>
+                  
+                  {/* Additional floating particles effect - BEHIND */}
+                  <div 
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      background: `radial-gradient(circle at ${50 + Math.sin(scrollY * 0.01) * 20}% ${50 + Math.cos(scrollY * 0.01) * 20}%, rgba(147, 51, 234, 0.2) 0%, transparent 50%)`,
+                      transform: `scale(2.2) rotate(${scrollY * -0.03}deg)`,
+                      zIndex: -2
+                    }}
+                  ></div>
+                  
                   <img 
                     src="https://www.fusion-events.ca/wp-content/uploads/2025/06/Untitled-512-x-512-px-3.png" 
                     alt="Selfie Holosphere - Interactive Photo Experience Platform"
-                    className="w-full max-w-6xl mx-auto drop-shadow-2xl"
+                    className="w-full max-w-6xl mx-auto drop-shadow-2xl relative z-10"
                     style={{
-                      filter: `drop-shadow(0 25px 60px rgba(147, 51, 234, 0.4)) brightness(${1 + Math.sin(scrollY * 0.01) * 0.1})`
+                      filter: `drop-shadow(0 25px 60px rgba(147, 51, 234, 0.4)) brightness(${1 + Math.sin(scrollY * 0.01) * 0.1})`,
+                      transform: `scale(${1 + scrollY * 0.0005})`
                     }}
                   />
                 </motion.div>
-                
-                {/* Enhanced glow effect with scroll interaction */}
-                <div 
-                  className="absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent blur-3xl scale-150 pointer-events-none"
-                  style={{
-                    opacity: 0.3 + Math.sin(scrollY * 0.008) * 0.1,
-                    transform: `scale(1.5) rotate(${scrollY * 0.05}deg)`
-                  }}
-                ></div>
-                
-                {/* Additional floating particles effect */}
-                <div 
-                  className="absolute inset-0 pointer-events-none"
-                  style={{
-                    background: `radial-gradient(circle at ${50 + Math.sin(scrollY * 0.01) * 20}% ${50 + Math.cos(scrollY * 0.01) * 20}%, rgba(147, 51, 234, 0.2) 0%, transparent 50%)`,
-                    transform: `scale(2) rotate(${scrollY * -0.03}deg)`
-                  }}
-                ></div>
               </div>
             </motion.div>
           </div>
