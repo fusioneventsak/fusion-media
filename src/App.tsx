@@ -37,11 +37,14 @@ export default function App() {
     <div className="min-h-screen bg-black overflow-x-hidden">
       {/* Fluid Cursor Effect */}
       <SplashCursor 
-        DENSITY_DISSIPATION={2.5}
-        VELOCITY_DISSIPATION={1.5}
-        SPLAT_RADIUS={0.15}
-        SPLAT_FORCE={4000}
-        COLOR_UPDATE_SPEED={8}
+        SIM_RESOLUTION={64}
+        DYE_RESOLUTION={512}
+        DENSITY_DISSIPATION={4.0}
+        VELOCITY_DISSIPATION={3.0}
+        SPLAT_RADIUS={0.08}
+        SPLAT_FORCE={2000}
+        COLOR_UPDATE_SPEED={5}
+        CURL={1}
       />
       
       {/* Enhanced 3D Background */}

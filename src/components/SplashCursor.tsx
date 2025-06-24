@@ -1247,11 +1247,11 @@ export default function SplashCursor({
 
     function clickSplat(pointer: Pointer) {
       const color = generateColor();
-      color.r *= 10;
-      color.g *= 10;
-      color.b *= 10;
-      const dx = 10 * (Math.random() - 0.5);
-      const dy = 30 * (Math.random() - 0.5);
+      color.r *= 5;
+      color.g *= 5;
+      color.b *= 5;
+      const dx = 5 * (Math.random() - 0.5);
+      const dy = 15 * (Math.random() - 0.5);
       splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color);
     }
 
@@ -1360,9 +1360,9 @@ export default function SplashCursor({
 
     function generateColor(): ColorRGB {
       const c = HSVtoRGB(Math.random(), 1.0, 1.0);
-      c.r *= 0.15;
-      c.g *= 0.15;
-      c.b *= 0.15;
+      c.r *= 0.08;
+      c.g *= 0.08;
+      c.b *= 0.08;
       return c;
     }
 
@@ -1436,7 +1436,15 @@ export default function SplashCursor({
     }
     document.body.addEventListener("mousemove", handleFirstMouseMove);
 
+    // Throttle mouse movement for better performance
+    let lastMoveTime = 0;
+    const moveThrottle = 16; // ~60fps
+
     window.addEventListener("mousemove", (e) => {
+      const now = Date.now();
+      if (now - lastMoveTime < moveThrottle) return;
+      lastMoveTime = now;
+      
       const pointer = pointers[0];
       const posX = scaleByPixelRatio(e.clientX);
       const posY = scaleByPixelRatio(e.clientY);
@@ -1474,6 +1482,7 @@ export default function SplashCursor({
     window.addEventListener(
       "touchmove",
       (e) => {
+        e.preventDefault(); // Prevent scroll interference
         const touches = e.targetTouches;
         const pointer = pointers[0];
         for (let i = 0; i < touches.length; i++) {
@@ -1482,7 +1491,7 @@ export default function SplashCursor({
           updatePointerMoveData(pointer, posX, posY, pointer.color);
         }
       },
-      false
+      { passive: false }
     );
 
     window.addEventListener("touchend", (e) => {
@@ -1515,10 +1524,11 @@ export default function SplashCursor({
         position: "fixed",
         top: 0,
         left: 0,
-        zIndex: 50,
+        zIndex: 1,
         pointerEvents: "none",
         width: "100%",
         height: "100%",
+        opacity: 0.6,
       }}
     >
       <canvas
@@ -1528,6 +1538,7 @@ export default function SplashCursor({
           width: "100vw",
           height: "100vh",
           display: "block",
+          mixBlendMode: "screen",
         }}
       />
     </div>
