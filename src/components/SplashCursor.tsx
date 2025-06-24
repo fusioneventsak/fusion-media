@@ -1247,11 +1247,12 @@ export default function SplashCursor({
 
     function clickSplat(pointer: Pointer) {
       const color = generateColor();
-      color.r *= 5;
-      color.g *= 5;
-      color.b *= 5;
-      const dx = 5 * (Math.random() - 0.5);
-      const dy = 15 * (Math.random() - 0.5);
+      // Make click splats extra bright and vibrant
+      color.r *= 2.5;
+      color.g *= 2.5;
+      color.b *= 2.5;
+      const dx = 8 * (Math.random() - 0.5);
+      const dy = 20 * (Math.random() - 0.5);
       splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color);
     }
 
@@ -1359,11 +1360,25 @@ export default function SplashCursor({
     }
 
     function generateColor(): ColorRGB {
-      const c = HSVtoRGB(Math.random(), 1.0, 1.0);
-      c.r *= 0.08;
-      c.g *= 0.08;
-      c.b *= 0.08;
-      return c;
+      // Site theme colors: blue, purple, cyan, pink, green
+      const themeColors = [
+        { r: 0.3, g: 0.6, b: 1.0 },    // Bright blue (#4F9FFF)
+        { r: 0.6, g: 0.3, b: 1.0 },    // Bright purple (#9966FF)
+        { r: 0.0, g: 0.8, b: 1.0 },    // Bright cyan (#00CCFF)
+        { r: 1.0, g: 0.4, b: 0.8 },    // Bright pink (#FF66CC)
+        { r: 0.3, g: 1.0, b: 0.6 },    // Bright green (#4FFF99)
+        { r: 0.8, g: 0.4, b: 1.0 },    // Light purple (#CC66FF)
+        { r: 0.4, g: 0.8, b: 1.0 },    // Light blue (#66CCFF)
+      ];
+      
+      const selectedColor = themeColors[Math.floor(Math.random() * themeColors.length)];
+      
+      // Make colors bright and vibrant
+      return {
+        r: selectedColor.r * 0.8,  // Increased from 0.08 to 0.8
+        g: selectedColor.g * 0.8,
+        b: selectedColor.b * 0.8
+      };
     }
 
     function HSVtoRGB(h: number, s: number, v: number): ColorRGB {
@@ -1528,7 +1543,7 @@ export default function SplashCursor({
         pointerEvents: "none",
         width: "100%",
         height: "100%",
-        opacity: 0.6,
+        opacity: 0.8,
       }}
     >
       <canvas
@@ -1538,7 +1553,7 @@ export default function SplashCursor({
           width: "100vw",
           height: "100vh",
           display: "block",
-          mixBlendMode: "screen",
+          mixBlendMode: "lighten",
         }}
       />
     </div>
