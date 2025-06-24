@@ -20,10 +20,12 @@ export default function FullWidthLaptopShowcase({
   textColor = 'text-gray-900',
   accentColor = 'text-blue-600'
 }: FullWidthLaptopShowcaseProps) {
-  const laptopRef = useRef<HTMLDivElement>(null);
+  const screenRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isInView, setIsInView] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [canEmbed, setCanEmbed] = useState(true);
 
   const getAccentBgColor = () => {
     if (accentColor.includes('purple')) return 'bg-purple-600';
@@ -46,13 +48,13 @@ export default function FullWidthLaptopShowcase({
   // Handle mouse movement for 3D effects
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (!laptopRef.current) return;
+      if (!screenRef.current) return;
       
-      const rect = laptopRef.current.getBoundingClientRect();
+      const rect = screenRef.current.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
       const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
       
-      setMousePosition({ x, y });
+      setMousePosition({ x: x * 0.5, y: y * 0.5 }); // Reduced sensitivity
     };
 
     if (isInView) {
@@ -64,112 +66,138 @@ export default function FullWidthLaptopShowcase({
     };
   }, [isInView]);
 
-  // Create website preview content
-  const createWebsitePreview = () => {
+  // Handle iframe loading and errors
+  const handleIframeLoad = () => {
+    setIsLoaded(true);
+    setCanEmbed(true);
+  };
+
+  const handleIframeError = () => {
+    console.log('Website blocking iframe embedding, showing fallback');
+    setCanEmbed(false);
+    setIsLoaded(true);
+  };
+
+  // Create fallback content for sites that block embedding
+  const createFallbackContent = () => {
     if (url.includes('selfieholosphere.com')) {
       return (
         <div className="h-full bg-gradient-to-br from-gray-900 via-purple-900 to-black relative overflow-hidden">
-          {/* Browser chrome */}
-          <div className="h-8 bg-gray-800 flex items-center px-3 border-b border-gray-600">
-            <div className="flex space-x-1.5">
-              <div className="w-2 h-2 rounded-full bg-red-500"></div>
-              <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
-            </div>
-            <div className="flex-1 text-center">
-              <div className="text-xs text-gray-300 font-medium">{url}</div>
-            </div>
+          {/* Animated background particles */}
+          <div className="absolute inset-0">
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                className="absolute w-1 h-1 bg-purple-400 rounded-full animate-pulse"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animationDelay: `${Math.random() * 3}s`,
+                  animationDuration: `${2 + Math.random() * 2}s`
+                }}
+              />
+            ))}
           </div>
           
           {/* Content */}
-          <div className="p-6 h-full relative">
-            <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold text-white mb-2">SELFIE HOLOSPHERE</h1>
-              <p className="text-purple-300 text-sm">Interactive Photo Experiences</p>
+          <div className="relative z-10 p-8 h-full flex flex-col justify-center">
+            <div className="text-center mb-8">
+              <motion.h1 
+                className="text-4xl md:text-6xl font-bold text-white mb-4"
+                animate={{ 
+                  textShadow: ['0 0 20px rgba(124, 58, 237, 0.5)', '0 0 30px rgba(124, 58, 237, 0.8)', '0 0 20px rgba(124, 58, 237, 0.5)']
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                SELFIE HOLOSPHERE
+              </motion.h1>
+              <p className="text-purple-300 text-xl">Interactive Photo Experiences</p>
             </div>
             
-            {/* Holographic circles */}
-            <div className="flex justify-center space-x-4 mb-6">
-              {[...Array(3)].map((_, i) => (
-                <div
+            {/* Holographic display */}
+            <div className="flex justify-center space-x-8 mb-8">
+              {[...Array(5)].map((_, i) => (
+                <motion.div
                   key={i}
-                  className={`w-12 h-12 rounded-full border-2 border-purple-400 
-                    animate-pulse bg-purple-500/20 ${i === 1 ? 'scale-110' : ''}`}
-                  style={{
-                    animationDelay: `${i * 0.3}s`,
-                    animationDuration: '2s'
+                  className="relative"
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.5, 1, 0.5]
                   }}
-                />
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    delay: i * 0.5
+                  }}
+                >
+                  <div className={`w-16 h-16 rounded-full border-2 border-purple-400 bg-purple-500/20`} />
+                  <div className={`absolute inset-2 rounded-full border border-purple-300 bg-purple-400/10`} />
+                </motion.div>
               ))}
             </div>
             
-            {/* Features grid */}
-            <div className="grid grid-cols-2 gap-2 text-xs text-white">
-              <div className="bg-white/10 rounded p-2">
-                <div className="text-purple-300">✨ Real-time processing</div>
-              </div>
-              <div className="bg-white/10 rounded p-2">
-                <div className="text-purple-300">📱 Social integration</div>
-              </div>
-              <div className="bg-white/10 rounded p-2">
-                <div className="text-purple-300">🎪 Event technology</div>
-              </div>
-              <div className="bg-white/10 rounded p-2">
-                <div className="text-purple-300">📊 Analytics</div>
-              </div>
+            {/* Features */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-white">
+              {[
+                { icon: '✨', text: 'Real-time Processing' },
+                { icon: '📱', text: 'Social Integration' },
+                { icon: '🎪', text: 'Event Technology' },
+                { icon: '📊', text: 'Analytics & Insights' }
+              ].map((feature, index) => (
+                <motion.div
+                  key={index}
+                  className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-lg"
+                  whileHover={{ scale: 1.05, backgroundColor: 'rgba(255,255,255,0.15)' }}
+                >
+                  <div className="text-2xl mb-2">{feature.icon}</div>
+                  <div className="text-sm">{feature.text}</div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
       );
     }
 
-    // Generic website preview
-    const headerColor = accentColor.includes('purple') ? 'bg-purple-600' :
-                       accentColor.includes('cyan') ? 'bg-cyan-600' :
-                       accentColor.includes('indigo') ? 'bg-indigo-600' :
-                       accentColor.includes('green') ? 'bg-green-600' : 'bg-blue-600';
+    // Generic fallback for other sites
+    const headerColor = accentColor.includes('purple') ? 'from-purple-600 to-purple-800' :
+                       accentColor.includes('cyan') ? 'from-cyan-600 to-cyan-800' :
+                       accentColor.includes('indigo') ? 'from-indigo-600 to-indigo-800' :
+                       accentColor.includes('green') ? 'from-green-600 to-green-800' : 'from-blue-600 to-blue-800';
 
     return (
       <div className="h-full bg-white relative overflow-hidden">
-        {/* Browser chrome */}
-        <div className="h-8 bg-gray-100 flex items-center px-3 border-b border-gray-200">
-          <div className="flex space-x-1.5">
-            <div className="w-2 h-2 rounded-full bg-red-500"></div>
-            <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-            <div className="w-2 h-2 rounded-full bg-green-500"></div>
-          </div>
-          <div className="flex-1 text-center">
-            <div className="text-xs text-gray-600 font-medium">{url}</div>
-          </div>
-          <div className="text-xs text-green-500 flex items-center">
-            <span className="w-1 h-1 bg-green-500 rounded-full mr-1 animate-pulse"></span>
-            LIVE
-          </div>
-        </div>
-        
         {/* Header */}
-        <div className={`${headerColor} text-white p-4`}>
-          <h1 className="text-lg font-bold">{title.substring(0, 30)}</h1>
-          <p className="text-sm opacity-90">{description.substring(0, 60)}...</p>
+        <div className={`bg-gradient-to-r ${headerColor} text-white p-8 text-center`}>
+          <h1 className="text-3xl md:text-5xl font-bold mb-4">{title}</h1>
+          <p className="text-lg md:text-xl opacity-90 max-w-4xl mx-auto">{description}</p>
         </div>
         
-        {/* Content cards */}
-        <div className="p-4 space-y-3">
-          {features.slice(0, 3).map((feature, index) => (
-            <div key={index} className="bg-gray-50 rounded-lg p-3">
-              <div className="flex items-start space-x-2">
-                <div className={`w-1.5 h-1.5 rounded-full ${headerColor} mt-1.5 flex-shrink-0`}></div>
-                <span className="text-xs text-gray-700 leading-relaxed">
-                  {feature.substring(0, 50)}{feature.length > 50 ? '...' : ''}
-                </span>
-              </div>
+        {/* Features showcase */}
+        <div className="p-8 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">Key Features</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={index}
+                  className="bg-white rounded-lg p-6 shadow-lg"
+                  whileHover={{ scale: 1.02, boxShadow: '0 10px 25px rgba(0,0,0,0.1)' }}
+                >
+                  <div className="flex items-start space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${getAccentBgColor()} mt-2 flex-shrink-0`}></div>
+                    <p className="text-gray-700 leading-relaxed">{feature}</p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
         
-        {/* CTA */}
-        <div className="absolute bottom-4 left-4 right-4">
-          <div className={`${headerColor} text-white text-center py-2 rounded-lg text-sm font-medium`}>
+        {/* CTA Section */}
+        <div className={`bg-gradient-to-r ${headerColor} text-white p-8 text-center`}>
+          <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
+          <div className={`inline-block px-8 py-3 bg-white text-gray-800 rounded-full font-medium hover:bg-gray-100 transition-colors cursor-pointer`}>
             View Live Site
           </div>
         </div>
@@ -232,7 +260,7 @@ export default function FullWidthLaptopShowcase({
             </motion.button>
           </motion.div>
 
-          {/* Real 3D CSS Laptop Side */}
+          {/* Floating Screen Side */}
           <motion.div 
             className="relative lg:pl-8"
             initial={{ opacity: 0, x: 50 }}
@@ -241,21 +269,19 @@ export default function FullWidthLaptopShowcase({
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <div 
-              ref={laptopRef}
-              className="relative w-full max-w-4xl mx-auto h-96"
+              ref={screenRef}
+              className="relative w-full max-w-4xl mx-auto"
               style={{
-                transform: `perspective(1000px) rotateX(${mousePosition.y * 5}deg) rotateY(${mousePosition.x * 10}deg)`,
-                transition: 'transform 0.1s ease-out',
-                transformStyle: 'preserve-3d'
+                transform: `perspective(1000px) rotateX(${mousePosition.y * 3}deg) rotateY(${mousePosition.x * 5}deg)`,
+                transition: 'transform 0.2s ease-out'
               }}
             >
-              {/* 3D Laptop Container */}
+              {/* Floating Screen Container */}
               <motion.div 
-                className="relative w-full h-full"
-                style={{ transformStyle: 'preserve-3d' }}
+                className="relative"
                 animate={{
                   rotateY: [0, 1, -1, 0],
-                  rotateX: [0, 0.5, -0.5, 0]
+                  y: [0, -10, 0, 10, 0]
                 }}
                 transition={{
                   duration: 8,
@@ -263,217 +289,95 @@ export default function FullWidthLaptopShowcase({
                   ease: "easeInOut"
                 }}
               >
-                {/* Laptop Base/Bottom */}
+                {/* Screen Frame */}
                 <div 
-                  className="absolute bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl shadow-2xl border border-gray-700"
+                  className="relative bg-gradient-to-br from-gray-900 to-black rounded-2xl shadow-2xl border-4 border-gray-700 overflow-hidden"
                   style={{
-                    width: '400px',
-                    height: '280px',
-                    transform: 'rotateX(90deg) rotateY(180deg) translateZ(-10px)', // Added rotateY(180deg) to flip it
-                    transformOrigin: 'center bottom'
+                    aspectRatio: '16/9',
+                    boxShadow: '0 25px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05)'
                   }}
                 >
-                  {/* Keyboard Area - properly inset and oriented */}
-                  <div 
-                    className="absolute bg-gray-700 rounded-lg"
-                    style={{
-                      top: '30px',
-                      left: '30px',
-                      right: '30px',
-                      bottom: '30px',
-                      transform: 'translateZ(2px)', // Now raised above the base since we flipped
-                      boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.4)'
-                    }}
-                  >
-                    {/* Keyboard Keys */}
-                    <div className="p-4">
-                      <div className="grid grid-cols-14 gap-1 mb-3">
-                        {Array.from({ length: 42 }).map((_, i) => (
-                          <div 
-                            key={i} 
-                            className="aspect-square bg-gray-600 rounded-sm border border-gray-500"
-                            style={{
-                              maxWidth: '12px',
-                              maxHeight: '12px',
-                              transform: 'translateZ(1px)', // Keys slightly raised
-                              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 2px rgba(255,255,255,0.1)'
-                            }}
-                          ></div>
-                        ))}
+                  {/* Screen Content */}
+                  <div className="absolute inset-3 bg-black rounded-lg overflow-hidden">
+                    {/* Browser Chrome */}
+                    <div className="h-10 bg-gray-800 flex items-center px-4 border-b border-gray-600">
+                      <div className="flex space-x-2">
+                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
                       </div>
+                      <div className="flex-1 text-center">
+                        <div className="max-w-md mx-auto bg-gray-700 rounded px-3 py-1">
+                          <span className="text-xs text-gray-300">{url}</span>
+                        </div>
+                      </div>
+                      <div className="text-xs text-green-400 flex items-center">
+                        <span className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                        LIVE
+                      </div>
+                    </div>
+                    
+                    {/* Website Content Area */}
+                    <div className="relative" style={{ height: 'calc(100% - 40px)' }}>
+                      {!isLoaded && (
+                        <div className="absolute inset-0 bg-gray-900 flex items-center justify-center z-20">
+                          <div className="text-center">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+                            <div className="text-white">Loading website...</div>
+                          </div>
+                        </div>
+                      )}
                       
-                      {/* Spacebar */}
-                      <div 
-                        className="mx-auto w-24 h-3 bg-gray-600 rounded border border-gray-500 mb-4"
-                        style={{
-                          transform: 'translateZ(1px)',
-                          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(255,255,255,0.1)'
-                        }}
-                      ></div>
-                      
-                      {/* Trackpad */}
-                      <div 
-                        className="mx-auto w-16 h-10 bg-gray-600 rounded border border-gray-500"
-                        style={{
-                          transform: 'translateZ(-1px)', // Trackpad slightly inset
-                          boxShadow: 'inset 0 3px 6px rgba(0,0,0,0.4)'
-                        }}
-                      ></div>
+                      {canEmbed ? (
+                        <iframe
+                          ref={iframeRef}
+                          src={url}
+                          className="w-full h-full border-none"
+                          title={title}
+                          sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-presentation"
+                          onLoad={handleIframeLoad}
+                          onError={handleIframeError}
+                          loading="lazy"
+                        />
+                      ) : (
+                        createFallbackContent()
+                      )}
                     </div>
                   </div>
                   
-                  {/* Power LED */}
+                  {/* Screen Reflection */}
                   <div 
-                    className="absolute top-4 right-6 w-2 h-2 bg-green-400 rounded-full animate-pulse"
+                    className="absolute inset-0 pointer-events-none rounded-2xl"
                     style={{
-                      transform: 'translateZ(3px)',
-                      boxShadow: '0 0 8px rgba(74, 222, 128, 0.8)'
+                      background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 100%)'
                     }}
                   ></div>
                   
-                  {/* Brand Logo */}
+                  {/* Screen Glow */}
                   <div 
-                    className="absolute bottom-4 right-6 text-xs text-gray-400 font-mono opacity-60"
+                    className="absolute -inset-1 pointer-events-none rounded-2xl"
                     style={{
-                      transform: 'translateZ(2.5px)'
-                    }}
-                  >
-                    FUSION
-                  </div>
-                </div>
-
-                {/* Laptop Screen Back */}
-                <div 
-                  className="absolute bg-gradient-to-br from-gray-800 to-gray-900 rounded-t-2xl border border-gray-700"
-                  style={{
-                    width: '380px',
-                    height: '240px',
-                    transform: 'translateZ(20px) rotateX(-15deg)',
-                    transformOrigin: 'center bottom',
-                    left: '10px',
-                    top: '20px',
-                    boxShadow: '0 -10px 30px rgba(0,0,0,0.5)'
-                  }}
-                >
-                  {/* Screen Frame/Bezel */}
-                  <div 
-                    className="absolute inset-3 bg-black rounded-lg border border-gray-600 overflow-hidden"
-                    style={{
-                      boxShadow: 'inset 0 0 20px rgba(0,0,0,0.8)'
-                    }}
-                  >
-                    {/* Actual Screen Content */}
-                    <div className="w-full h-full relative">
-                      {createWebsitePreview()}
-                      
-                      {/* Screen Glass Reflection */}
-                      <div 
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 30%, transparent 70%, rgba(255,255,255,0.05) 100%)'
-                        }}
-                      ></div>
-                      
-                      {/* Screen Glare */}
-                      <div 
-                        className="absolute top-4 left-8 w-16 h-32 pointer-events-none opacity-20"
-                        style={{
-                          background: 'linear-gradient(45deg, rgba(255,255,255,0.3) 0%, transparent 100%)',
-                          transform: 'skew(-15deg)',
-                          filter: 'blur(8px)'
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-                  
-                  {/* Camera */}
-                  <div 
-                    className="absolute top-3 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-800 rounded-full border border-gray-600"
-                    style={{
-                      boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.8)'
-                    }}
-                  >
-                    <div className="w-1.5 h-1.5 bg-gray-700 rounded-full absolute top-0.5 left-0.5"></div>
-                  </div>
-                  
-                  {/* Apple Logo */}
-                  <div 
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-6 h-6 opacity-30"
-                    style={{
-                      background: 'radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)'
+                      background: `linear-gradient(45deg, ${getAccentFromColor().replace('from-', '')} 0%, transparent 50%, transparent 100%)`,
+                      opacity: 0.2,
+                      filter: 'blur(20px)'
                     }}
                   ></div>
                 </div>
-
-                {/* Screen Hinge */}
-                <div 
-                  className="absolute bg-gray-700 rounded-sm"
-                  style={{
-                    width: '360px',
-                    height: '8px',
-                    left: '20px',
-                    top: '240px',
-                    transform: 'translateZ(15px)',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.4)'
-                  }}
-                ></div>
-
-                {/* Side Panel Left */}
-                <div 
-                  className="absolute bg-gradient-to-b from-gray-700 to-gray-800"
-                  style={{
-                    width: '20px',
-                    height: '280px',
-                    transform: 'rotateY(-90deg) translateZ(0px)',
-                    transformOrigin: 'left center',
-                    left: '0px',
-                    top: '0px'
-                  }}
-                ></div>
-
-                {/* Side Panel Right */}
-                <div 
-                  className="absolute bg-gradient-to-b from-gray-700 to-gray-800"
-                  style={{
-                    width: '20px',
-                    height: '280px',
-                    transform: 'rotateY(90deg) translateZ(380px)',
-                    transformOrigin: 'right center',
-                    right: '0px',
-                    top: '0px'
-                  }}
-                ></div>
-
-                {/* Front Edge */}
-                <div 
-                  className="absolute bg-gradient-to-t from-gray-900 to-gray-700 rounded-b-2xl"
-                  style={{
-                    width: '400px',
-                    height: '20px',
-                    transform: 'rotateX(-90deg) translateZ(260px)',
-                    transformOrigin: 'center top',
-                    bottom: '0px'
-                  }}
-                ></div>
               </motion.div>
               
               {/* Enhanced Ambient glow effect */}
               <div 
-                className={`absolute inset-0 bg-gradient-to-br ${getAccentFromColor()} to-transparent opacity-30 blur-3xl scale-125 pointer-events-none`}
-                style={{
-                  transform: 'translateZ(-50px)'
-                }}
+                className={`absolute inset-0 bg-gradient-to-br ${getAccentFromColor()} to-transparent opacity-30 blur-3xl scale-110 pointer-events-none`}
               ></div>
               
               {/* Floor Shadow */}
               <div 
-                className="absolute bottom-0 left-1/2 transform -translate-x-1/2"
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-8"
                 style={{
-                  width: '450px',
-                  height: '300px',
+                  width: '80%',
+                  height: '40px',
                   background: 'radial-gradient(ellipse, rgba(0,0,0,0.3) 0%, transparent 70%)',
-                  transform: 'translateZ(-100px) rotateX(90deg)',
-                  filter: 'blur(20px)'
+                  filter: 'blur(15px)'
                 }}
               ></div>
               
