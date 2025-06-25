@@ -223,27 +223,24 @@ export default function HomePage() {
             >
               <div className="relative">
                 <motion.div
-                  className="transform transition-all duration-1000"
+                  className="transform"
                   animate={{
-                    rotateY: [0, 2, -2, 0],
-                    rotateX: [0, 0.5, -0.5, 0],
-                    y: [0, -8, 0, 8, 0]
+                    rotateY: [0, 1, -1, 0],
+                    rotateX: [0, 0.3, -0.3, 0],
+                    y: [0, -4, 0, 4, 0]
                   }}
                   transition={{
-                    duration: 12,
+                    duration: 20,
                     repeat: Infinity,
-                    ease: [0.25, 0.46, 0.45, 0.94]
-                  }}
-                  style={{
-                    transform: `scale(1.875)`
+                    ease: "linear"
                   }}
                 >
                   {/* Enhanced glow effect - BEHIND the vector */}
                   <div 
                     className="absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent blur-3xl pointer-events-none"
                     style={{
-                      opacity: 0.4,
-                      transform: `scale(1.8)`,
+                      opacity: 0.3,
+                      transform: `scale(1.6)`,
                       zIndex: -1
                     }}
                   ></div>
@@ -252,8 +249,8 @@ export default function HomePage() {
                   <div 
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      background: `radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.25) 0%, transparent 50%)`,
-                      transform: `scale(2.2)`,
+                      background: `radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.2) 0%, transparent 50%)`,
+                      transform: `scale(2.0)`,
                       zIndex: -2
                     }}
                   ></div>
@@ -261,10 +258,9 @@ export default function HomePage() {
                   <img 
                     src="https://www.fusion-events.ca/wp-content/uploads/2025/06/Untitled-512-x-512-px-3.png" 
                     alt="Selfie Holosphere - Interactive Photo Experience Platform"
-                    className="w-full max-w-6xl mx-auto drop-shadow-2xl relative z-10"
+                    className="w-full max-w-6xl mx-auto drop-shadow-2xl relative z-10 transform scale-150"
                     style={{
-                      filter: `drop-shadow(0 25px 60px rgba(147, 51, 234, 0.4))`,
-                      transform: `scale(1)`
+                      filter: `drop-shadow(0 25px 60px rgba(147, 51, 234, 0.3))`
                     }}
                   />
                 </motion.div>
