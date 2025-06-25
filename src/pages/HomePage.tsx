@@ -15,9 +15,9 @@ export default function HomePage() {
   return (
     <div className="relative pointer-events-none">
       {/* Hero Section - Transparent to show WebGL background */}
-      <section className="relative min-h-screen flex items-center justify-center px-8 pt-20 pointer-events-none">
+      <section className="relative min-h-screen flex items-start justify-center px-8 pt-32 pointer-events-none">
         {/* Hero Content */}
-        <div className="relative z-10 text-center max-w-6xl pointer-events-auto">
+        <div className="relative z-10 text-center max-w-6xl pointer-events-auto mt-8">
           <motion.div
             className="mb-8"
             initial={{ opacity: 0, y: 30 }}
@@ -28,7 +28,7 @@ export default function HomePage() {
               ease: [0.25, 0.46, 0.45, 0.94]
             }}
           >
-            <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-8">
+            <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6">
               <div className="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
               <span className="text-sm font-medium text-white">AI-Assisted Digital Agency</span>
             </div>
@@ -47,7 +47,7 @@ export default function HomePage() {
           </motion.h1>
 
           <motion.p 
-            className="text-xl md:text-2xl text-white mb-12 max-w-4xl mx-auto leading-relaxed font-light"
+            className="text-xl md:text-2xl text-white mb-10 max-w-4xl mx-auto leading-relaxed font-light"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 
@@ -62,7 +62,7 @@ export default function HomePage() {
           </motion.p>
 
           <motion.div 
-            className="flex flex-col sm:flex-row justify-center gap-6 mb-16"
+            className="flex flex-col sm:flex-row justify-center gap-6 mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 
