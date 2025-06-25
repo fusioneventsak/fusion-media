@@ -55,8 +55,8 @@ export default function FullWidthLaptopShowcase({
     
     const animate = () => {
       setSmoothMouse(prev => ({
-        x: prev.x + (targetMouse.x - prev.x) * 0.08,
-        y: prev.y + (targetMouse.y - prev.y) * 0.08
+        x: prev.x + (targetMouse.x - prev.x) * 0.04, // Much smoother interpolation
+        y: prev.y + (targetMouse.y - prev.y) * 0.04
       }));
       animationId = requestAnimationFrame(animate);
     };
@@ -81,14 +81,14 @@ export default function FullWidthLaptopShowcase({
     
     const updateMousePosition = (clientX: number, clientY: number) => {
       const currentTime = performance.now();
-      if (currentTime - lastTime < 16) return; // Throttle to ~60fps
+      if (currentTime - lastTime < 32) return; // Throttle to ~30fps for smoother motion
       lastTime = currentTime;
       
       const rect = screenElement.getBoundingClientRect();
       const x = ((clientX - rect.left) / rect.width - 0.5) * 2;
       const y = ((clientY - rect.top) / rect.height - 0.5) * 2;
       
-      setTargetMouse({ x: x * 0.3, y: y * 0.3 });
+      setTargetMouse({ x: x * 0.15, y: y * 0.15 }); // Reduced mouse influence for smoother motion
     };
 
     // Mouse events (desktop)
@@ -413,7 +413,10 @@ export default function FullWidthLaptopShowcase({
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8 }}
+            transition={{ 
+              duration: 1.2,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
             onViewportEnter={() => setIsInView(true)}
           >
             <div>
@@ -433,7 +436,11 @@ export default function FullWidthLaptopShowcase({
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ 
+                    duration: 0.8, 
+                    delay: index * 0.15,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }}
                 >
                   <div className={`w-1.5 h-1.5 lg:w-2 lg:h-2 rounded-full ${getAccentBgColor()} mt-2 lg:mt-3 flex-shrink-0`}></div>
                   <span className={`text-sm sm:text-base ${textColor} opacity-80 font-medium leading-relaxed`}>{feature}</span>
@@ -443,8 +450,14 @@ export default function FullWidthLaptopShowcase({
 
             <motion.button
               className={`inline-flex items-center px-6 lg:px-8 py-3 lg:py-4 ${getAccentBgColor()} text-white rounded-full font-medium hover:opacity-90 transition-all duration-300 shadow-lg text-sm lg:text-base`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ 
+                scale: 1.05,
+                transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+              }}
+              whileTap={{ 
+                scale: 0.95,
+                transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+              }}
               onClick={() => window.open(url, '_blank')}
             >
               View Live Site
@@ -460,13 +473,17 @@ export default function FullWidthLaptopShowcase({
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ 
+              duration: 1.2, 
+              delay: 0.2,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
           >
             <div 
               ref={screenRef}
               className="relative w-full mx-auto"
               style={{
-                transform: `perspective(1200px) rotateX(${smoothMouse.y * 2}deg) rotateY(${smoothMouse.x * 3}deg)`,
+                transform: `perspective(1200px) rotateX(${smoothMouse.y * 1}deg) rotateY(${smoothMouse.x * 1.5}deg)`, // Reduced rotation for smoother effect
                 transition: 'none',
                 maxWidth: '100%',
                 willChange: 'transform'
@@ -477,12 +494,12 @@ export default function FullWidthLaptopShowcase({
                 className="relative"
                 animate={{
                   rotateY: [0, 0.5, -0.5, 0],
-                  y: [0, -8, 0, 8, 0]
+                  y: [0, -4, 0, 4, 0] // Reduced floating amplitude
                 }}
                 transition={{
-                  duration: 12,
+                  duration: 16, // Slower floating animation
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: [0.25, 0.46, 0.45, 0.94] // Smooth cubic-bezier easing
                 }}
                 style={{
                   willChange: 'transform'
@@ -619,7 +636,11 @@ export default function FullWidthLaptopShowcase({
                 className="absolute bottom-2 lg:bottom-4 left-1/2 transform -translate-x-1/2 text-center z-10"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 0.7, y: 0 }}
-                transition={{ duration: 1.2, delay: 2, ease: "easeOut" }}
+                transition={{ 
+                  duration: 1.8, 
+                  delay: 3, 
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
                 style={{
                   willChange: 'opacity, transform'
                 }}
