@@ -15,17 +15,17 @@ export default function AnimatedHeroTitle() {
   }, []);
 
   return (
-    <h1 className="text-5xl md:text-7xl lg:text-8xl font-light mb-8 text-white leading-tight">
+    <h1 className="text-5xl md:text-7xl lg:text-8xl font-light mb-8 text-white leading-tight text-center">
       We Make{' '}
-      <span className="font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+      <span className="font-semibold text-white">
         Kick-Ass
       </span>
       <br />
-      <div className="relative inline-block min-h-[1.2em]">
+      <div className="relative inline-block min-h-[1.2em] w-full text-center">
         <AnimatePresence mode="wait">
           <motion.span
             key={currentWordIndex}
-            className="absolute left-0 top-0 font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+            className="absolute left-1/2 top-0 font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent transform -translate-x-1/2"
             initial={{ 
               opacity: 0, 
               y: 50,
