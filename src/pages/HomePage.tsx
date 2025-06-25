@@ -109,8 +109,8 @@ export default function HomePage() {
       
       {/* 1. Event Engagement Technology */}
       <section className="min-h-screen relative overflow-hidden pointer-events-auto">
-        {/* Transparent background with subtle backdrop blur for readability */}
-        <div className="absolute inset-0 bg-black/10 backdrop-blur-sm"></div>
+        {/* Minimal background for readability */}
+        <div className="absolute inset-0 bg-black/5"></div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-8 py-20">
           <div className="grid lg:grid-cols-2 gap-16 items-center min-h-[80vh]">
@@ -192,14 +192,14 @@ export default function HomePage() {
                     ease: "easeInOut"
                   }}
                   style={{
-                    transform: `scale(${1.5 + Math.sin(scrollY * 0.002) * 0.05}) rotateZ(${scrollY * 0.01}deg)`
+                    transform: `scale(${1.875 + Math.sin(scrollY * 0.002) * 0.05}) rotateZ(${scrollY * 0.01}deg)`
                   }}
                 >
                   {/* Enhanced glow effect - BEHIND the vector */}
                   <div 
                     className="absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent blur-3xl pointer-events-none"
                     style={{
-                      opacity: 0.3 + Math.sin(scrollY * 0.008) * 0.1,
+                      opacity: 0.4 + Math.sin(scrollY * 0.008) * 0.1,
                       transform: `scale(1.8) rotate(${scrollY * 0.05}deg)`,
                       zIndex: -1
                     }}
@@ -209,7 +209,7 @@ export default function HomePage() {
                   <div 
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      background: `radial-gradient(circle at ${50 + Math.sin(scrollY * 0.01) * 20}% ${50 + Math.cos(scrollY * 0.01) * 20}%, rgba(147, 51, 234, 0.2) 0%, transparent 50%)`,
+                      background: `radial-gradient(circle at ${50 + Math.sin(scrollY * 0.01) * 20}% ${50 + Math.cos(scrollY * 0.01) * 20}%, rgba(147, 51, 234, 0.25) 0%, transparent 50%)`,
                       transform: `scale(2.2) rotate(${scrollY * -0.03}deg)`,
                       zIndex: -2
                     }}
