@@ -9,7 +9,7 @@ export default function AnimatedHeroTitle() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentWordIndex((prev) => (prev + 1) % words.length);
-    }, 2500); // Change word every 2.5 seconds
+    }, 3000); // Slower word changes for smoother experience
 
     return () => clearInterval(interval);
   }, []);
@@ -30,8 +30,8 @@ export default function AnimatedHeroTitle() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             transition={{ 
-              duration: 0.25, 
-              ease: "easeOut" 
+              duration: 0.6,
+              ease: [0.25, 0.46, 0.45, 0.94] // Custom cubic-bezier for ultra-smooth motion
             }}
             style={{ paddingBottom: '0.1em' }}
           >
