@@ -44,10 +44,9 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            What once took months to produce—high-end websites with animations, 
-            multiple pages, and complex functionality—we now deliver in weeks. 
-            AI-powered productivity meets 25+ years of expertise in events, 
-            entertainment, and technology.
+            From quick app MVPs to complex digital experiences—what once took months 
+            to develop, we now deliver in weeks. AI-powered productivity meets 25+ years 
+            of expertise in events, entertainment, and cutting-edge technology solutions.
           </motion.p>
 
           <motion.div 

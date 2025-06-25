@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const words = ['Apps', 'Websites', 'Activations', 'Experiences'];
+const words = ['Quick App MVPs', 'Websites', 'Digital Experiences', 'Custom Solutions'];
 
 export default function AnimatedHeroTitle() {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
