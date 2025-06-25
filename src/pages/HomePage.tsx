@@ -47,7 +47,7 @@ export default function HomePage() {
           </motion.h1>
 
           <motion.p 
-            className="text-xl md:text-2xl text-white mb-8 max-w-4xl mx-auto leading-relaxed font-light"
+            className="text-xl md:text-2xl text-white mb-4 max-w-4xl mx-auto leading-relaxed font-light"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 
