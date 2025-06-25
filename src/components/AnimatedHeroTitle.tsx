@@ -21,11 +21,11 @@ export default function AnimatedHeroTitle() {
         Kick-Ass
       </span>
       <br />
-      <div className="overflow-hidden py-2 flex justify-center">
+      <div className="overflow-hidden py-4 flex justify-center" style={{ minHeight: '1.2em' }}>
         <AnimatePresence mode="wait">
           <motion.span
             key={currentWordIndex}
-            className="font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent inline-block"
+            className="font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent inline-block leading-relaxed"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
@@ -33,6 +33,7 @@ export default function AnimatedHeroTitle() {
               duration: 0.25, 
               ease: "easeOut" 
             }}
+            style={{ paddingBottom: '0.1em' }}
           >
             {words[currentWordIndex]}
           </motion.span>
