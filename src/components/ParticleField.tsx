@@ -10,71 +10,9 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   const mainParticlesRef = useRef<THREE.Points>(null);
   const dustParticlesRef = useRef<THREE.Points>(null);
   
-  // Smooth scroll interpolation state
-  const [smoothScrollY, setSmoothScrollY] = useState(0);
-  const [targetScrollY, setTargetScrollY] = useState(0);
-  const [scrollVelocity, setScrollVelocity] = useState(0);
-  const smoothScrollRef = useRef(0);
-  const targetScrollRef = useRef(0);
-  
   // PARTICLE COUNTS
   const MAIN_COUNT = 4000;
   const DUST_COUNT = 2500;
-  
-  // Smooth scroll interpolation with easing
-  const updateSmoothScroll = useCallback((newScrollY: number) => {
-    setTargetScrollY(newScrollY);
-  }, []);
-  
-  // Update target when scrollY prop changes
-  React.useEffect(() => {
-    targetScrollRef.current = scrollY;
-  }, [scrollY]);
-  
-  // COMPLETELY SEPARATE scroll interpolation from useFrame to prevent conflicts
-  React.useEffect(() => {
-    let animationId: number;
-    
-    const independentScrollLoop = () => {
-      const target = targetScrollRef.current;
-      const current = smoothScrollRef.current;
-      const diff = target - current;
-      const absDiff = Math.abs(diff);
-      
-      // Even smoother easing for ultra-fluid motion
-      let easingFactor = 0.04; // Much gentler base easing
-      
-      // Gradual speed increase only for very large movements
-      if (absDiff > 500) {
-        easingFactor = 0.08;
-      } else if (absDiff > 200) {
-        easingFactor = 0.06;
-      }
-      
-      // Apply smooth interpolation directly to ref
-      const newValue = current + diff * easingFactor;
-      
-      // Stop micro-oscillations with tighter threshold
-      if (absDiff < 0.05) {
-        smoothScrollRef.current = target;
-      } else {
-        smoothScrollRef.current = newValue;
-      }
-      
-      // Update React state only occasionally to prevent render conflicts
-      setSmoothScrollY(smoothScrollRef.current);
-      
-      animationId = requestAnimationFrame(independentScrollLoop);
-    };
-    
-    animationId = requestAnimationFrame(independentScrollLoop);
-    
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-    };
-  }, []); // Empty dependency array - runs independently
   // EXACT SHADER MATERIAL FROM YOUR REFERENCE
   const sharpParticleMaterial = useMemo(() => {
     return new THREE.ShaderMaterial({
@@ -84,7 +22,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       depthWrite: false,
       uniforms: {
         time: { value: 0 },
-        scrollProgress: { value: 0 },
         pixelRatio: { value: Math.min(window.devicePixelRatio, 2) }
       },
       vertexShader: `
@@ -95,7 +32,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         varying float vOpacity;
         varying float vGlow;
         uniform float time;
-        uniform float scrollProgress;
         uniform float pixelRatio;
         
         void main() {
@@ -104,12 +40,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
           
           vec3 pos = position;
           
-          // Smooth scroll-based movement with different influences per particle
-          float scrollEffect = scrollProgress * scrollInfluence;
-          pos.x += sin(scrollEffect * 0.5 + position.x * 0.01) * scrollInfluence * 2.0;
-          pos.y += scrollEffect * scrollInfluence * 0.8;
-          pos.z += cos(scrollEffect * 0.3 + position.z * 0.01) * scrollInfluence * 1.5;
-          
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
           
           // EXACT SIZE CALCULATION FROM REFERENCE
@@ -117,11 +47,11 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
           float perspectiveSize = size * (300.0 / distance);
           
           // Add subtle pulsing with scroll influence
-          float pulse = 1.0 + sin(time * 2.0 + position.x * 0.5 + position.y * 0.3 + scrollProgress * 0.1) * 0.1;
+          float pulse = 1.0 + sin(time * 2.0 + position.x * 0.5 + position.y * 0.3) * 0.1;
           perspectiveSize *= pulse;
           
           // Glow intensity based on distance and scroll
-          vGlow = (1.0 - smoothstep(5.0, 50.0, distance)) * (0.8 + scrollInfluence * 0.2);
+          vGlow = (1.0 - smoothstep(5.0, 50.0, distance));
           
           gl_PointSize = perspectiveSize * pixelRatio;
           gl_Position = projectionMatrix * mvPosition;
@@ -168,11 +98,9 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       depthWrite: false,
       uniforms: {
         time: { value: 0 },
-        scrollProgress: { value: 0 }
       },
       vertexShader: `
         uniform float time;
-        uniform float scrollProgress;
         attribute float size;
         attribute float scrollInfluence;
         varying vec3 vColor;
@@ -183,17 +111,11 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
           
           vec3 pos = position;
           
-          // Gentle scroll-based drift for dust
-          float scrollEffect = scrollProgress * scrollInfluence;
-          pos.x += sin(scrollEffect * 0.3 + position.x * 0.02) * scrollInfluence * 1.0;
-          pos.y += scrollEffect * scrollInfluence * 0.5;
-          pos.z += cos(scrollEffect * 0.2 + position.z * 0.02) * scrollInfluence * 0.8;
-          
           vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
           
           // Very subtle movement
           float distance = length(mvPosition.xyz);
-          vOpacity = 0.3 * (1.0 - smoothstep(10.0, 100.0, distance)) * (0.7 + scrollInfluence * 0.3);
+          vOpacity = 0.3 * (1.0 - smoothstep(10.0, 100.0, distance));
           
           gl_PointSize = size * (100.0 / distance);
           gl_Position = projectionMatrix * mvPosition;
@@ -224,7 +146,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     const mainSizes = new Float32Array(MAIN_COUNT);
     const mainAlphas = new Float32Array(MAIN_COUNT);
     const mainVelocities = new Float32Array(MAIN_COUNT * 3);
-    const mainScrollInfluences = new Float32Array(MAIN_COUNT);
     
     for (let i = 0; i < MAIN_COUNT; i++) {
       // Create multiple spiral arms like the Milky Way
@@ -246,9 +167,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       mainVelocities[i * 3] = (Math.random() - 0.5) * 0.002;
       mainVelocities[i * 3 + 1] = (Math.random() - 0.5) * 0.001;
       mainVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.002;
-      
-      // Scroll influence varies per particle for natural movement
-      mainScrollInfluences[i] = 0.1 + Math.random() * 0.4; // 0.1 to 0.5
       
       // Realistic star colors
       const colorType = Math.random();
@@ -291,7 +209,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     const dustColors = new Float32Array(DUST_COUNT * 3);
     const dustSizes = new Float32Array(DUST_COUNT);
     const dustVelocities = new Float32Array(DUST_COUNT * 3);
-    const dustScrollInfluences = new Float32Array(DUST_COUNT);
     
     for (let i = 0; i < DUST_COUNT; i++) {
       // Concentrate around photo area with exponential falloff
@@ -306,9 +223,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       dustVelocities[i * 3] = (Math.random() - 0.5) * 0.003;
       dustVelocities[i * 3 + 1] = Math.random() * 0.002 + 0.001;
       dustVelocities[i * 3 + 2] = (Math.random() - 0.5) * 0.003;
-      
-      // Dust has lower scroll influence for subtlety
-      dustScrollInfluences[i] = 0.05 + Math.random() * 0.2; // 0.05 to 0.25
       
       // Subtle nebula colors
       const nebulaType = Math.random();
@@ -335,7 +249,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         sizes: mainSizes,
         alphas: mainAlphas,
         velocities: mainVelocities,
-        scrollInfluences: mainScrollInfluences,
         count: MAIN_COUNT
       },
       dust: {
@@ -343,7 +256,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         colors: dustColors,
         sizes: dustSizes,
         velocities: dustVelocities,
-        scrollInfluences: dustScrollInfluences,
         count: DUST_COUNT
       }
     };
@@ -352,21 +264,14 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   // ENHANCED ANIMATION WITH SMOOTH SCROLL EFFECTS
   useFrame((state) => {
     // SLOWER TIME MULTIPLIER - reduced by 30%
-    const time = state.clock.getElapsedTime() * 0.5; // Even slower for ultra-smooth motion
+    const time = state.clock.getElapsedTime() * 0.8; // Smooth but not too slow
     
-    // Use ref value directly to avoid React state conflicts
-    const scrollProgress = smoothScrollRef.current * 0.0003; // Ultra-minimal scroll influence
-    const scrollRotation = scrollProgress * 0.05; // Extremely subtle rotation
-    const scrollTilt = Math.sin(scrollProgress * 0.5) * 0.01; // Barely perceptible tilt
-    
-    // Update shader uniforms with smooth scroll
+    // Update shader uniforms - NO SCROLL INFLUENCE
     if (sharpParticleMaterial) {
       sharpParticleMaterial.uniforms.time.value = time;
-      sharpParticleMaterial.uniforms.scrollProgress.value = scrollProgress;
     }
     if (dustParticleMaterial) {
       dustParticleMaterial.uniforms.time.value = time;
-      dustParticleMaterial.uniforms.scrollProgress.value = scrollProgress;
     }
     
     // Animate main particles with galactic rotation + smooth scroll effects
@@ -377,9 +282,9 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         const i3 = i * 3;
         
         // Apply stellar velocities
-        mainPositions[i3] += particleData.main.velocities[i3] * 0.7; // Slower movement
-        mainPositions[i3 + 1] += particleData.main.velocities[i3 + 1] * 0.7;
-        mainPositions[i3 + 2] += particleData.main.velocities[i3 + 2] * 0.7;
+        mainPositions[i3] += particleData.main.velocities[i3];
+        mainPositions[i3 + 1] += particleData.main.velocities[i3 + 1];
+        mainPositions[i3 + 2] += particleData.main.velocities[i3 + 2];
         
         // Add complex galactic motion patterns
         const x = mainPositions[i3];
@@ -387,7 +292,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         const distanceFromCenter = Math.sqrt(x * x + z * z);
         
         // Galactic rotation - closer stars orbit faster
-        const orbitalSpeed = distanceFromCenter > 0 ? 0.00004 / Math.sqrt(distanceFromCenter + 10) : 0; // Slower orbital motion
+        const orbitalSpeed = distanceFromCenter > 0 ? 0.00006 / Math.sqrt(distanceFromCenter + 10) : 0;
         const angle = Math.atan2(z, x);
         const newAngle = angle + orbitalSpeed;
         
@@ -396,17 +301,16 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         mainPositions[i3 + 2] += Math.sin(newAngle) * orbitalSpeed * 0.1;
         
         // Add stellar parallax and depth motion
-        const parallaxFreq = time * 0.01 + i * 0.0005; // Slower parallax
-        mainPositions[i3] += Math.sin(parallaxFreq) * 0.0005; // Reduced amplitude
-        mainPositions[i3 + 1] += Math.cos(parallaxFreq * 0.7) * 0.0003;
-        mainPositions[i3 + 2] += Math.sin(parallaxFreq * 1.3) * 0.0005;
+        const parallaxFreq = time * 0.015 + i * 0.001;
+        mainPositions[i3] += Math.sin(parallaxFreq) * 0.0008;
+        mainPositions[i3 + 1] += Math.cos(parallaxFreq * 0.7) * 0.0004;
+        mainPositions[i3 + 2] += Math.sin(parallaxFreq * 1.3) * 0.0008;
       }
       
       mainParticlesRef.current.geometry.attributes.position.needsUpdate = true;
       
-      // ULTRA SMOOTH Galactic rotation + scroll rotation
-      mainParticlesRef.current.rotation.y = time * 0.0003 + scrollRotation; // Ultra-slow rotation
-      mainParticlesRef.current.rotation.z = scrollTilt;
+      // SMOOTH Galactic rotation - NO SCROLL INFLUENCE
+      mainParticlesRef.current.rotation.y = time * 0.0008; // Consistent smooth rotation
     }
     
     // Animate dust cloud with atmospheric turbulence + smooth scroll effects
@@ -417,15 +321,15 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         const i3 = i * 3;
         
         // Apply dust velocities
-        dustPositions[i3] += particleData.dust.velocities[i3] * 0.6; // Slower dust movement
-        dustPositions[i3 + 1] += particleData.dust.velocities[i3 + 1] * 0.6;
-        dustPositions[i3 + 2] += particleData.dust.velocities[i3 + 2] * 0.6;
+        dustPositions[i3] += particleData.dust.velocities[i3];
+        dustPositions[i3 + 1] += particleData.dust.velocities[i3 + 1];
+        dustPositions[i3 + 2] += particleData.dust.velocities[i3 + 2];
         
         // Add atmospheric turbulence
-        const turbulenceFreq = time * 0.05 + i * 0.025; // Slower turbulence
-        dustPositions[i3] += Math.sin(turbulenceFreq) * 0.001; // Reduced amplitude
-        dustPositions[i3 + 1] += Math.cos(turbulenceFreq * 1.3) * 0.0005;
-        dustPositions[i3 + 2] += Math.sin(turbulenceFreq * 0.8) * 0.001;
+        const turbulenceFreq = time * 0.08 + i * 0.04;
+        dustPositions[i3] += Math.sin(turbulenceFreq) * 0.0015;
+        dustPositions[i3 + 1] += Math.cos(turbulenceFreq * 1.3) * 0.0008;
+        dustPositions[i3 + 2] += Math.sin(turbulenceFreq * 0.8) * 0.0015;
         
         // Reset dust particles that drift too far
         if (dustPositions[i3 + 1] > 60) {
@@ -444,9 +348,8 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       }
       
       dustParticlesRef.current.geometry.attributes.position.needsUpdate = true;
-      // ULTRA SMOOTH dust rotation + scroll effects
-      dustParticlesRef.current.rotation.y = time * 0.0005 + scrollRotation * 0.2; // Ultra-slow dust rotation
-      dustParticlesRef.current.rotation.z = scrollTilt * 0.3;
+      // SMOOTH dust rotation - NO SCROLL INFLUENCE
+      dustParticlesRef.current.rotation.y = time * 0.001; // Consistent smooth rotation
     }
   });
   
@@ -479,12 +382,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
             array={particleData.main.alphas}
             itemSize={1}
           />
-          <bufferAttribute
-            attach="attributes-scrollInfluence"
-            count={particleData.main.count}
-            array={particleData.main.scrollInfluences}
-            itemSize={1}
-          />
         </bufferGeometry>
       </points>
       
@@ -507,12 +404,6 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
             attach="attributes-size"
             count={particleData.dust.count}
             array={particleData.dust.sizes}
-            itemSize={1}
-          />
-          <bufferAttribute
-            attach="attributes-scrollInfluence"
-            count={particleData.dust.count}
-            array={particleData.dust.scrollInfluences}
             itemSize={1}
           />
         </bufferGeometry>
