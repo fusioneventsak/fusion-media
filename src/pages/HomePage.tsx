@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import FullWidthLaptopShowcase from '../components/Laptop';
+import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
 
 export default function HomePage() {
   const [scrollY, setScrollY] = useState(0);
@@ -30,17 +31,11 @@ export default function HomePage() {
           </motion.div>
 
           <motion.h1 
-            className="text-5xl md:text-7xl lg:text-8xl font-light mb-8 text-white leading-tight"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4 }}
           >
-            We use the{' '}
-            <span className="font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              best tools
-            </span>
-            <br />
-            of our time
+            <AnimatedHeroTitle />
           </motion.h1>
 
           <motion.p 
