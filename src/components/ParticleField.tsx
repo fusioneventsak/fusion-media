@@ -25,47 +25,57 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   }, []);
   
   // Update target when scrollY prop changes
-  React.useEffect(() => {
-    updateSmoothScroll(scrollY);
-  }, [scrollY, updateSmoothScroll]);
+  // Removed - now handled by debounced effect above
   
   // High-frequency scroll interpolation using requestAnimationFrame
   React.useEffect(() => {
     let animationId: number;
+    let lastFrameTime = 0;
     
     const smoothScrollLoop = () => {
+      const currentTime = performance.now();
+      const deltaTime = currentTime - lastFrameTime;
+      
+      // Throttle to prevent over-processing during heavy scroll events
+      if (deltaTime < 8) { // ~120fps max
+        animationId = requestAnimationFrame(smoothScrollLoop);
+        return;
+      }
+      
+      lastFrameTime = currentTime;
+      
       setSmoothScrollY(prev => {
         const diff = targetScrollY - prev;
         const absDiff = Math.abs(diff);
         
-        // Adaptive easing based on scroll distance and velocity
+        // More aggressive easing for smoother section transitions
         let easingFactor;
         if (absDiff > 200) {
-          // Large jumps - be very responsive
-          easingFactor = 0.35;
+          // Large jumps - be very responsive but not jarring
+          easingFactor = 0.25;
         } else if (absDiff > 100) {
-          // Medium jumps - responsive
-          easingFactor = 0.28;
+          // Medium jumps - smooth and responsive
+          easingFactor = 0.20;
         } else if (absDiff > 50) {
-          // Small movements - smooth but responsive
-          easingFactor = 0.22;
+          // Small movements - prioritize smoothness
+          easingFactor = 0.16;
         } else if (absDiff > 10) {
-          // Fine movements - very smooth
-          easingFactor = 0.18;
+          // Fine movements - ultra smooth
+          easingFactor = 0.12;
         } else {
-          // Micro movements - ultra smooth
-          easingFactor = 0.15;
+          // Micro movements - minimal lag
+          easingFactor = 0.08;
         }
         
-        // Apply velocity-based adjustment
+        // Smoother velocity tracking
         setScrollVelocity(prevVel => {
-          const newVel = prevVel * 0.88 + diff * 0.12;
+          const newVel = prevVel * 0.92 + diff * 0.08;
           
-          // Boost easing when velocity is high
-          if (Math.abs(newVel) > 50) {
-            easingFactor *= 1.4;
-          } else if (Math.abs(newVel) > 20) {
-            easingFactor *= 1.2;
+          // Gentle velocity-based adjustment
+          if (Math.abs(newVel) > 100) {
+            easingFactor *= 1.3;
+          } else if (Math.abs(newVel) > 40) {
+            easingFactor *= 1.15;
           }
           
           return newVel;
@@ -75,7 +85,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         const newValue = prev + diff * easingFactor;
         
         // Stop micro-oscillations
-        if (absDiff < 0.1) {
+        if (absDiff < 0.05) {
           return targetScrollY;
         }
         
@@ -94,6 +104,25 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     };
   }, [targetScrollY]);
   
+  // Debounced scroll handling to prevent conflicts with section animations
+  React.useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    
+    const debouncedUpdate = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        updateSmoothScroll(scrollY);
+      }, 1); // Very short debounce to smooth out rapid scroll events
+    };
+    
+    debouncedUpdate();
+    
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [scrollY, updateSmoothScroll]);
+  
+  // Remove the direct effect that was causing conflicts
   // EXACT SHADER MATERIAL FROM YOUR REFERENCE
   const sharpParticleMaterial = useMemo(() => {
     return new THREE.ShaderMaterial({

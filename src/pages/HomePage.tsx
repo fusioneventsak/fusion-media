@@ -174,9 +174,6 @@ export default function HomePage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              style={{
-                transform: `translateY(${scrollY * 0.1}px) translateX(${Math.sin(scrollY * 0.005) * 10}px)`
-              }}
             >
               <div className="relative">
                 <motion.div
@@ -192,15 +189,15 @@ export default function HomePage() {
                     ease: "easeInOut"
                   }}
                   style={{
-                    transform: `scale(${1.875 + Math.sin(scrollY * 0.002) * 0.05}) rotateZ(${scrollY * 0.01}deg)`
+                    transform: `scale(1.875)`
                   }}
                 >
                   {/* Enhanced glow effect - BEHIND the vector */}
                   <div 
                     className="absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent blur-3xl pointer-events-none"
                     style={{
-                      opacity: 0.4 + Math.sin(scrollY * 0.008) * 0.1,
-                      transform: `scale(1.8) rotate(${scrollY * 0.05}deg)`,
+                      opacity: 0.4,
+                      transform: `scale(1.8)`,
                       zIndex: -1
                     }}
                   ></div>
@@ -209,8 +206,8 @@ export default function HomePage() {
                   <div 
                     className="absolute inset-0 pointer-events-none"
                     style={{
-                      background: `radial-gradient(circle at ${50 + Math.sin(scrollY * 0.01) * 20}% ${50 + Math.cos(scrollY * 0.01) * 20}%, rgba(147, 51, 234, 0.25) 0%, transparent 50%)`,
-                      transform: `scale(2.2) rotate(${scrollY * -0.03}deg)`,
+                      background: `radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.25) 0%, transparent 50%)`,
+                      transform: `scale(2.2)`,
                       zIndex: -2
                     }}
                   ></div>
@@ -220,8 +217,8 @@ export default function HomePage() {
                     alt="Selfie Holosphere - Interactive Photo Experience Platform"
                     className="w-full max-w-6xl mx-auto drop-shadow-2xl relative z-10"
                     style={{
-                      filter: `drop-shadow(0 25px 60px rgba(147, 51, 234, 0.4)) brightness(${1 + Math.sin(scrollY * 0.01) * 0.1})`,
-                      transform: `scale(${1 + Math.sin(scrollY * 0.003) * 0.02})`
+                      filter: `drop-shadow(0 25px 60px rgba(147, 51, 234, 0.4))`,
+                      transform: `scale(1)`
                     }}
                   />
                 </motion.div>
