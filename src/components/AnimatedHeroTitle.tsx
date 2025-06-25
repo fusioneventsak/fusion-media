@@ -21,11 +21,11 @@ export default function AnimatedHeroTitle() {
         Kick-Ass
       </span>
       <br />
-      <div className="relative inline-block min-h-[1.2em] w-full text-center">
+      <div className="relative flex justify-center items-center min-h-[1.2em] w-full">
         <AnimatePresence mode="wait">
           <motion.span
             key={currentWordIndex}
-            className="absolute left-1/2 top-0 font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent transform -translate-x-1/2"
+            className="font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
             initial={{ 
               opacity: 0, 
               y: 50,
