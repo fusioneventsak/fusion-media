@@ -13,6 +13,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   // Smooth scroll interpolation state
   const [smoothScrollY, setSmoothScrollY] = useState(0);
   const [targetScrollY, setTargetScrollY] = useState(0);
+  const [scrollVelocity, setScrollVelocity] = useState(0);
   
   // PARTICLE COUNTS
   const MAIN_COUNT = 4000;
@@ -28,8 +29,70 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     updateSmoothScroll(scrollY);
   }, [scrollY, updateSmoothScroll]);
   
-  // More responsive scroll interpolation
-  const [scrollVelocity, setScrollVelocity] = useState(0);
+  // High-frequency scroll interpolation using requestAnimationFrame
+  React.useEffect(() => {
+    let animationId: number;
+    
+    const smoothScrollLoop = () => {
+      setSmoothScrollY(prev => {
+        const diff = targetScrollY - prev;
+        const absDiff = Math.abs(diff);
+        
+        // Adaptive easing based on scroll distance and velocity
+        let easingFactor;
+        if (absDiff > 200) {
+          // Large jumps - be very responsive
+          easingFactor = 0.35;
+        } else if (absDiff > 100) {
+          // Medium jumps - responsive
+          easingFactor = 0.28;
+        } else if (absDiff > 50) {
+          // Small movements - smooth but responsive
+          easingFactor = 0.22;
+        } else if (absDiff > 10) {
+          // Fine movements - very smooth
+          easingFactor = 0.18;
+        } else {
+          // Micro movements - ultra smooth
+          easingFactor = 0.15;
+        }
+        
+        // Apply velocity-based adjustment
+        setScrollVelocity(prevVel => {
+          const newVel = prevVel * 0.88 + diff * 0.12;
+          
+          // Boost easing when velocity is high
+          if (Math.abs(newVel) > 50) {
+            easingFactor *= 1.4;
+          } else if (Math.abs(newVel) > 20) {
+            easingFactor *= 1.2;
+          }
+          
+          return newVel;
+        });
+        
+        // Apply the smooth interpolation
+        const newValue = prev + diff * easingFactor;
+        
+        // Stop micro-oscillations
+        if (absDiff < 0.1) {
+          return targetScrollY;
+        }
+        
+        return newValue;
+      });
+      
+      animationId = requestAnimationFrame(smoothScrollLoop);
+    };
+    
+    animationId = requestAnimationFrame(smoothScrollLoop);
+    
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
+  }, [targetScrollY]);
   
   // EXACT SHADER MATERIAL FROM YOUR REFERENCE
   const sharpParticleMaterial = useMemo(() => {
@@ -307,41 +370,13 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   
   // ENHANCED ANIMATION WITH SMOOTH SCROLL EFFECTS
   useFrame((state) => {
-    // Much more responsive scroll interpolation
-    setSmoothScrollY(prev => {
-      const diff = targetScrollY - prev;
-      
-      // Dynamic easing based on scroll velocity for better responsiveness
-      const scrollSpeed = Math.abs(diff);
-      let easingFactor;
-      
-      if (scrollSpeed > 100) {
-        // Fast scrolling - be more responsive
-        easingFactor = 0.25;
-      } else if (scrollSpeed > 50) {
-        // Medium scrolling
-        easingFactor = 0.18;
-      } else if (scrollSpeed > 10) {
-        // Slow scrolling
-        easingFactor = 0.15;
-      } else {
-        // Very slow/fine movements
-        easingFactor = 0.12;
-      }
-      
-      // Apply velocity-based smoothing
-      setScrollVelocity(prev => prev * 0.85 + diff * 0.15);
-      
-      return prev + diff * easingFactor;
-    });
-    
     // SLOWER TIME MULTIPLIER - reduced by 30%
     const time = state.clock.getElapsedTime() * 0.7;
     
     // SMOOTH SCROLL-BASED EFFECTS
-    const scrollProgress = smoothScrollY * 0.001; // Convert scroll to usable value
-    const scrollRotation = scrollProgress * 0.2; // Further reduced rotation
-    const scrollTilt = Math.sin(scrollProgress * 1.2) * 0.03; // Further reduced tilt
+    const scrollProgress = smoothScrollY * 0.0008; // Slightly reduced for smoother effect
+    const scrollRotation = scrollProgress * 0.15; // Reduced rotation for smoothness
+    const scrollTilt = Math.sin(scrollProgress * 1.0) * 0.025; // Reduced tilt
     
     // Update shader uniforms with smooth scroll
     if (sharpParticleMaterial) {
@@ -388,8 +423,8 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       
       mainParticlesRef.current.geometry.attributes.position.needsUpdate = true;
       
-      // SMOOTHER Galactic rotation + scroll rotation
-      mainParticlesRef.current.rotation.y = time * 0.001 + scrollRotation;
+      // ULTRA SMOOTH Galactic rotation + scroll rotation
+      mainParticlesRef.current.rotation.y = time * 0.0008 + scrollRotation;
       mainParticlesRef.current.rotation.z = scrollTilt;
     }
     
@@ -428,8 +463,8 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       }
       
       dustParticlesRef.current.geometry.attributes.position.needsUpdate = true;
-      // SMOOTHER dust rotation + scroll effects
-      dustParticlesRef.current.rotation.y = time * 0.002 + scrollRotation * 0.5;
+      // ULTRA SMOOTH dust rotation + scroll effects
+      dustParticlesRef.current.rotation.y = time * 0.0015 + scrollRotation * 0.4;
       dustParticlesRef.current.rotation.z = scrollTilt * 0.5;
     }
   });
