@@ -41,21 +41,21 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       const diff = target - current;
       const absDiff = Math.abs(diff);
       
-      // Ultra-smooth easing that won't conflict with React animations
-      let easingFactor = 0.08; // Very gentle base easing
+      // Even smoother easing for ultra-fluid motion
+      let easingFactor = 0.04; // Much gentler base easing
       
-      // Only speed up for very large movements
+      // Gradual speed increase only for very large movements
       if (absDiff > 500) {
-        easingFactor = 0.15;
+        easingFactor = 0.08;
       } else if (absDiff > 200) {
-        easingFactor = 0.12;
+        easingFactor = 0.06;
       }
       
       // Apply smooth interpolation directly to ref
       const newValue = current + diff * easingFactor;
       
-      // Stop micro-oscillations
-      if (absDiff < 0.1) {
+      // Stop micro-oscillations with tighter threshold
+      if (absDiff < 0.05) {
         smoothScrollRef.current = target;
       } else {
         smoothScrollRef.current = newValue;
@@ -352,12 +352,12 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
   // ENHANCED ANIMATION WITH SMOOTH SCROLL EFFECTS
   useFrame((state) => {
     // SLOWER TIME MULTIPLIER - reduced by 30%
-    const time = state.clock.getElapsedTime() * 0.7;
+    const time = state.clock.getElapsedTime() * 0.5; // Even slower for ultra-smooth motion
     
     // Use ref value directly to avoid React state conflicts
-    const scrollProgress = smoothScrollRef.current * 0.0006; // Further reduced for ultra-smoothness
-    const scrollRotation = scrollProgress * 0.1; // Minimal rotation
-    const scrollTilt = Math.sin(scrollProgress * 0.8) * 0.02; // Minimal tilt
+    const scrollProgress = smoothScrollRef.current * 0.0003; // Ultra-minimal scroll influence
+    const scrollRotation = scrollProgress * 0.05; // Extremely subtle rotation
+    const scrollTilt = Math.sin(scrollProgress * 0.5) * 0.01; // Barely perceptible tilt
     
     // Update shader uniforms with smooth scroll
     if (sharpParticleMaterial) {
@@ -377,9 +377,9 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         const i3 = i * 3;
         
         // Apply stellar velocities
-        mainPositions[i3] += particleData.main.velocities[i3];
-        mainPositions[i3 + 1] += particleData.main.velocities[i3 + 1];
-        mainPositions[i3 + 2] += particleData.main.velocities[i3 + 2];
+        mainPositions[i3] += particleData.main.velocities[i3] * 0.7; // Slower movement
+        mainPositions[i3 + 1] += particleData.main.velocities[i3 + 1] * 0.7;
+        mainPositions[i3 + 2] += particleData.main.velocities[i3 + 2] * 0.7;
         
         // Add complex galactic motion patterns
         const x = mainPositions[i3];
@@ -387,7 +387,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         const distanceFromCenter = Math.sqrt(x * x + z * z);
         
         // Galactic rotation - closer stars orbit faster
-        const orbitalSpeed = distanceFromCenter > 0 ? 0.00008 / Math.sqrt(distanceFromCenter + 10) : 0;
+        const orbitalSpeed = distanceFromCenter > 0 ? 0.00004 / Math.sqrt(distanceFromCenter + 10) : 0; // Slower orbital motion
         const angle = Math.atan2(z, x);
         const newAngle = angle + orbitalSpeed;
         
@@ -396,16 +396,16 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         mainPositions[i3 + 2] += Math.sin(newAngle) * orbitalSpeed * 0.1;
         
         // Add stellar parallax and depth motion
-        const parallaxFreq = time * 0.02 + i * 0.001;
-        mainPositions[i3] += Math.sin(parallaxFreq) * 0.001;
-        mainPositions[i3 + 1] += Math.cos(parallaxFreq * 0.7) * 0.0005;
-        mainPositions[i3 + 2] += Math.sin(parallaxFreq * 1.3) * 0.001;
+        const parallaxFreq = time * 0.01 + i * 0.0005; // Slower parallax
+        mainPositions[i3] += Math.sin(parallaxFreq) * 0.0005; // Reduced amplitude
+        mainPositions[i3 + 1] += Math.cos(parallaxFreq * 0.7) * 0.0003;
+        mainPositions[i3 + 2] += Math.sin(parallaxFreq * 1.3) * 0.0005;
       }
       
       mainParticlesRef.current.geometry.attributes.position.needsUpdate = true;
       
       // ULTRA SMOOTH Galactic rotation + scroll rotation
-      mainParticlesRef.current.rotation.y = time * 0.0006 + scrollRotation;
+      mainParticlesRef.current.rotation.y = time * 0.0003 + scrollRotation; // Ultra-slow rotation
       mainParticlesRef.current.rotation.z = scrollTilt;
     }
     
@@ -417,15 +417,15 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
         const i3 = i * 3;
         
         // Apply dust velocities
-        dustPositions[i3] += particleData.dust.velocities[i3];
-        dustPositions[i3 + 1] += particleData.dust.velocities[i3 + 1];
-        dustPositions[i3 + 2] += particleData.dust.velocities[i3 + 2];
+        dustPositions[i3] += particleData.dust.velocities[i3] * 0.6; // Slower dust movement
+        dustPositions[i3 + 1] += particleData.dust.velocities[i3 + 1] * 0.6;
+        dustPositions[i3 + 2] += particleData.dust.velocities[i3 + 2] * 0.6;
         
         // Add atmospheric turbulence
-        const turbulenceFreq = time * 0.1 + i * 0.05;
-        dustPositions[i3] += Math.sin(turbulenceFreq) * 0.002;
-        dustPositions[i3 + 1] += Math.cos(turbulenceFreq * 1.3) * 0.001;
-        dustPositions[i3 + 2] += Math.sin(turbulenceFreq * 0.8) * 0.002;
+        const turbulenceFreq = time * 0.05 + i * 0.025; // Slower turbulence
+        dustPositions[i3] += Math.sin(turbulenceFreq) * 0.001; // Reduced amplitude
+        dustPositions[i3 + 1] += Math.cos(turbulenceFreq * 1.3) * 0.0005;
+        dustPositions[i3 + 2] += Math.sin(turbulenceFreq * 0.8) * 0.001;
         
         // Reset dust particles that drift too far
         if (dustPositions[i3 + 1] > 60) {
@@ -445,8 +445,8 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       
       dustParticlesRef.current.geometry.attributes.position.needsUpdate = true;
       // ULTRA SMOOTH dust rotation + scroll effects
-      dustParticlesRef.current.rotation.y = time * 0.001 + scrollRotation * 0.3;
-      dustParticlesRef.current.rotation.z = scrollTilt * 0.5;
+      dustParticlesRef.current.rotation.y = time * 0.0005 + scrollRotation * 0.2; // Ultra-slow dust rotation
+      dustParticlesRef.current.rotation.z = scrollTilt * 0.3;
     }
   });
   

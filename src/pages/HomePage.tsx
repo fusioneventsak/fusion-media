@@ -22,7 +22,11 @@ export default function HomePage() {
             className="mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ 
+              duration: 1.2, 
+              delay: 0.2,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
           >
             <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-8">
               <div className="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
@@ -33,7 +37,11 @@ export default function HomePage() {
           <motion.h1 
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
+            transition={{ 
+              duration: 1.4, 
+              delay: 0.4,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
           >
             <AnimatedHeroTitle />
           </motion.h1>
@@ -42,7 +50,11 @@ export default function HomePage() {
             className="text-xl md:text-2xl text-white mb-12 max-w-4xl mx-auto leading-relaxed font-light"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ 
+              duration: 1.2, 
+              delay: 0.6,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
           >
             From quick app MVPs to complex digital experiences—what once took months 
             to develop, we now deliver in weeks. AI-powered productivity meets 25+ years 
@@ -53,19 +65,35 @@ export default function HomePage() {
             className="flex flex-col sm:flex-row justify-center gap-6 mb-16"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ 
+              duration: 1.2, 
+              delay: 0.8,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
           >
             <motion.button 
               className="px-10 py-4 bg-white text-gray-900 rounded-full font-medium text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ 
+                scale: 1.05,
+                transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+              }}
+              whileTap={{ 
+                scale: 0.95,
+                transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+              }}
             >
               See Our Work
             </motion.button>
             <motion.button 
               className="px-10 py-4 border border-white/30 text-white rounded-full font-medium text-lg hover:bg-white/10 transition-all duration-300"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ 
+                scale: 1.05,
+                transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+              }}
+              whileTap={{ 
+                scale: 0.95,
+                transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+              }}
             >
               Start a Project
             </motion.button>
@@ -75,7 +103,11 @@ export default function HomePage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.0 }}
+            transition={{ 
+              duration: 1.2, 
+              delay: 1.0,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
           >
             {[
               { number: '10x', label: 'Faster Delivery', description: 'AI-powered development' },
@@ -86,7 +118,10 @@ export default function HomePage() {
               <motion.div 
                 key={index}
                 className="text-center group"
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
               >
                 <div className="text-3xl md:text-4xl font-light text-white mb-2 group-hover:text-blue-400 transition-colors">
                   {stat.number}
@@ -115,7 +150,10 @@ export default function HomePage() {
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8 }}
+              transition={{ 
+                duration: 1.2,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
             >
               <div>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight">
@@ -140,7 +178,11 @@ export default function HomePage() {
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    transition={{ 
+                      duration: 0.8, 
+                      delay: index * 0.15,
+                      ease: [0.25, 0.46, 0.45, 0.94]
+                    }}
                   >
                     <div className="w-2 h-2 rounded-full bg-purple-600 mt-3 flex-shrink-0"></div>
                     <span className="text-white opacity-80 font-medium leading-relaxed">{feature}</span>
@@ -150,8 +192,14 @@ export default function HomePage() {
 
               <motion.button
                 className="inline-flex items-center px-8 py-4 bg-purple-600 text-white rounded-full font-medium hover:opacity-90 transition-all duration-300 shadow-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
+                whileTap={{ 
+                  scale: 0.95,
+                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
                 onClick={() => window.open('https://selfieholosphere.com/collage/1lr9qn', '_blank')}
               >
                 View Live Site
@@ -167,20 +215,24 @@ export default function HomePage() {
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ 
+                duration: 1.2, 
+                delay: 0.2,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
             >
               <div className="relative">
                 <motion.div
                   className="transform transition-all duration-1000"
                   animate={{
-                    rotateY: [0, 3, -3, 0],
-                    rotateX: [0, 1, -1, 0],
-                    y: [0, -12, 0, 12, 0]
+                    rotateY: [0, 2, -2, 0],
+                    rotateX: [0, 0.5, -0.5, 0],
+                    y: [0, -8, 0, 8, 0]
                   }}
                   transition={{
-                    duration: 8,
+                    duration: 12,
                     repeat: Infinity,
-                    ease: "easeInOut"
+                    ease: [0.25, 0.46, 0.45, 0.94]
                   }}
                   style={{
                     transform: `scale(1.875)`
@@ -306,7 +358,10 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ 
+              duration: 1.2,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
           >
             <h2 className="text-4xl md:text-6xl font-light text-white mb-8 leading-tight">
               How we{' '}
@@ -347,7 +402,11 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
+                transition={{ 
+                  duration: 0.8, 
+                  delay: index * 0.2,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
               >
                 <div className="text-6xl mb-6">{item.icon}</div>
                 <div className="text-sm font-mono text-gray-300 mb-3">{item.number}</div>
@@ -362,14 +421,23 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ 
+              duration: 1.2,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
           >
             <div className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-md rounded-full shadow-lg border border-white/20">
               <span className="text-white mr-4">Ready to experience the difference?</span>
               <motion.button
                 className="px-6 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
+                whileTap={{ 
+                  scale: 0.95,
+                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
               >
                 Get Started
               </motion.button>
@@ -385,7 +453,10 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ 
+              duration: 1.2,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
           >
             <h2 className="text-4xl md:text-6xl font-light text-white mb-8 leading-tight">
               Ready to transform{' '}
@@ -404,15 +475,27 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">
               <motion.button
                 className="px-12 py-4 bg-white text-gray-900 rounded-full font-medium text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
+                whileTap={{ 
+                  scale: 0.95,
+                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
               >
                 Start Your Project
               </motion.button>
               <motion.button
                 className="px-12 py-4 border border-white/30 text-white rounded-full font-medium text-lg hover:bg-white/10 transition-all duration-300"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
+                whileTap={{ 
+                  scale: 0.95,
+                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
               >
                 Schedule Consultation
               </motion.button>
@@ -424,8 +507,15 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                whileHover={{ scale: 1.05 }}
+                transition={{ 
+                  duration: 0.8, 
+                  delay: 0.1,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
               >
                 <div className="text-2xl font-light text-blue-400 mb-2">Events & Entertainment</div>
                 <p className="text-white text-sm">25+ years of industry expertise and proven results</p>
@@ -436,8 +526,15 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                whileHover={{ scale: 1.05 }}
+                transition={{ 
+                  duration: 0.8, 
+                  delay: 0.2,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
               >
                 <div className="text-2xl font-light text-purple-400 mb-2">AI-Powered Development</div>
                 <p className="text-white text-sm">10x faster project delivery with cutting-edge tools</p>
@@ -448,8 +545,15 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                whileHover={{ scale: 1.05 }}
+                transition={{ 
+                  duration: 0.8, 
+                  delay: 0.3,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+                whileHover={{ 
+                  scale: 1.05,
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
               >
                 <div className="text-2xl font-light text-cyan-400 mb-2">Custom Solutions</div>
                 <p className="text-white text-sm">Tailored specifically to your unique business needs</p>
