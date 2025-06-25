@@ -56,9 +56,10 @@ export default function HomePage() {
               ease: [0.25, 0.46, 0.45, 0.94]
             }}
           >
-            From quick app MVPs to complex digital experiences—what once took months 
-            to develop, we now deliver in weeks. AI-powered productivity meets 25+ years 
-            of expertise in events, entertainment, and cutting-edge technology solutions.
+            What once took months to produce—high-end websites with animations, 
+            multiple pages, and complex functionality—we now deliver in weeks. 
+            AI-powered productivity meets 25+ years of expertise in events, 
+            entertainment, and technology.
           </motion.p>
 
           <motion.div 
