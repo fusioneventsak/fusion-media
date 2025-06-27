@@ -3,10 +3,10 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 interface ParticleFieldProps {
-  scrollY: number;
+  // scrollY removed - no longer using scroll effects
 }
 
-export default function ParticleField({ scrollY }: ParticleFieldProps) {
+export default function ParticleField(): ParticleFieldProps {
   const mainParticlesRef = useRef<THREE.Points>(null);
   const dustParticlesRef = useRef<THREE.Points>(null);
   
@@ -266,7 +266,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
     // SLOWER TIME MULTIPLIER - reduced by 30%
     const time = state.clock.getElapsedTime() * 0.8; // Smooth but not too slow
     
-    // Update shader uniforms - NO SCROLL INFLUENCE
+    // Update shader uniforms
     if (sharpParticleMaterial) {
       sharpParticleMaterial.uniforms.time.value = time;
     }
@@ -274,7 +274,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       dustParticleMaterial.uniforms.time.value = time;
     }
     
-    // Animate main particles with galactic rotation + smooth scroll effects
+    // Animate main particles with galactic rotation
     if (mainParticlesRef.current) {
       const mainPositions = mainParticlesRef.current.geometry.attributes.position.array as Float32Array;
       
@@ -309,11 +309,11 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       
       mainParticlesRef.current.geometry.attributes.position.needsUpdate = true;
       
-      // SMOOTH Galactic rotation - NO SCROLL INFLUENCE
+      // SMOOTH Galactic rotation
       mainParticlesRef.current.rotation.y = time * 0.0008; // Consistent smooth rotation
     }
     
-    // Animate dust cloud with atmospheric turbulence + smooth scroll effects
+    // Animate dust cloud with atmospheric turbulence
     if (dustParticlesRef.current) {
       const dustPositions = dustParticlesRef.current.geometry.attributes.position.array as Float32Array;
       
@@ -348,7 +348,7 @@ export default function ParticleField({ scrollY }: ParticleFieldProps) {
       }
       
       dustParticlesRef.current.geometry.attributes.position.needsUpdate = true;
-      // SMOOTH dust rotation - NO SCROLL INFLUENCE
+      // SMOOTH dust rotation
       dustParticlesRef.current.rotation.y = time * 0.001; // Consistent smooth rotation
     }
   });

@@ -55,7 +55,7 @@ export default function Scene({ scrollY, currentPage }: SceneProps) {
       <pointLight position={[-8, 4, 0]} intensity={0.2} color="#ffffff" distance={12} />
       
       {/* Bright particle field with scroll effects */}
-      <ParticleField scrollY={scrollY} />
+      <ParticleField />
     </>
   );
 }
