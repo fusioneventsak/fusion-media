@@ -339,7 +339,16 @@ export default function HomePage() {
       </section>
 
       {/* Laptop Showcases */}
-      <div className="pointer-events-auto">
+      <motion.div 
+        className="pointer-events-auto"
+        initial={{ opacity: 0, y: 100 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ 
+          duration: 1.2,
+          ease: [0.25, 0.46, 0.45, 0.94]
+        }}
+      >
         <FullWidthLaptopShowcase
           url="https://splendid-cannoli-324007.netlify.app/"
           title="Custom Business Applications"
@@ -355,9 +364,19 @@ export default function HomePage() {
           textColor="text-white"
           accentColor="text-blue-600"
         />
-      </div>
+      </motion.div>
 
-      <div className="pointer-events-auto">
+      <motion.div 
+        className="pointer-events-auto"
+        initial={{ opacity: 0, x: -100, rotate: -2 }}
+        whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ 
+          duration: 1.4,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          delay: 0.2
+        }}
+      >
         <FullWidthLaptopShowcase
           url="http://urequestsongs.com"
           title="Audience Engagement Platforms"
@@ -373,9 +392,19 @@ export default function HomePage() {
           textColor="text-white"
           accentColor="text-cyan-400"
         />
-      </div>
+      </motion.div>
 
-      <div className="pointer-events-auto">
+      <motion.div 
+        className="pointer-events-auto"
+        initial={{ opacity: 0, x: 100, scale: 0.9 }}
+        whileInView={{ opacity: 1, x: 0, scale: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ 
+          duration: 1.3,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          delay: 0.1
+        }}
+      >
         <FullWidthLaptopShowcase
           url="https://capable-alfajores-d0dff2.netlify.app/"
           title="Interactive Widgets & Components"
@@ -391,9 +420,19 @@ export default function HomePage() {
           textColor="text-white"
           accentColor="text-indigo-600"
         />
-      </div>
+      </motion.div>
 
-      <div className="pointer-events-auto">
+      <motion.div 
+        className="pointer-events-auto"
+        initial={{ opacity: 0, y: 80, rotate: 1 }}
+        whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ 
+          duration: 1.5,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          delay: 0.3
+        }}
+      >
         <FullWidthLaptopShowcase
           url="https://www.fusion-events.ca"
           title="Professional Website Development"
@@ -409,7 +448,7 @@ export default function HomePage() {
           textColor="text-white"
           accentColor="text-green-600"
         />
-      </div>
+      </motion.div>
 
       {/* Technology & Process Section with Clip Path Reveal */}
       <section 
