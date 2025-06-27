@@ -75,7 +75,7 @@ export default function HomePage() {
       {/* Hero Section with Parallax */}
       <motion.section 
         ref={heroRef}
-        className="relative min-h-screen flex items-start justify-center px-8 pt-16 pointer-events-none"
+        className="relative min-h-screen flex items-center justify-center px-8 pt-32 pb-16 pointer-events-none"
         style={{
           opacity: heroOpacity,
           scale: heroScale,
@@ -85,9 +85,9 @@ export default function HomePage() {
         }}
       >
         {/* Hero Content */}
-        <div className="relative z-10 text-center max-w-6xl pointer-events-auto mt-4">
+        <div className="relative z-10 text-center max-w-6xl pointer-events-auto">
           <motion.div
-            className="mb-4"
+            className="mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 
@@ -96,7 +96,7 @@ export default function HomePage() {
               ease: [0.25, 0.46, 0.45, 0.94]
             }}
           >
-            <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-4">
+            <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
               <div className="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
               <span className="text-sm font-medium text-white">AI-Assisted Digital Agency</span>
             </div>
@@ -115,7 +115,7 @@ export default function HomePage() {
           </motion.h1>
 
           <motion.p 
-            className="text-xl md:text-2xl text-white mb-4 max-w-4xl mx-auto leading-relaxed font-light"
+            className="text-lg md:text-xl text-white mb-8 max-w-4xl mx-auto leading-relaxed font-light"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 
@@ -131,7 +131,7 @@ export default function HomePage() {
           </motion.p>
 
           <motion.div 
-            className="flex flex-col sm:flex-row justify-center gap-6 mb-10"
+            className="flex flex-col sm:flex-row justify-center gap-4 mb-12"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 
@@ -141,7 +141,7 @@ export default function HomePage() {
             }}
           >
             <motion.button 
-              className="px-10 py-4 bg-white text-gray-900 rounded-full font-medium text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg"
+              className="px-8 py-3 bg-white text-gray-900 rounded-full font-medium hover:bg-gray-100 transition-all duration-300 shadow-lg"
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 20px 40px rgba(255,255,255,0.2)",
@@ -155,7 +155,7 @@ export default function HomePage() {
               See Our Work
             </motion.button>
             <motion.button 
-              className="px-10 py-4 border border-white/30 text-white rounded-full font-medium text-lg hover:bg-white/10 transition-all duration-300"
+              className="px-8 py-3 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300"
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 20px 40px rgba(255,255,255,0.1)",
@@ -171,7 +171,7 @@ export default function HomePage() {
           </motion.div>
 
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ 
@@ -195,7 +195,7 @@ export default function HomePage() {
                   transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
                 }}
               >
-                <div className="text-3xl md:text-4xl font-light text-white mb-2 group-hover:text-blue-400 transition-colors">
+                <div className="text-2xl md:text-3xl font-light text-white mb-2 group-hover:text-blue-400 transition-colors">
                   {stat.number}
                 </div>
                 <div className="text-sm text-white font-medium mb-1">{stat.label}</div>
