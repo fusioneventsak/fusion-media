@@ -53,18 +53,18 @@ function pointerPrototype(): Pointer {
 }
 
 export default function SplashCursor({
-  SIM_RESOLUTION = 64, // Reduced default resolution
-  DYE_RESOLUTION = 512, // Reduced default resolution
+  SIM_RESOLUTION = 64,
+  DYE_RESOLUTION = 512,
   CAPTURE_RESOLUTION = 512,
-  DENSITY_DISSIPATION = 8.0, // Faster dissipation for better performance
-  VELOCITY_DISSIPATION = 6.0, // Faster dissipation for better performance
+  DENSITY_DISSIPATION = 8.0,
+  VELOCITY_DISSIPATION = 6.0,
   PRESSURE = 0.1,
   PRESSURE_ITERATIONS = 20,
-  CURL = 3,
-  SPLAT_RADIUS = 0.12, // Larger radius for fewer splats
-  SPLAT_FORCE = 2000, // Reduced force
+  CURL = 1,
+  SPLAT_RADIUS = 0.12,
+  SPLAT_FORCE = 2000,
   SHADING = true,
-  COLOR_UPDATE_SPEED = 4, // Slower color updates
+  COLOR_UPDATE_SPEED = 4,
   BACK_COLOR = { r: 0.5, g: 0, b: 0 },
   TRANSPARENT = true
 }: SplashCursorProps) {
@@ -77,28 +77,174 @@ export default function SplashCursor({
     // Mobile detection for performance optimizations
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Skip fluid simulation entirely on mobile for better performance
+    if (isMobile) {
+      console.log('📱 Mobile detected - using simplified cursor effect');
+      
+      // Simple mobile cursor effect
+      let mouseX = 0;
+      let mouseY = 0;
+      let trails: Array<{x: number, y: number, life: number, color: ColorRGB}> = [];
+      
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      
+      // Set canvas size
+      const resizeCanvas = () => {
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+      };
+      
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      
+      // Generate theme colors
+      const generateColor = (): ColorRGB => {
+        const themeColors = [
+          { r: 0.3, g: 0.6, b: 1.0 },    // Blue
+          { r: 0.6, g: 0.3, b: 1.0 },    // Purple
+          { r: 0.0, g: 0.8, b: 1.0 },    // Cyan
+          { r: 1.0, g: 0.4, b: 0.8 },    // Pink
+          { r: 0.3, g: 1.0, b: 0.6 },    // Green
+        ];
+        return themeColors[Math.floor(Math.random() * themeColors.length)];
+      };
+      
+      // Add trail point
+      const addTrail = (x: number, y: number) => {
+        const color = generateColor();
+        trails.push({
+          x: x,
+          y: y,
+          life: 1.0,
+          color: color
+        });
+        
+        // Limit trail length for performance
+        if (trails.length > (isIOS ? 15 : 25)) {
+          trails.shift();
+        }
+      };
+      
+      // Animation loop
+      let animationId: number;
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Update and draw trails
+        trails = trails.filter(trail => {
+          trail.life -= isIOS ? 0.08 : 0.05; // Faster fade on iOS
+          
+          if (trail.life <= 0) return false;
+          
+          // Draw trail point
+          const alpha = trail.life * 0.6;
+          const size = trail.life * (isIOS ? 20 : 30);
+          
+          const gradient = ctx.createRadialGradient(
+            trail.x, trail.y, 0,
+            trail.x, trail.y, size
+          );
+          
+          gradient.addColorStop(0, `rgba(${trail.color.r * 255}, ${trail.color.g * 255}, ${trail.color.b * 255}, ${alpha})`);
+          gradient.addColorStop(1, `rgba(${trail.color.r * 255}, ${trail.color.g * 255}, ${trail.color.b * 255}, 0)`);
+          
+          ctx.fillStyle = gradient;
+          ctx.beginPath();
+          ctx.arc(trail.x, trail.y, size, 0, Math.PI * 2);
+          ctx.fill();
+          
+          return true;
+        });
+        
+        animationId = requestAnimationFrame(animate);
+      };
+      
+      animate();
+      
+      // Mouse events
+      let lastTrailTime = 0;
+      const trailThrottle = isIOS ? 50 : 30; // Less frequent on iOS
+      
+      const handleMouseMove = (e: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+        
+        const now = Date.now();
+        if (now - lastTrailTime > trailThrottle) {
+          addTrail(mouseX, mouseY);
+          lastTrailTime = now;
+        }
+      };
+      
+      const handleTouchMove = (e: TouchEvent) => {
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        mouseX = touch.clientX - rect.left;
+        mouseY = touch.clientY - rect.top;
+        
+        const now = Date.now();
+        if (now - lastTrailTime > trailThrottle) {
+          addTrail(mouseX, mouseY);
+          lastTrailTime = now;
+        }
+      };
+      
+      const handleClick = (e: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Add burst effect on click
+        for (let i = 0; i < (isIOS ? 3 : 5); i++) {
+          setTimeout(() => {
+            addTrail(
+              x + (Math.random() - 0.5) * 40,
+              y + (Math.random() - 0.5) * 40
+            );
+          }, i * 50);
+        }
+      };
+      
+      // Add event listeners
+      canvas.addEventListener('mousemove', handleMouseMove, { passive: true });
+      canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+      canvas.addEventListener('click', handleClick);
+      
+      // Cleanup
+      return () => {
+        cancelAnimationFrame(animationId);
+        window.removeEventListener('resize', resizeCanvas);
+        canvas.removeEventListener('mousemove', handleMouseMove);
+        canvas.removeEventListener('touchmove', handleTouchMove);
+        canvas.removeEventListener('click', handleClick);
+      };
+    }
 
+    // Desktop fluid simulation (original code with optimizations)
     let pointers: Pointer[] = [pointerPrototype()];
 
     let config = {
-      SIM_RESOLUTION: isIOS ? 32 : isMobile ? 48 : SIM_RESOLUTION!, // Much lower resolution on mobile
-      DYE_RESOLUTION: isIOS ? 256 : isMobile ? 384 : DYE_RESOLUTION!, // Much lower resolution on mobile
+      SIM_RESOLUTION: SIM_RESOLUTION!,
+      DYE_RESOLUTION: DYE_RESOLUTION!,
       CAPTURE_RESOLUTION: CAPTURE_RESOLUTION!,
-      DENSITY_DISSIPATION: isIOS ? 12.0 : DENSITY_DISSIPATION!, // Faster dissipation on iOS
-      VELOCITY_DISSIPATION: isIOS ? 8.0 : VELOCITY_DISSIPATION!, // Faster dissipation on iOS
+      DENSITY_DISSIPATION: DENSITY_DISSIPATION!,
+      VELOCITY_DISSIPATION: VELOCITY_DISSIPATION!,
       PRESSURE: PRESSURE!,
-      PRESSURE_ITERATIONS: isIOS ? 10 : PRESSURE_ITERATIONS!, // Fewer iterations on iOS
-      CURL: isIOS ? 0.5 : CURL!, // Reduced curl on iOS
-      SPLAT_RADIUS: isIOS ? 0.15 : SPLAT_RADIUS!, // Larger radius on iOS
-      SPLAT_FORCE: isIOS ? 1000 : SPLAT_FORCE!, // Reduced force on iOS
-      SHADING: !isIOS && SHADING, // Disable shading on iOS
-      COLOR_UPDATE_SPEED: isIOS ? 2 : COLOR_UPDATE_SPEED!, // Much slower color updates on iOS
+      PRESSURE_ITERATIONS: PRESSURE_ITERATIONS!,
+      CURL: CURL!,
+      SPLAT_RADIUS: SPLAT_RADIUS!,
+      SPLAT_FORCE: SPLAT_FORCE!,
+      SHADING,
+      COLOR_UPDATE_SPEED: COLOR_UPDATE_SPEED!,
       PAUSED: false,
       BACK_COLOR,
       TRANSPARENT,
     };
-    
-    console.log(`💧 Fluid config - iOS: ${isIOS}, SIM: ${config.SIM_RESOLUTION}, DYE: ${config.DYE_RESOLUTION}`);
 
     const { gl, ext } = getWebGLContext(canvas);
     if (!gl || !ext) return;
@@ -1253,7 +1399,6 @@ export default function SplashCursor({
 
     function clickSplat(pointer: Pointer) {
       const color = generateColor();
-      // Make click splats extra bright and vibrant
       color.r *= 2.5;
       color.g *= 2.5;
       color.b *= 2.5;
@@ -1366,22 +1511,20 @@ export default function SplashCursor({
     }
 
     function generateColor(): ColorRGB {
-      // Site theme colors: blue, purple, cyan, pink, green
       const themeColors = [
-        { r: 0.3, g: 0.6, b: 1.0 },    // Bright blue (#4F9FFF)
-        { r: 0.6, g: 0.3, b: 1.0 },    // Bright purple (#9966FF)
-        { r: 0.0, g: 0.8, b: 1.0 },    // Bright cyan (#00CCFF)
-        { r: 1.0, g: 0.4, b: 0.8 },    // Bright pink (#FF66CC)
-        { r: 0.3, g: 1.0, b: 0.6 },    // Bright green (#4FFF99)
-        { r: 0.8, g: 0.4, b: 1.0 },    // Light purple (#CC66FF)
-        { r: 0.4, g: 0.8, b: 1.0 },    // Light blue (#66CCFF)
+        { r: 0.3, g: 0.6, b: 1.0 },    // Bright blue
+        { r: 0.6, g: 0.3, b: 1.0 },    // Bright purple
+        { r: 0.0, g: 0.8, b: 1.0 },    // Bright cyan
+        { r: 1.0, g: 0.4, b: 0.8 },    // Bright pink
+        { r: 0.3, g: 1.0, b: 0.6 },    // Bright green
+        { r: 0.8, g: 0.4, b: 1.0 },    // Light purple
+        { r: 0.4, g: 0.8, b: 1.0 },    // Light blue
       ];
       
       const selectedColor = themeColors[Math.floor(Math.random() * themeColors.length)];
       
-      // Make colors bright and vibrant
       return {
-        r: selectedColor.r * 0.8,  // Increased from 0.08 to 0.8
+        r: selectedColor.r * 0.8,
         g: selectedColor.g * 0.8,
         b: selectedColor.b * 0.8
       };
@@ -1459,7 +1602,7 @@ export default function SplashCursor({
 
     // Throttle mouse movement for better performance
     let lastMoveTime = 0;
-    const moveThrottle = isIOS ? 33 : 16; // 30fps on iOS, 60fps on desktop
+    const moveThrottle = 16; // ~60fps
 
     window.addEventListener("mousemove", (e) => {
       const now = Date.now();
@@ -1503,14 +1646,7 @@ export default function SplashCursor({
     window.addEventListener(
       "touchmove",
       (e) => {
-        // DON'T prevent default - let scrolling work naturally
-        // Only create fluid effects, don't block scrolling
-        
-        // Throttle touch events on iOS for better performance
-        const now = Date.now();
-        if (isIOS && now - lastMoveTime < 50) return; // 20fps on iOS for touch
-        lastMoveTime = now;
-        
+        // Allow scrolling on mobile
         const touches = e.targetTouches;
         const pointer = pointers[0];
         for (let i = 0; i < touches.length; i++) {
@@ -1519,7 +1655,7 @@ export default function SplashCursor({
           updatePointerMoveData(pointer, posX, posY, pointer.color);
         }
       },
-      { passive: true } // ← CHANGED: passive: true allows scrolling
+      { passive: true }
     );
 
     window.addEventListener("touchend", (e) => {
@@ -1529,6 +1665,8 @@ export default function SplashCursor({
         updatePointerUpData(pointer);
       }
     });
+
+    updateFrame();
   }, [
     SIM_RESOLUTION,
     DYE_RESOLUTION,
