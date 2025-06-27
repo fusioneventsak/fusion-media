@@ -8,6 +8,7 @@ interface NavigationProps {
 export default function Navigation({ currentPage, setCurrentPage }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +18,18 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  
+  // Handle page transitions
+  const handlePageChange = (newPage: string) => {
+    if (newPage !== currentPage && !isTransitioning) {
+      setIsTransitioning(true);
+      setCurrentPage(newPage);
+      setIsMenuOpen(false); // Close mobile menu
+      
+      // Reset transition state
+      setTimeout(() => setIsTransitioning(false), 2200);
+    }
+  };
   
   const navItems = [
     { id: 'home', label: 'Home' },
@@ -30,13 +43,19 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
       isScrolled 
         ? 'bg-black/95 border-b border-white/10 shadow-2xl' 
         : 'bg-transparent'
-    }`}>
+    } ${isTransitioning ? 'pointer-events-none' : ''}`}>
+      
+      {/* Hologram effect during transition */}
+      {isTransitioning && (
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/5 via-blue-400/10 to-purple-400/5 backdrop-blur-sm animate-pulse" />
+      )}
+      
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div 
             className="cursor-pointer group"
-            onClick={() => setCurrentPage('home')}
+            onClick={() => handlePageChange('home')}
           >
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -58,12 +77,13 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setCurrentPage(item.id)}
+                onClick={() => handlePageChange(item.id)}
                 className={`relative px-4 py-2 font-medium transition-all duration-300 group ${
                   currentPage === item.id
                     ? 'text-white'
                     : 'text-gray-300 hover:text-white'
-                }`}
+                } ${isTransitioning ? 'opacity-50' : ''}`}
+                disabled={isTransitioning}
               >
                 {item.label}
                 {/* Active indicator */}
@@ -76,7 +96,12 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
             ))}
             
             {/* CTA Button */}
-            <button className="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-medium text-white hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25">
+            <button 
+              className={`px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-medium text-white hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 ${
+                isTransitioning ? 'opacity-50 pointer-events-none' : ''
+              }`}
+              disabled={isTransitioning}
+            >
               Get Started
             </button>
           </div>
@@ -85,6 +110,7 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
           <button
             className="md:hidden relative w-10 h-10 flex flex-col justify-center items-center group"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            disabled={isTransitioning}
           >
             <div className="relative w-6 h-6">
               <span className={`absolute block w-full h-0.5 bg-white transition-all duration-300 ${
@@ -117,21 +143,24 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
               {navItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => {
-                    setCurrentPage(item.id);
-                    setIsMenuOpen(false);
-                  }}
+                  onClick={() => handlePageChange(item.id)}
                   className={`text-left px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
                     currentPage === item.id
                       ? 'bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-white border border-blue-500/30'
                       : 'text-gray-300 hover:text-white hover:bg-white/5'
-                  }`}
+                  } ${isTransitioning ? 'opacity-50 pointer-events-none' : ''}`}
+                  disabled={isTransitioning}
                 >
                   {item.label}
                 </button>
               ))}
               
-              <button className="mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-medium text-white hover:scale-105 transition-all duration-300">
+              <button 
+                className={`mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-medium text-white hover:scale-105 transition-all duration-300 ${
+                  isTransitioning ? 'opacity-50 pointer-events-none' : ''
+                }`}
+                disabled={isTransitioning}
+              >
                 Get Started
               </button>
             </div>

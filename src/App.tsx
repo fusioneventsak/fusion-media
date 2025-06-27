@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import SplashCursor from './components/SplashCursor';
 import Navigation from './components/Navigation';
 import Scene from './components/Scene';
+import HologramTransition from './components/HologramTransition';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import CaseStudiesPage from './pages/CaseStudiesPage';
@@ -109,9 +110,11 @@ export default function App() {
       <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
 
       {/* Page Content */}
-      <main className="relative z-10">
-        {renderPage()}
-      </main>
+      <HologramTransition currentPage={currentPage}>
+        <main className="relative z-10">
+          {renderPage()}
+        </main>
+      </HologramTransition>
 
       {/* Global Footer */}
       <Footer />
