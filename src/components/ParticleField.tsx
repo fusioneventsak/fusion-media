@@ -3,10 +3,10 @@ import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 interface ParticleFieldProps {
-  // scrollY removed - no longer using scroll effects
+  // No props needed - standalone particle system
 }
 
-export default function ParticleField(): ParticleFieldProps {
+export default function ParticleField() {
   const mainParticlesRef = useRef<THREE.Points>(null);
   const dustParticlesRef = useRef<THREE.Points>(null);
   

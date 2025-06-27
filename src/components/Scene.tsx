@@ -4,11 +4,10 @@ import * as THREE from 'three';
 import ParticleField from './ParticleField';
 
 interface SceneProps {
-  scrollY: number;
   currentPage: string;
 }
 
-export default function Scene({ scrollY, currentPage }: SceneProps) {
+export default function Scene({ currentPage }: SceneProps) {
   const { camera, gl } = useThree();
   
   useEffect(() => {

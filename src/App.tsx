@@ -14,6 +14,11 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [scrollY, setScrollY] = useState(0);
 
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentPage]);
+
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -88,7 +93,7 @@ export default function App() {
             imageRendering: 'pixelated' // CRITICAL for sharp particles
           }}
         >
-          <Scene scrollY={scrollY} currentPage={currentPage} />
+          <Scene currentPage={currentPage} />
         </Canvas>
       </div>
 
