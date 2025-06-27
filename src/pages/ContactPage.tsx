@@ -238,6 +238,7 @@ export default function ContactPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.2 }}
               >
+                <>
                 <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 text-center">
                   <div className="text-2xl font-bold text-green-400 mb-2">24hrs</div>
                   <div className="text-sm text-gray-400">Response Time</div>
@@ -246,6 +247,7 @@ export default function ContactPage() {
                   <div className="text-2xl font-bold text-purple-400 mb-2">500+</div>
                   <div className="text-sm text-gray-400">Projects Delivered</div>
                 </div>
+                </>
               </motion.div>
             </div>
           </div>
