@@ -166,6 +166,36 @@ const GlitchEffect: React.FC<{ isActive: boolean }> = ({ isActive }) => (
   />
 );
 
+// Transition Mask - Covers content during transition
+const TransitionMask: React.FC<{ isActive: boolean }> = ({ isActive }) => (
+  <AnimatePresence>
+    {isActive && (
+      <motion.div
+        className="fixed inset-0 z-60 bg-black pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ 
+          opacity: [0, 0.3, 0.7, 0.9, 0.7, 0.3, 0],
+          background: [
+            'rgba(0, 0, 0, 0)',
+            'rgba(0, 0, 0, 0.3)',
+            'rgba(0, 0, 0, 0.7)',
+            'rgba(0, 0, 0, 0.9)',
+            'rgba(0, 0, 0, 0.7)',
+            'rgba(0, 0, 0, 0.3)',
+            'rgba(0, 0, 0, 0)'
+          ]
+        }}
+        exit={{ opacity: 0 }}
+        transition={{ 
+          duration: 2.2,
+          ease: [0.25, 0.46, 0.45, 0.94],
+          times: [0, 0.15, 0.35, 0.5, 0.65, 0.85, 1]
+        }}
+      />
+    )}
+  </AnimatePresence>
+);
+
 // Main Hologram Overlay Component
 const HologramOverlay: React.FC<{ isActive: boolean }> = ({ isActive }) => (
   <AnimatePresence>
@@ -213,6 +243,7 @@ const hologramTransition = {
 export default function HologramTransition({ currentPage, children }: HologramTransitionProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayPage, setDisplayPage] = useState(currentPage);
+  const [showNewContent, setShowNewContent] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   
   // Check for reduced motion preference
@@ -235,6 +266,7 @@ export default function HologramTransition({ currentPage, children }: HologramTr
   useEffect(() => {
     if (currentPage !== displayPage) {
       setIsTransitioning(true);
+      setShowNewContent(false); // Hide new content immediately
       
       // Play hologram sound effect (optional)
       try {
@@ -248,17 +280,22 @@ export default function HologramTransition({ currentPage, children }: HologramTr
         // Ignore audio errors
       }
       
-      // Switch page content at transition midpoint
+      // Switch page content at transition midpoint (when mask is darkest)
       const switchDelay = prefersReducedMotion ? 500 : 1100;
+      const showContentDelay = prefersReducedMotion ? 700 : 1600; // Show content after mask starts fading
       const endDelay = prefersReducedMotion ? 1000 : 2200;
       
       setTimeout(() => setDisplayPage(currentPage), switchDelay);
+      setTimeout(() => setShowNewContent(true), showContentDelay);
       setTimeout(() => setIsTransitioning(false), endDelay);
     }
   }, [currentPage, displayPage, prefersReducedMotion]);
 
   return (
     <div className="relative">
+      {/* Transition Mask - Covers content during transition */}
+      {!prefersReducedMotion && <TransitionMask isActive={isTransitioning} />}
+      
       {/* Hologram Overlay Effects */}
       {!prefersReducedMotion && <HologramOverlay isActive={isTransitioning} />}
       
@@ -268,14 +305,16 @@ export default function HologramTransition({ currentPage, children }: HologramTr
         animate={isTransitioning ? (prefersReducedMotion ? reducedMotionAnimation : hologramContentAnimation) : {}}
         transition={prefersReducedMotion ? reducedMotionTransition : hologramTransition}
         style={{
-          willChange: isTransitioning ? 'transform, opacity, filter' : 'auto'
+          willChange: isTransitioning ? 'transform, opacity, filter' : 'auto',
+          opacity: showNewContent ? 1 : 0,
+          visibility: showNewContent ? 'visible' : 'hidden'
         }}
       >
         <AnimatePresence mode="wait">
           <motion.div
             key={displayPage}
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: showNewContent ? 1 : 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
           >
