@@ -1,21 +1,89 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import FullWidthLaptopShowcase from '../components/Laptop';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
 
 export default function HomePage() {
-  const [scrollY, setScrollY] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
+  const servicesRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
 
+  // Scroll progress tracking
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"]
+  });
+
+  // Hero parallax effects
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
+  const heroBlur = useTransform(scrollYProgress, [0, 0.3], [0, 8]);
+  const heroY = useTransform(scrollYProgress, [0, 0.3], [-50, -150]);
+
+  // Smooth spring animations
+  const smoothScrollProgress = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
+  // Services section in view detection
+  const servicesInView = useInView(servicesRef, { 
+    once: true, 
+    margin: "-20% 0px -20% 0px" 
+  });
+
+  // CTA section mouse tracking
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const handleMouseMove = (e: MouseEvent) => {
+      if (ctaRef.current) {
+        const rect = ctaRef.current.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
+        const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
+        setMousePosition({ x, y });
+      }
+    };
+
+    const ctaElement = ctaRef.current;
+    if (ctaElement) {
+      ctaElement.addEventListener('mousemove', handleMouseMove);
+      ctaElement.addEventListener('mouseleave', () => setMousePosition({ x: 0, y: 0 }));
+    }
+
+    return () => {
+      if (ctaElement) {
+        ctaElement.removeEventListener('mousemove', handleMouseMove);
+        ctaElement.removeEventListener('mouseleave', () => setMousePosition({ x: 0, y: 0 }));
+      }
+    };
   }, []);
 
   return (
-    <div className="relative pointer-events-none">
-      {/* Hero Section - Transparent to show WebGL background */}
-      <section className="relative min-h-screen flex items-start justify-center px-8 pt-16 pointer-events-none">
+    <div ref={containerRef} className="relative pointer-events-none">
+      {/* Scroll Progress Indicator */}
+      <div className="fixed bottom-8 left-8 z-50 pointer-events-none">
+        <div className="w-2 h-32 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm border border-white/30">
+          <motion.div
+            className="w-full bg-gradient-to-t from-cyan-400 via-blue-500 to-purple-600 rounded-full origin-bottom"
+            style={{ scaleY: smoothScrollProgress }}
+          />
+        </div>
+      </div>
+
+      {/* Hero Section with Parallax */}
+      <motion.section 
+        ref={heroRef}
+        className="relative min-h-screen flex items-start justify-center px-8 pt-16 pointer-events-none"
+        style={{
+          opacity: heroOpacity,
+          scale: heroScale,
+          filter: useTransform(heroBlur, (value) => `blur(${value}px)`),
+          y: heroY,
+          willChange: 'transform, opacity, filter'
+        }}
+      >
         {/* Hero Content */}
         <div className="relative z-10 text-center max-w-6xl pointer-events-auto mt-4">
           <motion.div
@@ -76,6 +144,7 @@ export default function HomePage() {
               className="px-10 py-4 bg-white text-gray-900 rounded-full font-medium text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg"
               whileHover={{ 
                 scale: 1.05,
+                boxShadow: "0 20px 40px rgba(255,255,255,0.2)",
                 transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
               }}
               whileTap={{ 
@@ -89,6 +158,7 @@ export default function HomePage() {
               className="px-10 py-4 border border-white/30 text-white rounded-full font-medium text-lg hover:bg-white/10 transition-all duration-300"
               whileHover={{ 
                 scale: 1.05,
+                boxShadow: "0 20px 40px rgba(255,255,255,0.1)",
                 transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
               }}
               whileTap={{ 
@@ -121,6 +191,7 @@ export default function HomePage() {
                 className="text-center group"
                 whileHover={{ 
                   scale: 1.05,
+                  y: -5,
                   transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
                 }}
               >
@@ -133,13 +204,10 @@ export default function HomePage() {
             ))}
           </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      {/* Use Case Showcases - Semi-transparent to show particles behind */}
-      
-      {/* 1. Event Engagement Technology */}
+      {/* Event Engagement Technology Section */}
       <section className="min-h-screen relative overflow-hidden pointer-events-auto">
-        {/* Minimal background for readability */}
         <div className="absolute inset-0 bg-black/5"></div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-8 py-20">
@@ -195,6 +263,7 @@ export default function HomePage() {
                 className="inline-flex items-center px-8 py-4 bg-purple-600 text-white rounded-full font-medium hover:opacity-90 transition-all duration-300 shadow-lg"
                 whileHover={{ 
                   scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(147, 51, 234, 0.3)",
                   transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
                 }}
                 whileTap={{ 
@@ -236,7 +305,6 @@ export default function HomePage() {
                     ease: "linear"
                   }}
                 >
-                  {/* Enhanced glow effect - BEHIND the vector */}
                   <div 
                     className="absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent blur-3xl pointer-events-none"
                     style={{
@@ -246,7 +314,6 @@ export default function HomePage() {
                     }}
                   ></div>
                   
-                  {/* Additional floating particles effect - BEHIND */}
                   <div 
                     className="absolute inset-0 pointer-events-none"
                     style={{
@@ -271,7 +338,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. Custom Business Applications */}
+      {/* Laptop Showcases */}
       <div className="pointer-events-auto">
         <FullWidthLaptopShowcase
           url="https://splendid-cannoli-324007.netlify.app/"
@@ -290,7 +357,6 @@ export default function HomePage() {
         />
       </div>
 
-      {/* 3. Audience Engagement Platforms */}
       <div className="pointer-events-auto">
         <FullWidthLaptopShowcase
           url="http://urequestsongs.com"
@@ -309,7 +375,6 @@ export default function HomePage() {
         />
       </div>
 
-      {/* 4. Interactive Widgets & Components */}
       <div className="pointer-events-auto">
         <FullWidthLaptopShowcase
           url="https://capable-alfajores-d0dff2.netlify.app/"
@@ -328,7 +393,6 @@ export default function HomePage() {
         />
       </div>
 
-      {/* 5. Professional Website Development */}
       <div className="pointer-events-auto">
         <FullWidthLaptopShowcase
           url="https://www.fusion-events.ca"
@@ -347,8 +411,19 @@ export default function HomePage() {
         />
       </div>
 
-      {/* Technology & Process Section */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto">
+      {/* Technology & Process Section with Clip Path Reveal */}
+      <section 
+        ref={servicesRef}
+        className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
+      >
+        {/* Clip Path Background */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm"
+          initial={{ clipPath: 'circle(0% at 50% 50%)' }}
+          animate={servicesInView ? { clipPath: 'circle(150% at 50% 50%)' } : {}}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
+        />
+
         <div className="relative z-10 max-w-7xl w-full">
           <motion.div
             className="text-center mb-20"
@@ -395,15 +470,22 @@ export default function HomePage() {
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className="text-center"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
+                initial={{ x: 200, rotate: 5, opacity: 0 }}
+                animate={servicesInView ? { x: 0, rotate: 0, opacity: 1 } : {}}
                 transition={{ 
-                  duration: 0.8, 
-                  delay: index * 0.2,
-                  ease: [0.25, 0.46, 0.45, 0.94]
+                  duration: 1.2, 
+                  ease: "easeOut", 
+                  delay: index * 0.2 
                 }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  y: -10, 
+                  rotate: -1,
+                  boxShadow: "0 25px 50px rgba(255,255,255,0.1)",
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
+                style={{ willChange: 'transform' }}
               >
                 <div className="text-6xl mb-6">{item.icon}</div>
                 <div className="text-sm font-mono text-gray-300 mb-3">{item.number}</div>
@@ -429,6 +511,7 @@ export default function HomePage() {
                 className="px-6 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors"
                 whileHover={{ 
                   scale: 1.05,
+                  boxShadow: "0 10px 25px rgba(59, 130, 246, 0.3)",
                   transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
                 }}
                 whileTap={{ 
@@ -443,8 +526,24 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Call to Action Section */}
-      <section className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto">
+      {/* Call to Action Section with Magnetic Interactions */}
+      <section 
+        ref={ctaRef}
+        className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
+      >
+        {/* Gradient Overlay that responds to mouse */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-cyan-600/10"
+          animate={{
+            background: `radial-gradient(circle at ${50 + mousePosition.x * 20}% ${50 + mousePosition.y * 20}%, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.1) 50%, rgba(6, 182, 212, 0.05) 100%)`
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 50,
+            damping: 20
+          }}
+        />
+
         <div className="relative z-10 max-w-5xl w-full text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -453,6 +552,15 @@ export default function HomePage() {
             transition={{ 
               duration: 1.2,
               ease: [0.25, 0.46, 0.45, 0.94]
+            }}
+            animate={{
+              x: mousePosition.x * 10,
+              y: mousePosition.y * 10,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 150,
+              damping: 15
             }}
           >
             <h2 className="text-4xl md:text-6xl font-light text-white mb-8 leading-tight">
@@ -474,11 +582,21 @@ export default function HomePage() {
                 className="px-12 py-4 bg-white text-gray-900 rounded-full font-medium text-lg hover:bg-gray-100 transition-all duration-300 shadow-lg"
                 whileHover={{ 
                   scale: 1.05,
+                  boxShadow: "0 25px 50px rgba(255,255,255,0.2)",
                   transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
                 }}
                 whileTap={{ 
                   scale: 0.95,
                   transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
+                animate={{
+                  x: mousePosition.x * 15,
+                  y: mousePosition.y * 15,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 200,
+                  damping: 20
                 }}
               >
                 Start Your Project
@@ -487,11 +605,21 @@ export default function HomePage() {
                 className="px-12 py-4 border border-white/30 text-white rounded-full font-medium text-lg hover:bg-white/10 transition-all duration-300"
                 whileHover={{ 
                   scale: 1.05,
+                  boxShadow: "0 25px 50px rgba(255,255,255,0.1)",
                   transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
                 }}
                 whileTap={{ 
                   scale: 0.95,
                   transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
+                animate={{
+                  x: mousePosition.x * 12,
+                  y: mousePosition.y * 12,
+                }}
+                transition={{
+                  type: "spring",
+                  stiffness: 180,
+                  damping: 18
                 }}
               >
                 Schedule Consultation
@@ -499,62 +627,56 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <motion.div
-                className="text-center p-6 bg-white/5 rounded-2xl backdrop-blur-sm border border-white/10"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: 0.1,
-                  ease: [0.25, 0.46, 0.45, 0.94]
-                }}
-                whileHover={{ 
-                  scale: 1.05,
-                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-              >
-                <div className="text-2xl font-light text-blue-400 mb-2">Events & Entertainment</div>
-                <p className="text-white text-sm">25+ years of industry expertise and proven results</p>
-              </motion.div>
-              
-              <motion.div
-                className="text-center p-6 bg-white/5 rounded-2xl backdrop-blur-sm border border-white/10"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: 0.2,
-                  ease: [0.25, 0.46, 0.45, 0.94]
-                }}
-                whileHover={{ 
-                  scale: 1.05,
-                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-              >
-                <div className="text-2xl font-light text-purple-400 mb-2">AI-Powered Development</div>
-                <p className="text-white text-sm">10x faster project delivery with cutting-edge tools</p>
-              </motion.div>
-              
-              <motion.div
-                className="text-center p-6 bg-white/5 rounded-2xl backdrop-blur-sm border border-white/10"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: 0.3,
-                  ease: [0.25, 0.46, 0.45, 0.94]
-                }}
-                whileHover={{ 
-                  scale: 1.05,
-                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-              >
-                <div className="text-2xl font-light text-cyan-400 mb-2">Custom Solutions</div>
-                <p className="text-white text-sm">Tailored specifically to your unique business needs</p>
-              </motion.div>
+              {[
+                {
+                  title: 'Events & Entertainment',
+                  description: '25+ years of industry expertise and proven results',
+                  color: 'blue'
+                },
+                {
+                  title: 'AI-Powered Development',
+                  description: '10x faster project delivery with cutting-edge tools',
+                  color: 'purple'
+                },
+                {
+                  title: 'Custom Solutions',
+                  description: 'Tailored specifically to your unique business needs',
+                  color: 'cyan'
+                }
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  className="text-center p-6 bg-white/5 rounded-2xl backdrop-blur-sm border border-white/10"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ 
+                    duration: 0.8, 
+                    delay: 0.1 + index * 0.1,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }}
+                  whileHover={{ 
+                    scale: 1.05,
+                    y: -5,
+                    boxShadow: "0 20px 40px rgba(255,255,255,0.1)",
+                    transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                  }}
+                  animate={{
+                    x: mousePosition.x * (5 + index * 2),
+                    y: mousePosition.y * (5 + index * 2),
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 100 + index * 20,
+                    damping: 15 + index * 2
+                  }}
+                >
+                  <div className={`text-2xl font-light ${item.color === 'blue' ? 'text-blue-400' : item.color === 'purple' ? 'text-purple-400' : 'text-cyan-400'} mb-2`}>
+                    {item.title}
+                  </div>
+                  <p className="text-white text-sm">{item.description}</p>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>
