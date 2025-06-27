@@ -22,16 +22,30 @@ export default function Scene({ currentPage }: SceneProps) {
     gl.setClearColor('#000000', 1);
     gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     
+    // iOS-specific optimizations
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isIOS) {
+      // Reduce pixel ratio for iOS to improve performance
+      gl.setPixelRatio(1);
+      
+      // Disable expensive features on iOS
+      gl.shadowMap.enabled = false;
+      gl.antialias = false;
+      
+      // Set lower precision for mobile
+      gl.getContext().getExtension('OES_standard_derivatives');
+    }
+    
     // Disable antialiasing for particles specifically
     const context = gl.getContext();
     context.disable(context.SAMPLE_ALPHA_TO_COVERAGE);
     
-    console.log('🔍 Camera positioned exactly like reference');
+    console.log('🔍 Camera positioned with iOS optimizations');
   }, [camera, gl]);
   
   useFrame(() => {
-    // SLOWER CAMERA MOVEMENT - reduced by 5x
-    const time = Date.now() * 0.0001; // Was 0.0005, now 0.0001
+    // MUCH SLOWER CAMERA MOVEMENT for iOS - reduced by 10x
+    const time = Date.now() * 0.00005; // Was 0.0001, now 0.00005 for smoother iOS
     camera.position.x = Math.cos(time) * 15;
     camera.position.z = Math.sin(time) * 15;
     camera.position.y = 3 + Math.sin(time * 0.5) * 1;
@@ -40,20 +54,17 @@ export default function Scene({ currentPage }: SceneProps) {
   
   return (
     <>
-      {/* EXACT LIGHTING FROM YOUR REFERENCE */}
-      <ambientLight intensity={0.4} color="#ffffff" />
+      {/* REDUCED LIGHTING FOR iOS PERFORMANCE */}
+      <ambientLight intensity={0.3} color="#ffffff" />
       
-      {/* Multiple directional lights for even coverage */}
-      <directionalLight position={[5, 10, 5]} intensity={0.5} color="#ffffff" />
-      <directionalLight position={[-5, 8, -5]} intensity={0.4} color="#ffffff" />
-      <directionalLight position={[0, 12, -8]} intensity={0.3} color="#ffffff" />
+      {/* Fewer directional lights for mobile */}
+      <directionalLight position={[5, 10, 5]} intensity={0.4} color="#ffffff" />
+      <directionalLight position={[-5, 8, -5]} intensity={0.3} color="#ffffff" />
       
-      {/* Point lights for localized brightness */}
-      <pointLight position={[0, 6, 0]} intensity={0.3} color="#ffffff" distance={20} />
-      <pointLight position={[8, 4, 0]} intensity={0.2} color="#ffffff" distance={12} />
-      <pointLight position={[-8, 4, 0]} intensity={0.2} color="#ffffff" distance={12} />
+      {/* Single point light instead of multiple */}
+      <pointLight position={[0, 6, 0]} intensity={0.2} color="#ffffff" distance={20} />
       
-      {/* Bright particle field with scroll effects */}
+      {/* Optimized particle field */}
       <ParticleField />
     </>
   );

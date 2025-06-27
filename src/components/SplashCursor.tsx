@@ -53,18 +53,18 @@ function pointerPrototype(): Pointer {
 }
 
 export default function SplashCursor({
-  SIM_RESOLUTION = 128,
-  DYE_RESOLUTION = 1440,
+  SIM_RESOLUTION = 64, // Reduced default resolution
+  DYE_RESOLUTION = 512, // Reduced default resolution
   CAPTURE_RESOLUTION = 512,
-  DENSITY_DISSIPATION = 3.5,
-  VELOCITY_DISSIPATION = 2,
+  DENSITY_DISSIPATION = 8.0, // Faster dissipation for better performance
+  VELOCITY_DISSIPATION = 6.0, // Faster dissipation for better performance
   PRESSURE = 0.1,
   PRESSURE_ITERATIONS = 20,
   CURL = 3,
-  SPLAT_RADIUS = 0.2,
-  SPLAT_FORCE = 6000,
+  SPLAT_RADIUS = 0.12, // Larger radius for fewer splats
+  SPLAT_FORCE = 2000, // Reduced force
   SHADING = true,
-  COLOR_UPDATE_SPEED = 10,
+  COLOR_UPDATE_SPEED = 4, // Slower color updates
   BACK_COLOR = { r: 0.5, g: 0, b: 0 },
   TRANSPARENT = true
 }: SplashCursorProps) {
@@ -73,26 +73,32 @@ export default function SplashCursor({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    
+    // Mobile detection for performance optimizations
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     let pointers: Pointer[] = [pointerPrototype()];
 
     let config = {
-      SIM_RESOLUTION: SIM_RESOLUTION!,
-      DYE_RESOLUTION: DYE_RESOLUTION!,
+      SIM_RESOLUTION: isIOS ? 32 : isMobile ? 48 : SIM_RESOLUTION!, // Much lower resolution on mobile
+      DYE_RESOLUTION: isIOS ? 256 : isMobile ? 384 : DYE_RESOLUTION!, // Much lower resolution on mobile
       CAPTURE_RESOLUTION: CAPTURE_RESOLUTION!,
-      DENSITY_DISSIPATION: DENSITY_DISSIPATION!,
-      VELOCITY_DISSIPATION: VELOCITY_DISSIPATION!,
+      DENSITY_DISSIPATION: isIOS ? 12.0 : DENSITY_DISSIPATION!, // Faster dissipation on iOS
+      VELOCITY_DISSIPATION: isIOS ? 8.0 : VELOCITY_DISSIPATION!, // Faster dissipation on iOS
       PRESSURE: PRESSURE!,
-      PRESSURE_ITERATIONS: PRESSURE_ITERATIONS!,
-      CURL: CURL!,
-      SPLAT_RADIUS: SPLAT_RADIUS!,
-      SPLAT_FORCE: SPLAT_FORCE!,
-      SHADING,
-      COLOR_UPDATE_SPEED: COLOR_UPDATE_SPEED!,
+      PRESSURE_ITERATIONS: isIOS ? 10 : PRESSURE_ITERATIONS!, // Fewer iterations on iOS
+      CURL: isIOS ? 0.5 : CURL!, // Reduced curl on iOS
+      SPLAT_RADIUS: isIOS ? 0.15 : SPLAT_RADIUS!, // Larger radius on iOS
+      SPLAT_FORCE: isIOS ? 1000 : SPLAT_FORCE!, // Reduced force on iOS
+      SHADING: !isIOS && SHADING, // Disable shading on iOS
+      COLOR_UPDATE_SPEED: isIOS ? 2 : COLOR_UPDATE_SPEED!, // Much slower color updates on iOS
       PAUSED: false,
       BACK_COLOR,
       TRANSPARENT,
     };
+    
+    console.log(`💧 Fluid config - iOS: ${isIOS}, SIM: ${config.SIM_RESOLUTION}, DYE: ${config.DYE_RESOLUTION}`);
 
     const { gl, ext } = getWebGLContext(canvas);
     if (!gl || !ext) return;
@@ -1453,7 +1459,7 @@ export default function SplashCursor({
 
     // Throttle mouse movement for better performance
     let lastMoveTime = 0;
-    const moveThrottle = 16; // ~60fps
+    const moveThrottle = isIOS ? 33 : 16; // 30fps on iOS, 60fps on desktop
 
     window.addEventListener("mousemove", (e) => {
       const now = Date.now();
@@ -1499,6 +1505,12 @@ export default function SplashCursor({
       (e) => {
         // DON'T prevent default - let scrolling work naturally
         // Only create fluid effects, don't block scrolling
+        
+        // Throttle touch events on iOS for better performance
+        const now = Date.now();
+        if (isIOS && now - lastMoveTime < 50) return; // 20fps on iOS for touch
+        lastMoveTime = now;
+        
         const touches = e.targetTouches;
         const pointer = pointers[0];
         for (let i = 0; i < touches.length; i++) {

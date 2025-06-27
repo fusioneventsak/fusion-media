@@ -13,6 +13,10 @@ import Footer from './components/Footer';
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [scrollY, setScrollY] = useState(0);
+  
+  // Mobile detection for performance optimizations
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   // Scroll to top when page changes
   useEffect(() => {
@@ -64,33 +68,36 @@ export default function App() {
           gl={{ 
             antialias: true, 
             alpha: true,
-            powerPreference: "high-performance",
+            powerPreference: isIOS ? "low-power" : "high-performance", // Use low-power on iOS
             preserveDrawingBuffer: false,
             stencil: false,
             depth: true
           }}
-          dpr={[1, 2]}
+          dpr={isIOS ? [1, 1] : [1, 2]} // Force 1x pixel ratio on iOS
           onCreated={({ gl, camera }) => {
             gl.toneMapping = THREE.ACESFilmicToneMapping;
             gl.toneMappingExposure = 1.0;
             gl.outputColorSpace = THREE.SRGBColorSpace;
-            gl.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            gl.setPixelRatio(isIOS ? 1 : Math.min(window.devicePixelRatio, 2)); // Force 1x on iOS
             
-            // CRITICAL: Disable texture filtering for sharp particles
-            gl.getContext().disable(gl.getContext().SAMPLE_ALPHA_TO_COVERAGE);
+            // iOS-specific optimizations
+            if (isIOS) {
+              gl.shadowMap.enabled = false;
+              gl.physicallyCorrectLights = false;
+            }
             
-            console.log('🌌 Milky Way canvas created');
+            console.log(`🌌 Canvas created - iOS: ${isIOS}, Mobile: ${isMobile}`);
           }}
           performance={{
-            current: 1,
-            min: 0.5,
+            current: isIOS ? 0.5 : 1, // Lower performance target on iOS
+            min: isIOS ? 0.3 : 0.5,
             max: 1,
-            debounce: 200
+            debounce: isIOS ? 500 : 200 // Longer debounce on iOS
           }}
-          frameloop="always"
+          frameloop={isIOS ? "demand" : "always"} // Use demand mode on iOS to save battery
           style={{ 
             background: 'transparent',
-            imageRendering: 'pixelated' // CRITICAL for sharp particles
+            imageRendering: isIOS ? 'auto' : 'pixelated' // Auto rendering on iOS
           }}
         >
           <Scene currentPage={currentPage} />
