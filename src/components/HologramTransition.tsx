@@ -18,16 +18,7 @@ const ScanLines: React.FC<{ isActive: boolean }> = ({ isActive }) => (
         animate={isActive ? {
           opacity: [0, 0.9, 0.4, 0.8, 0.2, 0.6, 0],
           scaleX: [0, 1.2, 1, 1.1, 0.9, 1, 0],
-          x: ['-100%', '0%', '0%', '0%', '0%', '0%', '100%'],
-          filter: [
-            "blur(0px) brightness(1)",
-            "blur(1px) brightness(1.5)",
-            "blur(0px) brightness(1.2)",
-            "blur(0.5px) brightness(1.3)",
-            "blur(0px) brightness(1)",
-            "blur(1px) brightness(1.4)",
-            "blur(0px) brightness(1)"
-          ]
+          x: ['-100%', '0%', '0%', '0%', '0%', '0%', '100%']
         } : { opacity: 0, scaleX: 0 }}
         transition={{ 
           duration: 1.8, 
@@ -56,16 +47,7 @@ const HolographicGrid: React.FC<{ isActive: boolean }> = ({ isActive }) => (
     initial={{ opacity: 0, scale: 0.8 }}
     animate={isActive ? {
       opacity: [0, 0.7, 0.9, 0.5, 0.8, 0.3, 0],
-      scale: [0.8, 1.1, 1, 1.05, 0.95, 1.02, 0.9],
-      filter: [
-        "hue-rotate(0deg) brightness(1)",
-        "hue-rotate(30deg) brightness(1.3)",
-        "hue-rotate(60deg) brightness(1.1)",
-        "hue-rotate(90deg) brightness(1.2)",
-        "hue-rotate(45deg) brightness(1)",
-        "hue-rotate(15deg) brightness(1.1)",
-        "hue-rotate(0deg) brightness(1)"
-      ]
+      scale: [0.8, 1.1, 1, 1.05, 0.95, 1.02, 0.9]
     } : { opacity: 0, scale: 0.8 }}
     transition={{ 
       duration: 2.2, 
@@ -83,9 +65,9 @@ const InterferencePattern: React.FC<{ isActive: boolean }> = ({ isActive }) => (
       className="absolute top-0 bg-gradient-to-r from-transparent via-cyan-400/40 to-transparent pointer-events-none z-45 hologram-layer"
       style={{ width: '120px', height: '100vh', left: '-120px' }}
       animate={isActive ? {
-        x: ['0px', 'calc(100vw + 240px)'],
+        x: [0, window.innerWidth + 240],
         opacity: [0, 0.8, 0.9, 0.7, 0]
-      } : { x: '0px', opacity: 0 }}
+      } : { x: 0, opacity: 0 }}
       transition={{ 
         duration: 1.4, 
         delay: 0.2,
@@ -98,9 +80,9 @@ const InterferencePattern: React.FC<{ isActive: boolean }> = ({ isActive }) => (
       className="absolute left-0 bg-gradient-to-b from-transparent via-blue-400/30 to-transparent pointer-events-none z-45 hologram-layer"
       style={{ height: '100px', width: '100vw', top: '-100px' }}
       animate={isActive ? {
-        y: ['0px', 'calc(100vh + 200px)'],
+        y: [0, window.innerHeight + 200],
         opacity: [0, 0.6, 0.8, 0.5, 0]
-      } : { y: '0px', opacity: 0 }}
+      } : { y: 0, opacity: 0 }}
       transition={{ 
         duration: 1.8, 
         delay: 0.5,
@@ -122,7 +104,8 @@ const InterferencePattern: React.FC<{ isActive: boolean }> = ({ isActive }) => (
       }}
       animate={isActive ? {
         opacity: [0, 0.4, 0.6, 0.3, 0.5, 0],
-        backgroundPosition: ['0px 0px', '20px 20px', '40px 40px', '60px 60px', '80px 80px', '100px 100px']
+        x: [0, 20, 40, 60, 80, 100],
+        y: [0, 20, 40, 60, 80, 100]
       } : { opacity: 0 }}
       transition={{ 
         duration: 2, 
@@ -173,8 +156,7 @@ const GlitchEffect: React.FC<{ isActive: boolean }> = ({ isActive }) => (
     }}
     animate={isActive ? {
       opacity: [0, 0.7, 0, 0.5, 0, 0.8, 0],
-      x: [0, -2, 2, -1, 1, -3, 0],
-      backgroundPosition: ['0% 0%', '100% 0%', '0% 0%', '50% 0%', '0% 0%', '75% 0%', '0% 0%']
+      x: [0, -2, 2, -1, 1, -3, 0]
     } : { opacity: 0 }}
     transition={{
       duration: 0.8,
@@ -204,12 +186,9 @@ const HologramOverlay: React.FC<{ isActive: boolean }> = ({ isActive }) => (
         {/* Hologram border effect */}
         <motion.div
           className="absolute inset-4 border-2 border-cyan-400/30 pointer-events-none z-47"
-          style={{
-            borderImage: 'linear-gradient(45deg, rgba(6, 182, 212, 0.5), rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.4)) 1'
-          }}
           animate={isActive ? {
             opacity: [0, 0.8, 0.4, 0.9, 0.2, 0.6, 0],
-            borderWidth: ['2px', '3px', '1px', '4px', '2px', '3px', '1px']
+            borderWidth: [2, 3, 1, 4, 2, 3, 1]
           } : { opacity: 0 }}
           transition={{ duration: 2, ease: [0.25, 0.46, 0.45, 0.94] }}
         />
@@ -221,17 +200,7 @@ const HologramOverlay: React.FC<{ isActive: boolean }> = ({ isActive }) => (
 // Content Animation Presets
 const hologramContentAnimation = {
   opacity: [1, 0.3, 0.7, 0.4, 0.9, 0.2, 0.8, 1],
-  scale: [1, 1.02, 0.98, 1.01, 0.99, 1.01, 0.995, 1],
-  filter: [
-    "brightness(1) contrast(1) saturate(1)",
-    "brightness(1.3) contrast(1.2) saturate(1.1)",
-    "brightness(0.8) contrast(0.9) saturate(0.9)",
-    "brightness(1.1) contrast(1.1) saturate(1.05)",
-    "brightness(0.9) contrast(0.95) saturate(0.95)",
-    "brightness(1.2) contrast(1.1) saturate(1.1)",
-    "brightness(1.05) contrast(1.02) saturate(1.02)",
-    "brightness(1) contrast(1) saturate(1)"
-  ]
+  scale: [1, 1.02, 0.98, 1.01, 0.99, 1.01, 0.995, 1]
 };
 
 const hologramTransition = {
