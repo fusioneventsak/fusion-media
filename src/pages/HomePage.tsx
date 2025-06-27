@@ -19,7 +19,6 @@ export default function HomePage() {
   // Hero parallax effects
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
-  const heroBlur = useTransform(scrollYProgress, [0, 0.3], [0, 8]);
   const heroY = useTransform(scrollYProgress, [0, 0.3], [-50, -150]);
 
   // Smooth spring animations
@@ -79,7 +78,6 @@ export default function HomePage() {
         style={{
           opacity: heroOpacity,
           scale: heroScale,
-          filter: useTransform(heroBlur, (value) => `blur(${value}px)`),
           y: heroY,
           willChange: 'transform, opacity, filter'
         }}
