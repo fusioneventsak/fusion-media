@@ -22,9 +22,9 @@ export default function HomePage() {
   const heroY = useTransform(scrollYProgress, [0, 0.3], [-50, -150]);
 
   // Event section parallax effects
-  const eventOpacity = useTransform(scrollYProgress, [0.25, 0.55], [1, 0]);
-  const eventScale = useTransform(scrollYProgress, [0.25, 0.55], [1, 0.95]);
-  const eventY = useTransform(scrollYProgress, [0.25, 0.55], [0, -100]);
+  const eventOpacity = useTransform(scrollYProgress, [0.15, 0.45], [1, 0]);
+  const eventScale = useTransform(scrollYProgress, [0.15, 0.45], [1, 0.95]);
+  const eventY = useTransform(scrollYProgress, [0.15, 0.45], [0, -100]);
 
   // Smooth spring animations
   const smoothScrollProgress = useSpring(scrollYProgress, {
