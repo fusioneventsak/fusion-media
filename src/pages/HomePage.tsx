@@ -21,6 +21,11 @@ export default function HomePage() {
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
   const heroY = useTransform(scrollYProgress, [0, 0.3], [-50, -150]);
 
+  // Event section parallax effects
+  const eventOpacity = useTransform(scrollYProgress, [0.25, 0.55], [1, 0]);
+  const eventScale = useTransform(scrollYProgress, [0.25, 0.55], [1, 0.95]);
+  const eventY = useTransform(scrollYProgress, [0.25, 0.55], [0, -100]);
+
   // Smooth spring animations
   const smoothScrollProgress = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -205,7 +210,15 @@ export default function HomePage() {
       </motion.section>
 
       {/* Event Engagement Technology Section */}
-      <section className="min-h-screen relative overflow-hidden pointer-events-auto">
+      <motion.section 
+        className="min-h-screen relative overflow-hidden pointer-events-auto"
+        style={{
+          opacity: eventOpacity,
+          scale: eventScale,
+          y: eventY,
+          willChange: 'transform, opacity'
+        }}
+      >
         <div className="absolute inset-0 bg-black/5"></div>
         
         <div className="relative z-10 max-w-7xl mx-auto px-8 py-20">
@@ -334,7 +347,7 @@ export default function HomePage() {
             </motion.div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Laptop Showcases */}
       <>
