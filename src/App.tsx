@@ -48,12 +48,13 @@ export default function App() {
       <SplashCursor 
         SIM_RESOLUTION={64}
         DYE_RESOLUTION={512}
-        DENSITY_DISSIPATION={6.0}
-        VELOCITY_DISSIPATION={4.5}
-        SPLAT_RADIUS={0.08}
-        SPLAT_FORCE={3000}
-        COLOR_UPDATE_SPEED={8}
+        DENSITY_DISSIPATION={8.0}
+        VELOCITY_DISSIPATION={6.0}
+        SPLAT_RADIUS={0.06}
+        SPLAT_FORCE={2000}
+        COLOR_UPDATE_SPEED={0}
         CURL={1}
+        STABLE_COLORS={true}
       />
       
       {/* Enhanced 3D Background */}

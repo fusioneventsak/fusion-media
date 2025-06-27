@@ -22,6 +22,7 @@ interface SplashCursorProps {
   COLOR_UPDATE_SPEED?: number;
   BACK_COLOR?: ColorRGB;
   TRANSPARENT?: boolean;
+  STABLE_COLORS?: boolean;
 }
 
 interface Pointer {
@@ -66,7 +67,8 @@ export default function SplashCursor({
   SHADING = true,
   COLOR_UPDATE_SPEED = 4,
   BACK_COLOR = { r: 0.5, g: 0, b: 0 },
-  TRANSPARENT = true
+  TRANSPARENT = true,
+  STABLE_COLORS = true
 }: SplashCursorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -240,7 +242,7 @@ export default function SplashCursor({
       SPLAT_RADIUS: SPLAT_RADIUS!,
       SPLAT_FORCE: SPLAT_FORCE!,
       SHADING,
-      COLOR_UPDATE_SPEED: COLOR_UPDATE_SPEED!,
+      COLOR_UPDATE_SPEED: STABLE_COLORS ? 0 : COLOR_UPDATE_SPEED!, // Disable color updates if stable
       PAUSED: false,
       BACK_COLOR,
       TRANSPARENT,
@@ -1141,11 +1143,20 @@ export default function SplashCursor({
 
     let lastUpdateTime = Date.now();
     let colorUpdateTimer = 0.0;
+    
+    // Initialize with stable colors if requested
+    if (STABLE_COLORS) {
+      pointers.forEach((p) => {
+        p.color = generateColor();
+      });
+    }
 
     function updateFrame() {
       const dt = calcDeltaTime();
       if (resizeCanvas()) initFramebuffers();
-      updateColors(dt);
+      if (!STABLE_COLORS) {
+        updateColors(dt);
+      }
       applyInputs();
       step(dt);
       render(null);
@@ -1521,12 +1532,14 @@ export default function SplashCursor({
         { r: 0.4, g: 0.8, b: 1.0 },    // Light blue
       ];
       
-      const selectedColor = themeColors[Math.floor(Math.random() * themeColors.length)];
+      // Use a consistent color selection if stable colors are enabled
+      const colorIndex = STABLE_COLORS ? 0 : Math.floor(Math.random() * themeColors.length);
+      const selectedColor = themeColors[colorIndex];
       
       return {
-        r: selectedColor.r * 0.8,
-        g: selectedColor.g * 0.8,
-        b: selectedColor.b * 0.8
+        r: selectedColor.r * (STABLE_COLORS ? 0.6 : 0.8),
+        g: selectedColor.g * (STABLE_COLORS ? 0.6 : 0.8),
+        b: selectedColor.b * (STABLE_COLORS ? 0.6 : 0.8)
       };
     }
 
@@ -1586,7 +1599,9 @@ export default function SplashCursor({
       const posX = scaleByPixelRatio(e.clientX);
       const posY = scaleByPixelRatio(e.clientY);
       updatePointerDownData(pointer, -1, posX, posY);
-      clickSplat(pointer);
+      if (!STABLE_COLORS) {
+        clickSplat(pointer);
+      }
     });
 
     function handleFirstMouseMove(e: MouseEvent) {
@@ -1612,7 +1627,7 @@ export default function SplashCursor({
       const pointer = pointers[0];
       const posX = scaleByPixelRatio(e.clientX);
       const posY = scaleByPixelRatio(e.clientY);
-      const color = pointer.color;
+      const color = STABLE_COLORS ? generateColor() : pointer.color;
       updatePointerMoveData(pointer, posX, posY, color);
     });
 
@@ -1652,7 +1667,8 @@ export default function SplashCursor({
         for (let i = 0; i < touches.length; i++) {
           const posX = scaleByPixelRatio(touches[i].clientX);
           const posY = scaleByPixelRatio(touches[i].clientY);
-          updatePointerMoveData(pointer, posX, posY, pointer.color);
+          const color = STABLE_COLORS ? generateColor() : pointer.color;
+          updatePointerMoveData(pointer, posX, posY, color);
         }
       },
       { passive: true }
@@ -1682,6 +1698,7 @@ export default function SplashCursor({
     COLOR_UPDATE_SPEED,
     BACK_COLOR,
     TRANSPARENT,
+    STABLE_COLORS,
   ]);
 
   return (
