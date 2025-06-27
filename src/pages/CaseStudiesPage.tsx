@@ -159,18 +159,19 @@ export default function CaseStudiesPage() {
             transition={{ duration: 0.8 }}
           >
             <div className="bg-gradient-to-r from-blue-900/50 to-purple-900/50 backdrop-blur-sm rounded-2xl p-8 border border-blue-500/30">
-            <div className="bg-gradient-to-r from-blue-900/60 to-purple-900/60 bg-black/40 rounded-2xl p-8 border border-blue-500/30">
-              <h2 className="text-3xl font-bold mb-4 text-blue-300">Ready to Create Your Success Story?</h2>
-              <p className="text-gray-300 mb-6 text-lg">
-                Join these successful companies and transform your business with our innovative technology solutions.
-              </p>
-              <motion.button 
-                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Start Your Project Today
-              </motion.button>
+              <div className="bg-gradient-to-r from-blue-900/60 to-purple-900/60 bg-black/40 rounded-2xl p-8 border border-blue-500/30">
+                <h2 className="text-3xl font-bold mb-4 text-blue-300">Ready to Create Your Success Story?</h2>
+                <p className="text-gray-300 mb-6 text-lg">
+                  Join these successful companies and transform your business with our innovative technology solutions.
+                </p>
+                <motion.button 
+                  className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Start Your Project Today
+                </motion.button>
+              </div>
             </div>
           </motion.div>
         </div>

@@ -239,7 +239,6 @@ export default function ContactPage() {
                 transition={{ duration: 0.8, delay: 1.2 }}
               >
                 <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 text-center">
-                <div className="bg-black/30 rounded-lg p-4 border border-white/10 text-center">
                   <div className="text-2xl font-bold text-green-400 mb-2">24hrs</div>
                   <div className="text-sm text-gray-400">Response Time</div>
                 </div>
