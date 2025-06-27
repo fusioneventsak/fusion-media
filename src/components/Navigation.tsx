@@ -28,7 +28,7 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
       isScrolled 
-        ? 'bg-black/90 backdrop-blur-md border-b border-white/10 shadow-2xl' 
+        ? 'bg-black/95 border-b border-white/10 shadow-2xl' 
         : 'bg-transparent'
     }`}>
       <div className="max-w-7xl mx-auto px-6 py-4">

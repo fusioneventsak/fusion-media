@@ -245,7 +245,7 @@ export default function Footer() {
 
             {/* Bottom Bar */}
             <motion.div
-              className="border-t border-white/10 bg-black/50 backdrop-blur-sm"
+              className="border-t border-white/10 bg-black/70"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}

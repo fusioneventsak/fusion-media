@@ -51,7 +51,7 @@ export default function ContactPage() {
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Contact Form */}
             <motion.div 
-              className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
+              className="bg-black/30 rounded-2xl p-8 border border-white/10"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -176,7 +176,7 @@ export default function ContactPage() {
             {/* Contact Information */}
             <div className="space-y-8">
               <motion.div 
-                className="bg-gradient-to-br from-cyan-900/50 to-blue-900/50 backdrop-blur-sm rounded-2xl p-8 border border-cyan-500/30"
+                className="bg-gradient-to-br from-cyan-900/60 to-blue-900/60 bg-black/40 rounded-2xl p-8 border border-cyan-500/30"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.6 }}
@@ -209,7 +209,7 @@ export default function ContactPage() {
               </motion.div>
 
               <motion.div 
-                className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10"
+                className="bg-black/30 rounded-xl p-6 border border-white/10"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1.0 }}
@@ -239,10 +239,11 @@ export default function ContactPage() {
                 transition={{ duration: 0.8, delay: 1.2 }}
               >
                 <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 text-center">
+                <div className="bg-black/30 rounded-lg p-4 border border-white/10 text-center">
                   <div className="text-2xl font-bold text-green-400 mb-2">24hrs</div>
                   <div className="text-sm text-gray-400">Response Time</div>
                 </div>
-                <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 text-center">
+                <div className="bg-black/30 rounded-lg p-4 border border-white/10 text-center">
                   <div className="text-2xl font-bold text-purple-400 mb-2">500+</div>
                   <div className="text-sm text-gray-400">Projects Delivered</div>
                 </div>

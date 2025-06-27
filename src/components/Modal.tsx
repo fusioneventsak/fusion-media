@@ -44,7 +44,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           {/* Backdrop */}
           <motion.div
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            className="absolute inset-0 bg-black/85"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -53,11 +53,11 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
 
           {/* Modal Content */}
           <motion.div
-            className="relative w-full max-w-4xl max-h-[90vh] bg-gradient-to-br from-gray-900/95 to-black/95 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden"
+            className="relative w-full max-w-4xl max-h-[90vh] bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-white/20 shadow-2xl overflow-hidden"
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-blue-900/30 to-purple-900/30">

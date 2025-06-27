@@ -493,13 +493,13 @@ export default function FullWidthLaptopShowcase({
               <motion.div 
                 className="relative"
                 animate={{
-                  rotateY: [0, 0.5, -0.5, 0],
-                  y: [0, -4, 0, 4, 0] // Reduced floating amplitude
+                  rotateY: [0, 0.2, -0.2, 0],
+                  y: [0, -2, 0, 2, 0] // Further reduced floating amplitude
                 }}
                 transition={{
-                  duration: 16, // Slower floating animation
+                  duration: 20, // Even slower floating animation
                   repeat: Infinity,
-                  ease: [0.25, 0.46, 0.45, 0.94] // Smooth cubic-bezier easing
+                  ease: "linear" // Simpler easing for better performance
                 }}
                 style={{
                   willChange: 'transform'

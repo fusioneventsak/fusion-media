@@ -455,12 +455,12 @@ export default function HomePage() {
         ref={servicesRef}
         className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
       >
-        {/* Clip Path Background */}
+        {/* Simplified Background */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm"
-          initial={{ clipPath: 'circle(0% at 50% 50%)' }}
-          animate={servicesInView ? { clipPath: 'circle(150% at 50% 50%)' } : {}}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
+          className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 bg-black/30"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={servicesInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 1.2, ease: "easeOut" }}
         />
 
         <div className="relative z-10 max-w-7xl w-full">
@@ -509,22 +509,19 @@ export default function HomePage() {
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className="text-center bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
-                initial={{ x: 200, rotate: 5, opacity: 0 }}
-                animate={servicesInView ? { x: 0, rotate: 0, opacity: 1 } : {}}
+                className="text-center bg-black/40 rounded-2xl p-8 border border-white/10"
+                initial={{ y: 50, opacity: 0 }}
+                animate={servicesInView ? { y: 0, opacity: 1 } : {}}
                 transition={{ 
-                  duration: 1.2, 
+                  duration: 0.8, 
                   ease: "easeOut", 
                   delay: index * 0.2 
                 }}
                 whileHover={{ 
-                  scale: 1.05, 
-                  y: -10, 
-                  rotate: -1,
-                  boxShadow: "0 25px 50px rgba(255,255,255,0.1)",
-                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                  scale: 1.02, 
+                  y: -5,
+                  transition: { duration: 0.2, ease: "easeOut" }
                 }}
-                style={{ willChange: 'transform' }}
               >
                 <div className="text-6xl mb-6">{item.icon}</div>
                 <div className="text-sm font-mono text-gray-300 mb-3">{item.number}</div>
@@ -545,17 +542,17 @@ export default function HomePage() {
             }}
           >
             <div className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-md rounded-full shadow-lg border border-white/20">
+            <div className="inline-flex items-center px-8 py-4 bg-black/60 rounded-full shadow-lg border border-white/20">
               <span className="text-white mr-4">Ready to experience the difference?</span>
               <motion.button
                 className="px-6 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors"
                 whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 10px 25px rgba(59, 130, 246, 0.3)",
-                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                  scale: 1.02,
+                  transition: { duration: 0.2, ease: "easeOut" }
                 }}
                 whileTap={{ 
                   scale: 0.95,
-                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                  transition: { duration: 0.1, ease: "easeOut" }
                 }}
               >
                 Get Started
@@ -570,17 +567,12 @@ export default function HomePage() {
         ref={ctaRef}
         className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
       >
-        {/* Gradient Overlay that responds to mouse */}
+        {/* Simplified Static Background */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-cyan-600/10"
-          animate={{
-            background: `radial-gradient(circle at ${50 + mousePosition.x * 20}% ${50 + mousePosition.y * 20}%, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.1) 50%, rgba(6, 182, 212, 0.05) 100%)`
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 50,
-            damping: 20
-          }}
+          className="absolute inset-0 bg-gradient-to-br from-blue-600/15 via-purple-600/10 to-cyan-600/5 bg-black/20"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 1.0, ease: "easeOut" }}
         />
 
         <div className="relative z-10 max-w-5xl w-full text-center">
@@ -591,15 +583,6 @@ export default function HomePage() {
             transition={{ 
               duration: 1.2,
               ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-            animate={{
-              x: mousePosition.x * 10,
-              y: mousePosition.y * 10,
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 150,
-              damping: 15
             }}
           >
             <h2 className="text-4xl md:text-6xl font-light text-white mb-8 leading-tight">
@@ -622,20 +605,11 @@ export default function HomePage() {
                 whileHover={{ 
                   scale: 1.05,
                   boxShadow: "0 25px 50px rgba(255,255,255,0.2)",
-                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                  transition: { duration: 0.2, ease: "easeOut" }
                 }}
                 whileTap={{ 
                   scale: 0.95,
-                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-                animate={{
-                  x: mousePosition.x * 15,
-                  y: mousePosition.y * 15,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 200,
-                  damping: 20
+                  transition: { duration: 0.1, ease: "easeOut" }
                 }}
               >
                 Start Your Project
@@ -645,20 +619,11 @@ export default function HomePage() {
                 whileHover={{ 
                   scale: 1.05,
                   boxShadow: "0 25px 50px rgba(255,255,255,0.1)",
-                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                  transition: { duration: 0.2, ease: "easeOut" }
                 }}
                 whileTap={{ 
                   scale: 0.95,
-                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-                animate={{
-                  x: mousePosition.x * 12,
-                  y: mousePosition.y * 12,
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 180,
-                  damping: 18
+                  transition: { duration: 0.1, ease: "easeOut" }
                 }}
               >
                 Schedule Consultation
@@ -685,29 +650,19 @@ export default function HomePage() {
               ].map((item, index) => (
                 <motion.div
                   key={index}
-                  className="text-center p-6 bg-white/5 rounded-2xl backdrop-blur-sm border border-white/10"
+                  className="text-center p-6 bg-black/40 rounded-2xl border border-white/10"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ 
                     duration: 0.8, 
                     delay: 0.1 + index * 0.1,
-                    ease: [0.25, 0.46, 0.45, 0.94]
+                    ease: "easeOut"
                   }}
                   whileHover={{ 
-                    scale: 1.05,
+                    scale: 1.02,
                     y: -5,
-                    boxShadow: "0 20px 40px rgba(255,255,255,0.1)",
-                    transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
-                  }}
-                  animate={{
-                    x: mousePosition.x * (5 + index * 2),
-                    y: mousePosition.y * (5 + index * 2),
-                  }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 100 + index * 20,
-                    damping: 15 + index * 2
+                    transition: { duration: 0.2, ease: "easeOut" }
                   }}
                 >
                   <div className={`text-2xl font-light ${item.color === 'blue' ? 'text-blue-400' : item.color === 'purple' ? 'text-purple-400' : 'text-cyan-400'} mb-2`}>

@@ -34,7 +34,7 @@ export default function AboutPage() {
               </p>
             </motion.div>
             <motion.div 
-              className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 backdrop-blur-sm rounded-2xl p-8 border border-blue-500/30"
+              className="bg-gradient-to-br from-blue-900/60 to-purple-900/60 bg-black/40 rounded-2xl p-8 border border-blue-500/30"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -91,12 +91,12 @@ export default function AboutPage() {
               ].map((member, index) => (
                 <motion.div 
                   key={index}
-                  className="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 hover:bg-white/10 transition-all duration-300 text-center"
+                  className="bg-black/30 rounded-xl p-6 border border-white/10 hover:bg-black/40 transition-all duration-300 text-center"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.2 }}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.02 }}
                 >
                   <div className="text-6xl mb-4">{member.image}</div>
                   <h3 className="text-xl font-semibold mb-2 text-white">{member.name}</h3>
@@ -143,12 +143,12 @@ export default function AboutPage() {
               ].map((value, index) => (
                 <motion.div 
                   key={index}
-                  className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10 text-center"
+                  className="bg-black/30 rounded-lg p-6 border border-white/10 text-center"
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.02 }}
                 >
                   <div className="text-4xl mb-4">{value.icon}</div>
                   <h3 className="text-lg font-semibold mb-3 text-white">{value.title}</h3>
@@ -190,12 +190,11 @@ export default function AboutPage() {
               ].map((stack, index) => (
                 <motion.div 
                   key={index}
-                  className="bg-white/5 backdrop-blur-sm rounded-lg p-6 border border-white/10"
+                  className="bg-black/30 rounded-lg p-6 border border-white/10"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
                 >
                   <h3 className="text-lg font-semibold mb-4 text-yellow-400">{stack.category}</h3>
                   <ul className="space-y-2">
