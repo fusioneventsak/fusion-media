@@ -1523,23 +1523,25 @@ export default function SplashCursor({
 
     function generateColor(): ColorRGB {
       const themeColors = [
-        { r: 0.3, g: 0.6, b: 1.0 },    // Bright blue
-        { r: 0.6, g: 0.3, b: 1.0 },    // Bright purple
-        { r: 0.0, g: 0.8, b: 1.0 },    // Bright cyan
-        { r: 1.0, g: 0.4, b: 0.8 },    // Bright pink
-        { r: 0.3, g: 1.0, b: 0.6 },    // Bright green
-        { r: 0.8, g: 0.4, b: 1.0 },    // Light purple
-        { r: 0.4, g: 0.8, b: 1.0 },    // Light blue
+        { r: 0.4, g: 0.7, b: 1.0 },    // Bright blue
+        { r: 0.8, g: 0.4, b: 1.0 },    // Bright purple
+        { r: 0.2, g: 0.9, b: 1.0 },    // Bright cyan
+        { r: 1.0, g: 0.5, b: 0.8 },    // Bright pink
+        { r: 0.4, g: 1.0, b: 0.7 },    // Bright green
+        { r: 0.9, g: 0.5, b: 1.0 },    // Light purple
+        { r: 0.5, g: 0.8, b: 1.0 },    // Light blue
       ];
       
-      // Use a consistent color selection if stable colors are enabled
-      const colorIndex = STABLE_COLORS ? 0 : Math.floor(Math.random() * themeColors.length);
+      // Use a more varied but still controlled color selection
+      const colorIndex = STABLE_COLORS ? 
+        Math.floor(Math.random() * 3) : // Rotate between first 3 colors for variety
+        Math.floor(Math.random() * themeColors.length);
       const selectedColor = themeColors[colorIndex];
       
       return {
-        r: selectedColor.r * (STABLE_COLORS ? 0.6 : 0.8),
-        g: selectedColor.g * (STABLE_COLORS ? 0.6 : 0.8),
-        b: selectedColor.b * (STABLE_COLORS ? 0.6 : 0.8)
+        r: selectedColor.r * (STABLE_COLORS ? 0.9 : 0.8), // Increased intensity
+        g: selectedColor.g * (STABLE_COLORS ? 0.9 : 0.8),
+        b: selectedColor.b * (STABLE_COLORS ? 0.9 : 0.8)
       };
     }
 
