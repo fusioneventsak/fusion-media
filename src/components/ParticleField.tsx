@@ -296,7 +296,7 @@ export default function ParticleField() {
       mainParticlesRef.current.geometry.attributes.position.needsUpdate = true;
       
       // MUCH SLOWER rotation for iOS
-      mainParticlesRef.current.rotation.y = time * (isIOS ? 0.002 : 0.005); // Much faster rotation
+      mainParticlesRef.current.rotation.y = time * (isIOS ? 0.004 : 0.01); // Twice as fast rotation
     }
     
     // Simplified dust animation
@@ -338,7 +338,7 @@ export default function ParticleField() {
       }
       
       dustParticlesRef.current.geometry.attributes.position.needsUpdate = true;
-      dustParticlesRef.current.rotation.y = time * (isIOS ? 0.003 : 0.008); // Much faster rotation
+      dustParticlesRef.current.rotation.y = time * (isIOS ? 0.006 : 0.016); // Twice as fast rotation
     }
   });
   
