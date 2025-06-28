@@ -21,17 +21,19 @@
   background: rgba(59, 130, 246, 0.7);
 }
 
-/* Hologram transition optimizations */
-.hologram-layer {
+/* 3D transition optimizations */
+.transition-layer {
   will-change: transform, opacity, filter;
   transform: translateZ(0);
   backface-visibility: hidden;
+  perspective: 2000px;
 }
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .hologram-layer {
+  .transition-layer {
     will-change: auto;
+    perspective: none;
   }
   
   * {
@@ -39,4 +41,15 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* 3D perspective container */
+.perspective-container {
+  perspective: 2000px;
+  perspective-origin: 50% 50%;
+}
+
+/* Preserve 3D transforms */
+.preserve-3d {
+  transform-style: preserve-3d;
 }
