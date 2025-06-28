@@ -237,20 +237,81 @@ export default function HomePage() {
             >
               <div>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-6 leading-tight">
-                  Event Engagement Technology
+                  <span className="inline-flex items-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-xl flex items-center justify-center mr-4 shadow-lg">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-medium text-green-400 tracking-wider uppercase">Event Technology</span>
+                  </span>
+                  <br />
+                  Interactive Engagement
+                  <br />
+                  <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent font-semibold">
+                    Experiences
+                  </span>
                 </h2>
                 <p className="text-lg md:text-xl text-white opacity-70 leading-relaxed font-light mb-8">
-                  Interactive experiences that captivate audiences and create unforgettable moments. From trade shows to festivals, retail activations to corporate events—our engagement platforms drive participation and generate valuable data insights.
+                  Transform any event into an interactive experience that captivates audiences and creates lasting memories. 
+                  Our cutting-edge engagement platforms combine real-time photo processing, social media integration, 
+                  and advanced analytics to drive meaningful participation and generate valuable business insights.
                 </p>
               </div>
 
               <div className="space-y-6">
                 {[
-                  'Trade shows and corporate events with real-time engagement',
-                  'Festivals and concerts with social media integration',
-                  'Retail locations and brand activations',
-                  'Real-time photo processing and customizable animations',
-                  'Custom branding, analytics, and lead generation'
+                  {
+                    text: 'Real-time photo processing with AI-powered effects and customizable animations',
+                    icon: (
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                      </div>
+                    )
+                  },
+                  {
+                    text: 'Social media integration with viral sharing and hashtag campaigns',
+                    icon: (
+                      <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                      </div>
+                    )
+                  },
+                  {
+                    text: 'Trade shows, festivals, retail activations, and corporate events',
+                    icon: (
+                      <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                        </svg>
+                      </div>
+                    )
+                  },
+                  {
+                    text: 'Advanced analytics dashboard with engagement metrics and lead capture',
+                    icon: (
+                      <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center shadow-lg">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                      </div>
+                    )
+                  },
+                  {
+                    text: 'Custom branding, white-label solutions, and enterprise integrations',
+                    icon: (
+                      <div className="w-8 h-8 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                        </svg>
+                      </div>
+                    )
+                  }
                 ].map((feature, index) => (
                   <motion.div
                     key={index}
@@ -264,30 +325,57 @@ export default function HomePage() {
                       ease: [0.25, 0.46, 0.45, 0.94]
                     }}
                   >
-                    <div className="w-2 h-2 rounded-full bg-purple-600 mt-3 flex-shrink-0"></div>
-                    <span className="text-white opacity-80 font-medium leading-relaxed">{feature}</span>
+                    {feature.icon}
+                    <span className="text-white opacity-90 font-medium leading-relaxed">{feature.text}</span>
                   </motion.div>
                 ))}
               </div>
 
-              <motion.button
-                className="inline-flex items-center px-8 py-4 bg-purple-600 text-white rounded-full font-medium hover:opacity-90 transition-all duration-300 shadow-lg"
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(147, 51, 234, 0.3)",
-                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-                whileTap={{ 
-                  scale: 0.95,
-                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-                onClick={() => window.open('https://selfieholosphere.com/collage/1lr9qn', '_blank')}
-              >
-                View Live Site
-                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-              </motion.button>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <motion.button
+                  className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full font-medium hover:opacity-90 transition-all duration-300 shadow-lg"
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: "0 20px 40px rgba(147, 51, 234, 0.3)",
+                    transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                  }}
+                  whileTap={{ 
+                    scale: 0.95,
+                    transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                  }}
+                  onClick={() => window.open('https://selfieholosphere.com/collage/1lr9qn', '_blank')}
+                >
+                  <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center mr-2">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  View Live Demo
+                  <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </motion.button>
+                
+                <motion.button
+                  className="inline-flex items-center px-8 py-4 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300"
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: "0 20px 40px rgba(255,255,255,0.1)",
+                    transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                  }}
+                  whileTap={{ 
+                    scale: 0.95,
+                    transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                  }}
+                >
+                  <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center mr-2">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                  </div>
+                  Get Quote
+                </motion.button>
+              </div>
             </motion.div>
 
             {/* Vector Image Side with Enhanced Animations */}
@@ -333,66 +421,69 @@ export default function HomePage() {
 
                 {/* Floating UI Elements */}
                 <motion.div
-                  className="absolute -top-8 -left-8 w-16 h-16 bg-purple-500/20 rounded-full backdrop-blur-sm border border-purple-400/30 flex items-center justify-center z-20"
+                  className="absolute -top-8 -left-8 w-16 h-16 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-2xl backdrop-blur-sm border border-purple-400/30 flex items-center justify-center z-20 shadow-lg"
                   animate={{ 
                     y: [0, -10, 0],
-                    rotate: [0, 180, 360]
+                    rotate: [0, 5, -5, 0]
                   }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <span className="text-purple-300 text-xl">✨</span>
+                  <svg className="w-8 h-8 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
                 </motion.div>
 
                 <motion.div
-                  className="absolute top-1/4 -right-12 w-12 h-12 bg-blue-500/20 rounded-full backdrop-blur-sm border border-blue-400/30 flex items-center justify-center z-20"
+                  className="absolute top-1/4 -right-12 w-12 h-12 bg-gradient-to-br from-blue-500/30 to-cyan-500/30 rounded-xl backdrop-blur-sm border border-blue-400/30 flex items-center justify-center z-20 shadow-lg"
                   animate={{ 
                     x: [0, 10, 0],
                     scale: [1, 1.2, 1]
                   }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
                 >
-                  <span className="text-blue-300 text-lg">🎪</span>
+                  <svg className="w-6 h-6 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
                 </motion.div>
 
                 {/* Interactive Feature Badges */}
                 <motion.div
-                  className="absolute bottom-8 left-4 bg-white/10 backdrop-blur-md rounded-lg p-3 border border-white/20 z-20"
+                  className="absolute bottom-8 left-4 bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-md rounded-xl p-4 border border-white/20 z-20 shadow-lg"
                   initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.5 }}
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    opacity: [0.8, 1, 0.8]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
                 >
                   <div className="flex items-center space-x-2">
-                    <span className="text-lg">📸</span>
+                    <div className="w-8 h-8 bg-gradient-to-br from-green-400 to-emerald-500 rounded-lg flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </div>
                     <div>
-                      <div className="text-white text-xs font-bold">Live Processing</div>
-                      <div className="text-purple-300 text-xs">Real-time effects</div>
+                      <div className="text-white text-sm font-bold">Live Processing</div>
+                      <div className="text-green-300 text-xs">Real-time AI effects</div>
                     </div>
                   </div>
                 </motion.div>
 
                 <motion.div
-                  className="absolute top-8 right-4 bg-white/10 backdrop-blur-md rounded-lg p-3 border border-white/20 z-20"
+                  className="absolute top-8 right-4 bg-gradient-to-br from-white/15 to-white/5 backdrop-blur-md rounded-xl p-4 border border-white/20 z-20 shadow-lg"
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.7 }}
-                  animate={{ 
-                    y: [0, -5, 0],
-                    opacity: [0.8, 1, 0.8]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, delay: 1 }}
                 >
                   <div className="flex items-center space-x-2">
-                    <span className="text-lg">📊</span>
+                    <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-red-500 rounded-lg flex items-center justify-center">
+                      <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                    </div>
                     <div>
-                      <div className="text-white text-xs font-bold">Analytics</div>
-                      <div className="text-cyan-300 text-xs">Data insights</div>
+                      <div className="text-white text-sm font-bold">Analytics</div>
+                      <div className="text-orange-300 text-xs">Live insights</div>
                     </div>
                   </div>
                 </motion.div>
