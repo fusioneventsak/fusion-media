@@ -27,7 +27,7 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
       setIsMenuOpen(false); // Close mobile menu
       
       // Reset transition state
-      const transitionDuration = 800; // All transitions are now 0.8 seconds
+      const transitionDuration = 1000; // 3D transitions are 1 second
       setTimeout(() => setIsTransitioning(false), transitionDuration);
     }
   };

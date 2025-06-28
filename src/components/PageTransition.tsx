@@ -15,30 +15,50 @@ export default function PageTransition({ currentPage, children }: PageTransition
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
     : false;
 
-  // Simple, fast transition variants
-  const transitionVariants = {
-    initial: { 
-      opacity: 1,
-      scale: 1,
-      filter: 'blur(0px)'
-    },
-    animate: {
-      opacity: [1, 0.7, 1], // Never goes below 70% opacity
-      scale: [1, 0.98, 1], // Minimal scale change
-      filter: ['blur(0px)', 'blur(1px)', 'blur(0px)'] // Very light blur
-    },
-    transition: {
-      duration: 0.8, // Much faster - 0.8 seconds total
-      ease: [0.25, 0.46, 0.45, 0.94], // Smooth easing
-      times: [0, 0.4, 1] // Content switches at 40%
+  // Get rotation direction based on page navigation
+  const getRotationDirection = (from: string, to: string) => {
+    const pages = ['home', 'about', 'case-studies', 'contact'];
+    const fromIndex = pages.indexOf(from);
+    const toIndex = pages.indexOf(to);
+    
+    // Determine if we're going forward or backward
+    if (toIndex > fromIndex) {
+      return 'forward'; // Rotate right
+    } else {
+      return 'backward'; // Rotate left
     }
   };
 
-  // Even simpler for reduced motion
+  // 3D perspective transition variants
+  const get3DTransitionVariants = (direction: 'forward' | 'backward') => {
+    const rotateY = direction === 'forward' ? 90 : -90;
+    
+    return {
+      initial: { 
+        opacity: 1,
+        rotateY: 0,
+        scale: 1,
+        z: 0
+      },
+      animate: {
+        opacity: [1, 0.3, 1], // Dip to 30% opacity at midpoint
+        rotateY: [0, rotateY, 0], // Single clean rotation
+        scale: [1, 0.95, 1], // Slight scale for depth
+        z: [0, -200, 0] // Move back in 3D space
+      },
+      transition: {
+        duration: 1.0, // 1 second for smooth 3D effect
+        ease: [0.25, 0.46, 0.45, 0.94],
+        times: [0, 0.5, 1] // Content switches at exact midpoint
+      }
+    };
+  };
+
+  // Reduced motion fallback
   const reducedMotionVariant = {
     initial: { opacity: 1 },
-    animate: { opacity: [1, 0.8, 1] }, // Minimal opacity change
-    transition: { duration: 0.4, ease: "easeInOut" }
+    animate: { opacity: [1, 0.7, 1] },
+    transition: { duration: 0.6, ease: "easeInOut" }
   };
 
   // Trigger transition when page changes
@@ -46,21 +66,25 @@ export default function PageTransition({ currentPage, children }: PageTransition
     if (currentPage !== displayPage) {
       setIsTransitioning(true);
       
-      // Switch page content at 40% of transition (when opacity is lowest)
-      const switchDelay = prefersReducedMotion ? 160 : 320; // 40% of 0.8s = 320ms
-      const endDelay = prefersReducedMotion ? 400 : 800; // Total duration
+      const switchDelay = prefersReducedMotion ? 300 : 500; // Switch at midpoint
+      const endDelay = prefersReducedMotion ? 600 : 1000; // Total duration
       
       setTimeout(() => setDisplayPage(currentPage), switchDelay);
       setTimeout(() => setIsTransitioning(false), endDelay);
     }
   }, [currentPage, displayPage, prefersReducedMotion]);
 
+  const direction = getRotationDirection(displayPage, currentPage);
+  const transitionVariants = get3DTransitionVariants(direction);
+
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full perspective-container">
       <motion.div
-        className="relative w-full h-full"
+        className="relative w-full h-full preserve-3d transition-layer"
         style={{
-          willChange: isTransitioning ? 'transform, opacity, filter' : 'auto'
+          willChange: isTransitioning ? 'transform, opacity' : 'auto',
+          transformStyle: 'preserve-3d',
+          perspective: '2000px'
         }}
         initial={prefersReducedMotion ? reducedMotionVariant.initial : transitionVariants.initial}
         animate={isTransitioning ? 
@@ -73,11 +97,11 @@ export default function PageTransition({ currentPage, children }: PageTransition
           <motion.div
             key={displayPage}
             className="w-full h-full"
-            initial={{ opacity: 0.8 }} // Start at 80% opacity
+            initial={{ opacity: 0.7 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0.8 }}
+            exit={{ opacity: 0.7 }}
             transition={{ 
-              duration: 0.2, // Very quick content fade
+              duration: 0.3,
               ease: "easeOut"
             }}
           >
@@ -86,20 +110,55 @@ export default function PageTransition({ currentPage, children }: PageTransition
         </AnimatePresence>
       </motion.div>
 
-      {/* Subtle background effect */}
+      {/* 3D ambient lighting effect */}
       <AnimatePresence>
         {isTransitioning && !prefersReducedMotion && (
           <motion.div
             className="fixed inset-0 z-0 pointer-events-none"
             style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.03) 0%, rgba(147, 51, 234, 0.02) 50%, transparent 100%)'
+              background: `radial-gradient(circle at 50% 50%, 
+                rgba(59, 130, 246, 0.08) 0%, 
+                rgba(147, 51, 234, 0.05) 30%, 
+                rgba(6, 182, 212, 0.03) 60%, 
+                transparent 100%)`
             }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.5, 0] }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ 
+              opacity: [0, 1, 0],
+              scale: [0.8, 1.2, 0.8]
+            }}
             exit={{ opacity: 0 }}
             transition={{ 
-              duration: 0.8, 
-              ease: "easeInOut" 
+              duration: 1.0,
+              ease: "easeInOut",
+              times: [0, 0.5, 1]
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Holographic scan lines during transition */}
+      <AnimatePresence>
+        {isTransitioning && !prefersReducedMotion && (
+          <motion.div
+            className="fixed inset-0 z-10 pointer-events-none"
+            style={{
+              background: `linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0, 255, 255, 0.03) 25%, 
+                rgba(255, 0, 255, 0.03) 50%, 
+                rgba(0, 255, 255, 0.03) 75%, 
+                transparent 100%)`
+            }}
+            initial={{ x: '-100%', opacity: 0 }}
+            animate={{ 
+              x: ['100%', '200%'],
+              opacity: [0, 0.6, 0]
+            }}
+            transition={{ 
+              duration: 1.0,
+              ease: "easeInOut",
+              times: [0, 0.5, 1]
             }}
           />
         )}

@@ -26,7 +26,6 @@
   will-change: transform, opacity, filter;
   transform: translateZ(0);
   backface-visibility: hidden;
-  perspective: 2000px;
 }
 
 /* Reduced motion support */
@@ -47,27 +46,41 @@
 .perspective-container {
   perspective: 2000px;
   perspective-origin: 50% 50%;
+  overflow: hidden;
 }
 
 /* Preserve 3D transforms */
 .preserve-3d {
   transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
-/* Enhanced transition classes */
-.transition-home {
-  filter: contrast(1.02) brightness(1.01);
+/* 3D rotation optimizations */
+.transition-layer {
+  transform-origin: center center;
+  will-change: transform, opacity;
 }
 
-.transition-standard {
-  filter: contrast(1) brightness(1);
-}
-
-/* Smooth hardware acceleration */
+/* Smooth 3D rendering */
 .transition-layer,
-.transition-home,
-.transition-standard {
+.perspective-container {
+  -webkit-transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 2000px;
+}
+
+/* Hardware acceleration for smooth 3D */
+.transition-layer {
   transform: translateZ(0);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-transform: translateZ(0);
+}
+
+/* Prevent text selection during transitions */
+.transition-layer.transitioning {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
