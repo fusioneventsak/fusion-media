@@ -59,7 +59,7 @@ export default function App() {
       />
       
       {/* Enhanced 3D Background */}
-      <div className="fixed inset-0 z-0" style={{ zIndex: 1 }}>
+      <div className="fixed inset-0" style={{ zIndex: 1 }}>
         <Canvas
           camera={{ 
             position: [15, 3, 15], 
@@ -107,17 +107,23 @@ export default function App() {
       </div>
 
       {/* Navigation */}
-      <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <div style={{ zIndex: 50 }}>
+        <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      </div>
 
       {/* Page Content */}
-      <PageTransition currentPage={currentPage}>
-        <main className="relative z-10">
-          {renderPage()}
-        </main>
-      </PageTransition>
+      <div style={{ zIndex: 10 }}>
+        <PageTransition currentPage={currentPage}>
+          <main className="relative">
+            {renderPage()}
+          </main>
+        </PageTransition>
+      </div>
 
       {/* Global Footer */}
-      <Footer />
+      <div style={{ zIndex: 10 }}>
+        <Footer />
+      </div>
     </div>
   );
 }
