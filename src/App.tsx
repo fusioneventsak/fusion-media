@@ -59,7 +59,7 @@ export default function App() {
       />
       
       {/* Enhanced 3D Background */}
-      <div className="fixed inset-0 z-0">
+      <div className="fixed inset-0 z-0" style={{ zIndex: 1 }}>
         <Canvas
           camera={{ 
             position: [15, 3, 15], 
