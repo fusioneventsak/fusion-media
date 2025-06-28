@@ -27,7 +27,9 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
       setIsMenuOpen(false); // Close mobile menu
       
       // Reset transition state
-      setTimeout(() => setIsTransitioning(false), 2000);
+      const isHomeTransition = newPage === 'home' || currentPage === 'home';
+      const transitionDuration = isHomeTransition ? 1800 : 2000;
+      setTimeout(() => setIsTransitioning(false), transitionDuration);
     }
   };
   

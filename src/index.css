@@ -53,3 +53,21 @@
 .preserve-3d {
   transform-style: preserve-3d;
 }
+
+/* Enhanced transition classes */
+.transition-home {
+  filter: contrast(1.02) brightness(1.01);
+}
+
+.transition-standard {
+  filter: contrast(1) brightness(1);
+}
+
+/* Smooth hardware acceleration */
+.transition-layer,
+.transition-home,
+.transition-standard {
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
