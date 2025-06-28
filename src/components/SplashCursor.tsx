@@ -234,13 +234,13 @@ export default function SplashCursor({
       SIM_RESOLUTION: SIM_RESOLUTION!,
       DYE_RESOLUTION: DYE_RESOLUTION!,
       CAPTURE_RESOLUTION: CAPTURE_RESOLUTION!,
-      DENSITY_DISSIPATION: Math.max(DENSITY_DISSIPATION!, 12.0),
-      VELOCITY_DISSIPATION: Math.max(VELOCITY_DISSIPATION!, 8.0),
+      DENSITY_DISSIPATION: DENSITY_DISSIPATION!,
+      VELOCITY_DISSIPATION: VELOCITY_DISSIPATION!,
       PRESSURE: PRESSURE!,
       PRESSURE_ITERATIONS: PRESSURE_ITERATIONS!,
       CURL: CURL!,
-      SPLAT_RADIUS: Math.min(SPLAT_RADIUS!, 0.08),
-      SPLAT_FORCE: Math.min(SPLAT_FORCE!, 1200),
+      SPLAT_RADIUS: SPLAT_RADIUS!,
+      SPLAT_FORCE: SPLAT_FORCE!,
       SHADING,
       COLOR_UPDATE_SPEED: STABLE_COLORS ? 0 : COLOR_UPDATE_SPEED!, // Disable color updates if stable
       PAUSED: false,
@@ -1410,11 +1410,11 @@ export default function SplashCursor({
 
     function clickSplat(pointer: Pointer) {
       const color = generateColor();
-      color.r *= 1.8;
-      color.g *= 1.8;
-      color.b *= 1.8;
-      const dx = 6 * (Math.random() - 0.5);
-      const dy = 12 * (Math.random() - 0.5);
+      color.r *= 2.2;
+      color.g *= 2.2;
+      color.b *= 2.2;
+      const dx = 7 * (Math.random() - 0.5);
+      const dy = 16 * (Math.random() - 0.5);
       splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color);
     }
 
