@@ -415,7 +415,6 @@ export default function HomePage() {
                   }}
                 ></div>
               </div>
-              </motion.div>
             </motion.div>
           </div>
         </div>
