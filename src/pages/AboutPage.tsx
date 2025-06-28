@@ -2,25 +2,82 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 export default function AboutPage() {
+  // Enhanced animation variants with better text visibility
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.08,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 20,
+      filter: 'blur(2px)'
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      filter: 'blur(0px)',
+      transition: {
+        duration: 0.5,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      scale: 0.95,
+      y: 30
+    },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      }
+    }
+  };
+
+  const staggerContainerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.06,
+        delayChildren: 0.1
+      }
+    }
+  };
+
   return (
     <div className="relative z-10 pointer-events-none">
       <section className="min-h-screen flex items-center justify-center px-8 pt-24">
-        <div className="max-w-7xl w-full pointer-events-auto">
+        <motion.div 
+          className="max-w-7xl w-full pointer-events-auto"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <motion.h1 
             className="text-6xl font-bold text-center mb-8 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+            variants={itemVariants}
           >
             About Fusion Interactive
           </motion.h1>
           
           <div className="grid lg:grid-cols-2 gap-16 items-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
+            <motion.div variants={itemVariants}>
               <h2 className="text-3xl font-bold mb-6 text-white">Pioneering Digital Excellence Since 2014</h2>
               <p className="text-lg text-gray-300 mb-6 leading-relaxed">
                 Fusion Interactive was born from a simple belief: technology should transform businesses, 
@@ -33,11 +90,10 @@ export default function AboutPage() {
                 measurable business results.
               </p>
             </motion.div>
+            
             <motion.div 
               className="bg-gradient-to-br from-blue-900/60 to-purple-900/60 bg-black/40 rounded-2xl p-8 border border-blue-500/30"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              variants={cardVariants}
             >
               <h3 className="text-2xl font-bold mb-6 text-blue-300">Our Mission</h3>
               <p className="text-gray-300 mb-6">
@@ -58,13 +114,16 @@ export default function AboutPage() {
           </div>
 
           {/* Team Section */}
-          <div className="mb-16">
+          <motion.div 
+            className="mb-16"
+            variants={staggerContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             <motion.h2 
               className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-pink-400 to-red-500 bg-clip-text text-transparent"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              variants={itemVariants}
             >
               Meet Our Expert Team
             </motion.h2>
@@ -92,11 +151,12 @@ export default function AboutPage() {
                 <motion.div 
                   key={index}
                   className="bg-black/30 rounded-xl p-6 border border-white/10 hover:bg-black/40 transition-all duration-300 text-center"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  whileHover={{ scale: 1.02 }}
+                  variants={cardVariants}
+                  whileHover={{ 
+                    scale: 1.02,
+                    y: -5,
+                    transition: { duration: 0.2 }
+                  }}
                 >
                   <div className="text-6xl mb-4">{member.image}</div>
                   <h3 className="text-xl font-semibold mb-2 text-white">{member.name}</h3>
@@ -105,16 +165,19 @@ export default function AboutPage() {
                 </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Values Section */}
-          <div className="mb-16">
+          <motion.div 
+            className="mb-16"
+            variants={staggerContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             <motion.h2 
               className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              variants={itemVariants}
             >
               Our Core Values
             </motion.h2>
@@ -144,11 +207,12 @@ export default function AboutPage() {
                 <motion.div 
                   key={index}
                   className="bg-black/30 rounded-lg p-6 border border-white/10 text-center"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.02 }}
+                  variants={cardVariants}
+                  whileHover={{ 
+                    scale: 1.02,
+                    y: -3,
+                    transition: { duration: 0.2 }
+                  }}
                 >
                   <div className="text-4xl mb-4">{value.icon}</div>
                   <h3 className="text-lg font-semibold mb-3 text-white">{value.title}</h3>
@@ -156,16 +220,18 @@ export default function AboutPage() {
                 </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Technology Stack */}
-          <div>
+          <motion.div
+            variants={staggerContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             <motion.h2 
               className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+              variants={itemVariants}
             >
               Our Technology Stack
             </motion.h2>
@@ -191,25 +257,33 @@ export default function AboutPage() {
                 <motion.div 
                   key={index}
                   className="bg-black/30 rounded-lg p-6 border border-white/10"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  variants={cardVariants}
                 >
                   <h3 className="text-lg font-semibold mb-4 text-yellow-400">{stack.category}</h3>
                   <ul className="space-y-2">
                     {stack.technologies.map((tech, idx) => (
-                      <li key={idx} className="text-gray-300 text-sm flex items-center">
+                      <motion.li 
+                        key={idx} 
+                        className="text-gray-300 text-sm flex items-center"
+                        initial={{ opacity: 0, x: -10 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ 
+                          duration: 0.3, 
+                          delay: idx * 0.05,
+                          ease: [0.25, 0.46, 0.45, 0.94]
+                        }}
+                      >
                         <span className="w-2 h-2 bg-yellow-400 rounded-full mr-3"></span>
                         {tech}
-                      </li>
+                      </motion.li>
                     ))}
                   </ul>
                 </motion.div>
               ))}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
     </div>
   );

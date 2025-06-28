@@ -38,9 +38,11 @@ export default function PageTransition({ currentPage, children }: PageTransition
   // Enhanced easing curves for smoother transitions
   const smoothEasing = [0.23, 1, 0.32, 1]; // Custom cubic-bezier for ultra-smooth motion
   const homeEasing = [0.19, 1, 0.22, 1]; // Even smoother for home page
+  const aboutEasing = [0.25, 0.46, 0.45, 0.94]; // Optimized for about page text visibility
 
   // Determine if we're transitioning from/to home for special handling
   const isHomeTransition = displayPage === 'home' || currentPage === 'home';
+  const isAboutTransition = displayPage === 'about' || currentPage === 'about';
 
   // 3D Transition Variants
   const transitionVariants = {
@@ -53,16 +55,16 @@ export default function PageTransition({ currentPage, children }: PageTransition
         filter: 'blur(0px)'
       },
       animate: {
-        opacity: isHomeTransition ? [1, 0.1, 1] : [1, 0, 1],
+        opacity: isHomeTransition ? [1, 0.1, 1] : isAboutTransition ? [1, 0.3, 1] : [1, 0, 1],
         rotateY: isHomeTransition ? [0, 120, 360] : [0, 180, 360],
         z: isHomeTransition ? [0, -1200, 0] : [0, -1800, 0],
         scale: isHomeTransition ? [1, 0.9, 1] : [1, 0.8, 1],
-        filter: isHomeTransition ? ['blur(0px)', 'blur(2px)', 'blur(0px)'] : ['blur(0px)', 'blur(4px)', 'blur(0px)']
+        filter: isHomeTransition ? ['blur(0px)', 'blur(2px)', 'blur(0px)'] : isAboutTransition ? ['blur(0px)', 'blur(1px)', 'blur(0px)'] : ['blur(0px)', 'blur(4px)', 'blur(0px)']
       },
       transition: {
-        duration: isHomeTransition ? 1.8 : 2,
-        ease: isHomeTransition ? homeEasing : smoothEasing,
-        times: isHomeTransition ? [0, 0.45, 1] : [0, 0.5, 1]
+        duration: isHomeTransition ? 1.8 : isAboutTransition ? 1.6 : 2,
+        ease: isHomeTransition ? homeEasing : isAboutTransition ? aboutEasing : smoothEasing,
+        times: isHomeTransition ? [0, 0.45, 1] : isAboutTransition ? [0, 0.4, 1] : [0, 0.5, 1]
       }
     },
     ltr: {
@@ -74,16 +76,16 @@ export default function PageTransition({ currentPage, children }: PageTransition
         filter: 'blur(0px)'
       },
       animate: {
-        opacity: isHomeTransition ? [1, 0.1, 1] : [1, 0, 1],
+        opacity: isHomeTransition ? [1, 0.1, 1] : isAboutTransition ? [1, 0.3, 1] : [1, 0, 1],
         rotateY: isHomeTransition ? [0, -120, -360] : [0, -180, -360],
         z: isHomeTransition ? [0, -1200, 0] : [0, -1800, 0],
         scale: isHomeTransition ? [1, 0.9, 1] : [1, 0.8, 1],
-        filter: isHomeTransition ? ['blur(0px)', 'blur(2px)', 'blur(0px)'] : ['blur(0px)', 'blur(4px)', 'blur(0px)']
+        filter: isHomeTransition ? ['blur(0px)', 'blur(2px)', 'blur(0px)'] : isAboutTransition ? ['blur(0px)', 'blur(1px)', 'blur(0px)'] : ['blur(0px)', 'blur(4px)', 'blur(0px)']
       },
       transition: {
-        duration: isHomeTransition ? 1.8 : 2,
-        ease: isHomeTransition ? homeEasing : smoothEasing,
-        times: isHomeTransition ? [0, 0.45, 1] : [0, 0.5, 1]
+        duration: isHomeTransition ? 1.8 : isAboutTransition ? 1.6 : 2,
+        ease: isHomeTransition ? homeEasing : isAboutTransition ? aboutEasing : smoothEasing,
+        times: isHomeTransition ? [0, 0.45, 1] : isAboutTransition ? [0, 0.4, 1] : [0, 0.5, 1]
       }
     },
     ttb: {
@@ -95,16 +97,16 @@ export default function PageTransition({ currentPage, children }: PageTransition
         filter: 'blur(0px)'
       },
       animate: {
-        opacity: isHomeTransition ? [1, 0.1, 1] : [1, 0, 1],
+        opacity: isHomeTransition ? [1, 0.1, 1] : isAboutTransition ? [1, 0.3, 1] : [1, 0, 1],
         rotateX: isHomeTransition ? [0, 120, 360] : [0, 180, 360],
         z: isHomeTransition ? [0, -1200, 0] : [0, -1800, 0],
         scale: isHomeTransition ? [1, 0.9, 1] : [1, 0.8, 1],
-        filter: isHomeTransition ? ['blur(0px)', 'blur(2px)', 'blur(0px)'] : ['blur(0px)', 'blur(4px)', 'blur(0px)']
+        filter: isHomeTransition ? ['blur(0px)', 'blur(2px)', 'blur(0px)'] : isAboutTransition ? ['blur(0px)', 'blur(1px)', 'blur(0px)'] : ['blur(0px)', 'blur(4px)', 'blur(0px)']
       },
       transition: {
-        duration: isHomeTransition ? 1.8 : 2,
-        ease: isHomeTransition ? homeEasing : smoothEasing,
-        times: isHomeTransition ? [0, 0.45, 1] : [0, 0.5, 1]
+        duration: isHomeTransition ? 1.8 : isAboutTransition ? 1.6 : 2,
+        ease: isHomeTransition ? homeEasing : isAboutTransition ? aboutEasing : smoothEasing,
+        times: isHomeTransition ? [0, 0.45, 1] : isAboutTransition ? [0, 0.4, 1] : [0, 0.5, 1]
       }
     },
     btt: {
@@ -116,16 +118,16 @@ export default function PageTransition({ currentPage, children }: PageTransition
         filter: 'blur(0px)'
       },
       animate: {
-        opacity: isHomeTransition ? [1, 0.1, 1] : [1, 0, 1],
+        opacity: isHomeTransition ? [1, 0.1, 1] : isAboutTransition ? [1, 0.3, 1] : [1, 0, 1],
         rotateX: isHomeTransition ? [0, -120, -360] : [0, -180, -360],
         z: isHomeTransition ? [0, -1200, 0] : [0, -1800, 0],
         scale: isHomeTransition ? [1, 0.9, 1] : [1, 0.8, 1],
-        filter: isHomeTransition ? ['blur(0px)', 'blur(2px)', 'blur(0px)'] : ['blur(0px)', 'blur(4px)', 'blur(0px)']
+        filter: isHomeTransition ? ['blur(0px)', 'blur(2px)', 'blur(0px)'] : isAboutTransition ? ['blur(0px)', 'blur(1px)', 'blur(0px)'] : ['blur(0px)', 'blur(4px)', 'blur(0px)']
       },
       transition: {
-        duration: isHomeTransition ? 1.8 : 2,
-        ease: isHomeTransition ? homeEasing : smoothEasing,
-        times: isHomeTransition ? [0, 0.45, 1] : [0, 0.5, 1]
+        duration: isHomeTransition ? 1.8 : isAboutTransition ? 1.6 : 2,
+        ease: isHomeTransition ? homeEasing : isAboutTransition ? aboutEasing : smoothEasing,
+        times: isHomeTransition ? [0, 0.45, 1] : isAboutTransition ? [0, 0.4, 1] : [0, 0.5, 1]
       }
     }
   };
@@ -145,13 +147,13 @@ export default function PageTransition({ currentPage, children }: PageTransition
       setIsTransitioning(true);
       
       // Switch page content at transition midpoint (when opacity is 0)
-      const switchDelay = prefersReducedMotion ? 400 : (isHomeTransition ? 810 : 1000); // 45% of 1.8s = 810ms
-      const endDelay = prefersReducedMotion ? 800 : (isHomeTransition ? 1800 : 2000);
+      const switchDelay = prefersReducedMotion ? 400 : (isHomeTransition ? 810 : isAboutTransition ? 640 : 1000); // 40% of 1.6s = 640ms for about
+      const endDelay = prefersReducedMotion ? 800 : (isHomeTransition ? 1800 : isAboutTransition ? 1600 : 2000);
       
       setTimeout(() => setDisplayPage(currentPage), switchDelay);
       setTimeout(() => setIsTransitioning(false), endDelay);
     }
-  }, [currentPage, displayPage, prefersReducedMotion, isHomeTransition]);
+  }, [currentPage, displayPage, prefersReducedMotion, isHomeTransition, isAboutTransition]);
 
   return (
     <div 
