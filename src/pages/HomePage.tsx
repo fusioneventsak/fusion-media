@@ -414,6 +414,7 @@ export default function HomePage() {
                     zIndex: -2
                   }}
                 ></div>
+              </div>
               </motion.div>
             </motion.div>
           </div>
