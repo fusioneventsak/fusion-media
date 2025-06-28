@@ -2,6 +2,49 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 export default function CaseStudiesPage() {
+  // Simplified animation variants for better performance and readability
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.4,
+        staggerChildren: 0.06,
+        delayChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 20
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 30
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        duration: 0.4,
+        ease: [0.25, 0.46, 0.45, 0.94]
+      }
+    }
+  };
+
   const caseStudies = [
     {
       title: "Global Tech Conference - Interactive Event Platform",
@@ -68,20 +111,21 @@ export default function CaseStudiesPage() {
   return (
     <div className="relative z-10 pointer-events-none">
       <section className="min-h-screen px-8 pt-24">
-        <div className="max-w-7xl mx-auto pointer-events-auto">
+        <motion.div 
+          className="max-w-7xl mx-auto pointer-events-auto"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           <motion.h1 
             className="text-6xl font-bold text-center mb-8 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+            variants={itemVariants}
           >
             Case Studies
           </motion.h1>
           <motion.p 
             className="text-xl text-center text-gray-300 mb-16 max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            variants={itemVariants}
           >
             Discover how we've transformed businesses across industries with innovative technology solutions 
             that drive engagement, increase conversions, and deliver measurable results.
@@ -91,11 +135,16 @@ export default function CaseStudiesPage() {
             {caseStudies.map((study, index) => (
               <motion.div 
                 key={index}
-                className="bg-black/30 rounded-2xl p-8 border border-white/10 hover:bg-black/40 transition-all duration-300"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
+                className="bg-black/30 rounded-2xl p-8 border border-white/10 hover:bg-black/40 transition-all duration-200"
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                whileHover={{ 
+                  scale: 1.01,
+                  y: -2,
+                  transition: { duration: 0.2 }
+                }}
               >
                 <div className="grid lg:grid-cols-3 gap-8">
                   <div className="lg:col-span-2">
@@ -126,10 +175,21 @@ export default function CaseStudiesPage() {
                       <h3 className="text-lg font-semibold text-purple-400 mb-4">Key Results</h3>
                       <ul className="space-y-2">
                         {study.results.map((result, idx) => (
-                          <li key={idx} className="text-gray-300 text-sm flex items-start">
+                          <motion.li 
+                            key={idx} 
+                            className="text-gray-300 text-sm flex items-start"
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ 
+                              duration: 0.3, 
+                              delay: idx * 0.05,
+                              ease: [0.25, 0.46, 0.45, 0.94]
+                            }}
+                          >
                             <span className="w-2 h-2 bg-purple-400 rounded-full mr-3 mt-2 flex-shrink-0"></span>
                             {result}
-                          </li>
+                          </motion.li>
                         ))}
                       </ul>
                     </div>
@@ -138,9 +198,20 @@ export default function CaseStudiesPage() {
                       <h3 className="text-lg font-semibold text-yellow-400 mb-4">Technologies Used</h3>
                       <div className="flex flex-wrap gap-2">
                         {study.technologies.map((tech, idx) => (
-                          <span key={idx} className="px-3 py-1 bg-yellow-400/20 text-yellow-300 rounded-full text-xs">
+                          <motion.span 
+                            key={idx} 
+                            className="px-3 py-1 bg-yellow-400/20 text-yellow-300 rounded-full text-xs"
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ 
+                              duration: 0.2, 
+                              delay: idx * 0.03,
+                              ease: [0.25, 0.46, 0.45, 0.94]
+                            }}
+                          >
                             {tech}
-                          </span>
+                          </motion.span>
                         ))}
                       </div>
                     </div>
@@ -153,10 +224,10 @@ export default function CaseStudiesPage() {
           {/* Call to Action */}
           <motion.div 
             className="mt-16 text-center"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
           >
             <div className="bg-gradient-to-r from-blue-900/50 to-purple-900/50 backdrop-blur-sm rounded-2xl p-8 border border-blue-500/30">
               <div className="bg-gradient-to-r from-blue-900/60 to-purple-900/60 bg-black/40 rounded-2xl p-8 border border-blue-500/30">
@@ -166,15 +237,21 @@ export default function CaseStudiesPage() {
                 </p>
                 <motion.button 
                   className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ 
+                    scale: 1.02,
+                    transition: { duration: 0.15 }
+                  }}
+                  whileTap={{ 
+                    scale: 0.98,
+                    transition: { duration: 0.1 }
+                  }}
                 >
                   Start Your Project Today
                 </motion.button>
               </div>
             </div>
           </motion.div>
-        </div>
+        </motion.div>
       </section>
     </div>
   );

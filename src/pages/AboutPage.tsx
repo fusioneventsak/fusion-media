@@ -2,14 +2,14 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 export default function AboutPage() {
-  // Enhanced animation variants with better text visibility
+  // Much simpler animation variants focused on readability
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.6,
-        staggerChildren: 0.08,
+        duration: 0.4, // Faster container animation
+        staggerChildren: 0.05, // Quicker stagger
         delayChildren: 0.1
       }
     }
@@ -18,15 +18,13 @@ export default function AboutPage() {
   const itemVariants = {
     hidden: { 
       opacity: 0, 
-      y: 20,
-      filter: 'blur(2px)'
+      y: 15 // Smaller movement
     },
     visible: { 
       opacity: 1, 
       y: 0,
-      filter: 'blur(0px)',
       transition: {
-        duration: 0.5,
+        duration: 0.3, // Much faster
         ease: [0.25, 0.46, 0.45, 0.94]
       }
     }
@@ -35,15 +33,15 @@ export default function AboutPage() {
   const cardVariants = {
     hidden: { 
       opacity: 0, 
-      scale: 0.95,
-      y: 30
+      scale: 0.98, // Minimal scale
+      y: 20
     },
     visible: { 
       opacity: 1, 
       scale: 1,
       y: 0,
       transition: {
-        duration: 0.4,
+        duration: 0.3, // Faster
         ease: [0.25, 0.46, 0.45, 0.94]
       }
     }
@@ -54,8 +52,8 @@ export default function AboutPage() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.06,
-        delayChildren: 0.1
+        staggerChildren: 0.04, // Even quicker stagger
+        delayChildren: 0.05
       }
     }
   };
@@ -150,12 +148,12 @@ export default function AboutPage() {
               ].map((member, index) => (
                 <motion.div 
                   key={index}
-                  className="bg-black/30 rounded-xl p-6 border border-white/10 hover:bg-black/40 transition-all duration-300 text-center"
+                  className="bg-black/30 rounded-xl p-6 border border-white/10 hover:bg-black/40 transition-all duration-200 text-center"
                   variants={cardVariants}
                   whileHover={{ 
                     scale: 1.02,
-                    y: -5,
-                    transition: { duration: 0.2 }
+                    y: -3,
+                    transition: { duration: 0.15 }
                   }}
                 >
                   <div className="text-6xl mb-4">{member.image}</div>
@@ -210,8 +208,8 @@ export default function AboutPage() {
                   variants={cardVariants}
                   whileHover={{ 
                     scale: 1.02,
-                    y: -3,
-                    transition: { duration: 0.2 }
+                    y: -2,
+                    transition: { duration: 0.15 }
                   }}
                 >
                   <div className="text-4xl mb-4">{value.icon}</div>
@@ -265,12 +263,12 @@ export default function AboutPage() {
                       <motion.li 
                         key={idx} 
                         className="text-gray-300 text-sm flex items-center"
-                        initial={{ opacity: 0, x: -10 }}
+                        initial={{ opacity: 0, x: -5 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ 
-                          duration: 0.3, 
-                          delay: idx * 0.05,
+                          duration: 0.2, 
+                          delay: idx * 0.03,
                           ease: [0.25, 0.46, 0.45, 0.94]
                         }}
                       >

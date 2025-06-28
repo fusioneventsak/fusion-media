@@ -27,9 +27,7 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
       setIsMenuOpen(false); // Close mobile menu
       
       // Reset transition state
-      const isHomeTransition = newPage === 'home' || currentPage === 'home';
-      const isAboutTransition = newPage === 'about' || currentPage === 'about';
-      const transitionDuration = isHomeTransition ? 1800 : isAboutTransition ? 1600 : 2000;
+      const transitionDuration = 800; // All transitions are now 0.8 seconds
       setTimeout(() => setIsTransitioning(false), transitionDuration);
     }
   };
