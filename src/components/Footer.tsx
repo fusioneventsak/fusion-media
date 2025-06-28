@@ -59,7 +59,7 @@ export default function Footer() {
   return (
     <LegalModals>
       {(openModal) => (
-        <footer className="relative pointer-events-auto">
+        <footer className="relative">
           {/* Gradient overlay for readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent"></div>
           
