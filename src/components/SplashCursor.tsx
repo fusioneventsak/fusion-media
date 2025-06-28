@@ -63,12 +63,12 @@ export default function SplashCursor({
   PRESSURE_ITERATIONS = 20,
   CURL = 1,
   SPLAT_RADIUS = 0.12,
-  SPLAT_FORCE = 2000,
+    SPLAT_FORCE = 1500,
   SHADING = true,
-  COLOR_UPDATE_SPEED = 4,
+    COLOR_UPDATE_SPEED = 0,
   BACK_COLOR = { r: 0.5, g: 0, b: 0 },
   TRANSPARENT = true,
-  STABLE_COLORS = true
+    STABLE_COLORS = true
 }: SplashCursorProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -234,13 +234,13 @@ export default function SplashCursor({
       SIM_RESOLUTION: SIM_RESOLUTION!,
       DYE_RESOLUTION: DYE_RESOLUTION!,
       CAPTURE_RESOLUTION: CAPTURE_RESOLUTION!,
-      DENSITY_DISSIPATION: DENSITY_DISSIPATION!,
-      VELOCITY_DISSIPATION: VELOCITY_DISSIPATION!,
+      DENSITY_DISSIPATION: Math.max(DENSITY_DISSIPATION!, 12.0),
+      VELOCITY_DISSIPATION: Math.max(VELOCITY_DISSIPATION!, 8.0),
       PRESSURE: PRESSURE!,
       PRESSURE_ITERATIONS: PRESSURE_ITERATIONS!,
       CURL: CURL!,
-      SPLAT_RADIUS: SPLAT_RADIUS!,
-      SPLAT_FORCE: SPLAT_FORCE!,
+      SPLAT_RADIUS: Math.min(SPLAT_RADIUS!, 0.08),
+      SPLAT_FORCE: Math.min(SPLAT_FORCE!, 1200),
       SHADING,
       COLOR_UPDATE_SPEED: STABLE_COLORS ? 0 : COLOR_UPDATE_SPEED!, // Disable color updates if stable
       PAUSED: false,
@@ -1410,11 +1410,11 @@ export default function SplashCursor({
 
     function clickSplat(pointer: Pointer) {
       const color = generateColor();
-      color.r *= 2.5;
-      color.g *= 2.5;
-      color.b *= 2.5;
-      const dx = 8 * (Math.random() - 0.5);
-      const dy = 20 * (Math.random() - 0.5);
+      color.r *= 1.8;
+      color.g *= 1.8;
+      color.b *= 1.8;
+      const dx = 6 * (Math.random() - 0.5);
+      const dy = 12 * (Math.random() - 0.5);
       splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color);
     }
 
