@@ -43,14 +43,7 @@ export default function Scene({ currentPage }: SceneProps) {
     console.log('🔍 Camera positioned with iOS optimizations');
   }, [camera, gl]);
   
-  useFrame(() => {
-    // MUCH SLOWER CAMERA MOVEMENT for iOS - reduced by 10x
-    const time = Date.now() * 0.00005; // Was 0.0001, now 0.00005 for smoother iOS
-    camera.position.x = Math.cos(time) * 15;
-    camera.position.z = Math.sin(time) * 15;
-    camera.position.y = 3 + Math.sin(time * 0.5) * 1;
-    camera.lookAt(0, 0, 0);
-  });
+  // Camera is now completely static - no movement during scroll
   
   return (
     <>
