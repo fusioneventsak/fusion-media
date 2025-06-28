@@ -109,10 +109,10 @@ export default function CaseStudiesPage() {
   ];
 
   return (
-    <div className="relative">
+    <div className="relative z-10 pointer-events-none">
       <section className="min-h-screen px-8 pt-24">
         <motion.div 
-          className="max-w-7xl mx-auto"
+          className="max-w-7xl mx-auto pointer-events-auto"
           variants={containerVariants}
           initial="hidden"
           animate="visible"

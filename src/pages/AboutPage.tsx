@@ -59,10 +59,10 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-10 pointer-events-none">
       <section className="min-h-screen flex items-center justify-center px-8 pt-24">
         <motion.div 
-          className="max-w-7xl w-full"
+          className="max-w-7xl w-full pointer-events-auto"
           variants={containerVariants}
           initial="hidden"
           animate="visible"

@@ -65,9 +65,9 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative pointer-events-none">
       {/* Scroll Progress Indicator */}
-      <div className="fixed bottom-8 left-8 z-50">
+      <div className="fixed bottom-8 left-8 z-50 pointer-events-none">
         <div className="w-2 h-32 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm border border-white/30">
           <motion.div
             className="w-full bg-gradient-to-t from-cyan-400 via-blue-500 to-purple-600 rounded-full origin-bottom"
@@ -79,7 +79,7 @@ export default function HomePage() {
       {/* Hero Section with Parallax */}
       <motion.section 
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center px-8 pt-32 pb-16"
+        className="relative min-h-screen flex items-center justify-center px-8 pt-32 pb-16 pointer-events-none"
         style={{
           opacity: heroOpacity,
           scale: heroScale,
@@ -88,7 +88,7 @@ export default function HomePage() {
         }}
       >
         {/* Hero Content */}
-        <div className="relative text-center max-w-6xl">
+        <div className="relative z-10 text-center max-w-6xl pointer-events-auto">
           <motion.div
             className="mb-6"
             initial={{ opacity: 0, y: 30 }}
@@ -211,7 +211,7 @@ export default function HomePage() {
 
       {/* Event Engagement Technology Section */}
       <motion.section 
-        className="min-h-screen relative overflow-hidden"
+        className="min-h-screen relative overflow-hidden pointer-events-auto"
         style={{
           opacity: eventOpacity,
           scale: eventScale,
@@ -514,7 +514,7 @@ export default function HomePage() {
       {/* Laptop Showcases */}
       <>
         <motion.div 
-          className=""
+          className="pointer-events-auto"
           initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -541,7 +541,7 @@ export default function HomePage() {
         </motion.div>
 
         <motion.div 
-          className=""
+          className="pointer-events-auto"
           initial={{ opacity: 0, x: -100, rotate: -2 }}
           whileInView={{ opacity: 1, x: 0, rotate: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -569,7 +569,7 @@ export default function HomePage() {
         </motion.div>
 
         <motion.div 
-          className=""
+          className="pointer-events-auto"
           initial={{ opacity: 0, x: 100, scale: 0.9 }}
           whileInView={{ opacity: 1, x: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -597,7 +597,7 @@ export default function HomePage() {
         </motion.div>
 
         <motion.div 
-          className=""
+          className="pointer-events-auto"
           initial={{ opacity: 0, y: 80, rotate: 1 }}
           whileInView={{ opacity: 1, y: 0, rotate: 0 }}
           viewport={{ once: true, amount: 0.2 }}
@@ -628,7 +628,7 @@ export default function HomePage() {
       {/* Technology & Process Section with Clip Path Reveal */}
       <section 
         ref={servicesRef}
-        className="min-h-screen flex items-center justify-center px-8 py-32 relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
       >
         {/* Clip Path Background */}
         <motion.div
@@ -743,7 +743,7 @@ export default function HomePage() {
       {/* Call to Action Section with Magnetic Interactions */}
       <section 
         ref={ctaRef}
-        className="min-h-screen flex items-center justify-center px-8 py-32 relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
       >
         {/* Gradient Overlay that responds to mouse */}
         <motion.div

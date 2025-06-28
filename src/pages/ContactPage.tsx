@@ -27,9 +27,9 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="relative">
+    <div className="relative z-10 pointer-events-none">
       <section className="min-h-screen px-8 pt-24">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto pointer-events-auto">
           <motion.h1 
             className="text-6xl font-bold text-center mb-8 bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent"
             initial={{ opacity: 0, y: 50 }}
