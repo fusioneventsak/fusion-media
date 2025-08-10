@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
 
 const FullWidthShowcase = ({ url, title, description, features, backgroundColor, textColor, accentColor }) => {
@@ -13,21 +13,21 @@ const FullWidthShowcase = ({ url, title, description, features, backgroundColor,
     <div className="relative z-10 max-w-7xl mx-auto px-8 py-20" style={{ backgroundColor }}>
       <div className="grid lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-8">
-          <h2 className={`text-4xl md:text-5xl lg:text-6xl font-light ${textColor} mb-6 leading-tight`}>
+          <h2 className={"text-4xl md:text-5xl lg:text-6xl font-light " + textColor + " mb-6 leading-tight"}>
             {title}
           </h2>
-          <p className={`text-lg md:text-xl ${textColor} opacity-70 leading-relaxed font-light mb-8`}>
+          <p className={"text-lg md:text-xl " + textColor + " opacity-70 leading-relaxed font-light mb-8"}>
             {description}
           </p>
           <ul className="space-y-6">
             {features.map((feature, index) => (
               <li key={index} className="flex items-start space-x-4">
-                <div className={`w-8 h-8 bg-gradient-to-br from-${colorName}-400 to-${colorName}-600 rounded-lg flex items-center justify-center shadow-lg`}>
+                <div className={"w-8 h-8 bg-gradient-to-br from-" + colorName + "-400 to-" + colorName + "-600 rounded-lg flex items-center justify-center shadow-lg"}>
                   <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span className={`${textColor} opacity-90 font-medium leading-relaxed`}>{feature}</span>
+                <span className={textColor + " opacity-90 font-medium leading-relaxed"}>{feature}</span>
               </li>
             ))}
           </ul>
@@ -57,42 +57,44 @@ const FullWidthShowcase = ({ url, title, description, features, backgroundColor,
         </div>
       </div>
 
-      {isModalOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <div className="relative w-full h-full max-w-7xl max-h-[90vh] p-4">
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 z-10 px-4 py-2 bg-white/20 text-white rounded-full font-medium hover:bg-white/30 transition-all duration-300 backdrop-blur-sm"
-            >
-              Close
-            </button>
-            <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
-              <iframe
-                src={url}
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-                frameBorder="0"
-                allowFullScreen
-                loading="lazy"
-              />
+      <AnimatePresence>
+        {isModalOpen && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="relative w-full max-w-[90vw] p-4">
+              <button
+                onClick={closeModal}
+                className="absolute top-4 right-4 z-10 px-4 py-2 bg-white/20 text-white rounded-full font-medium hover:bg-white/30 transition-all duration-300 backdrop-blur-sm"
+              >
+                Close
+              </button>
+              <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', maxWidth: '100%', margin: '0 auto' }}>
+                <iframe
+                  src={url}
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                  frameBorder="0"
+                  allowFullScreen
+                  loading="lazy"
+                />
+              </div>
             </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
 export default function HomePage() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const servicesRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef(null);
+  const heroRef = useRef(null);
+  const servicesRef = useRef(null);
+  const ctaRef = useRef(null);
   // Scroll progress tracking
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -119,7 +121,7 @@ export default function HomePage() {
   });
   // CTA section mouse tracking
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e) => {
       if (ctaRef.current) {
         const rect = ctaRef.current.getBoundingClientRect();
         const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
@@ -288,7 +290,7 @@ export default function HomePage() {
           willChange: 'transform, opacity'
         }}
       >
-        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-black/5"></div>
        
         <div className="relative z-10 max-w-7xl mx-auto px-8 py-20">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -571,7 +573,7 @@ export default function HomePage() {
           </div>
         </div>
       </motion.section>
-      {/* Showcases */}
+      {/* Laptop Showcases */}
       <>
         <motion.div
           className="pointer-events-auto"
@@ -611,7 +613,7 @@ export default function HomePage() {
           }}
         >
           <FullWidthShowcase
-            url="https://urequestsongs.com"
+            url="http://urequestsongs.com"
             title="Audience Engagement Platforms"
             description="Real-time interaction tools that connect performers with their audience in meaningful ways. From song requests to live polling, these platforms create deeper engagement and memorable experiences for bands, DJs, and entertainers of all kinds."
             features={[
@@ -688,7 +690,7 @@ export default function HomePage() {
       >
         {/* Clip Path Background */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-900/70 to-purple-900/70 backdrop-blur-sm"
+          className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm"
           initial={{ clipPath: 'circle(0% at 50% 50%)' }}
           animate={servicesInView ? { clipPath: 'circle(150% at 50% 50%)' } : {}}
           transition={{ duration: 1.5, ease: "easeInOut" }}
@@ -799,7 +801,7 @@ export default function HomePage() {
       >
         {/* Gradient Overlay that responds to mouse */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-purple-900/70 to-cyan-900/70"
+          className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-cyan-600/10"
           animate={{
             background: `radial-gradient(circle at ${50 + mousePosition.x * 20}% ${50 + mousePosition.y * 20}%, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.1) 50%, rgba(6, 182, 212, 0.05) 100%)`
           }}
@@ -934,7 +936,7 @@ export default function HomePage() {
                     damping: 15 + index * 2
                   }}
                 >
-                  <div className={`text-2xl font-light ${item.color === 'blue' ? 'text-blue-400' : item.color === 'purple' ? 'text-purple-400' : 'text-cyan-400'} mb-2`}>
+                  <div className={"text-2xl font-light " + (item.color === 'blue' ? 'text-blue-400' : item.color === 'purple' ? 'text-purple-400' : 'text-cyan-400') + " mb-2"}>
                     {item.title}
                   </div>
                   <p className="text-white text-sm">{item.description}</p>
