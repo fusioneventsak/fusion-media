@@ -49,10 +49,10 @@ export default function App() {
       <SplashCursor 
         SIM_RESOLUTION={64}
         DYE_RESOLUTION={512}
-        DENSITY_DISSIPATION={7.0}
+        DENSITY_DISSIPATION={8.0}
         VELOCITY_DISSIPATION={5.5}
         SPLAT_RADIUS={0.06}
-        SPLAT_FORCE={2500}
+        SPLAT_FORCE={2000}
         COLOR_UPDATE_SPEED={0}
         CURL={1}
         STABLE_COLORS={true}
