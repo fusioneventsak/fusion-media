@@ -130,11 +130,9 @@ export default function App() {
       </div>
 
       {/* Page Content - Above everything else */}
-      <PageTransition currentPage={currentPage}>
-        <main className="relative z-[100]">
-          {renderPage()}
-        </main>
-      </PageTransition>
+      <main className="relative z-[100]">
+        {renderPage()}
+      </main>
 
       {/* Global Footer */}
       <div style={{ position: 'relative', zIndex: 50 }}>
