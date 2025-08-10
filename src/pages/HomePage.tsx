@@ -1,12 +1,8 @@
-import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
 import ReactDOM from 'react-dom';
 import { X } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface ModalProps {
   isOpen: boolean;
@@ -48,10 +44,10 @@ function Modal({ isOpen, onClose, title, children }: ModalProps) {
   const modalContent = (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 pointer-events-auto">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           {/* Backdrop */}
           <motion.div
-            className="absolute inset-0 bg-gradient-to-br from-black/90 to-blue-900/70 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/85"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -59,34 +55,27 @@ function Modal({ isOpen, onClose, title, children }: ModalProps) {
           />
           {/* Modal Content */}
           <motion.div
-            className="relative w-full max-w-6xl max-h-[90vh] bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl overflow-hidden"
-            initial={{ opacity: 0, scale: 0.95, y: 50 }}
+            className="relative w-full max-w-4xl max-h-[90vh] bg-gradient-to-br from-gray-900 to-black rounded-2xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden"
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 50 }}
-            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-            style={{ willChange: 'transform, opacity' }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-white/5 bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-md">
-              <h2 className="text-3xl font-light text-white tracking-wide">{title}</h2>
+            <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-blue-900/30 to-purple-900/30">
+              <h2 className="text-2xl font-semibold text-white">{title}</h2>
               <motion.button
                 onClick={onClose}
-                className="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-all duration-300 shadow-sm"
-                whileHover={{ scale: 1.05, boxShadow: "0 10px 20px rgba(255,255,255,0.1)" }}
-                whileTap={{ scale: 0.95 }}
+                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-all duration-200"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <X className="w-5 h-5" />
               </motion.button>
             </div>
             {/* Content */}
-            <div className="p-0 overflow-hidden max-h-[calc(90vh-80px)]">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-              >
-                {children}
-              </motion.div>
+            <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)] custom-scrollbar">
+              {children}
             </div>
           </motion.div>
         </div>
@@ -174,7 +163,6 @@ export default function HomePage() {
   const heroRef = useRef(null);
   const servicesRef = useRef(null);
   const ctaRef = useRef(null);
-  const statsRefs = useRef([]);
   // Scroll progress tracking
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -221,30 +209,6 @@ export default function HomePage() {
       }
     };
   }, []);
-
-  // GSAP animations for stats
-  useLayoutEffect(() => {
-    statsRefs.current.forEach((stat, index) => {
-      if (stat) {
-        gsap.fromTo(stat, 
-          { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            delay: index * 0.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: stat,
-              start: "top 90%",
-              toggleActions: "play none none reverse"
-            }
-          }
-        );
-      }
-    });
-  }, []);
-
   return (
     <div ref={containerRef} className="relative pointer-events-none">
       {/* Scroll Progress Indicator */}
@@ -349,8 +313,15 @@ export default function HomePage() {
               Start a Project
             </motion.button>
           </motion.div>
-          <div
+          <motion.div
             className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1.2,
+              delay: 1.0,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
           >
             {[
               { number: '10x', label: 'Faster Delivery', description: 'AI-powered development' },
@@ -360,7 +331,6 @@ export default function HomePage() {
             ].map((stat, index) => (
               <motion.div
                 key={index}
-                ref={(el) => statsRefs.current[index] = el}
                 className="text-center group"
                 whileHover={{
                   scale: 1.05,
@@ -375,7 +345,7 @@ export default function HomePage() {
                 <div className="text-xs text-gray-300">{stat.description}</div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </motion.section>
       {/* Event Engagement Technology Section */}
