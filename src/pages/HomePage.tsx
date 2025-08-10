@@ -1,89 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
-import ReactDOM from 'react-dom';
-import { X, ExternalLink, Maximize2, Play, Code, Zap, Globe } from 'lucide-react';
+import { ExternalLink, Maximize2, Play, Code, Zap, Globe } from 'lucide-react';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
-
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
-}
-
-function Modal({ isOpen, onClose, title, children }: ModalProps) {
-  const modalRoot = document.getElementById('modal-root');
- 
-  if (!modalRoot) {
-    console.error('Modal root element not found');
-    return null;
-  }
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-    }
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, onClose]);
-  const modalContent = (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <motion.div
-            className="absolute inset-0 bg-black/85"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-          />
-          {/* Modal Content */}
-          <motion.div
-            className="relative w-full max-w-4xl max-h-[90vh] bg-gradient-to-br from-gray-900 to-black rounded-2xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden"
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-blue-900/30 to-purple-900/30">
-              <h2 className="text-2xl font-semibold text-white">{title}</h2>
-              <motion.button
-                onClick={onClose}
-                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-all duration-200"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <X className="w-5 h-5" />
-              </motion.button>
-            </div>
-            {/* Content */}
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)] custom-scrollbar">
-              {children}
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
-  );
-  return ReactDOM.createPortal(modalContent, modalRoot);
-}
 
 // Portfolio projects data
 const portfolioProjects = [
@@ -166,7 +84,6 @@ const portfolioProjects = [
 ];
 
 const HorizontalProjectCard = ({ project, index }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   
   const iconMap = {
@@ -349,7 +266,10 @@ const HorizontalProjectCard = ({ project, index }) => {
                   backgroundColor: 'rgba(255,255,255,0.1)'
                 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                  // Simple alert for full screen - you can replace with your modal logic
+                  window.open(project.url, '_blank');
+                }}
               >
                 <Maximize2 className="w-5 h-5 mr-2" />
                 Full Screen
@@ -433,7 +353,7 @@ const HorizontalProjectCard = ({ project, index }) => {
                     <ExternalLink className="w-5 h-5" />
                   </motion.button>
                   <motion.button
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => window.open(project.url, '_blank')}
                     className="w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -467,47 +387,6 @@ const HorizontalProjectCard = ({ project, index }) => {
           </motion.div>
         </div>
       </div>
-
-      {/* Full Screen Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setIsModalOpen(false)}
-          >
-            <motion.div
-              className="w-full max-w-6xl h-full max-h-[90vh] bg-black rounded-2xl overflow-hidden border border-white/20 shadow-2xl"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="flex items-center justify-between p-4 border-b border-white/10 bg-gray-900/50">
-                <h3 className="text-xl font-semibold text-white">{project.title}</h3>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-all"
-                >
-                  ×
-                </button>
-              </div>
-              
-              {/* Full Screen Iframe */}
-              <div className="h-[calc(100%-4rem)]">
-                <iframe
-                  src={project.url}
-                  className="w-full h-full border-none"
-                  loading="lazy"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 };
