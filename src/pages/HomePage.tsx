@@ -1,9 +1,15 @@
+```javascript
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
 
 const FullWidthShowcase = ({ url, title, description, features, backgroundColor, textColor, accentColor }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const colorName = accentColor.split('-')[1];
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
   return (
     <div className="relative z-10 max-w-7xl mx-auto px-8 py-20" style={{ backgroundColor }}>
       <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -29,21 +35,55 @@ const FullWidthShowcase = ({ url, title, description, features, backgroundColor,
         </div>
         <div className="relative">
           <motion.div
-            className="rounded-3xl overflow-hidden shadow-2xl border border-white/20"
+            className="rounded-3xl overflow-hidden shadow-2xl border border-white/20 relative"
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
           >
-            <iframe
-              src={url}
-              width="100%"
-              height="600"
-              frameBorder="0"
-              allowFullScreen
-              loading="lazy"
-            />
+            <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+              <iframe
+                src={url}
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                frameBorder="0"
+                allowFullScreen
+                loading="lazy"
+              />
+            </div>
+            <button
+              onClick={openModal}
+              className="absolute bottom-4 right-4 px-4 py-2 bg-white/20 text-white rounded-full font-medium hover:bg-white/30 transition-all duration-300 backdrop-blur-sm"
+            >
+              Full Screen
+            </button>
           </motion.div>
         </div>
       </div>
+
+      {isModalOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <div className="relative w-full h-full max-w-7xl max-h-[90vh] p-4">
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 z-10 px-4 py-2 bg-white/20 text-white rounded-full font-medium hover:bg-white/30 transition-all duration-300 backdrop-blur-sm"
+            >
+              Close
+            </button>
+            <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
+              <iframe
+                src={url}
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                frameBorder="0"
+                allowFullScreen
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 };
@@ -249,7 +289,7 @@ export default function HomePage() {
           willChange: 'transform, opacity'
         }}
       >
-        <div className="absolute inset-0 bg-black/50"></div>
+        <div className="absolute inset-0 bg-black/5"></div>
        
         <div className="relative z-10 max-w-7xl mx-auto px-8 py-20">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -649,7 +689,7 @@ export default function HomePage() {
       >
         {/* Clip Path Background */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-900/70 to-purple-900/70 backdrop-blur-sm"
+          className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm"
           initial={{ clipPath: 'circle(0% at 50% 50%)' }}
           animate={servicesInView ? { clipPath: 'circle(150% at 50% 50%)' } : {}}
           transition={{ duration: 1.5, ease: "easeInOut" }}
@@ -760,7 +800,7 @@ export default function HomePage() {
       >
         {/* Gradient Overlay that responds to mouse */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-purple-900/70 to-cyan-900/70"
+          className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-cyan-600/10"
           animate={{
             background: `radial-gradient(circle at ${50 + mousePosition.x * 20}% ${50 + mousePosition.y * 20}%, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.1) 50%, rgba(6, 182, 212, 0.05) 100%)`
           }}
@@ -908,3 +948,4 @@ export default function HomePage() {
     </div>
   );
 }
+```
