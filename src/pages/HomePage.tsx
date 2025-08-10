@@ -288,7 +288,7 @@ export default function HomePage() {
           willChange: 'transform, opacity'
         }}
       >
-        <div className="absolute inset-0 bg-black/5"></div>
+        <div className="absolute inset-0 bg-black/50"></div>
        
         <div className="relative z-10 max-w-7xl mx-auto px-8 py-20">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -688,7 +688,7 @@ export default function HomePage() {
       >
         {/* Clip Path Background */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm"
+          className="absolute inset-0 bg-gradient-to-br from-blue-900/70 to-purple-900/70 backdrop-blur-sm"
           initial={{ clipPath: 'circle(0% at 50% 50%)' }}
           animate={servicesInView ? { clipPath: 'circle(150% at 50% 50%)' } : {}}
           transition={{ duration: 1.5, ease: "easeInOut" }}
@@ -799,7 +799,7 @@ export default function HomePage() {
       >
         {/* Gradient Overlay that responds to mouse */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-cyan-600/10"
+          className="absolute inset-0 bg-gradient-to-br from-blue-900/70 via-purple-900/70 to-cyan-900/70"
           animate={{
             background: `radial-gradient(circle at ${50 + mousePosition.x * 20}% ${50 + mousePosition.y * 20}%, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.1) 50%, rgba(6, 182, 212, 0.05) 100%)`
           }}
@@ -946,3 +946,4 @@ export default function HomePage() {
       </section>
     </div>
   );
+}
