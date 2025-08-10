@@ -50,9 +50,9 @@ export default function App() {
         SIM_RESOLUTION={64}
         DYE_RESOLUTION={512}
         DENSITY_DISSIPATION={8.0}
-        VELOCITY_DISSIPATION={5.5}
-        SPLAT_RADIUS={0.06}
-        SPLAT_FORCE={2000}
+        VELOCITY_DISSIPATION={7.0}
+        SPLAT_RADIUS={0.04}
+        SPLAT_FORCE={1500}
         COLOR_UPDATE_SPEED={0}
         CURL={1}
         STABLE_COLORS={true}
