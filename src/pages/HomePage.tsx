@@ -1,4 +1,3 @@
-```javascript
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
