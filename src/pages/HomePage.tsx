@@ -444,27 +444,18 @@ const HorizontalPortfolioSection = () => {
       return totalWidth - viewportWidth;
     };
 
-    // Create horizontal scroll animation WITHOUT pinning (WebGL-friendly)
+    // Create horizontal scroll animation WITHOUT the recursive update
     const horizontalScroll = gsap.to(scrollContainer, {
       x: () => -getScrollDistance(),
       ease: "none",
       scrollTrigger: {
         trigger: container,
-        start: "top bottom", // Start when section enters viewport
-        end: "bottom top",   // End when section leaves viewport
+        start: "top bottom",
+        end: "bottom top",
         scrub: 1,
         refreshPriority: -1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          // Smooth progress-based animation instead of pinning
-          const progress = self.progress;
-          const scrollDistance = getScrollDistance();
-          gsap.set(scrollContainer, { x: -scrollDistance * progress });
-        },
-        onRefresh: () => {
-          // Recalculate on resize
-          ScrollTrigger.refresh();
-        }
+        invalidateOnRefresh: true
+        // Removed the onUpdate callback that was causing the infinite loop
       }
     });
 
