@@ -21,11 +21,12 @@ export default function FullWidthLaptopShowcase({
   accentColor = 'text-blue-600'
 }: FullWidthLaptopShowcaseProps) {
   const screenRef = useRef<HTMLDivElement>(null);
+  const iframeContainerRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isInView, setIsInView] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [canEmbed, setCanEmbed] = useState(true);
+  const [canEmbed, setCanEmbed] = useState(!url.includes('urequestsongs.com'));
 
   const getAccentBgColor = () => {
     if (accentColor.includes('purple')) return 'bg-purple-600';
@@ -146,11 +147,20 @@ export default function FullWidthLaptopShowcase({
     try {
       const urlObj = new URL(originalUrl);
       
-      // Add common desktop view parameters
-      urlObj.searchParams.set('desktop', '1');
-      urlObj.searchParams.set('mobile', '0');
-      urlObj.searchParams.set('view', 'desktop');
-      urlObj.searchParams.set('force_desktop', '1');
+      // Special handling for urequestsongs.com - use tablet parameters
+      if (urlObj.hostname.includes('urequestsongs.com')) {
+        urlObj.searchParams.set('viewport', 'tablet');
+        urlObj.searchParams.set('width', '1024');
+        urlObj.searchParams.set('height', '768');
+        urlObj.searchParams.set('device', 'ipad');
+        urlObj.searchParams.set('orientation', 'landscape');
+      } else {
+        // Add common desktop view parameters for other sites
+        urlObj.searchParams.set('desktop', '1');
+        urlObj.searchParams.set('mobile', '0');
+        urlObj.searchParams.set('view', 'desktop');
+        urlObj.searchParams.set('force_desktop', '1');
+      }
       
       // For specific sites that have desktop parameters
       if (urlObj.hostname.includes('youtube.com')) {
@@ -177,101 +187,128 @@ export default function FullWidthLaptopShowcase({
   useEffect(() => {
     if (iframeRef.current && isLoaded && canEmbed) {
       const iframe = iframeRef.current;
+      const container = iframeContainerRef.current;
       
       // Wait for iframe to fully load, then try to force desktop view
       const timer = setTimeout(() => {
-        try {
-          // Try to access and modify iframe content
-          const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-          
-          if (iframeDoc) {
-            console.log('Modifying iframe content for desktop view');
+        if (url.includes('urequestsongs.com')) {
+          // iPad-specific sizing for urequestsongs.com
+          if (container) {
+            const containerWidth = container.offsetWidth;
+            const containerHeight = container.offsetHeight;
             
-            // Force desktop viewport
-            let viewport = iframeDoc.querySelector('meta[name="viewport"]');
-            if (viewport) {
-              viewport.setAttribute('content', 'width=1200, initial-scale=1.0, user-scalable=yes');
-            } else {
-              viewport = iframeDoc.createElement('meta');
-              viewport.setAttribute('name', 'viewport');
-              viewport.setAttribute('content', 'width=1200, initial-scale=1.0, user-scalable=yes');
-              if (iframeDoc.head) {
-                iframeDoc.head.appendChild(viewport);
-              }
-            }
+            // Standard iPad landscape dimensions
+            const ipadWidth = 1024;
+            const ipadHeight = 768;
             
-            // Inject desktop-forcing CSS
-            const style = iframeDoc.createElement('style');
-            style.textContent = `
-              html, body {
-                width: 1200px !important;
-                min-width: 1200px !important;
-                max-width: none !important;
-                transform-origin: 0 0 !important;
+            // Calculate scale to fit iPad content in container while maintaining aspect ratio
+            const scaleX = containerWidth / ipadWidth;
+            const scaleY = containerHeight / ipadHeight;
+            const scale = Math.min(scaleX, scaleY, 1); // Don't scale up beyond 100%
+            
+            // Apply iPad dimensions and scale
+            iframe.style.width = `${ipadWidth}px`;
+            iframe.style.height = `${ipadHeight}px`;
+            iframe.style.transform = `scale(${scale}) translateZ(0)`;
+            iframe.style.transformOrigin = '0 0';
+            
+            console.log(`📱 iPad sizing applied - Scale: ${scale.toFixed(2)}, Container: ${containerWidth}x${containerHeight}`);
+          }
+        } else {
+          // Desktop sizing for other sites
+          try {
+            // Try to access and modify iframe content
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+            
+            if (iframeDoc) {
+              console.log('Modifying iframe content for desktop view');
+              
+              // Force desktop viewport
+              let viewport = iframeDoc.querySelector('meta[name="viewport"]');
+              if (viewport) {
+                viewport.setAttribute('content', 'width=1200, initial-scale=1.0, user-scalable=yes');
+              } else {
+                viewport = iframeDoc.createElement('meta');
+                viewport.setAttribute('name', 'viewport');
+                viewport.setAttribute('content', 'width=1200, initial-scale=1.0, user-scalable=yes');
+                if (iframeDoc.head) {
+                  iframeDoc.head.appendChild(viewport);
+                }
               }
               
-              /* Force desktop layouts */
-              @media (max-width: 1199px) {
+              // Inject desktop-forcing CSS
+              const style = iframeDoc.createElement('style');
+              style.textContent = `
                 html, body {
                   width: 1200px !important;
                   min-width: 1200px !important;
+                  max-width: none !important;
+                  transform-origin: 0 0 !important;
                 }
                 
-                /* Hide mobile navigation if it exists */
-                .mobile-nav, .mobile-menu, .hamburger, .nav-toggle {
-                  display: none !important;
+                /* Force desktop layouts */
+                @media (max-width: 1199px) {
+                  html, body {
+                    width: 1200px !important;
+                    min-width: 1200px !important;
+                  }
+                  
+                  /* Hide mobile navigation if it exists */
+                  .mobile-nav, .mobile-menu, .hamburger, .nav-toggle {
+                    display: none !important;
+                  }
+                  
+                  /* Show desktop navigation */
+                  .desktop-nav, .desktop-menu {
+                    display: block !important;
+                  }
+                  
+                  /* Force desktop grid layouts */
+                  .container, .wrapper, main, .content {
+                    max-width: 1200px !important;
+                    width: 100% !important;
+                  }
                 }
                 
-                /* Show desktop navigation */
-                .desktop-nav, .desktop-menu {
-                  display: block !important;
+                /* Disable responsive behavior */
+                * {
+                  max-width: none !important;
                 }
                 
-                /* Force desktop grid layouts */
-                .container, .wrapper, main, .content {
-                  max-width: 1200px !important;
+                /* Force desktop header/navigation */
+                header, nav, .header, .navigation {
                   width: 100% !important;
+                  min-width: 1200px !important;
                 }
+              `;
+              
+              if (iframeDoc.head) {
+                iframeDoc.head.appendChild(style);
               }
               
-              /* Disable responsive behavior */
-              * {
-                max-width: none !important;
+              // Try to trigger a resize event to force layout recalculation
+              if (iframe.contentWindow) {
+                iframe.contentWindow.dispatchEvent(new Event('resize'));
               }
               
-              /* Force desktop header/navigation */
-              header, nav, .header, .navigation {
-                width: 100% !important;
-                min-width: 1200px !important;
+            } catch (error) {
+              console.log('Cross-origin restrictions prevent iframe modification, using alternative method');
+              
+              // Alternative: Use CSS transform to scale up mobile content
+              if (iframe) {
+                iframe.style.width = '1200px';
+                iframe.style.height = '675px'; // 16:9 ratio
+                iframe.style.transform = 'scale(0.75)';
+                iframe.style.transformOrigin = '0 0';
               }
-            `;
-            
-            if (iframeDoc.head) {
-              iframeDoc.head.appendChild(style);
             }
-            
-            // Try to trigger a resize event to force layout recalculation
-            if (iframe.contentWindow) {
-              iframe.contentWindow.dispatchEvent(new Event('resize'));
-            }
-            
-          }
-        } catch (error) {
-          console.log('Cross-origin restrictions prevent iframe modification, using alternative method');
-          
-          // Alternative: Use CSS transform to scale up mobile content
-          if (iframe) {
-            iframe.style.width = '1200px';
-            iframe.style.height = '675px'; // 16:9 ratio
-            iframe.style.transform = 'scale(0.75)';
-            iframe.style.transformOrigin = '0 0';
           }
         }
       }, 1000); // Wait 1 second for content to load
       
       return () => clearTimeout(timer);
     }
-  }, [isLoaded, canEmbed]);
+  }, [isLoaded, canEmbed, url]);
 
   // Create fallback content for sites that block embedding
   const createFallbackContent = () => {
@@ -541,6 +578,7 @@ export default function FullWidthLaptopShowcase({
                     
                     {/* Content Area */}
                     <div 
+                      ref={iframeContainerRef}
                       className="relative overflow-hidden bg-white"
                       style={{ 
                         height: 'calc(100% - 32px)',
@@ -574,9 +612,9 @@ export default function FullWidthLaptopShowcase({
                             onError={handleIframeError}
                             loading="lazy"
                             style={{
-                              width: '1400px',
-                              height: '787px',
-                              transform: 'scale(0.85) translateZ(0)',
+                              width: url.includes('urequestsongs.com') ? '1024px' : '1400px',
+                              height: url.includes('urequestsongs.com') ? '768px' : '787px',
+                              transform: url.includes('urequestsongs.com') ? 'scale(1) translateZ(0)' : 'scale(0.85) translateZ(0)',
                               transformOrigin: '0 0',
                               border: 'none',
                               overflow: 'hidden',
