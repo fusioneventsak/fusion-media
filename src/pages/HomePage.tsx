@@ -96,7 +96,7 @@ const HorizontalProjectCard = ({ project, index }) => {
   const Icon = iconMap[project.category] || Code;
 
   return (
-    <div className="w-screen h-full flex items-center justify-center flex-shrink-0">
+    <div className="w-screen h-full flex items-center justify-center flex-shrink-0 relative z-[105]">
       {/* Animated gradient overlay */}
       <motion.div
         className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10`}
@@ -111,11 +111,11 @@ const HorizontalProjectCard = ({ project, index }) => {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center h-full px-8">
+      <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center h-full px-6 py-8" style={{ maxHeight: 'calc(100vh - 80px)', marginTop: '80px' }}>
         
         {/* Content Side */}
         <motion.div
-          className="space-y-8"
+          className="space-y-4"
           initial={{ opacity: 0, x: -100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -127,21 +127,21 @@ const HorizontalProjectCard = ({ project, index }) => {
         >
           {/* Category Badge */}
           <motion.div
-            className="inline-flex items-center space-x-3"
+            className="inline-flex items-center space-x-2"
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
           >
             <div 
-              className={`w-12 h-12 bg-gradient-to-br ${project.gradient} rounded-xl flex items-center justify-center shadow-lg`}
+              className={`w-10 h-10 bg-gradient-to-br ${project.gradient} rounded-lg flex items-center justify-center shadow-lg`}
               style={{ 
-                boxShadow: `0 0 30px ${project.accentColor}40` 
+                boxShadow: `0 0 20px ${project.accentColor}30` 
               }}
             >
-              <Icon className="w-6 h-6 text-white" />
+              <Icon className="w-5 h-5 text-white" />
             </div>
-            <span className="text-sm font-medium tracking-wider uppercase" style={{ color: project.accentColor }}>
+            <span className="text-xs font-medium tracking-wider uppercase" style={{ color: project.accentColor }}>
               {project.category}
             </span>
           </motion.div>
@@ -149,7 +149,7 @@ const HorizontalProjectCard = ({ project, index }) => {
           {/* Title */}
           <div>
             <motion.h2 
-              className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-4 leading-tight"
+              className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-3 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -158,7 +158,7 @@ const HorizontalProjectCard = ({ project, index }) => {
               {project.title}
             </motion.h2>
             <motion.p 
-              className="text-xl md:text-2xl opacity-70 text-white font-light mb-6"
+              className="text-lg md:text-xl opacity-70 text-white font-light mb-4"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -170,7 +170,7 @@ const HorizontalProjectCard = ({ project, index }) => {
 
           {/* Description */}
           <motion.p
-            className="text-lg md:text-xl text-white opacity-70 leading-relaxed font-light"
+            className="text-base md:text-lg text-white opacity-70 leading-relaxed font-light"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -181,7 +181,7 @@ const HorizontalProjectCard = ({ project, index }) => {
 
           {/* Features */}
           <motion.div 
-            className="space-y-4"
+            className="space-y-3"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -200,13 +200,13 @@ const HorizontalProjectCard = ({ project, index }) => {
                 }}
               >
                 <div 
-                  className={`w-6 h-6 bg-gradient-to-br ${project.gradient} rounded-lg flex items-center justify-center mt-1 shadow-lg flex-shrink-0`}
+                  className={`w-5 h-5 bg-gradient-to-br ${project.gradient} rounded-md flex items-center justify-center mt-0.5 shadow-lg flex-shrink-0`}
                 >
-                  <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <span className="text-white opacity-90 font-medium leading-relaxed">
+                <span className="text-white opacity-90 font-medium leading-relaxed text-sm">
                   {feature}
                 </span>
               </motion.div>
@@ -215,7 +215,7 @@ const HorizontalProjectCard = ({ project, index }) => {
 
           {/* Technology Tags */}
           <motion.div 
-            className="flex flex-wrap gap-2"
+            className="flex flex-wrap gap-1.5"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -224,7 +224,7 @@ const HorizontalProjectCard = ({ project, index }) => {
             {project.technologies.map((tech, i) => (
               <span
                 key={i}
-                className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm text-white border border-white/20"
+                className="px-2.5 py-1 bg-white/10 backdrop-blur-sm rounded-full text-xs text-white border border-white/20"
               >
                 {tech}
               </span>
@@ -233,27 +233,27 @@ const HorizontalProjectCard = ({ project, index }) => {
 
           {/* Action Buttons */}
           <motion.div 
-            className="flex flex-col sm:flex-row gap-4 pt-4"
+            className="flex flex-col sm:flex-row gap-3 pt-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.9 }}
           >
             <motion.button
-              className={`inline-flex items-center px-8 py-4 bg-gradient-to-r ${project.gradient} text-white rounded-full font-medium shadow-lg hover:opacity-90 transition-all duration-300`}
+              className={`inline-flex items-center px-6 py-3 bg-gradient-to-r ${project.gradient} text-white rounded-full font-medium shadow-lg hover:opacity-90 transition-all duration-300 text-sm`}
               whileHover={{
                 scale: 1.05,
-                boxShadow: `0 20px 40px ${project.accentColor}30`
+                boxShadow: `0 15px 30px ${project.accentColor}30`
               }}
               whileTap={{ scale: 0.95 }}
               onClick={() => window.open(project.url, '_blank')}
             >
-              <ExternalLink className="w-5 h-5 mr-2" />
+              <ExternalLink className="w-4 h-4 mr-2" />
               View Live Demo
             </motion.button>
             
             <motion.button
-              className="inline-flex items-center px-8 py-4 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300"
+              className="inline-flex items-center px-6 py-3 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300 text-sm"
               whileHover={{ 
                 scale: 1.05,
                 backgroundColor: 'rgba(255,255,255,0.1)'
@@ -261,7 +261,7 @@ const HorizontalProjectCard = ({ project, index }) => {
               whileTap={{ scale: 0.95 }}
               onClick={() => window.open(project.url, '_blank')}
             >
-              <Maximize2 className="w-5 h-5 mr-2" />
+              <Maximize2 className="w-4 h-4 mr-2" />
               Full Screen
             </motion.button>
           </motion.div>
@@ -282,7 +282,7 @@ const HorizontalProjectCard = ({ project, index }) => {
           {/* Main preview Frame */}
           <div className="relative">
             <motion.div
-              className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-black/20 backdrop-blur-sm"
+              className="relative rounded-2xl overflow-hidden shadow-xl border border-white/20 bg-black/20 backdrop-blur-sm"
               whileHover={{ 
                 scale: 1.02,
                 rotateY: 2,
@@ -290,24 +290,25 @@ const HorizontalProjectCard = ({ project, index }) => {
               }}
               transition={{ duration: 0.3 }}
               style={{
-                boxShadow: `0 25px 60px ${project.accentColor}20`,
-                transformPerspective: 1000
+                boxShadow: `0 20px 40px ${project.accentColor}20`,
+                transformPerspective: 1000,
+                maxHeight: '60vh'
               }}
             >
               {/* Browser Chrome */}
-              <div className="bg-gray-800/80 backdrop-blur-sm px-4 py-3 flex items-center space-x-2 border-b border-white/10">
-                <div className="flex space-x-2">
-                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <div className="bg-gray-800/80 backdrop-blur-sm px-3 py-2 flex items-center space-x-2 border-b border-white/10">
+                <div className="flex space-x-1.5">
+                  <div className="w-2.5 h-2.5 bg-red-500 rounded-full"></div>
+                  <div className="w-2.5 h-2.5 bg-yellow-500 rounded-full"></div>
+                  <div className="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
                 </div>
-                <div className="flex-1 bg-black/20 rounded-lg px-3 py-1 mx-4">
-                  <span className="text-gray-300 text-sm truncate">{project.url}</span>
+                <div className="flex-1 bg-black/20 rounded-md px-2 py-1 mx-3">
+                  <span className="text-gray-300 text-xs truncate">{project.url}</span>
                 </div>
               </div>
 
               {/* Website Preview */}
-              <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+              <div style={{ position: 'relative', paddingBottom: '50%', height: 0, overflow: 'hidden' }}>
                 <iframe
                   src={project.url}
                   style={{ 
@@ -325,7 +326,7 @@ const HorizontalProjectCard = ({ project, index }) => {
                 {/* Loading overlay */}
                 {!isLoaded && (
                   <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                    <div className={`w-8 h-8 border-2 border-t-transparent rounded-full animate-spin`} 
+                    <div className={`w-6 h-6 border-2 border-t-transparent rounded-full animate-spin`} 
                          style={{ borderColor: project.accentColor, borderTopColor: 'transparent' }}>
                     </div>
                   </div>
@@ -333,31 +334,31 @@ const HorizontalProjectCard = ({ project, index }) => {
               </div>
 
               {/* Overlay Controls */}
-              <div className="absolute bottom-4 right-4 flex space-x-2">
+              <div className="absolute bottom-3 right-3 flex space-x-2">
                 <motion.button
                   onClick={() => window.open(project.url, '_blank')}
-                  className="w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
+                  className="w-8 h-8 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <ExternalLink className="w-5 h-5" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </motion.button>
                 <motion.button
                   onClick={() => window.open(project.url, '_blank')}
-                  className="w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
+                  className="w-8 h-8 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <Maximize2 className="w-5 h-5" />
+                  <Maximize2 className="w-3.5 h-3.5" />
                 </motion.button>
               </div>
             </motion.div>
 
-            {/* Floating UI Elements */}
+            {/* Floating UI Elements - Smaller */}
             <motion.div
-              className={`absolute -top-4 -left-4 w-20 h-20 bg-gradient-to-br ${project.gradient} opacity-20 rounded-2xl backdrop-blur-sm border border-white/10`}
+              className={`absolute -top-2 -left-2 w-12 h-12 bg-gradient-to-br ${project.gradient} opacity-20 rounded-xl backdrop-blur-sm border border-white/10`}
               animate={{
-                y: [0, -10, 0],
+                y: [0, -8, 0],
                 rotate: [0, 5, -5, 0],
                 scale: [1, 1.1, 1]
               }}
@@ -365,9 +366,9 @@ const HorizontalProjectCard = ({ project, index }) => {
             />
             
             <motion.div
-              className={`absolute -bottom-6 -right-6 w-16 h-16 bg-gradient-to-br ${project.gradient} opacity-15 rounded-xl backdrop-blur-sm border border-white/10`}
+              className={`absolute -bottom-3 -right-3 w-10 h-10 bg-gradient-to-br ${project.gradient} opacity-15 rounded-lg backdrop-blur-sm border border-white/10`}
               animate={{
-                x: [0, 10, 0],
+                x: [0, 8, 0],
                 scale: [1, 1.2, 1],
                 rotate: [0, -5, 0]
               }}
@@ -489,7 +490,7 @@ const HorizontalPortfolioSection = () => {
 
   return (
     <div className="relative">
-      {/* Horizontal Scrolling Container */}
+      {/* Horizontal Scrolling Container - Ensure it's above WebGL */}
       <div 
         ref={containerRef} 
         className="relative"
@@ -497,7 +498,9 @@ const HorizontalPortfolioSection = () => {
           height: '100vh', 
           overflow: 'hidden',
           background: 'transparent',
-          zIndex: 50
+          zIndex: 100, // Increased z-index to be above WebGL
+          position: 'relative',
+          pointerEvents: 'auto' // Ensure pointer events work
         }}
       >
         <div 
@@ -505,7 +508,8 @@ const HorizontalPortfolioSection = () => {
           className="flex h-full relative"
           style={{ 
             width: `${horizontalPortfolioProjects.length * 100}vw`,
-            willChange: 'transform'
+            willChange: 'transform',
+            zIndex: 101
           }}
         >
           {horizontalPortfolioProjects.map((project, index) => (
@@ -518,7 +522,7 @@ const HorizontalPortfolioSection = () => {
         </div>
 
         {/* Progress Indicator */}
-        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+        <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-[110]">
           <div className="flex space-x-2 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
             {horizontalPortfolioProjects.map((_, index) => (
               <div
@@ -535,7 +539,7 @@ const HorizontalPortfolioSection = () => {
 
         {/* Scroll Instructions */}
         <motion.div
-          className="fixed top-1/2 right-8 transform -translate-y-1/2 z-50 text-white/70 text-sm"
+          className="fixed top-1/2 right-8 transform -translate-y-1/2 z-[110] text-white/70 text-sm"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 1 }}
@@ -547,7 +551,7 @@ const HorizontalPortfolioSection = () => {
         </motion.div>
 
         {/* Project Counter */}
-        <div className="fixed top-8 right-8 z-50 bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
+        <div className="fixed top-8 right-8 z-[110] bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
           <span className="text-white text-sm font-medium">
             {String(currentProject + 1).padStart(2, '0')} / {String(horizontalPortfolioProjects.length).padStart(2, '0')}
           </span>
