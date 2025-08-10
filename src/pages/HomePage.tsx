@@ -3,8 +3,8 @@ import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence 
 import { ExternalLink, Maximize2, Play, Code, Zap, Globe } from 'lucide-react';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
 
-// Portfolio projects data
-const portfolioProjects = [
+// Portfolio projects data for horizontal scroll
+const horizontalPortfolioProjects = [
   {
     id: 1,
     title: "Custom Business Applications",
@@ -96,298 +96,293 @@ const HorizontalProjectCard = ({ project, index }) => {
   const Icon = iconMap[project.category] || Code;
 
   return (
-    <>
-      <div className="flex-none w-screen h-screen flex items-center justify-center px-8 relative">
-        {/* Background Pattern */}
-        <div 
-          className="absolute inset-0 opacity-30"
-          style={{ background: project.bgPattern }}
-        />
+    <div className="flex-none w-screen h-screen flex items-center justify-center px-8 relative">
+      {/* Background Pattern */}
+      <div 
+        className="absolute inset-0 opacity-30"
+        style={{ background: project.bgPattern }}
+      />
+      
+      {/* Animated gradient overlay */}
+      <motion.div
+        className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10`}
+        animate={{
+          scale: [1, 1.1, 1],
+          rotate: [0, 0.5, 0],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center h-full">
         
-        {/* Animated gradient overlay */}
+        {/* Content Side */}
         <motion.div
-          className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10`}
-          animate={{
-            scale: [1, 1.1, 1],
-            rotate: [0, 0.5, 0],
-          }}
+          className="space-y-8"
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
           transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
+            duration: 1.2,
+            ease: [0.25, 0.46, 0.45, 0.94],
+            delay: 0.2
           }}
-        />
-
-        <div className="relative z-10 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center h-full">
-          
-          {/* Content Side */}
+        >
+          {/* Category Badge */}
           <motion.div
-            className="space-y-8"
-            initial={{ opacity: 0, x: -100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              duration: 1.2,
-              ease: [0.25, 0.46, 0.45, 0.94],
-              delay: 0.2
-            }}
+            className="inline-flex items-center space-x-3"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
           >
-            {/* Category Badge */}
-            <motion.div
-              className="inline-flex items-center space-x-3"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.1 }}
+            <div 
+              className={`w-12 h-12 bg-gradient-to-br ${project.gradient} rounded-xl flex items-center justify-center shadow-lg`}
+              style={{ 
+                boxShadow: `0 0 30px ${project.accentColor}40` 
+              }}
             >
-              <div 
-                className={`w-12 h-12 bg-gradient-to-br ${project.gradient} rounded-xl flex items-center justify-center shadow-lg`}
-                style={{ 
-                  boxShadow: `0 0 30px ${project.accentColor}40` 
-                }}
-              >
-                <Icon className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-sm font-medium tracking-wider uppercase" style={{ color: project.accentColor }}>
-                {project.category}
-              </span>
-            </motion.div>
-
-            {/* Title */}
-            <div>
-              <motion.h2 
-                className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-4 leading-tight"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-              >
-                {project.title}
-              </motion.h2>
-              <motion.p 
-                className="text-xl md:text-2xl opacity-70 text-white font-light mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                {project.subtitle}
-              </motion.p>
+              <Icon className="w-6 h-6 text-white" />
             </div>
+            <span className="text-sm font-medium tracking-wider uppercase" style={{ color: project.accentColor }}>
+              {project.category}
+            </span>
+          </motion.div>
 
-            {/* Description */}
-            <motion.p
-              className="text-lg md:text-xl text-white opacity-70 leading-relaxed font-light"
+          {/* Title */}
+          <div>
+            <motion.h2 
+              className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-4 leading-tight"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+            >
+              {project.title}
+            </motion.h2>
+            <motion.p 
+              className="text-xl md:text-2xl opacity-70 text-white font-light mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.5 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
             >
-              {project.description}
+              {project.subtitle}
             </motion.p>
+          </div>
 
-            {/* Features */}
-            <motion.div 
-              className="space-y-4"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              {project.features.slice(0, 3).map((feature, i) => (
-                <motion.div
-                  key={i}
-                  className="flex items-start space-x-3"
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.6,
-                    delay: 0.7 + i * 0.1
-                  }}
-                >
-                  <div 
-                    className={`w-6 h-6 bg-gradient-to-br ${project.gradient} rounded-lg flex items-center justify-center mt-1 shadow-lg flex-shrink-0`}
-                  >
-                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-white opacity-90 font-medium leading-relaxed">
-                    {feature}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Technology Tags */}
-            <motion.div 
-              className="flex flex-wrap gap-2"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-            >
-              {project.technologies.map((tech, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm text-white border border-white/20"
-                >
-                  {tech}
-                </span>
-              ))}
-            </motion.div>
-
-            {/* Action Buttons */}
-            <motion.div 
-              className="flex flex-col sm:flex-row gap-4 pt-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-            >
-              <motion.button
-                className={`inline-flex items-center px-8 py-4 bg-gradient-to-r ${project.gradient} text-white rounded-full font-medium shadow-lg hover:opacity-90 transition-all duration-300`}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: `0 20px 40px ${project.accentColor}30`
-                }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => window.open(project.url, '_blank')}
-              >
-                <ExternalLink className="w-5 h-5 mr-2" />
-                View Live Demo
-              </motion.button>
-              
-              <motion.button
-                className="inline-flex items-center px-8 py-4 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300"
-                whileHover={{ 
-                  scale: 1.05,
-                  backgroundColor: 'rgba(255,255,255,0.1)'
-                }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  // Simple alert for full screen - you can replace with your modal logic
-                  window.open(project.url, '_blank');
-                }}
-              >
-                <Maximize2 className="w-5 h-5 mr-2" />
-                Full Screen
-              </motion.button>
-            </motion.div>
-          </motion.div>
-
-          {/* Website Preview Side */}
-          <motion.div
-            className="relative"
-            initial={{ opacity: 0, scale: 0.8, x: 100 }}
-            whileInView={{ opacity: 1, scale: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              duration: 1.2,
-              ease: [0.25, 0.46, 0.45, 0.94],
-              delay: 0.4
-            }}
+          {/* Description */}
+          <motion.p
+            className="text-lg md:text-xl text-white opacity-70 leading-relaxed font-light"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.5 }}
           >
-            {/* Main Preview Frame */}
-            <div className="relative">
+            {project.description}
+          </motion.p>
+
+          {/* Features */}
+          <motion.div 
+            className="space-y-4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            {project.features.slice(0, 3).map((feature, i) => (
               <motion.div
-                className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-black/20 backdrop-blur-sm"
-                whileHover={{ 
-                  scale: 1.02,
-                  rotateY: 2,
-                  rotateX: 2
-                }}
-                transition={{ duration: 0.3 }}
-                style={{
-                  boxShadow: `0 25px 60px ${project.accentColor}20`,
-                  transformPerspective: 1000
+                key={i}
+                className="flex items-start space-x-3"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.7 + i * 0.1
                 }}
               >
-                {/* Browser Chrome */}
-                <div className="bg-gray-800/80 backdrop-blur-sm px-4 py-3 flex items-center space-x-2 border-b border-white/10">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  </div>
-                  <div className="flex-1 bg-black/20 rounded-lg px-3 py-1 mx-4">
-                    <span className="text-gray-300 text-sm truncate">{project.url}</span>
-                  </div>
+                <div 
+                  className={`w-6 h-6 bg-gradient-to-br ${project.gradient} rounded-lg flex items-center justify-center mt-1 shadow-lg flex-shrink-0`}
+                >
+                  <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
-
-                {/* Website Preview */}
-                <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
-                  <iframe
-                    src={project.url}
-                    style={{ 
-                      position: 'absolute', 
-                      top: 0, 
-                      left: 0, 
-                      width: '100%', 
-                      height: '100%',
-                      border: 'none'
-                    }}
-                    loading="lazy"
-                    onLoad={() => setIsLoaded(true)}
-                  />
-                  
-                  {/* Loading overlay */}
-                  {!isLoaded && (
-                    <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                      <div className={`w-8 h-8 border-2 border-t-transparent rounded-full animate-spin`} 
-                           style={{ borderColor: project.accentColor, borderTopColor: 'transparent' }}>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Overlay Controls */}
-                <div className="absolute bottom-4 right-4 flex space-x-2">
-                  <motion.button
-                    onClick={() => window.open(project.url, '_blank')}
-                    className="w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                  </motion.button>
-                  <motion.button
-                    onClick={() => window.open(project.url, '_blank')}
-                    className="w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Maximize2 className="w-5 h-5" />
-                  </motion.button>
-                </div>
+                <span className="text-white opacity-90 font-medium leading-relaxed">
+                  {feature}
+                </span>
               </motion.div>
-
-              {/* Floating UI Elements */}
-              <motion.div
-                className={`absolute -top-4 -left-4 w-20 h-20 bg-gradient-to-br ${project.gradient} opacity-20 rounded-2xl backdrop-blur-sm border border-white/10`}
-                animate={{
-                  y: [0, -10, 0],
-                  rotate: [0, 5, -5, 0],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              />
-              
-              <motion.div
-                className={`absolute -bottom-6 -right-6 w-16 h-16 bg-gradient-to-br ${project.gradient} opacity-15 rounded-xl backdrop-blur-sm border border-white/10`}
-                animate={{
-                  x: [0, 10, 0],
-                  scale: [1, 1.2, 1],
-                  rotate: [0, -5, 0]
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              />
-            </div>
+            ))}
           </motion.div>
-        </div>
+
+          {/* Technology Tags */}
+          <motion.div 
+            className="flex flex-wrap gap-2"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            {project.technologies.map((tech, i) => (
+              <span
+                key={i}
+                className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm text-white border border-white/20"
+              >
+                {tech}
+              </span>
+            ))}
+          </motion.div>
+
+          {/* Action Buttons */}
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4 pt-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+          >
+            <motion.button
+              className={`inline-flex items-center px-8 py-4 bg-gradient-to-r ${project.gradient} text-white rounded-full font-medium shadow-lg hover:opacity-90 transition-all duration-300`}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: `0 20px 40px ${project.accentColor}30`
+              }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => window.open(project.url, '_blank')}
+            >
+              <ExternalLink className="w-5 h-5 mr-2" />
+              View Live Demo
+            </motion.button>
+            
+            <motion.button
+              className="inline-flex items-center px-8 py-4 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300"
+              whileHover={{ 
+                scale: 1.05,
+                backgroundColor: 'rgba(255,255,255,0.1)'
+              }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => window.open(project.url, '_blank')}
+            >
+              <Maximize2 className="w-5 h-5 mr-2" />
+              Full Screen
+            </motion.button>
+          </motion.div>
+        </motion.div>
+
+        {/* Website Preview Side */}
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0, scale: 0.8, x: 100 }}
+          whileInView={{ opacity: 1, scale: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{
+            duration: 1.2,
+            ease: [0.25, 0.46, 0.45, 0.94],
+            delay: 0.4
+          }}
+        >
+          {/* Main Preview Frame */}
+          <div className="relative">
+            <motion.div
+              className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-black/20 backdrop-blur-sm"
+              whileHover={{ 
+                scale: 1.02,
+                rotateY: 2,
+                rotateX: 2
+              }}
+              transition={{ duration: 0.3 }}
+              style={{
+                boxShadow: `0 25px 60px ${project.accentColor}20`,
+                transformPerspective: 1000
+              }}
+            >
+              {/* Browser Chrome */}
+              <div className="bg-gray-800/80 backdrop-blur-sm px-4 py-3 flex items-center space-x-2 border-b border-white/10">
+                <div className="flex space-x-2">
+                  <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                </div>
+                <div className="flex-1 bg-black/20 rounded-lg px-3 py-1 mx-4">
+                  <span className="text-gray-300 text-sm truncate">{project.url}</span>
+                </div>
+              </div>
+
+              {/* Website Preview */}
+              <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+                <iframe
+                  src={project.url}
+                  style={{ 
+                    position: 'absolute', 
+                    top: 0, 
+                    left: 0, 
+                    width: '100%', 
+                    height: '100%',
+                    border: 'none'
+                  }}
+                  loading="lazy"
+                  onLoad={() => setIsLoaded(true)}
+                />
+                
+                {/* Loading overlay */}
+                {!isLoaded && (
+                  <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
+                    <div className={`w-8 h-8 border-2 border-t-transparent rounded-full animate-spin`} 
+                         style={{ borderColor: project.accentColor, borderTopColor: 'transparent' }}>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Overlay Controls */}
+              <div className="absolute bottom-4 right-4 flex space-x-2">
+                <motion.button
+                  onClick={() => window.open(project.url, '_blank')}
+                  className="w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <ExternalLink className="w-5 h-5" />
+                </motion.button>
+                <motion.button
+                  onClick={() => window.open(project.url, '_blank')}
+                  className="w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <Maximize2 className="w-5 h-5" />
+                </motion.button>
+              </div>
+            </motion.div>
+
+            {/* Floating UI Elements */}
+            <motion.div
+              className={`absolute -top-4 -left-4 w-20 h-20 bg-gradient-to-br ${project.gradient} opacity-20 rounded-2xl backdrop-blur-sm border border-white/10`}
+              animate={{
+                y: [0, -10, 0],
+                rotate: [0, 5, -5, 0],
+                scale: [1, 1.1, 1]
+              }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            />
+            
+            <motion.div
+              className={`absolute -bottom-6 -right-6 w-16 h-16 bg-gradient-to-br ${project.gradient} opacity-15 rounded-xl backdrop-blur-sm border border-white/10`}
+              animate={{
+                x: [0, 10, 0],
+                scale: [1, 1.2, 1],
+                rotate: [0, -5, 0]
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            />
+          </div>
+        </motion.div>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -534,11 +529,11 @@ const HorizontalPortfolioSection = () => {
           ref={scrollContainerRef}
           className="flex h-full"
           style={{ 
-            width: `${portfolioProjects.length * 100}vw`,
+            width: `${horizontalPortfolioProjects.length * 100}vw`,
             willChange: 'transform'
           }}
         >
-          {portfolioProjects.map((project, index) => (
+          {horizontalPortfolioProjects.map((project, index) => (
             <HorizontalProjectCard
               key={project.id}
               project={project}
@@ -550,7 +545,7 @@ const HorizontalPortfolioSection = () => {
         {/* Progress Indicator */}
         <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
           <div className="flex space-x-2">
-            {portfolioProjects.map((_, index) => (
+            {horizontalPortfolioProjects.map((_, index) => (
               <div
                 key={index}
                 className="w-2 h-2 bg-white/30 rounded-full transition-all duration-300"
@@ -576,676 +571,42 @@ const HorizontalPortfolioSection = () => {
   );
 };
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
-}
-
-function Modal({ isOpen, onClose, title, children }: ModalProps) {
-  const modalRoot = document.getElementById('modal-root');
- 
-  if (!modalRoot) {
-    console.error('Modal root element not found');
-    return null;
-  }
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen]);
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-    }
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, onClose]);
-  const modalContent = (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-          {/* Backdrop */}
-          <motion.div
-            className="absolute inset-0 bg-black/85"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-          />
-          {/* Modal Content */}
-          <motion.div
-            className="relative w-full max-w-4xl max-h-[90vh] bg-gradient-to-br from-gray-900 to-black rounded-2xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden"
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-white/10 bg-gradient-to-r from-blue-900/30 to-purple-900/30">
-              <h2 className="text-2xl font-semibold text-white">{title}</h2>
-              <motion.button
-                onClick={onClose}
-                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-all duration-200"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <X className="w-5 h-5" />
-              </motion.button>
-            </div>
-            {/* Content */}
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)] custom-scrollbar">
-              {children}
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
-  );
-  return ReactDOM.createPortal(modalContent, modalRoot);
-}
-
-// Portfolio projects data
-const portfolioProjects = [
-  {
-    id: 1,
-    title: "Custom Business Applications",
-    subtitle: "Internal Tools & CRM Systems",
-    url: "https://splendid-cannoli-324007.netlify.app/",
-    category: "Web Applications",
-    technologies: ["React", "Node.js", "AI/ML", "MongoDB", "Analytics"],
-    description: "Tailored internal tools and CRM systems built specifically for your organization's workflow. Streamline operations, improve efficiency, and gain valuable insights with applications designed around your unique business needs and processes.",
-    features: [
-      'Custom CRM and database management systems',
-      'Workflow automation and comprehensive reporting',
-      'Team collaboration tools and project management',
-      'Advanced data visualization and business analytics',
-      'Secure cloud-based architecture with enterprise-grade security'
-    ],
-    gradient: "from-blue-500 to-cyan-500",
-    accentColor: "#3B82F6",
-    bgPattern: "radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%)"
-  },
-  {
-    id: 2,
-    title: "Audience Engagement Platforms",
-    subtitle: "Real-time Interactive Tools",
-    url: "http://urequestsongs.com",
-    category: "Event Technology",
-    technologies: ["React", "WebSocket", "Social APIs", "Real-time", "Analytics"],
-    description: "Real-time interaction tools that connect performers with their audience in meaningful ways. From song requests to live polling, these platforms create deeper engagement and memorable experiences for bands, DJs, and entertainers of all kinds.",
-    features: [
-      'Live song request systems for bands, DJs, and performers',
-      'Real-time audience voting, polls, and interactive features',
-      'Social media integration and viral sharing capabilities',
-      'Custom branding for artists, venues, and event organizers',
-      'Comprehensive analytics and audience engagement insights'
-    ],
-    gradient: "from-cyan-500 to-blue-500",
-    accentColor: "#06B6D4",
-    bgPattern: "radial-gradient(circle at 20% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),radial-gradient(circle at 80% 80%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)"
-  },
-  {
-    id: 3,
-    title: "Interactive Widgets & Components",
-    subtitle: "Gamified Experiences",
-    url: "https://capable-alfajores-d0dff2.netlify.app/",
-    category: "Interactive Media",
-    technologies: ["React", "Three.js", "WebGL", "Game Logic", "Animation"],
-    description: "Gamified experiences and interactive elements that boost engagement on websites and at live events. From custom game shows to educational tools, we create interactive components that entertain, inform, and drive meaningful user participation.",
-    features: [
-      'Custom game shows, trivia platforms, and interactive competitions',
-      'Interactive website widgets and embedded components',
-      'Educational modules and training platforms',
-      'Leaderboards, scoring systems, and competition management',
-      'Multi-device compatibility and responsive design'
-    ],
-    gradient: "from-purple-500 to-pink-500",
-    accentColor: "#8B5CF6",
-    bgPattern: "radial-gradient(circle at 30% 70%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),radial-gradient(circle at 70% 30%, rgba(236, 72, 153, 0.15) 0%, transparent 50%)"
-  },
-  {
-    id: 4,
-    title: "Professional Website Development",
-    subtitle: "High-Performance Websites",
-    url: "https://www.fusion-events.ca",
-    category: "Web Development",
-    technologies: ["React", "SEO", "CMS", "Analytics", "Performance"],
-    description: "Beautiful, high-performance websites that drive real business results. Built with modern HTML, CSS, and JavaScript, optimized for speed, SEO, and conversions. Perfect for service businesses, corporate brands, and growing organizations.",
-    features: [
-      'Modern, responsive design with mobile-first approach',
-      'SEO optimization and lightning-fast loading speeds',
-      'Content management systems and easy updates',
-      'E-commerce integration and payment processing',
-      'Advanced analytics, conversion tracking, and performance monitoring'
-    ],
-    gradient: "from-emerald-500 to-green-500",
-    accentColor: "#10B981",
-    bgPattern: "radial-gradient(circle at 40% 60%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),radial-gradient(circle at 60% 40%, rgba(34, 197, 94, 0.15) 0%, transparent 50%)"
-  }
-];
-
-const FullPageProjectShowcase = ({ project, index }) => {
-  const containerRef = useRef(null);
-  const iframeRef = useRef(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  const inView = useInView(containerRef, { 
-    once: false, 
-    amount: 0.3 
-  });
-
-  // Parallax transforms
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
-  const rotateY = useTransform(scrollYProgress, [0, 0.5, 1], [15, 0, -15]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
-  // Smooth spring animations
-  const smoothY = useSpring(y, { stiffness: 100, damping: 30 });
-  const smoothScale = useSpring(scale, { stiffness: 100, damping: 30 });
-  const smoothRotateY = useSpring(rotateY, { stiffness: 100, damping: 30 });
-
-  useEffect(() => {
-    if (!inView) return;
-
-    // Load GSAP only when needed and create subtle effects
-    const script = document.createElement('script');
-    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js';
-    script.onload = () => {
-      const gsap = window.gsap;
-      if (gsap && containerRef.current) {
-        // Create minimal floating elements that don't interfere with existing particles
-        const elements = [];
-        for (let i = 0; i < 5; i++) {
-          const element = document.createElement('div');
-          element.style.position = 'absolute';
-          element.style.width = '2px';
-          element.style.height = '2px';
-          element.style.background = project.accentColor;
-          element.style.borderRadius = '50%';
-          element.style.opacity = '0.3';
-          element.style.left = Math.random() * 100 + '%';
-          element.style.top = Math.random() * 100 + '%';
-          element.style.pointerEvents = 'none';
-          element.style.zIndex = '1';
-          containerRef.current.appendChild(element);
-          elements.push(element);
-
-          // Very subtle animation
-          gsap.to(element, {
-            y: -50,
-            x: gsap.utils.random(-20, 20),
-            opacity: 0,
-            duration: gsap.utils.random(3, 6),
-            repeat: -1,
-            delay: gsap.utils.random(0, 3),
-            ease: "power2.out"
-          });
-        }
-
-        return () => {
-          elements.forEach(element => {
-            if (element.parentNode) {
-              element.parentNode.removeChild(element);
-            }
-          });
-        };
-      }
-    };
-    
-    if (!document.querySelector('script[src*="gsap"]')) {
-      document.head.appendChild(script);
-    } else if (window.gsap) {
-      script.onload();
-    }
-  }, [inView, project.accentColor]);
-
-  const iconMap = {
-    "Web Applications": Code,
-    "Event Technology": Zap,
-    "Interactive Media": Play,
-    "Web Development": Globe
-  };
-
-  const Icon = iconMap[project.category] || Code;
-
-  return (
-    <>
-      <motion.section
-        ref={containerRef}
-        className="min-h-screen relative overflow-hidden flex items-center justify-center py-20 pointer-events-auto"
-        style={{
-          background: project.bgPattern,
-          opacity,
-        }}
-      >
-        {/* Background Elements */}
-        <div className="absolute inset-0 bg-black/20" />
-        
-        {/* Dynamic gradient overlay */}
-        <motion.div
-          className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10`}
-          animate={{
-            scale: inView ? [1, 1.1, 1] : 1,
-            rotate: inView ? [0, 1, 0] : 0,
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-        />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-8 grid lg:grid-cols-2 gap-16 items-center">
-          
-          {/* Content Side */}
-          <motion.div
-            className={`space-y-8 ${index % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}`}
-            style={{ y: smoothY }}
-            initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              duration: 1.2,
-              ease: [0.25, 0.46, 0.45, 0.94],
-              delay: 0.2
-            }}
-          >
-            {/* Category Badge */}
-            <motion.div
-              className="inline-flex items-center space-x-3"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-            >
-              <div 
-                className={`w-12 h-12 bg-gradient-to-br ${project.gradient} rounded-xl flex items-center justify-center shadow-lg`}
-                style={{ 
-                  boxShadow: `0 0 30px ${project.accentColor}40` 
-                }}
-              >
-                <Icon className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-sm font-medium tracking-wider uppercase" style={{ color: project.accentColor }}>
-                {project.category}
-              </span>
-            </motion.div>
-
-            {/* Title */}
-            <div>
-              <motion.h2 
-                className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-4 leading-tight"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-              >
-                {project.title}
-              </motion.h2>
-              <motion.p 
-                className="text-xl md:text-2xl opacity-70 text-white font-light mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                {project.subtitle}
-              </motion.p>
-            </div>
-
-            {/* Description */}
-            <motion.p
-              className="text-lg md:text-xl text-white opacity-70 leading-relaxed font-light"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-            >
-              {project.description}
-            </motion.p>
-
-            {/* Features */}
-            <motion.div 
-              className="space-y-4"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              {project.features.slice(0, 3).map((feature, i) => (
-                <motion.div
-                  key={i}
-                  className="flex items-start space-x-3"
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    duration: 0.6,
-                    delay: 0.7 + i * 0.1
-                  }}
-                >
-                  <div 
-                    className={`w-6 h-6 bg-gradient-to-br ${project.gradient} rounded-lg flex items-center justify-center mt-1 shadow-lg flex-shrink-0`}
-                  >
-                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-white opacity-90 font-medium leading-relaxed">
-                    {feature}
-                  </span>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Technology Tags */}
-            <motion.div 
-              className="flex flex-wrap gap-2"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-            >
-              {project.technologies.map((tech, i) => (
-                <span
-                  key={i}
-                  className="px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm text-white border border-white/20"
-                >
-                  {tech}
-                </span>
-              ))}
-            </motion.div>
-
-            {/* Action Buttons */}
-            <motion.div 
-              className="flex flex-col sm:flex-row gap-4 pt-4"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-            >
-              <motion.button
-                className={`inline-flex items-center px-8 py-4 bg-gradient-to-r ${project.gradient} text-white rounded-full font-medium shadow-lg hover:opacity-90 transition-all duration-300`}
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: `0 20px 40px ${project.accentColor}30`
-                }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => window.open(project.url, '_blank')}
-              >
-                <ExternalLink className="w-5 h-5 mr-2" />
-                View Live Demo
-              </motion.button>
-              
-              <motion.button
-                className="inline-flex items-center px-8 py-4 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300"
-                whileHover={{ 
-                  scale: 1.05,
-                  backgroundColor: 'rgba(255,255,255,0.1)'
-                }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setIsModalOpen(true)}
-              >
-                <Maximize2 className="w-5 h-5 mr-2" />
-                Full Screen
-              </motion.button>
-            </motion.div>
-          </motion.div>
-
-          {/* Website Preview Side */}
-          <motion.div
-            className={`relative ${index % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}
-            style={{ 
-              y: smoothY,
-              scale: smoothScale,
-              rotateY: smoothRotateY,
-              transformPerspective: 1000
-            }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              duration: 1.2,
-              ease: [0.25, 0.46, 0.45, 0.94],
-              delay: 0.4
-            }}
-          >
-            {/* Main Preview Frame */}
-            <div className="relative">
-              <motion.div
-                className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-black/20 backdrop-blur-sm"
-                whileHover={{ 
-                  scale: 1.02,
-                  rotateY: index % 2 === 0 ? -2 : 2,
-                  rotateX: 2
-                }}
-                transition={{ duration: 0.3 }}
-                style={{
-                  boxShadow: `0 25px 60px ${project.accentColor}20`
-                }}
-              >
-                {/* Browser Chrome */}
-                <div className="bg-gray-800/80 backdrop-blur-sm px-4 py-3 flex items-center space-x-2 border-b border-white/10">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 bg-red-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                  </div>
-                  <div className="flex-1 bg-black/20 rounded-lg px-3 py-1 mx-4">
-                    <span className="text-gray-300 text-sm truncate">{project.url}</span>
-                  </div>
-                </div>
-
-                {/* Website Preview */}
-                <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
-                  <iframe
-                    ref={iframeRef}
-                    src={project.url}
-                    style={{ 
-                      position: 'absolute', 
-                      top: 0, 
-                      left: 0, 
-                      width: '100%', 
-                      height: '100%',
-                      border: 'none'
-                    }}
-                    loading="lazy"
-                    onLoad={() => setIsLoaded(true)}
-                  />
-                  
-                  {/* Loading overlay */}
-                  {!isLoaded && (
-                    <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                      <div className={`w-8 h-8 border-2 border-t-transparent rounded-full animate-spin`} 
-                           style={{ borderColor: project.accentColor, borderTopColor: 'transparent' }}>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Overlay Controls */}
-                <div className="absolute bottom-4 right-4 flex space-x-2">
-                  <motion.button
-                    onClick={() => window.open(project.url, '_blank')}
-                    className="w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                  </motion.button>
-                  <motion.button
-                    onClick={() => setIsModalOpen(true)}
-                    className="w-12 h-12 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <Maximize2 className="w-5 h-5" />
-                  </motion.button>
-                </div>
-              </motion.div>
-
-              {/* Floating UI Elements */}
-              <motion.div
-                className={`absolute -top-4 -left-4 w-20 h-20 bg-gradient-to-br ${project.gradient} opacity-20 rounded-2xl backdrop-blur-sm border border-white/10`}
-                animate={{
-                  y: [0, -10, 0],
-                  rotate: [0, 5, -5, 0],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              />
-              
-              <motion.div
-                className={`absolute -bottom-6 -right-6 w-16 h-16 bg-gradient-to-br ${project.gradient} opacity-15 rounded-xl backdrop-blur-sm border border-white/10`}
-                animate={{
-                  x: [0, 10, 0],
-                  scale: [1, 1.2, 1],
-                  rotate: [0, -5, 0]
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-              />
-            </div>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Full Screen Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <motion.div
-            className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setIsModalOpen(false)}
-          >
-            <motion.div
-              className="w-full max-w-6xl h-full max-h-[90vh] bg-black rounded-2xl overflow-hidden border border-white/20 shadow-2xl"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Modal Header */}
-              <div className="flex items-center justify-between p-4 border-b border-white/10 bg-gray-900/50">
-                <h3 className="text-xl font-semibold text-white">{project.title}</h3>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-300 hover:text-white transition-all"
-                >
-                  ×
-                </button>
-              </div>
-              
-              {/* Full Screen Iframe */}
-              <div className="h-[calc(100%-4rem)]">
-                <iframe
-                  src={project.url}
-                  className="w-full h-full border-none"
-                  loading="lazy"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
-};
-
-// Main Portfolio Section Component
-const GSAPPortfolioSection = () => {
-  return (
-    <div className="relative">
-      {/* Section Introduction */}
-      <motion.section
-        className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1 }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/10 via-purple-900/10 to-cyan-900/10" />
-        
-        <div className="relative z-10 max-w-5xl text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-5xl md:text-7xl font-light text-white mb-8 leading-tight">
-              Our <span className="font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Work</span>
-            </h2>
-            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-light">
-              Transforming ideas into powerful digital experiences with AI-assisted development
-            </p>
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* Individual Project Showcases */}
-      {portfolioProjects.map((project, index) => (
-        <FullPageProjectShowcase
-          key={project.id}
-          project={project}
-          index={index}
-        />
-      ))}
-    </div>
-  );
-};
-
 export default function HomePage() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef(null);
   const heroRef = useRef(null);
   const servicesRef = useRef(null);
   const ctaRef = useRef(null);
+  
   // Scroll progress tracking
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
+  
   // Hero parallax effects
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
   const heroY = useTransform(scrollYProgress, [0, 0.3], [-50, -150]);
+  
   // Event section parallax effects
   const eventOpacity = useTransform(scrollYProgress, [0.15, 0.45], [1, 0]);
   const eventScale = useTransform(scrollYProgress, [0.15, 0.45], [1, 0.95]);
   const eventY = useTransform(scrollYProgress, [0.15, 0.45], [0, -100]);
+  
   // Smooth spring animations
   const smoothScrollProgress = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
   });
+  
   // Services section in view detection
   const servicesInView = useInView(servicesRef, {
     once: true,
     margin: "-20% 0px -20% 0px"
   });
+  
   // CTA section mouse tracking
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -1268,6 +629,7 @@ export default function HomePage() {
       }
     };
   }, []);
+  
   return (
     <div ref={containerRef} className="relative pointer-events-none">
       {/* Scroll Progress Indicator */}
@@ -1279,6 +641,7 @@ export default function HomePage() {
           />
         </div>
       </div>
+      
       {/* Hero Section with Parallax */}
       <motion.section
         ref={heroRef}
@@ -1407,6 +770,7 @@ export default function HomePage() {
           </motion.div>
         </div>
       </motion.section>
+      
       {/* Event Engagement Technology Section */}
       <motion.section
         className="min-h-screen relative overflow-hidden pointer-events-auto"
@@ -1701,7 +1065,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* NEW Horizontal Scrolling Portfolio Showcases - Replaces old laptop showcases */}
+      {/* NEW Horizontal Scrolling Portfolio Showcases */}
       <HorizontalPortfolioSection />
 
       {/* Technology & Process Section with Clip Path Reveal */}
@@ -1815,6 +1179,7 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+      
       {/* Call to Action Section with Magnetic Interactions */}
       <section
         ref={ctaRef}
