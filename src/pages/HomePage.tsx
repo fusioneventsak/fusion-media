@@ -433,13 +433,16 @@ const HorizontalPortfolioSection = () => {
     
     gsap.registerPlugin(ScrollTrigger);
 
+    // Force ScrollTrigger to refresh and handle WebGL conflicts
+    ScrollTrigger.refresh();
+
     // Get the scroll container
     const scrollContainer = scrollContainerRef.current;
     const totalWidth = scrollContainer.scrollWidth;
     const viewportWidth = window.innerWidth;
     const scrollDistance = totalWidth - viewportWidth;
 
-    // Create horizontal scroll animation
+    // Create horizontal scroll animation with WebGL-friendly settings
     const horizontalScroll = gsap.to(scrollContainer, {
       x: -scrollDistance,
       ease: "none",
@@ -451,17 +454,33 @@ const HorizontalPortfolioSection = () => {
         pin: true,
         anticipatePin: 1,
         invalidateOnRefresh: true,
+        pinSpacing: false, // Important for WebGL compatibility
+        refreshPriority: -1, // Lower priority to avoid conflicts
         onUpdate: (self) => {
-          // Optional: Add progress tracking
-          const progress = self.progress;
-          // You can use this for additional animations
+          // Force refresh of other scroll elements
+          ScrollTrigger.refresh();
+        },
+        onRefresh: () => {
+          // Recalculate dimensions
+          const newTotalWidth = scrollContainer.scrollWidth;
+          const newViewportWidth = window.innerWidth;
+          const newScrollDistance = newTotalWidth - newViewportWidth;
+          gsap.set(scrollContainer, { x: 0 }); // Reset position
         }
       }
     });
 
+    // Handle resize events that might affect WebGL
+    const handleResize = () => {
+      ScrollTrigger.refresh();
+    };
+
+    window.addEventListener('resize', handleResize);
+
     // Cleanup function
     return () => {
       horizontalScroll.kill();
+      window.removeEventListener('resize', handleResize);
       ScrollTrigger.getAll().forEach(trigger => {
         if (trigger.trigger === containerRef.current) {
           trigger.kill();
@@ -479,7 +498,7 @@ const HorizontalPortfolioSection = () => {
   }
 
   return (
-    <div ref={containerRef} className="relative overflow-hidden">
+    <div className="relative">
       {/* Section Introduction */}
       <motion.section
         className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
@@ -523,11 +542,20 @@ const HorizontalPortfolioSection = () => {
         </div>
       </motion.section>
 
-      {/* Horizontal Scrolling Container */}
-      <div className="relative h-screen overflow-hidden">
+      {/* Horizontal Scrolling Container - Fixed for WebGL */}
+      <div 
+        ref={containerRef} 
+        className="relative"
+        style={{ 
+          height: '100vh', 
+          overflow: 'hidden',
+          background: 'transparent',
+          zIndex: 50 // Ensure it's above WebGL but below navigation
+        }}
+      >
         <div 
           ref={scrollContainerRef}
-          className="flex h-full"
+          className="flex h-full relative"
           style={{ 
             width: `${horizontalPortfolioProjects.length * 100}vw`,
             willChange: 'transform'
@@ -778,7 +806,8 @@ export default function HomePage() {
           opacity: eventOpacity,
           scale: eventScale,
           y: eventY,
-          willChange: 'transform, opacity'
+          willChange: 'transform, opacity',
+          marginBottom: 0 // Ensure no gap
         }}
       >
         <div className="absolute inset-0 bg-black/5"></div>
