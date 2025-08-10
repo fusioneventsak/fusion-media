@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
+import { createPortal } from 'react-dom';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
 
 const FullWidthShowcase = ({ url, title, description, features, backgroundColor, textColor, accentColor }) => {
@@ -58,9 +59,9 @@ const FullWidthShowcase = ({ url, title, description, features, backgroundColor,
       </div>
 
       <AnimatePresence>
-        {isModalOpen && (
+        {isModalOpen && createPortal(
           <motion.div
-            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -82,7 +83,8 @@ const FullWidthShowcase = ({ url, title, description, features, backgroundColor,
                 />
               </div>
             </div>
-          </motion.div>
+          </motion.div>,
+          document.body
         )}
       </AnimatePresence>
     </div>
