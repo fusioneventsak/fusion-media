@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
@@ -10,6 +11,13 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
+  const modalRoot = document.getElementById('modal-root');
+  
+  if (!modalRoot) {
+    console.error('Modal root element not found');
+    return null;
+  }
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -38,7 +46,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
     };
   }, [isOpen, onClose]);
 
-  return (
+  const modalContent = (
     <AnimatePresence>
       {isOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
@@ -81,4 +89,6 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
       )}
     </AnimatePresence>
   );
+
+  return ReactDOM.createPortal(modalContent, modalRoot);
 }
