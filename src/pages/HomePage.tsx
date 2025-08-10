@@ -433,44 +433,42 @@ const HorizontalPortfolioSection = () => {
     
     gsap.registerPlugin(ScrollTrigger);
 
-    // Force ScrollTrigger to refresh and handle WebGL conflicts
-    ScrollTrigger.refresh();
-
     // Get the scroll container
     const scrollContainer = scrollContainerRef.current;
-    const totalWidth = scrollContainer.scrollWidth;
-    const viewportWidth = window.innerWidth;
-    const scrollDistance = totalWidth - viewportWidth;
+    const container = containerRef.current;
+    
+    // Calculate scroll distance based on content width
+    const getScrollDistance = () => {
+      const totalWidth = scrollContainer.scrollWidth;
+      const viewportWidth = window.innerWidth;
+      return totalWidth - viewportWidth;
+    };
 
-    // Create horizontal scroll animation with WebGL-friendly settings
+    // Create horizontal scroll animation WITHOUT pinning (WebGL-friendly)
     const horizontalScroll = gsap.to(scrollContainer, {
-      x: -scrollDistance,
+      x: () => -getScrollDistance(),
       ease: "none",
       scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        end: () => `+=${scrollDistance}`,
+        trigger: container,
+        start: "top bottom", // Start when section enters viewport
+        end: "bottom top",   // End when section leaves viewport
         scrub: 1,
-        pin: true,
-        anticipatePin: 1,
+        refreshPriority: -1,
         invalidateOnRefresh: true,
-        pinSpacing: false, // Important for WebGL compatibility
-        refreshPriority: -1, // Lower priority to avoid conflicts
         onUpdate: (self) => {
-          // Force refresh of other scroll elements
-          ScrollTrigger.refresh();
+          // Smooth progress-based animation instead of pinning
+          const progress = self.progress;
+          const scrollDistance = getScrollDistance();
+          gsap.set(scrollContainer, { x: -scrollDistance * progress });
         },
         onRefresh: () => {
-          // Recalculate dimensions
-          const newTotalWidth = scrollContainer.scrollWidth;
-          const newViewportWidth = window.innerWidth;
-          const newScrollDistance = newTotalWidth - newViewportWidth;
-          gsap.set(scrollContainer, { x: 0 }); // Reset position
+          // Recalculate on resize
+          ScrollTrigger.refresh();
         }
       }
     });
 
-    // Handle resize events that might affect WebGL
+    // Handle resize events
     const handleResize = () => {
       ScrollTrigger.refresh();
     };
@@ -482,7 +480,7 @@ const HorizontalPortfolioSection = () => {
       horizontalScroll.kill();
       window.removeEventListener('resize', handleResize);
       ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === containerRef.current) {
+        if (trigger.trigger === container) {
           trigger.kill();
         }
       });
