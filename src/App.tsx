@@ -111,7 +111,7 @@ export default function App() {
 
       {/* Page Content */}
       <PageTransition currentPage={currentPage}>
-        <main className="relative z-10">
+        <main className="relative z-[100]">
           {renderPage()}
         </main>
       </PageTransition>
