@@ -96,13 +96,7 @@ const HorizontalProjectCard = ({ project, index }) => {
   const Icon = iconMap[project.category] || Code;
 
   return (
-    <div className="flex-none w-screen h-screen flex items-center justify-center px-8 relative">
-      {/* Background Pattern */}
-      <div 
-        className="absolute inset-0 opacity-30"
-        style={{ background: project.bgPattern }}
-      />
-      
+    <div className="w-full h-full flex items-center justify-center">
       {/* Animated gradient overlay */}
       <motion.div
         className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10`}
@@ -117,7 +111,7 @@ const HorizontalProjectCard = ({ project, index }) => {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center h-full">
+      <div className="relative z-10 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center h-full px-8">
         
         {/* Content Side */}
         <motion.div
@@ -433,42 +427,43 @@ const HorizontalPortfolioSection = () => {
     
     gsap.registerPlugin(ScrollTrigger);
 
-    // Get the scroll container
     const scrollContainer = scrollContainerRef.current;
     const container = containerRef.current;
+    const sections = scrollContainer.querySelectorAll('.horizontal-section');
     
-    // Calculate scroll distance based on content width
-    const getScrollDistance = () => {
-      const totalWidth = scrollContainer.scrollWidth;
-      const viewportWidth = window.innerWidth;
-      return totalWidth - viewportWidth;
-    };
+    // Calculate the total scroll distance needed
+    const totalScrollDistance = (sections.length - 1) * window.innerWidth;
 
-    // Create horizontal scroll animation WITHOUT the recursive update
-    const horizontalScroll = gsap.to(scrollContainer, {
-      x: () => -getScrollDistance(),
-      ease: "none",
+    // Create the main horizontal scroll animation
+    const horizontalAnimation = gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: "top bottom",
-        end: "bottom top",
+        start: "top top",
+        end: () => `+=${totalScrollDistance}`,
         scrub: 1,
-        refreshPriority: -1,
-        invalidateOnRefresh: true
-        // Removed the onUpdate callback that was causing the infinite loop
+        pin: true,
+        anticipatePin: 1,
+        invalidateOnRefresh: true,
+        refreshPriority: -1
       }
     });
 
-    // Handle resize events
+    // Animate the horizontal movement
+    horizontalAnimation.to(scrollContainer, {
+      x: -totalScrollDistance,
+      ease: "none"
+    });
+
+    // Handle resize
     const handleResize = () => {
       ScrollTrigger.refresh();
     };
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup function
+    // Cleanup
     return () => {
-      horizontalScroll.kill();
+      horizontalAnimation.kill();
       window.removeEventListener('resize', handleResize);
       ScrollTrigger.getAll().forEach(trigger => {
         if (trigger.trigger === container) {
