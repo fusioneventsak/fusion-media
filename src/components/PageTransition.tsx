@@ -34,7 +34,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
     };
   };
 
-  // Handle page changes - SIMPLIFIED
+  // Handle page changes
   useEffect(() => {
     if (isTransitioning) return; // Prevent multiple triggers
     
@@ -49,16 +49,57 @@ export default function PageTransition({ currentPage, children, onTransitionChan
     // Start revealing content
     setTimeout(() => {
       setShowContent(true);
-    }, 1600);
+    }, 1800);
     
     // End transition
     setTimeout(() => {
       setIsTransitioning(false);
       onTransitionChange?.(false);
-    }, 2200);
-  }, [currentPage]); // Only depend on currentPage
+    }, 2400);
+  }, [currentPage]);
 
-  const pageInfo = getPageInfo(currentPage); // Use currentPage directly
+  const pageInfo = getPageInfo(currentPage);
+
+  // Grid square configuration (5x3 = 15 squares)
+  const squares = [
+    { id: 1, direction: 'from-right', hasLogo: false },
+    { id: 2, direction: 'from-right', hasLogo: false },
+    { id: 3, direction: 'from-right', hasLogo: false },
+    { id: 4, direction: 'from-bottom', hasLogo: false },
+    { id: 5, direction: 'from-left', hasLogo: false },
+    { id: 6, direction: 'from-right', hasLogo: false },
+    { id: 7, direction: 'from-right', hasLogo: false },
+    { id: 8, direction: 'from-right', hasLogo: false },
+    { id: 9, direction: 'from-bottom', hasLogo: true }, // Center square with logo
+    { id: 10, direction: 'from-left', hasLogo: false },
+    { id: 11, direction: 'from-right', hasLogo: false },
+    { id: 12, direction: 'from-right', hasLogo: false },
+    { id: 13, direction: 'from-right', hasLogo: false },
+    { id: 14, direction: 'from-bottom', hasLogo: false },
+    { id: 15, direction: 'from-left', hasLogo: false }
+  ];
+
+  // Get animation delays for staggered effect
+  const getSquareDelay = (index: number) => {
+    const delayMap = [
+      0,     // square 1
+      0.1,   // square 2, 6
+      0.2,   // square 3, 7, 11
+      0.3,   // square 4, 8, 10, 12
+      0.4,   // square 5, 9, 13, 15
+      0.1,   // square 6 (same as 2)
+      0.2,   // square 7 (same as 3)
+      0.3,   // square 8 (same as 4)
+      0.4,   // square 9 (center)
+      0.3,   // square 10 (same as 4)
+      0.2,   // square 11 (same as 3)
+      0.3,   // square 12 (same as 4)
+      0.4,   // square 13 (same as 5)
+      0.5,   // square 14
+      0.4    // square 15 (same as 5)
+    ];
+    return delayMap[index] || 0;
+  };
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -74,18 +115,18 @@ export default function PageTransition({ currentPage, children, onTransitionChan
           scale: showContent ? 1 : 0.95
         }}
         transition={{ 
-          duration: 0.6, // Slower content reveal
+          duration: 0.6,
           ease: [0.25, 0.46, 0.45, 0.94]
         }}
       >
         {children}
       </motion.div>
 
-      {/* Transition Stinger Frame */}
+      {/* Grid Transition */}
       <AnimatePresence>
         {isTransitioning && (
-          <motion.div
-            key={`transition-${transitionKey}`} // Use incrementing key instead
+          <div
+            key={`transition-${transitionKey}`}
             style={{
               position: 'fixed',
               top: 0,
@@ -93,193 +134,221 @@ export default function PageTransition({ currentPage, children, onTransitionChan
               width: '100vw',
               height: '100vh',
               zIndex: 9999,
-              background: `linear-gradient(135deg, ${pageInfo.color}ee 0%, ${pageInfo.color}dd 100%)`,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              pointerEvents: 'none'
-            }}
-            initial={{ 
-              clipPath: 'circle(0% at 50% 50%)',
-              opacity: 0
-            }}
-            animate={{ 
-              clipPath: [
-                'circle(0% at 50% 50%)',      // Start: invisible
-                'circle(100% at 50% 50%)',    // Cover everything
-                'circle(100% at 50% 50%)',    // Hold longer
-                'circle(0% at 50% 50%)'       // Reveal content
-              ],
-              opacity: [0, 1, 1, 0]
-            }}
-            exit={{ 
-              clipPath: 'circle(0% at 50% 50%)',
-              opacity: 0
-            }}
-            transition={{
-              duration: 2.2, // Much slower overall
-              ease: [0.25, 0.46, 0.45, 0.94],
-              times: [0, 0.25, 0.75, 1] // Hold longer in the middle
+              pointerEvents: 'none',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(5, 1fr)',
+              gridTemplateRows: 'repeat(3, 1fr)'
             }}
           >
-            {/* Logo Content */}
-            <motion.div
-              key={`logo-${transitionKey}`} // Use incrementing key
-              style={{ textAlign: 'center', color: 'white' }}
-              initial={{ opacity: 0, scale: 0.8, y: 20 }}
-              animate={{ 
-                opacity: [0, 1, 1, 1, 0],
-                scale: [0.8, 1.1, 1, 1, 0.8],
-                y: [20, 0, 0, 0, -20]
-              }}
-              transition={{
-                duration: 2.2, // Match container duration
-                ease: [0.25, 0.46, 0.45, 0.94],
-                times: [0, 0.2, 0.4, 0.8, 1] // Hold longer in middle
-              }}
-            >
-              {/* F Logo */}
+            {squares.map((square, index) => (
               <motion.div
+                key={square.id}
                 style={{
-                  width: '80px',
-                  height: '80px',
-                  background: 'rgba(255,255,255,0.2)',
-                  backdropFilter: 'blur(20px)',
-                  borderRadius: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '2px solid rgba(255,255,255,0.3)',
-                  margin: '0 auto 16px auto',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+                  position: 'relative',
+                  width: '100%',
+                  height: '100%',
+                  perspective: '600px',
+                  perspectiveOrigin: square.direction === 'from-right' ? '100% 50%' :
+                                   square.direction === 'from-left' ? '0% 50%' :
+                                   square.direction === 'from-bottom' ? '50% 100%' : '50% 50%'
                 }}
-                initial={{ scale: 0, rotate: -10 }}
-                animate={{
-                  scale: [0, 1.2, 1, 1, 0],
-                  rotate: [-10, 5, 0, 0, 10]
-                }}
-                transition={{
-                  duration: 2.2, // Match parent duration
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.2, 0.4, 0.8, 1]
-                }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.1 }}
               >
-                <span
+                {/* Square Inner */}
+                <motion.div
                   style={{
-                    color: 'white',
-                    fontSize: '36px',
-                    fontWeight: 'bold',
-                    fontFamily: '"Inter", sans-serif'
+                    width: '101%',
+                    height: '100%',
+                    marginRight: '-1px',
+                    background: pageInfo.color,
+                    position: 'relative',
+                    transformOrigin: square.direction === 'from-right' ? '100% 50% 0' :
+                                    square.direction === 'from-left' ? '0% 50% 0' :
+                                    square.direction === 'from-bottom' ? '50% 100% 0' : '50% 50% 0',
+                    backfaceVisibility: 'hidden',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  initial={{
+                    rotateY: square.direction.includes('right') ? -92 : 
+                            square.direction.includes('left') ? 92 : 0,
+                    rotateX: square.direction.includes('bottom') ? 92 : 0
+                  }}
+                  animate={{
+                    rotateY: [
+                      square.direction.includes('right') ? -92 : 
+                      square.direction.includes('left') ? 92 : 0,
+                      0,
+                      0,
+                      square.direction.includes('right') ? -92 : 
+                      square.direction.includes('left') ? 92 : 0
+                    ],
+                    rotateX: [
+                      square.direction.includes('bottom') ? 92 : 0,
+                      0,
+                      0,
+                      square.direction.includes('bottom') ? 92 : 0
+                    ]
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    times: [0, 0.3, 0.7, 1],
+                    delay: getSquareDelay(index),
+                    ease: 'linear'
                   }}
                 >
-                  F
-                </span>
-              </motion.div>
+                  {/* Logo in center square */}
+                  {square.hasLogo && (
+                    <motion.div
+                      style={{ 
+                        textAlign: 'center', 
+                        color: 'white',
+                        opacity: 0
+                      }}
+                      animate={{
+                        opacity: [0, 1, 1, 0]
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        times: [0, 0.3, 0.7, 1],
+                        delay: 0.4
+                      }}
+                    >
+                      {/* F Logo */}
+                      <motion.div
+                        style={{
+                          width: '60px',
+                          height: '60px',
+                          background: 'rgba(255,255,255,0.2)',
+                          backdropFilter: 'blur(20px)',
+                          borderRadius: '12px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          border: '2px solid rgba(255,255,255,0.3)',
+                          margin: '0 auto 12px auto',
+                          boxShadow: '0 10px 20px rgba(0,0,0,0.2)'
+                        }}
+                        animate={{
+                          scale: [0.8, 1.1, 1],
+                          rotate: [0, 5, 0]
+                        }}
+                        transition={{
+                          duration: 1.2,
+                          times: [0, 0.5, 1],
+                          delay: 0.6
+                        }}
+                      >
+                        <span
+                          style={{
+                            color: 'white',
+                            fontSize: '28px',
+                            fontWeight: 'bold',
+                            fontFamily: '"Inter", sans-serif'
+                          }}
+                        >
+                          F
+                        </span>
+                      </motion.div>
 
-              {/* FUSION Text */}
-              <motion.div
-                style={{
-                  fontSize: '32px',
-                  fontWeight: '300',
-                  color: 'white',
-                  letterSpacing: '3px',
-                  marginBottom: '4px',
-                  textShadow: '0 0 20px rgba(255,255,255,0.5)',
-                  fontFamily: '"Inter", sans-serif'
-                }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{
-                  opacity: [0, 1, 1, 1, 0],
-                  y: [10, 0, 0, 0, -10],
-                  letterSpacing: ['3px', '4px', '3px', '3px', '2px']
-                }}
-                transition={{
-                  duration: 2.2,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.15, 0.4, 0.8, 1]
-                }}
-              >
-                FUSION
-              </motion.div>
+                      {/* FUSION Text */}
+                      <motion.div
+                        style={{
+                          fontSize: '20px',
+                          fontWeight: '300',
+                          color: 'white',
+                          letterSpacing: '2px',
+                          marginBottom: '2px',
+                          textShadow: '0 0 10px rgba(255,255,255,0.5)',
+                          fontFamily: '"Inter", sans-serif'
+                        }}
+                        animate={{
+                          letterSpacing: ['2px', '3px', '2px']
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          delay: 0.8
+                        }}
+                      >
+                        FUSION
+                      </motion.div>
 
-              {/* INTERACTIVE Text */}
-              <motion.div
-                style={{
-                  fontSize: '10px',
-                  fontWeight: '300',
-                  color: 'rgba(255,255,255,0.9)',
-                  letterSpacing: '3px',
-                  marginBottom: '20px',
-                  textShadow: '0 0 10px rgba(255,255,255,0.3)',
-                  fontFamily: '"Inter", sans-serif'
-                }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{
-                  opacity: [0, 1, 1, 1, 0],
-                  y: [10, 0, 0, 0, -10]
-                }}
-                transition={{
-                  duration: 2.2,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.18, 0.4, 0.8, 1],
-                  delay: 0.05
-                }}
-              >
-                INTERACTIVE
-              </motion.div>
+                      {/* INTERACTIVE Text */}
+                      <motion.div
+                        style={{
+                          fontSize: '8px',
+                          fontWeight: '300',
+                          color: 'rgba(255,255,255,0.9)',
+                          letterSpacing: '2px',
+                          marginBottom: '8px',
+                          textShadow: '0 0 8px rgba(255,255,255,0.3)',
+                          fontFamily: '"Inter", sans-serif'
+                        }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 1.0 }}
+                      >
+                        INTERACTIVE
+                      </motion.div>
 
-              {/* Page Name - DESTINATION */}
-              <motion.div
-                style={{
-                  background: 'rgba(255,255,255,0.15)',
-                  backdropFilter: 'blur(20px)',
-                  borderRadius: '20px',
-                  padding: '12px 24px',
-                  border: '1px solid rgba(255,255,255,0.2)',
-                  display: 'inline-block',
-                  marginTop: '8px'
-                }}
-                initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                animate={{ 
-                  opacity: [0, 1, 1, 1, 0],
-                  y: [10, 0, 0, 0, -10],
-                  scale: [0.9, 1, 1, 1, 0.9]
-                }}
-                transition={{ 
-                  duration: 2.2,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.25, 0.4, 0.75, 1],
-                  delay: 0.1
-                }}
-              >
-                <span
+                      {/* Page Name */}
+                      <motion.div
+                        style={{
+                          background: 'rgba(255,255,255,0.15)',
+                          backdropFilter: 'blur(20px)',
+                          borderRadius: '12px',
+                          padding: '6px 12px',
+                          border: '1px solid rgba(255,255,255,0.2)',
+                          display: 'inline-block'
+                        }}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 1.2, duration: 0.4 }}
+                      >
+                        <span
+                          style={{
+                            color: 'white',
+                            fontSize: '10px',
+                            fontWeight: '500',
+                            fontFamily: '"Inter", sans-serif'
+                          }}
+                        >
+                          {pageInfo.name}
+                        </span>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </motion.div>
+
+                {/* Square Overlay */}
+                <motion.div
                   style={{
-                    color: 'white',
-                    fontSize: '16px',
-                    fontWeight: '600',
-                    fontFamily: '"Inter", sans-serif',
-                    textShadow: '0 0 10px rgba(255,255,255,0.3)'
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    bottom: 0,
+                    left: 0,
+                    background: '#000',
+                    pointerEvents: 'none'
                   }}
-                >
-                  {pageInfo.name}
-                </span>
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    opacity: [0, 0.6, 0.6, 0]
+                  }}
+                  transition={{
+                    duration: 0.3,
+                    times: [0, 0.3, 0.7, 1],
+                    delay: getSquareDelay(index),
+                    ease: 'linear'
+                  }}
+                />
               </motion.div>
-            </motion.div>
-
-            {/* Subtle Background Pattern */}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: `radial-gradient(circle at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 50%),
-                            radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%)`,
-                pointerEvents: 'none'
-              }}
-            />
-          </motion.div>
+            ))}
+          </div>
         )}
       </AnimatePresence>
     </div>
