@@ -621,7 +621,7 @@ export default function HomePage() {
   }, []);
   
   return (
-    <div ref={containerRef} className="relative pointer-events-none">
+    <div ref={containerRef} className="relative">
       {/* Scroll Progress Indicator */}
       <div className="fixed bottom-8 left-8 z-50 pointer-events-none">
         <div className="w-2 h-32 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm border border-white/30">
@@ -635,7 +635,7 @@ export default function HomePage() {
       {/* Hero Section with Parallax */}
       <motion.section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center px-8 pt-32 pb-16 pointer-events-none"
+        className="relative min-h-screen flex items-center justify-center px-8 pt-32 pb-16"
         style={{
           opacity: heroOpacity,
           scale: heroScale,
@@ -763,7 +763,7 @@ export default function HomePage() {
 
       {/* Section Introduction */}
       <motion.section
-        className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center px-8 py-32 relative overflow-hidden"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -806,7 +806,7 @@ export default function HomePage() {
 
       {/* Event Engagement Technology Section */}
       <motion.section
-        className="min-h-screen relative overflow-hidden pointer-events-auto"
+        className="min-h-screen relative overflow-hidden"
         style={{
           opacity: eventOpacity,
           scale: eventScale,
@@ -1105,7 +1105,7 @@ export default function HomePage() {
       {/* Technology & Process Section with Clip Path Reveal */}
       <section
         ref={servicesRef}
-        className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center px-8 py-32 relative overflow-hidden"
       >
         {/* Clip Path Background */}
         <motion.div
@@ -1217,7 +1217,7 @@ export default function HomePage() {
       {/* Call to Action Section with Magnetic Interactions */}
       <section
         ref={ctaRef}
-        className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center px-8 py-32 relative overflow-hidden"
       >
         {/* Gradient Overlay that responds to mouse */}
         <motion.div
