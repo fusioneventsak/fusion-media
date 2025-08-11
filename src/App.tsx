@@ -20,9 +20,17 @@ export default function App() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-  // Scroll to top when page changes
+  // Scroll to top when page changes - Enhanced
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Immediate scroll to top
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    
+    // Also set scroll position after a small delay to ensure it sticks
+    const scrollTimeout = setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }, 100);
+
+    return () => clearTimeout(scrollTimeout);
   }, [currentPage]);
 
   useEffect(() => {
