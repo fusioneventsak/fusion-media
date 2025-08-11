@@ -46,16 +46,16 @@ export default function PageTransition({ currentPage, children, onTransitionChan
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'auto' });
     
-    // Start revealing content - INCREASED from 1800ms to 3000ms
+    // Start revealing content - after all squares animate in + pause + animate out
     setTimeout(() => {
       setShowContent(true);
-    }, 3000);
+    }, 4500);
     
-    // End transition - INCREASED from 2400ms to 3800ms
+    // End transition - total time for complete animation sequence
     setTimeout(() => {
       setIsTransitioning(false);
       onTransitionChange?.(false);
-    }, 3800);
+    }, 5200);
   }, [currentPage]);
 
   const pageInfo = getPageInfo(currentPage);
@@ -68,13 +68,13 @@ export default function PageTransition({ currentPage, children, onTransitionChan
     { id: 4, direction: 'from-bottom', hasLogo: false },
     { id: 5, direction: 'from-left', hasLogo: false },
     { id: 6, direction: 'from-right', hasLogo: false },
-    { id: 7, direction: 'from-right', hasLogo: false },
-    { id: 8, direction: 'from-right', hasLogo: false },
-    { id: 9, direction: 'from-bottom', hasLogo: true }, // Center square with logo
+    { id: 7, direction: 'from-right', hasLogo: true }, // Logo spans center area
+    { id: 8, direction: 'from-right', hasLogo: true }, // Logo spans center area
+    { id: 9, direction: 'from-bottom', hasLogo: true }, // Logo spans center area
     { id: 10, direction: 'from-left', hasLogo: false },
     { id: 11, direction: 'from-right', hasLogo: false },
-    { id: 12, direction: 'from-right', hasLogo: false },
-    { id: 13, direction: 'from-right', hasLogo: false },
+    { id: 12, direction: 'from-right', hasLogo: true }, // Logo spans center area
+    { id: 13, direction: 'from-right', hasLogo: true }, // Logo spans center area
     { id: 14, direction: 'from-bottom', hasLogo: false },
     { id: 15, direction: 'from-left', hasLogo: false }
   ];
@@ -184,6 +184,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       square.direction.includes('left') ? 92 : 0,
                       0,
                       0,
+                      0,
                       square.direction.includes('right') ? -92 : 
                       square.direction.includes('left') ? 92 : 0
                     ],
@@ -191,62 +192,74 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       square.direction.includes('bottom') ? 92 : 0,
                       0,
                       0,
+                      0,
                       square.direction.includes('bottom') ? 92 : 0
                     ]
                   }}
                   transition={{
-                    duration: 0.8, // INCREASED from 0.3 to 0.8 for slower square animation
-                    times: [0, 0.25, 0.75, 1], // Adjusted timing to hold squares longer
+                    duration: 3.5, // Total animation duration
+                    times: [0, 0.2, 0.5, 0.8, 1], // Animate in (0-0.2), hold (0.2-0.8), animate out (0.8-1)
                     delay: getSquareDelay(index),
-                    ease: 'easeInOut' // Changed from 'linear' to smoother easing
+                    ease: 'easeInOut'
                   }}
                 >
-                  {/* Logo in center square */}
-                  {square.hasLogo && (
+                  {/* Logo in center area - only render once in center square (id 9) */}
+                  {square.hasLogo && square.id === 9 && (
                     <motion.div
                       style={{ 
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
                         textAlign: 'center', 
                         color: 'white',
-                        opacity: 0
+                        opacity: 0,
+                        zIndex: 10,
+                        width: '300px', // Span across multiple squares
+                        height: '200px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center'
                       }}
                       animate={{
-                        opacity: [0, 1, 1, 0]
+                        opacity: [0, 0, 1, 1, 1, 0]
                       }}
                       transition={{
-                        duration: 2.0, // INCREASED from 1.2 to 2.0 for longer logo visibility
-                        times: [0, 0.2, 0.8, 1], // Hold logo visible longer
-                        delay: 0.6
+                        duration: 3.5,
+                        times: [0, 0.15, 0.25, 0.5, 0.75, 1], // Fade in after squares, hold, fade out before squares
+                        delay: 0.8 // Start after initial square delays
                       }}
                     >
                       {/* F Logo */}
                       <motion.div
                         style={{
-                          width: '60px',
-                          height: '60px',
+                          width: '80px', // Increased size
+                          height: '80px',
                           background: 'rgba(255,255,255,0.2)',
                           backdropFilter: 'blur(20px)',
-                          borderRadius: '12px',
+                          borderRadius: '16px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           border: '2px solid rgba(255,255,255,0.3)',
-                          margin: '0 auto 12px auto',
-                          boxShadow: '0 10px 20px rgba(0,0,0,0.2)'
+                          margin: '0 auto 16px auto',
+                          boxShadow: '0 15px 30px rgba(0,0,0,0.3)'
                         }}
                         animate={{
                           scale: [0.8, 1.1, 1],
                           rotate: [0, 5, 0]
                         }}
                         transition={{
-                          duration: 1.8, // INCREASED from 1.2 to 1.8
+                          duration: 2.0,
                           times: [0, 0.4, 1],
-                          delay: 0.8
+                          delay: 1.0
                         }}
                       >
                         <span
                           style={{
                             color: 'white',
-                            fontSize: '28px',
+                            fontSize: '36px', // Increased font size
                             fontWeight: 'bold',
                             fontFamily: '"Inter", sans-serif'
                           }}
@@ -258,20 +271,20 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       {/* FUSION Text */}
                       <motion.div
                         style={{
-                          fontSize: '20px',
+                          fontSize: '28px', // Increased size
                           fontWeight: '300',
                           color: 'white',
-                          letterSpacing: '2px',
-                          marginBottom: '2px',
-                          textShadow: '0 0 10px rgba(255,255,255,0.5)',
+                          letterSpacing: '3px',
+                          marginBottom: '4px',
+                          textShadow: '0 0 15px rgba(255,255,255,0.6)',
                           fontFamily: '"Inter", sans-serif'
                         }}
                         animate={{
-                          letterSpacing: ['2px', '3px', '2px']
+                          letterSpacing: ['3px', '4px', '3px']
                         }}
                         transition={{
-                          duration: 2.0, // INCREASED from 1.5 to 2.0
-                          delay: 1.0
+                          duration: 2.5,
+                          delay: 1.2
                         }}
                       >
                         FUSION
@@ -280,17 +293,17 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       {/* INTERACTIVE Text */}
                       <motion.div
                         style={{
-                          fontSize: '8px',
+                          fontSize: '12px', // Increased size
                           fontWeight: '300',
                           color: 'rgba(255,255,255,0.9)',
-                          letterSpacing: '2px',
-                          marginBottom: '8px',
-                          textShadow: '0 0 8px rgba(255,255,255,0.3)',
+                          letterSpacing: '3px',
+                          marginBottom: '12px',
+                          textShadow: '0 0 10px rgba(255,255,255,0.4)',
                           fontFamily: '"Inter", sans-serif'
                         }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 1.2 }} // INCREASED from 1.0 to 1.2
+                        transition={{ delay: 1.4 }}
                       >
                         INTERACTIVE
                       </motion.div>
@@ -300,19 +313,19 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                         style={{
                           background: 'rgba(255,255,255,0.15)',
                           backdropFilter: 'blur(20px)',
-                          borderRadius: '12px',
-                          padding: '6px 12px',
+                          borderRadius: '16px',
+                          padding: '10px 20px', // Increased padding
                           border: '1px solid rgba(255,255,255,0.2)',
                           display: 'inline-block'
                         }}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 1.4, duration: 0.6 }} // INCREASED delay and duration
+                        transition={{ delay: 1.6, duration: 0.8 }}
                       >
                         <span
                           style={{
                             color: 'white',
-                            fontSize: '10px',
+                            fontSize: '14px', // Increased size
                             fontWeight: '500',
                             fontFamily: '"Inter", sans-serif'
                           }}
@@ -337,11 +350,11 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   }}
                   initial={{ opacity: 0 }}
                   animate={{
-                    opacity: [0, 0.6, 0.6, 0]
+                    opacity: [0, 0.6, 0.6, 0.6, 0]
                   }}
                   transition={{
-                    duration: 0.8, // INCREASED from 0.3 to 0.8 to match square animation
-                    times: [0, 0.25, 0.75, 1],
+                    duration: 3.5, // Match square animation duration
+                    times: [0, 0.2, 0.5, 0.8, 1], // Sync with square timing
                     delay: getSquareDelay(index),
                     ease: 'easeInOut'
                   }}
