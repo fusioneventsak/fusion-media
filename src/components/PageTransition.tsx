@@ -11,6 +11,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showContent, setShowContent] = useState(true);
   const [transitionKey, setTransitionKey] = useState(0);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
   
   // Get page info
   const getPageInfo = (to: string) => {
@@ -36,6 +37,12 @@ export default function PageTransition({ currentPage, children, onTransitionChan
 
   // Handle page changes
   useEffect(() => {
+    // Skip transition on first load
+    if (isFirstLoad) {
+      setIsFirstLoad(false);
+      return;
+    }
+    
     if (isTransitioning) return; // Prevent multiple triggers
     
     setIsTransitioning(true);
@@ -60,23 +67,23 @@ export default function PageTransition({ currentPage, children, onTransitionChan
 
   const pageInfo = getPageInfo(currentPage);
 
-  // Grid square configuration (5x3 = 15 squares)
+  // Grid square configuration (5x3 = 15 squares) - Step and repeat pattern
   const squares = [
-    { id: 1, direction: 'from-right', hasLogo: false },
-    { id: 2, direction: 'from-right', hasLogo: false },
-    { id: 3, direction: 'from-right', hasLogo: false },
-    { id: 4, direction: 'from-bottom', hasLogo: false },
-    { id: 5, direction: 'from-left', hasLogo: false },
-    { id: 6, direction: 'from-right', hasLogo: false },
-    { id: 7, direction: 'from-right', hasLogo: true }, // Logo spans center area
-    { id: 8, direction: 'from-right', hasLogo: true }, // Logo spans center area
-    { id: 9, direction: 'from-bottom', hasLogo: true }, // Logo spans center area
-    { id: 10, direction: 'from-left', hasLogo: false },
-    { id: 11, direction: 'from-right', hasLogo: false },
-    { id: 12, direction: 'from-right', hasLogo: true }, // Logo spans center area
-    { id: 13, direction: 'from-right', hasLogo: true }, // Logo spans center area
-    { id: 14, direction: 'from-bottom', hasLogo: false },
-    { id: 15, direction: 'from-left', hasLogo: false }
+    { id: 1, direction: 'from-right', type: 'logo' },
+    { id: 2, direction: 'from-right', type: 'title' },
+    { id: 3, direction: 'from-right', type: 'logo' },
+    { id: 4, direction: 'from-bottom', type: 'title' },
+    { id: 5, direction: 'from-left', type: 'logo' },
+    { id: 6, direction: 'from-right', type: 'title' },
+    { id: 7, direction: 'from-right', type: 'logo' },
+    { id: 8, direction: 'from-right', type: 'title' },
+    { id: 9, direction: 'from-bottom', type: 'logo' },
+    { id: 10, direction: 'from-left', type: 'title' },
+    { id: 11, direction: 'from-right', type: 'logo' },
+    { id: 12, direction: 'from-right', type: 'title' },
+    { id: 13, direction: 'from-right', type: 'logo' },
+    { id: 14, direction: 'from-bottom', type: 'title' },
+    { id: 15, direction: 'from-left', type: 'logo' }
   ];
 
   // Get animation delays for staggered effect - INCREASED delays for slower animation
@@ -203,8 +210,8 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     ease: 'easeInOut'
                   }}
                 >
-                  {/* Logo in center area - only render once in center square (id 9) */}
-                  {square.hasLogo && square.id === 9 && (
+                  {/* Step and Repeat Content */}
+                  {square.type === 'logo' && (
                     <motion.div
                       style={{ 
                         position: 'absolute',
@@ -215,36 +222,37 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                         color: 'white',
                         opacity: 0,
                         zIndex: 10,
-                        width: '300px', // Span across multiple squares
-                        height: '200px',
+                        width: '100%',
+                        height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center'
                       }}
                       animate={{
-                        opacity: [0, 0, 1, 1, 1, 0]
+                        opacity: [0, 0, 1, 1, 1, 0],
+                        scale: [0.8, 0.8, 1, 1, 1, 0.8]
                       }}
                       transition={{
                         duration: 3.5,
                         times: [0, 0.15, 0.25, 0.5, 0.75, 1], // Fade in after squares, hold, fade out before squares
-                        delay: 0.8 // Start after initial square delays
+                        delay: getSquareDelay(index) + 0.3 // Stagger based on square position
                       }}
                     >
                       {/* F Logo */}
                       <motion.div
                         style={{
-                          width: '80px', // Increased size
-                          height: '80px',
+                          width: '60px',
+                          height: '60px',
                           background: 'rgba(255,255,255,0.2)',
                           backdropFilter: 'blur(20px)',
-                          borderRadius: '16px',
+                          borderRadius: '12px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           border: '2px solid rgba(255,255,255,0.3)',
-                          margin: '0 auto 16px auto',
-                          boxShadow: '0 15px 30px rgba(0,0,0,0.3)'
+                          margin: '0 auto 8px auto',
+                          boxShadow: '0 10px 20px rgba(0,0,0,0.3)'
                         }}
                         animate={{
                           scale: [0.8, 1.1, 1],
@@ -253,13 +261,13 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                         transition={{
                           duration: 2.0,
                           times: [0, 0.4, 1],
-                          delay: 1.0
+                          delay: getSquareDelay(index) + 0.5
                         }}
                       >
                         <span
                           style={{
                             color: 'white',
-                            fontSize: '36px', // Increased font size
+                            fontSize: '28px',
                             fontWeight: 'bold',
                             fontFamily: '"Inter", sans-serif'
                           }}
@@ -271,20 +279,20 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       {/* FUSION Text */}
                       <motion.div
                         style={{
-                          fontSize: '28px', // Increased size
+                          fontSize: '18px',
                           fontWeight: '300',
                           color: 'white',
-                          letterSpacing: '3px',
-                          marginBottom: '4px',
+                          letterSpacing: '2px',
+                          marginBottom: '2px',
                           textShadow: '0 0 15px rgba(255,255,255,0.6)',
                           fontFamily: '"Inter", sans-serif'
                         }}
                         animate={{
-                          letterSpacing: ['3px', '4px', '3px']
+                          letterSpacing: ['2px', '3px', '2px']
                         }}
                         transition={{
                           duration: 2.5,
-                          delay: 1.2
+                          delay: getSquareDelay(index) + 0.7
                         }}
                       >
                         FUSION
@@ -293,44 +301,98 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       {/* INTERACTIVE Text */}
                       <motion.div
                         style={{
-                          fontSize: '12px', // Increased size
+                          fontSize: '8px',
                           fontWeight: '300',
                           color: 'rgba(255,255,255,0.9)',
-                          letterSpacing: '3px',
-                          marginBottom: '12px',
+                          letterSpacing: '2px',
+                          marginBottom: '8px',
                           textShadow: '0 0 10px rgba(255,255,255,0.4)',
                           fontFamily: '"Inter", sans-serif'
                         }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 1.4 }}
+                        transition={{ delay: getSquareDelay(index) + 0.9 }}
                       >
                         INTERACTIVE
                       </motion.div>
+                    </motion.div>
+                  )}
 
-                      {/* Page Name */}
+                  {/* Title Content */}
+                  {square.type === 'title' && (
+                    <motion.div
+                      style={{ 
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        textAlign: 'center', 
+                        color: 'white',
+                        opacity: 0,
+                        zIndex: 10,
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}
+                      animate={{
+                        opacity: [0, 0, 1, 1, 1, 0],
+                        scale: [0.8, 0.8, 1, 1, 1, 0.8]
+                      }}
+                      transition={{
+                        duration: 3.5,
+                        times: [0, 0.15, 0.25, 0.5, 0.75, 1],
+                        delay: getSquareDelay(index) + 0.3
+                      }}
+                    >
+                      {/* Page Title */}
+                      <motion.div
+                        style={{
+                          fontSize: '24px',
+                          fontWeight: 'bold',
+                          color: 'white',
+                          letterSpacing: '1px',
+                          marginBottom: '8px',
+                          textShadow: '0 0 15px rgba(255,255,255,0.6)',
+                          fontFamily: '"Inter", sans-serif'
+                        }}
+                        animate={{
+                          scale: [0.9, 1.1, 1]
+                        }}
+                        transition={{
+                          duration: 2.0,
+                          times: [0, 0.4, 1],
+                          delay: getSquareDelay(index) + 0.5
+                        }}
+                      >
+                        {pageInfo.name.toUpperCase()}
+                      </motion.div>
+
+                      {/* Subtitle */}
                       <motion.div
                         style={{
                           background: 'rgba(255,255,255,0.15)',
                           backdropFilter: 'blur(20px)',
-                          borderRadius: '16px',
-                          padding: '10px 20px', // Increased padding
+                          borderRadius: '12px',
+                          padding: '6px 12px',
                           border: '1px solid rgba(255,255,255,0.2)',
                           display: 'inline-block'
                         }}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 1.6, duration: 0.8 }}
+                        transition={{ delay: getSquareDelay(index) + 0.7, duration: 0.8 }}
                       >
                         <span
                           style={{
                             color: 'white',
-                            fontSize: '14px', // Increased size
+                            fontSize: '10px',
                             fontWeight: '500',
                             fontFamily: '"Inter", sans-serif'
                           }}
                         >
-                          {pageInfo.name}
+                          INTERACTIVE
                         </span>
                       </motion.div>
                     </motion.div>
