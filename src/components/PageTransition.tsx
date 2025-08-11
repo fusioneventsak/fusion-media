@@ -48,18 +48,18 @@ export default function PageTransition({ currentPage, children, onTransitionChan
       setTimeout(() => {
         setDisplayPage(currentPage);
         window.scrollTo({ top: 0, behavior: 'auto' });
-      }, 600);
+      }, 1000); // Slower timing
       
       // Start revealing content
       setTimeout(() => {
         setShowContent(true);
-      }, 1000);
+      }, 1600); // Slower timing
       
       // End transition
       setTimeout(() => {
         setIsTransitioning(false);
         onTransitionChange?.(false);
-      }, 1400);
+      }, 2200); // Much longer total duration
     }
   }, [currentPage, displayPage, onTransitionChange]);
 
@@ -79,7 +79,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
           scale: showContent ? 1 : 0.95
         }}
         transition={{ 
-          duration: 0.4,
+          duration: 0.6, // Slower content reveal
           ease: [0.25, 0.46, 0.45, 0.94]
         }}
       >
@@ -90,6 +90,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
       <AnimatePresence>
         {isTransitioning && (
           <motion.div
+            key={`transition-${currentPage}-${Date.now()}`} // Force re-render each time
             style={{
               position: 'fixed',
               top: 0,
@@ -111,7 +112,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
               clipPath: [
                 'circle(0% at 50% 50%)',      // Start: invisible
                 'circle(100% at 50% 50%)',    // Cover everything
-                'circle(100% at 50% 50%)',    // Hold
+                'circle(100% at 50% 50%)',    // Hold longer
                 'circle(0% at 50% 50%)'       // Reveal content
               ],
               opacity: [0, 1, 1, 0]
@@ -121,13 +122,14 @@ export default function PageTransition({ currentPage, children, onTransitionChan
               opacity: 0
             }}
             transition={{
-              duration: 1.4,
+              duration: 2.2, // Much slower overall
               ease: [0.25, 0.46, 0.45, 0.94],
-              times: [0, 0.3, 0.7, 1]
+              times: [0, 0.25, 0.75, 1] // Hold longer in the middle
             }}
           >
             {/* Logo Content */}
             <motion.div
+              key={`logo-${currentPage}-${Date.now()}`} // Force re-animation
               style={{ textAlign: 'center', color: 'white' }}
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{ 
@@ -136,9 +138,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                 y: [20, 0, 0, 0, -20]
               }}
               transition={{
-                duration: 1.4,
+                duration: 2.2, // Match container duration
                 ease: [0.25, 0.46, 0.45, 0.94],
-                times: [0, 0.25, 0.5, 0.75, 1]
+                times: [0, 0.2, 0.4, 0.8, 1] // Hold longer in middle
               }}
             >
               {/* F Logo */}
@@ -162,9 +164,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   rotate: [-10, 5, 0, 0, 10]
                 }}
                 transition={{
-                  duration: 1.4,
+                  duration: 2.2, // Match parent duration
                   ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.25, 0.5, 0.75, 1]
+                  times: [0, 0.2, 0.4, 0.8, 1]
                 }}
               >
                 <span
@@ -197,9 +199,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   letterSpacing: ['3px', '4px', '3px', '3px', '2px']
                 }}
                 transition={{
-                  duration: 1.4,
+                  duration: 2.2,
                   ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.2, 0.5, 0.8, 1]
+                  times: [0, 0.15, 0.4, 0.8, 1]
                 }}
               >
                 FUSION
@@ -222,9 +224,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   y: [10, 0, 0, 0, -10]
                 }}
                 transition={{
-                  duration: 1.4,
+                  duration: 2.2,
                   ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.25, 0.5, 0.75, 1],
+                  times: [0, 0.18, 0.4, 0.8, 1],
                   delay: 0.05
                 }}
               >
@@ -249,9 +251,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   scale: [0.9, 1, 1, 1, 0.9]
                 }}
                 transition={{ 
-                  duration: 1.4,
+                  duration: 2.2,
                   ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.3, 0.5, 0.7, 1],
+                  times: [0, 0.25, 0.4, 0.75, 1],
                   delay: 0.1
                 }}
               >
