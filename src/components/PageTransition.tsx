@@ -113,35 +113,39 @@ export default function PageTransition({ currentPage, children, onTransitionChan
       ref={containerRef}
       className="relative w-full h-full"
     >
-      {/* Main content - always visible */}
+      {/* Main content - always visible, no AnimatePresence */}
       <div className="w-full h-full">
-        <AnimatePresence mode="wait">
+        {!prefersReducedMotion && isTransitioning && (
           <motion.div
-            key={displayPage}
-            className="w-full h-full"
-            initial={{ 
-              opacity: 0.9,
-              scale: 0.99,
-              filter: 'blur(2px)'
+            className="fixed inset-0 pointer-events-none z-10"
+            style={{
+              background: `radial-gradient(ellipse at center, 
+                ${pageInfo.fromColor}08 0%, 
+                ${pageInfo.toColor}06 40%, 
+                transparent 70%)`
             }}
-            animate={{ 
-              opacity: 1,
-              scale: 1,
-              filter: 'blur(0px)'
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.6, 0] }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+          />
+        )}
+        
+        {/* Simple fade overlay instead of remounting content */}
+        {isTransitioning && (
+          <motion.div
+            className="fixed inset-0 pointer-events-none z-5"
+            style={{
+              background: 'rgba(0, 0, 0, 0.1)',
+              backdropFilter: 'blur(1px)'
             }}
-            exit={{ 
-              opacity: 0.8,
-              scale: 1.01,
-              filter: 'blur(1px)'
-            }}
-            transition={{ 
-              duration: 0.4,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.3, 0] }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+          />
+        )}
+        
+        {/* Content stays mounted - no AnimatePresence */}
+        {children}
       </div>
 
       {/* Dynamic color morphing background */}
