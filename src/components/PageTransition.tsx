@@ -111,32 +111,18 @@ export default function PageTransition({ currentPage, children, onTransitionChan
   return (
     <div 
       ref={containerRef}
-      className="relative w-full h-full overflow-hidden"
-      style={{ 
-        perspective: '2000px',
-        transformStyle: 'preserve-3d'
-      }}
+      className="relative w-full h-full"
     >
-      {/* Main content with fluid transition */}
-      <motion.div
-        className="relative w-full h-full"
-        style={{
-          willChange: isTransitioning ? 'transform, opacity, filter' : 'auto',
-          transformOrigin: 'center center',
-          backfaceVisibility: 'hidden'
-        }}
-        initial={currentTransition.initial}
-        animate={isTransitioning ? currentTransition.animate : currentTransition.initial}
-        transition={currentTransition.transition}
-      >
+      {/* Main content - always visible */}
+      <div className="w-full h-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={displayPage}
             className="w-full h-full"
             initial={{ 
-              opacity: 0.7,
+              opacity: 0.9,
               scale: 0.99,
-              filter: 'blur(1px)'
+              filter: 'blur(2px)'
             }}
             animate={{ 
               opacity: 1,
@@ -144,7 +130,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
               filter: 'blur(0px)'
             }}
             exit={{ 
-              opacity: 0.7,
+              opacity: 0.8,
               scale: 1.01,
               filter: 'blur(1px)'
             }}
@@ -156,7 +142,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
             {children}
           </motion.div>
         </AnimatePresence>
-      </motion.div>
+      </div>
 
       {/* Dynamic color morphing background */}
       <AnimatePresence>
