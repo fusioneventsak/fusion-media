@@ -14,6 +14,7 @@ import Footer from './components/Footer';
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [scrollY, setScrollY] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   
   // Mobile detection for performance optimizations
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -126,13 +127,22 @@ export default function App() {
 
       {/* Navigation - Above backgrounds */}
       <div style={{ position: 'relative', zIndex: 200 }}>
-        <Navigation currentPage={currentPage} setCurrentPage={setCurrentPage} />
+        <Navigation 
+          currentPage={currentPage} 
+          setCurrentPage={setCurrentPage}
+          isTransitioning={isTransitioning}
+        />
       </div>
 
-      {/* Page Content - Above everything else */}
-      <main className="relative z-[100]">
-        {renderPage()}
-      </main>
+      {/* Page Content with Modern Transition */}
+      <PageTransition 
+        currentPage={currentPage}
+        onTransitionChange={setIsTransitioning}
+      >
+        <main className="relative z-[100]">
+          {renderPage()}
+        </main>
+      </PageTransition>
 
       {/* Global Footer */}
       <div style={{ position: 'relative', zIndex: 200 }}>
