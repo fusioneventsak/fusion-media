@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useSpring } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface PageTransitionProps {
   currentPage: string;
@@ -11,20 +11,11 @@ export default function PageTransition({ currentPage, children, onTransitionChan
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayPage, setDisplayPage] = useState(currentPage);
   const [transitionDirection, setTransitionDirection] = useState<'forward' | 'backward'>('forward');
-  const containerRef = useRef<HTMLDivElement>(null);
   
   // Check for reduced motion preference
   const prefersReducedMotion = typeof window !== 'undefined' 
     ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
     : false;
-
-  // Smooth spring for organic movement
-  const springConfig = { 
-    type: "spring", 
-    stiffness: 180, 
-    damping: 25, 
-    mass: 0.8 
-  };
 
   // Get navigation direction and page info
   const getPageInfo = (from: string, to: string) => {
@@ -36,6 +27,13 @@ export default function PageTransition({ currentPage, children, onTransitionChan
       'contact': '#10B981'       // Green
     };
     
+    const pageNames = {
+      'home': 'Home',
+      'about': 'About',
+      'case-studies': 'Case Studies',
+      'contact': 'Contact'
+    };
+    
     const fromIndex = pages.indexOf(from);
     const toIndex = pages.indexOf(to);
     const direction = toIndex > fromIndex ? 'forward' : 'backward';
@@ -44,6 +42,8 @@ export default function PageTransition({ currentPage, children, onTransitionChan
       direction,
       fromColor: pageColors[from as keyof typeof pageColors] || pageColors.home,
       toColor: pageColors[to as keyof typeof pageColors] || pageColors.home,
+      fromName: pageNames[from as keyof typeof pageNames] || 'Home',
+      toName: pageNames[to as keyof typeof pageNames] || 'Home',
       fromIndex,
       toIndex
     };
@@ -60,9 +60,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
       // Force scroll to top immediately when transition starts
       window.scrollTo({ top: 0, behavior: 'auto' });
       
-      // Page switch timing
-      const switchDelay = prefersReducedMotion ? 200 : 400;
-      const endDelay = prefersReducedMotion ? 500 : 900;
+      // Page switch timing - longer for full stinger effect
+      const switchDelay = prefersReducedMotion ? 300 : 600;  // Switch at peak coverage
+      const endDelay = prefersReducedMotion ? 600 : 1200;    // Full stinger duration
       
       setTimeout(() => {
         setDisplayPage(currentPage);
@@ -81,356 +81,232 @@ export default function PageTransition({ currentPage, children, onTransitionChan
 
   const pageInfo = getPageInfo(displayPage, currentPage);
 
-  // Modern fluid transition variants
-  const fluidTransition = {
-    initial: { 
-      scale: 1,
-      opacity: 1,
-      filter: 'blur(0px) brightness(1)',
-      rotateX: 0,
-      y: 0
-    },
-    animate: {
-      scale: [1, 0.98, 1.02, 1],
-      opacity: [1, 0.4, 0.6, 1],
-      filter: [
-        'blur(0px) brightness(1)', 
-        'blur(3px) brightness(1.1)', 
-        'blur(2px) brightness(1.05)', 
-        'blur(0px) brightness(1)'
-      ],
-      rotateX: [0, -2, 1, 0],
-      y: [0, -8, 4, 0]
-    },
-    transition: {
-      duration: 0.9,
-      ease: [0.25, 0.46, 0.45, 0.94],
-      times: [0, 0.35, 0.65, 1]
-    }
-  };
-
-  // Reduced motion fallback
-  const simpleTransition = {
-    initial: { opacity: 1 },
-    animate: { opacity: [1, 0.8, 1] },
-    transition: { duration: 0.5, ease: "easeInOut" }
-  };
-
-  const currentTransition = prefersReducedMotion ? simpleTransition : fluidTransition;
-
   return (
-    <div 
-      ref={containerRef}
-      className="relative w-full h-full"
-    >
-      {/* Main content - always visible, no AnimatePresence */}
-      <div className="w-full h-full">
-        {/* Enhanced background effects during transition */}
-        {!prefersReducedMotion && isTransitioning && (
-          <>
-            {/* Color morphing background */}
-            <motion.div
-              className="fixed inset-0 pointer-events-none z-10"
-              style={{
-                background: `radial-gradient(ellipse at center, 
-                  ${pageInfo.fromColor}15 0%, 
-                  ${pageInfo.toColor}10 40%, 
-                  transparent 70%)`
-              }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ 
-                opacity: [0, 0.8, 0],
-                scale: [0.8, 1.2, 0.8]
-              }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
-            />
+    <div className="relative w-full h-full">
+      {/* Content stays mounted - no AnimatePresence */}
+      {children}
 
-            {/* Elegant particle flow */}
-            {[...Array(8)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="fixed w-2 h-2 rounded-full pointer-events-none z-15"
-                style={{
-                  background: `linear-gradient(45deg, ${pageInfo.fromColor}, ${pageInfo.toColor})`,
-                  left: `${20 + (i * 8) % 60}%`,
-                  top: `${30 + (i * 5) % 40}%`,
-                  boxShadow: `0 0 20px ${i % 2 === 0 ? pageInfo.fromColor : pageInfo.toColor}60`
-                }}
-                initial={{ 
-                  opacity: 0,
-                  scale: 0,
-                  x: transitionDirection === 'forward' ? -50 : 50
-                }}
-                animate={{
-                  opacity: [0, 1, 0.6, 0],
-                  scale: [0, 1.5, 1, 0],
-                  x: [
-                    transitionDirection === 'forward' ? -50 : 50,
-                    0,
-                    transitionDirection === 'forward' ? 50 : -50
-                  ]
-                }}
-                transition={{
-                  duration: 0.8,
-                  ease: "easeOut",
-                  delay: i * 0.05
-                }}
-              />
-            ))}
-
-            {/* Gradient sweep */}
+      {/* Full-Screen Stinger Transition Overlay */}
+      <AnimatePresence>
+        {isTransitioning && (
+          <motion.div
+            className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {/* Main Stinger Shape - Diagonal Wipe */}
             <motion.div
-              className="fixed inset-0 pointer-events-none z-12"
+              className="absolute inset-0"
               style={{
-                background: `linear-gradient(${transitionDirection === 'forward' ? '120deg' : '240deg'}, 
-                  transparent 0%, 
-                  ${pageInfo.fromColor}20 30%,
-                  ${pageInfo.toColor}25 50%,
-                  ${pageInfo.fromColor}20 70%,
-                  transparent 100%)`
+                background: `linear-gradient(135deg, 
+                  ${pageInfo.fromColor} 0%, 
+                  ${pageInfo.toColor} 50%,
+                  ${pageInfo.fromColor} 100%)`,
+                clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
               }}
               initial={{ 
-                x: transitionDirection === 'forward' ? '-100%' : '100%',
-                opacity: 0
+                clipPath: transitionDirection === 'forward' 
+                  ? 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                  : 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)'
               }}
               animate={{ 
-                x: [
-                  transitionDirection === 'forward' ? '-100%' : '100%',
-                  '0%',
-                  transitionDirection === 'forward' ? '100%' : '-100%'
-                ],
-                opacity: [0, 0.7, 0.4, 0]
+                clipPath: [
+                  transitionDirection === 'forward' 
+                    ? 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                    : 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)',
+                  'polygon(0 0, 100% 0, 100% 100%, 0 100%)',  // Full cover
+                  transitionDirection === 'forward'
+                    ? 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)'
+                    : 'polygon(0 0, 0 0, 0 100%, 0 100%)'
+                ]
               }}
               transition={{ 
-                duration: 0.8,
-                ease: "easeInOut"
+                duration: prefersReducedMotion ? 0.6 : 1.2,
+                ease: [0.25, 0.46, 0.45, 0.94],
+                times: [0, 0.5, 1]
               }}
             />
-          </>
-        )}
-        
-        {/* Loading indicator */}
-        {isTransitioning && (
-          <motion.div
-            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="bg-black/50 backdrop-blur-md rounded-full px-6 py-3 border border-white/30">
-              <div className="flex items-center space-x-3">
+
+            {/* Animated Geometric Patterns */}
+            {!prefersReducedMotion && (
+              <>
+                {/* Rotating Rings */}
+                {[...Array(3)].map((_, i) => (
+                  <motion.div
+                    key={`ring-${i}`}
+                    className="absolute border rounded-full"
+                    style={{
+                      width: `${200 + i * 100}px`,
+                      height: `${200 + i * 100}px`,
+                      borderColor: `${pageInfo.toColor}40`,
+                      borderWidth: '2px',
+                      left: '50%',
+                      top: '50%',
+                      marginLeft: `-${100 + i * 50}px`,
+                      marginTop: `-${100 + i * 50}px`
+                    }}
+                    initial={{ 
+                      scale: 0,
+                      rotate: 0,
+                      opacity: 0
+                    }}
+                    animate={{ 
+                      scale: [0, 1.2, 0],
+                      rotate: [0, 180, 360],
+                      opacity: [0, 0.6, 0]
+                    }}
+                    transition={{ 
+                      duration: 1.2,
+                      ease: "easeInOut",
+                      delay: i * 0.1
+                    }}
+                  />
+                ))}
+
+                {/* Flowing Particles */}
+                {[...Array(20)].map((_, i) => (
+                  <motion.div
+                    key={`particle-${i}`}
+                    className="absolute w-3 h-3 rounded-full"
+                    style={{
+                      background: `linear-gradient(45deg, ${pageInfo.fromColor}, ${pageInfo.toColor})`,
+                      left: `${Math.random() * 100}%`,
+                      top: `${Math.random() * 100}%`,
+                      boxShadow: `0 0 20px ${pageInfo.toColor}80`
+                    }}
+                    initial={{ 
+                      scale: 0,
+                      opacity: 0,
+                      x: transitionDirection === 'forward' ? -100 : 100,
+                      y: Math.random() * 200 - 100
+                    }}
+                    animate={{
+                      scale: [0, 1.5, 0],
+                      opacity: [0, 1, 0],
+                      x: [
+                        transitionDirection === 'forward' ? -100 : 100,
+                        0,
+                        transitionDirection === 'forward' ? 100 : -100
+                      ],
+                      y: [
+                        Math.random() * 200 - 100,
+                        Math.random() * 100 - 50,
+                        Math.random() * 200 - 100
+                      ]
+                    }}
+                    transition={{
+                      duration: 1.2,
+                      ease: "easeOut",
+                      delay: Math.random() * 0.3
+                    }}
+                  />
+                ))}
+              </>
+            )}
+
+            {/* Central Logo/Page Indicator */}
+            <motion.div
+              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+              initial={{ 
+                scale: 0,
+                opacity: 0,
+                rotate: -180
+              }}
+              animate={{ 
+                scale: [0, 1.2, 1, 0],
+                opacity: [0, 1, 1, 0],
+                rotate: [
+                  transitionDirection === 'forward' ? -180 : 180,
+                  0,
+                  0,
+                  transitionDirection === 'forward' ? 180 : -180
+                ]
+              }}
+              transition={{ 
+                duration: prefersReducedMotion ? 0.6 : 1.2,
+                ease: [0.25, 0.46, 0.45, 0.94],
+                times: [0, 0.3, 0.7, 1]
+              }}
+            >
+              <div className="text-center">
+                {/* Company Logo */}
+                <div className="w-20 h-20 bg-gradient-to-br from-white/20 to-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center mb-4 border border-white/30 shadow-2xl">
+                  <span className="text-white font-bold text-3xl">F</span>
+                </div>
+                
+                {/* Page Name */}
+                <div className="bg-black/30 backdrop-blur-md rounded-full px-6 py-3 border border-white/20">
+                  <motion.span 
+                    className="text-white text-lg font-medium"
+                    style={{ color: pageInfo.toColor }}
+                    animate={{ 
+                      textShadow: [
+                        `0 0 0px ${pageInfo.toColor}`,
+                        `0 0 20px ${pageInfo.toColor}80`,
+                        `0 0 0px ${pageInfo.toColor}`
+                      ]
+                    }}
+                    transition={{ 
+                      duration: 0.8,
+                      repeat: 1,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    {pageInfo.toName}
+                  </motion.span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Progress Bar */}
+            {!prefersReducedMotion && (
+              <motion.div
+                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-64 h-1 bg-white/20 rounded-full overflow-hidden"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0 }}
+              >
                 <motion.div
-                  className="w-3 h-3 rounded-full"
-                  style={{ backgroundColor: pageInfo.toColor }}
-                  animate={{ 
-                    scale: [1, 1.5, 1],
-                    opacity: [0.6, 1, 0.6]
+                  className="h-full rounded-full"
+                  style={{
+                    background: `linear-gradient(90deg, ${pageInfo.fromColor}, ${pageInfo.toColor})`
                   }}
+                  initial={{ width: '0%' }}
+                  animate={{ width: '100%' }}
                   transition={{ 
-                    duration: 0.6,
-                    repeat: Infinity,
+                    duration: 1.2,
                     ease: "easeInOut"
                   }}
                 />
-                <span className="text-white text-sm font-medium">
-                  Loading {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)}...
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        )}
-        
-        {/* Content stays mounted - no AnimatePresence */}
-        {children}
-      </div>
+              </motion.div>
+            )}
 
-      {/* Dynamic color morphing background */}
-      <AnimatePresence>
-        {isTransitioning && !prefersReducedMotion && (
-          <motion.div
-            className="fixed inset-0 pointer-events-none"
-            style={{
-              background: `radial-gradient(ellipse at center, 
-                ${pageInfo.fromColor}08 0%, 
-                ${pageInfo.toColor}06 40%, 
-                transparent 70%)`
-            }}
-            initial={{ 
-              opacity: 0,
-              scale: 0.8,
-              filter: 'blur(20px)'
-            }}
-            animate={{ 
-              opacity: [0, 0.8, 0.4, 0],
-              scale: [0.8, 1.4, 1.1, 0.9],
-              filter: [
-                'blur(20px)', 
-                'blur(10px)', 
-                'blur(15px)', 
-                'blur(25px)'
-              ]
-            }}
-            exit={{ 
-              opacity: 0,
-              scale: 0.7,
-              filter: 'blur(30px)'
-            }}
-            transition={{ 
-              duration: 0.9,
-              ease: [0.25, 0.46, 0.45, 0.94],
-              times: [0, 0.3, 0.7, 1]
-            }}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Elegant particle flow */}
-      <AnimatePresence>
-        {isTransitioning && !prefersReducedMotion && (
-          <>
-            {[...Array(12)].map((_, i) => (
+            {/* Scan Lines Effect */}
+            {!prefersReducedMotion && (
               <motion.div
-                key={i}
-                className="fixed w-1 h-1 rounded-full pointer-events-none"
+                className="absolute inset-0"
                 style={{
-                  background: `linear-gradient(45deg, ${pageInfo.fromColor}80, ${pageInfo.toColor}60)`,
-                  left: `${20 + (i * 5) % 60}%`,
-                  top: `${30 + (i * 3) % 40}%`,
-                  boxShadow: `0 0 10px ${i % 2 === 0 ? pageInfo.fromColor : pageInfo.toColor}40`
+                  background: `repeating-linear-gradient(
+                    0deg,
+                    transparent 0px,
+                    transparent 2px,
+                    ${pageInfo.toColor}10 2px,
+                    ${pageInfo.toColor}10 4px
+                  )`
                 }}
-                initial={{ 
-                  opacity: 0,
-                  scale: 0,
-                  x: transitionDirection === 'forward' ? -100 : 100,
-                  y: Math.random() * 50 - 25
+                initial={{ opacity: 0 }}
+                animate={{ 
+                  opacity: [0, 0.3, 0],
+                  y: ['-100%', '0%', '100%']
                 }}
-                animate={{
-                  opacity: [0, 0.9, 0.6, 0],
-                  scale: [0, 1.5, 1, 0],
-                  x: [
-                    transitionDirection === 'forward' ? -100 : 100,
-                    0,
-                    transitionDirection === 'forward' ? 100 : -100
-                  ],
-                  y: [
-                    Math.random() * 50 - 25,
-                    Math.random() * 30 - 15,
-                    Math.random() * 40 - 20
-                  ]
-                }}
-                exit={{ 
-                  opacity: 0,
-                  scale: 0
-                }}
-                transition={{
-                  duration: 0.9,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                  delay: i * 0.03,
-                  times: [0, 0.2, 0.8, 1]
+                transition={{ 
+                  duration: 1.2,
+                  ease: "linear"
                 }}
               />
-            ))}
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Sophisticated gradient sweep */}
-      <AnimatePresence>
-        {isTransitioning && !prefersReducedMotion && (
-          <motion.div
-            className="fixed inset-0 pointer-events-none"
-            style={{
-              background: `linear-gradient(${transitionDirection === 'forward' ? '120deg' : '240deg'}, 
-                transparent 0%, 
-                ${pageInfo.fromColor}08 20%,
-                ${pageInfo.toColor}12 50%,
-                ${pageInfo.fromColor}08 80%,
-                transparent 100%)`
-            }}
-            initial={{ 
-              x: transitionDirection === 'forward' ? '-100%' : '100%',
-              opacity: 0
-            }}
-            animate={{ 
-              x: [
-                transitionDirection === 'forward' ? '-100%' : '100%',
-                '0%',
-                transitionDirection === 'forward' ? '100%' : '-100%'
-              ],
-              opacity: [0, 0.6, 0.3, 0]
-            }}
-            transition={{ 
-              duration: 0.9,
-              ease: [0.25, 0.46, 0.45, 0.94],
-              times: [0, 0.3, 0.7, 1]
-            }}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Subtle glow effect */}
-      <AnimatePresence>
-        {isTransitioning && !prefersReducedMotion && (
-          <motion.div
-            className="fixed inset-0 pointer-events-none"
-            style={{
-              background: `conic-gradient(from 0deg at 50% 50%, 
-                transparent 0deg,
-                ${pageInfo.toColor}04 90deg,
-                transparent 180deg,
-                ${pageInfo.fromColor}04 270deg,
-                transparent 360deg)`,
-              filter: 'blur(40px)'
-            }}
-            initial={{ 
-              opacity: 0,
-              rotate: 0,
-              scale: 0.5
-            }}
-            animate={{ 
-              opacity: [0, 0.4, 0],
-              rotate: [0, transitionDirection === 'forward' ? 180 : -180],
-              scale: [0.5, 1.5, 0.5]
-            }}
-            transition={{ 
-              duration: 0.9,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Loading progress indicator */}
-      <AnimatePresence>
-        {isTransitioning && (
-          <motion.div
-            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <div className="bg-black/30 backdrop-blur-md rounded-full px-6 py-3 border border-white/20">
-              <div className="flex items-center space-x-3">
-                <motion.div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: pageInfo.toColor }}
-                  animate={{ 
-                    scale: [1, 1.5, 1],
-                    opacity: [0.6, 1, 0.6]
-                  }}
-                  transition={{ 
-                    duration: 0.6,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-                <span className="text-white text-sm font-medium">
-                  Transitioning...
-                </span>
-              </div>
-            </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
