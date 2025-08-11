@@ -179,7 +179,14 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     width: '101%',
                     height: '100%',
                     marginRight: '-1px',
-                    background: pageInfo.color,
+                    background: `linear-gradient(135deg, 
+                      ${pageInfo.color}cc 0%, 
+                      ${pageInfo.color}dd 25%, 
+                      ${pageInfo.color}aa 50%, 
+                      ${pageInfo.color}cc 75%, 
+                      ${pageInfo.color}bb 100%)`,
+                    backdropFilter: 'blur(20px) saturate(180%)',
+                    border: '1px solid rgba(255,255,255,0.18)',
                     position: 'relative',
                     transformOrigin: square.direction === 'from-right' ? '100% 50% 0' :
                                     square.direction === 'from-left' ? '0% 50% 0' :
@@ -187,7 +194,8 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     backfaceVisibility: 'hidden',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    overflow: 'hidden'
                   }}
                   initial={{
                     rotateY: square.direction.includes('right') ? -92 : 
@@ -218,6 +226,98 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     delay: getSquareDelay(index),
                     ease: 'easeInOut'
                   }}
+                >
+                  {/* Floating water droplets */}
+                  <motion.div
+                    style={{
+                      position: 'absolute',
+                      top: '20%',
+                      left: '15%',
+                      width: '8px',
+                      height: '8px',
+                      background: 'rgba(255,255,255,0.4)',
+                      borderRadius: '50%',
+                      filter: 'blur(1px)'
+                    }}
+                    animate={{
+                      y: [0, -10, 0],
+                      opacity: [0.3, 0.8, 0.3],
+                      scale: [1, 1.2, 1]
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      delay: getSquareDelay(index) + Math.random() * 2
+                    }}
+                  />
+                  
+                  <motion.div
+                    style={{
+                      position: 'absolute',
+                      top: '70%',
+                      right: '25%',
+                      width: '6px',
+                      height: '6px',
+                      background: 'rgba(255,255,255,0.3)',
+                      borderRadius: '50%',
+                      filter: 'blur(0.5px)'
+                    }}
+                    animate={{
+                      y: [0, 8, 0],
+                      x: [0, 3, 0],
+                      opacity: [0.2, 0.6, 0.2]
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      delay: getSquareDelay(index) + Math.random() * 2
+                    }}
+                  />
+
+                  {/* Ripple effects */}
+                  <motion.div
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      width: '40px',
+                      height: '40px',
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      borderRadius: '50%',
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                    animate={{
+                      scale: [0.5, 2, 0.5],
+                      opacity: [0, 0.4, 0]
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      delay: getSquareDelay(index) + 1
+                    }}
+                  />
+
+                  {/* Flowing gradient overlay */}
+                  <motion.div
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: '-100%',
+                      width: '200%',
+                      height: '100%',
+                      background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
+                      transform: 'skewX(-20deg)'
+                    }}
+                    animate={{
+                      x: ['0%', '100%']
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: getSquareDelay(index) + 0.5,
+                      ease: 'easeInOut'
+                    }}
+                  />
                 >
                   {/* Logo or Title content - step and repeat pattern */}
                   {square.type === 'logo' && (
@@ -252,13 +352,16 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                         style={{
                           width: '50px',
                           height: '50px',
-                          background: 'linear-gradient(to right, #3B82F6, #8B5CF6)', // Blue to purple gradient
+                          background: 'linear-gradient(to right, #3B82F6, #8B5CF6)',
                           borderRadius: '12px',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          border: '1px solid rgba(255,255,255,0.4)',
-                          boxShadow: '0 8px 16px rgba(0,0,0,0.2)'
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
+                          backdropFilter: 'blur(8px)',
+                          position: 'relative',
+                          overflow: 'hidden'
                         }}
                         animate={{
                           scale: [0.8, 1.05, 1],
@@ -270,12 +373,36 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                           delay: getSquareDelay(index) + 0.5
                         }}
                       >
+                        {/* Water shimmer effect on logo */}
+                        <motion.div
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: '-100%',
+                            width: '200%',
+                            height: '100%',
+                            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)',
+                            transform: 'skewX(-20deg)'
+                          }}
+                          animate={{
+                            x: ['0%', '100%']
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            delay: getSquareDelay(index) + 1,
+                            ease: 'easeInOut'
+                          }}
+                        />
+                        
                         <span
                           style={{
                             color: 'white',
                             fontSize: '24px',
                             fontWeight: 'bold',
-                            fontFamily: '"Inter", sans-serif'
+                            fontFamily: '"Inter", sans-serif',
+                            position: 'relative',
+                            zIndex: 2
                           }}
                         >
                           F
@@ -314,12 +441,15 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       {/* Title Text */}
                       <motion.div
                         style={{
-                          background: 'rgba(255,255,255,0.15)',
-                          backdropFilter: 'blur(15px)',
+                          background: 'rgba(255,255,255,0.1)',
+                          backdropFilter: 'blur(20px) saturate(180%)',
                           borderRadius: '8px',
                           padding: '8px 12px',
-                          border: '1px solid rgba(255,255,255,0.3)',
-                          display: 'inline-block'
+                          border: '1px solid rgba(255,255,255,0.2)',
+                          display: 'inline-block',
+                          position: 'relative',
+                          overflow: 'hidden',
+                          boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)'
                         }}
                         animate={{
                           scale: [0.9, 1.05, 1]
@@ -330,6 +460,27 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                           delay: getSquareDelay(index) + 0.5
                         }}
                       >
+                        {/* Water shimmer on title container */}
+                        <motion.div
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: '-100%',
+                            width: '200%',
+                            height: '100%',
+                            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)',
+                            transform: 'skewX(-15deg)'
+                          }}
+                          animate={{
+                            x: ['0%', '100%']
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            delay: getSquareDelay(index) + 1.2,
+                            ease: 'easeInOut'
+                          }}
+                        />
                         <motion.div
                           style={{
                             fontSize: '14px',
@@ -337,7 +488,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                             color: 'white',
                             letterSpacing: '1px',
                             textShadow: '0 0 8px rgba(255,255,255,0.4)',
-                            fontFamily: '"Inter", sans-serif'
+                            fontFamily: '"Inter", sans-serif',
+                            position: 'relative',
+                            zIndex: 2
                           }}
                           animate={{
                             letterSpacing: ['1px', '1.5px', '1px']
@@ -358,7 +511,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                             letterSpacing: '2px',
                             marginTop: '2px',
                             textShadow: '0 0 6px rgba(255,255,255,0.3)',
-                            fontFamily: '"Inter", sans-serif'
+                            fontFamily: '"Inter", sans-serif',
+                            position: 'relative',
+                            zIndex: 2
                           }}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
