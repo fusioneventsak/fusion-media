@@ -213,7 +213,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
               </>
             )}
 
-            {/* Central Logo/Brand - FUSION INTERACTIVE */}
+            {/* Central Logo/Brand - FUSION INTERACTIVE - Completes FIRST */}
             <motion.div
               className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
               initial={{ 
@@ -222,21 +222,19 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                 rotate: -10
               }}
               animate={{ 
-                scale: [0, 1.1, 1, 1, 0.8, 0],
-                opacity: [0, 1, 1, 1, 0.8, 0],
-                rotate: [
-                  transitionDirection === 'forward' ? -10 : 10,
-                  0,
-                  0,
-                  0,
-                  0,
-                  transitionDirection === 'forward' ? 10 : -10
-                ]
+                scale: logoComplete ? 0 : [0, 1.1, 1],
+                opacity: logoComplete ? 0 : [0, 1, 1],
+                rotate: logoComplete 
+                  ? (transitionDirection === 'forward' ? 15 : -15)
+                  : [transitionDirection === 'forward' ? -10 : 10, 0, 0]
               }}
               transition={{ 
-                duration: prefersReducedMotion ? 1.0 : 2.0,
-                ease: [0.25, 0.46, 0.45, 0.94],
-                times: [0, 0.2, 0.4, 0.6, 0.8, 1]
+                duration: logoComplete ? 0.3 : 1.2, // Quick exit when logoComplete
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
+              onAnimationComplete={() => {
+                // This ensures the logo animation is truly complete
+                if (!logoComplete) return;
               }}
             >
               {/* Large FI Logo */}
