@@ -9,8 +9,8 @@ interface PageTransitionProps {
 
 export default function PageTransition({ currentPage, children, onTransitionChange }: PageTransitionProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [displayPage, setDisplayPage] = useState(currentPage);
   const [showContent, setShowContent] = useState(true);
+  const [transitionKey, setTransitionKey] = useState(0);
   
   // Get page info
   const getPageInfo = (to: string) => {
@@ -34,36 +34,31 @@ export default function PageTransition({ currentPage, children, onTransitionChan
     };
   };
 
-  // Handle page changes
+  // Handle page changes - SIMPLIFIED
   useEffect(() => {
-    if (currentPage !== displayPage) {
-      setIsTransitioning(true);
-      setShowContent(false); // Hide content immediately
-      onTransitionChange?.(true);
-      
-      // Scroll to top
-      window.scrollTo({ top: 0, behavior: 'auto' });
-      
-      // Switch page content in the middle of transition
-      setTimeout(() => {
-        setDisplayPage(currentPage);
-        window.scrollTo({ top: 0, behavior: 'auto' });
-      }, 1000); // Slower timing
-      
-      // Start revealing content
-      setTimeout(() => {
-        setShowContent(true);
-      }, 1600); // Slower timing
-      
-      // End transition
-      setTimeout(() => {
-        setIsTransitioning(false);
-        onTransitionChange?.(false);
-      }, 2200); // Much longer total duration
-    }
-  }, [currentPage, displayPage, onTransitionChange]);
+    if (isTransitioning) return; // Prevent multiple triggers
+    
+    setIsTransitioning(true);
+    setShowContent(false);
+    setTransitionKey(prev => prev + 1); // Force new animation
+    onTransitionChange?.(true);
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    
+    // Start revealing content
+    setTimeout(() => {
+      setShowContent(true);
+    }, 1600);
+    
+    // End transition
+    setTimeout(() => {
+      setIsTransitioning(false);
+      onTransitionChange?.(false);
+    }, 2200);
+  }, [currentPage]); // Only depend on currentPage
 
-  const pageInfo = getPageInfo(currentPage);
+  const pageInfo = getPageInfo(currentPage); // Use currentPage directly
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
@@ -90,7 +85,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
       <AnimatePresence>
         {isTransitioning && (
           <motion.div
-            key={`transition-${currentPage}-${Date.now()}`} // Force re-render each time
+            key={`transition-${transitionKey}`} // Use incrementing key instead
             style={{
               position: 'fixed',
               top: 0,
@@ -129,7 +124,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
           >
             {/* Logo Content */}
             <motion.div
-              key={`logo-${currentPage}-${Date.now()}`} // Force re-animation
+              key={`logo-${transitionKey}`} // Use incrementing key
               style={{ textAlign: 'center', color: 'white' }}
               initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{ 
