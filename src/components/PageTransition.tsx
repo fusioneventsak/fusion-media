@@ -12,6 +12,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
   const [showContent, setShowContent] = useState(true);
   const [transitionKey, setTransitionKey] = useState(0);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [previousPage, setPreviousPage] = useState(currentPage);
   
   // Get page info
   const getPageInfo = (to: string) => {
@@ -43,27 +44,33 @@ export default function PageTransition({ currentPage, children, onTransitionChan
       return;
     }
     
+    // Only trigger transition if page actually changed
+    if (currentPage === previousPage && !isFirstLoad) {
+      return;
+    }
+    
     if (isTransitioning) return; // Prevent multiple triggers
     
     setIsFirstLoad(false);
+    setPreviousPage(currentPage);
     setIsTransitioning(true);
-    setShowContent(false);
+    setShowContent(false); // Hide content immediately when transition starts
     setTransitionKey(prev => prev + 1); // Force new animation
     onTransitionChange?.(true);
     
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'auto' });
     
-    // Start revealing content - after all squares animate in + pause + animate out
+    // Start revealing content - immediately when squares finish animating out
     setTimeout(() => {
       setShowContent(true);
-    }, 4500);
+    }, 4200); // Reduced from 4500ms - content appears right as squares finish
     
-    // End transition - total time for complete animation sequence
+    // End transition - slightly after content appears for smooth handoff
     setTimeout(() => {
       setIsTransitioning(false);
       onTransitionChange?.(false);
-    }, 5200);
+    }, 4300); // Reduced from 5200ms - quicker cleanup
   }, [currentPage]);
 
   const pageInfo = getPageInfo(currentPage);
@@ -116,14 +123,15 @@ export default function PageTransition({ currentPage, children, onTransitionChan
         style={{ 
           width: '100%', 
           height: '100%',
-          opacity: showContent ? 1 : 0
+          opacity: showContent ? 1 : 0,
+          visibility: showContent ? 'visible' : 'hidden' // Prevent content flashing
         }}
         animate={{ 
           opacity: showContent ? 1 : 0,
-          scale: showContent ? 1 : 0.95
+          scale: showContent ? 1 : 0.98
         }}
         transition={{ 
-          duration: 1.0, // INCREASED from 0.6 to 1.0 for smoother fade
+          duration: 0.4, // Faster content fade in
           ease: [0.25, 0.46, 0.45, 0.94]
         }}
       >
@@ -145,7 +153,8 @@ export default function PageTransition({ currentPage, children, onTransitionChan
               pointerEvents: 'none',
               display: 'grid',
               gridTemplateColumns: 'repeat(5, 1fr)',
-              gridTemplateRows: 'repeat(3, 1fr)'
+              gridTemplateRows: 'repeat(3, 1fr)',
+              backgroundColor: '#000' // Black background to prevent content bleeding through
             }}
           >
             {squares.map((square, index) => (
@@ -244,8 +253,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                         style={{
                           width: '50px',
                           height: '50px',
-                          background: 'rgba(255,255,255,0.25)',
-                          backdropFilter: 'blur(15px)',
+                          background: 'linear-gradient(to right, #3B82F6, #8B5CF6)', // Blue to purple gradient
                           borderRadius: '12px',
                           display: 'flex',
                           alignItems: 'center',
