@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 interface NavigationProps {
   currentPage: string;
   setCurrentPage: (page: string) => void;
+  isTransitioning: boolean;
 }
 
-export default function Navigation({ currentPage, setCurrentPage }: NavigationProps) {
+export default function Navigation({ currentPage, setCurrentPage, isTransitioning }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -22,13 +22,8 @@ export default function Navigation({ currentPage, setCurrentPage }: NavigationPr
   // Handle page transitions
   const handlePageChange = (newPage: string) => {
     if (newPage !== currentPage && !isTransitioning) {
-      setIsTransitioning(true);
       setCurrentPage(newPage);
       setIsMenuOpen(false); // Close mobile menu
-      
-      // Reset transition state
-      const transitionDuration = 1000; // 3D transitions are 1 second
-      setTimeout(() => setIsTransitioning(false), transitionDuration);
     }
   };
   

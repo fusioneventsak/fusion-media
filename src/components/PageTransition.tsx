@@ -4,9 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface PageTransitionProps {
   currentPage: string;
   children: React.ReactNode;
+  onTransitionChange: (isTransitioning: boolean) => void;
 }
 
-export default function PageTransition({ currentPage, children }: PageTransitionProps) {
+export default function PageTransition({ currentPage, children, onTransitionChange }: PageTransitionProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayPage, setDisplayPage] = useState(currentPage);
   
@@ -65,14 +66,18 @@ export default function PageTransition({ currentPage, children }: PageTransition
   useEffect(() => {
     if (currentPage !== displayPage) {
       setIsTransitioning(true);
+      onTransitionChange(true);
       
       const switchDelay = prefersReducedMotion ? 300 : 500; // Switch at midpoint
       const endDelay = prefersReducedMotion ? 600 : 1000; // Total duration
       
       setTimeout(() => setDisplayPage(currentPage), switchDelay);
-      setTimeout(() => setIsTransitioning(false), endDelay);
+      setTimeout(() => {
+        setIsTransitioning(false);
+        onTransitionChange(false);
+      }, endDelay);
     }
-  }, [currentPage, displayPage, prefersReducedMotion]);
+  }, [currentPage, displayPage, prefersReducedMotion, onTransitionChange]);
 
   const direction = getRotationDirection(displayPage, currentPage);
   const transitionVariants = get3DTransitionVariants(direction);
