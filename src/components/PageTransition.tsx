@@ -57,14 +57,24 @@ export default function PageTransition({ currentPage, children, onTransitionChan
       setIsTransitioning(true);
       onTransitionChange?.(true);
       
+      // Force scroll to top immediately when transition starts
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      
       // Page switch timing
       const switchDelay = prefersReducedMotion ? 200 : 400;
       const endDelay = prefersReducedMotion ? 500 : 900;
       
-      setTimeout(() => setDisplayPage(currentPage), switchDelay);
+      setTimeout(() => {
+        setDisplayPage(currentPage);
+        // Ensure scroll to top when content switches
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }, switchDelay);
+      
       setTimeout(() => {
         setIsTransitioning(false);
         onTransitionChange?.(false);
+        // Final scroll to top to ensure it sticks
+        window.scrollTo({ top: 0, behavior: 'auto' });
       }, endDelay);
     }
   }, [currentPage, displayPage, prefersReducedMotion, onTransitionChange]);
