@@ -1,426 +1,457 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { motion, AnimatePresence, useIsPresent } from "framer-motion";
+
+/**
+ * PageTransitionPro
+ * Modern, elegant, and performant page transition overlay.
+ *
+ * Usage:
+ * <PageTransitionPro currentPage={route} onTransitionChange={setBusy}>
+ *   {pageContent}
+ * </PageTransitionPro>
+ */
+
+type Direction = "forward" | "backward";
 
 interface PageTransitionProps {
   currentPage: string;
   children: React.ReactNode;
   onTransitionChange?: (isTransitioning: boolean) => void;
+  // Optional fine-tuning
+  durationMs?: number;          // total overlay lifetime
+  switchAtMs?: number;          // when to swap children
+  pagesOrder?: string[];        // to compute direction
 }
 
-export default function PageTransition({ currentPage, children, onTransitionChange }: PageTransitionProps) {
-  const [isTransitioning, setIsTransitioning] = useState(false);
+const DEFAULT_PAGES = ["home", "about", "case-studies", "contact"];
+
+const PAGE_META: Record<
+  string,
+  { name: string; from: string; to: string; accent: string }
+> = {
+  home: { name: "Home", from: "#1e3a8a", to: "#3b82f6", accent: "#60a5fa" },
+  about: { name: "About", from: "#4c1d95", to: "#8b5cf6", accent: "#a78bfa" },
+  "case-studies": {
+    name: "Case Studies",
+    from: "#115e59",
+    to: "#06b6d4",
+    accent: "#67e8f9",
+  },
+  contact: { name: "Contact", from: "#064e3b", to: "#10b981", accent: "#6ee7b7" },
+};
+
+export default function PageTransitionPro({
+  currentPage,
+  children,
+  onTransitionChange,
+  durationMs,
+  switchAtMs,
+  pagesOrder,
+}: PageTransitionProps) {
+  const prefersReducedMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Tuned timing with reduced-motion support
+  const TOTAL = prefersReducedMotion ? 700 : durationMs ?? 1200;
+  const SWITCH_AT = prefersReducedMotion ? 300 : switchAtMs ?? Math.floor(TOTAL * 0.45);
+
+  const order = pagesOrder ?? DEFAULT_PAGES;
   const [displayPage, setDisplayPage] = useState(currentPage);
-  const [transitionDirection, setTransitionDirection] = useState<'forward' | 'backward'>('forward');
-  
-  // Check for reduced motion preference
-  const prefersReducedMotion = typeof window !== 'undefined' 
-    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
-    : false;
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [direction, setDirection] = useState<Direction>("forward");
 
-  // Get navigation direction and page info
-  const getPageInfo = (from: string, to: string) => {
-    const pages = ['home', 'about', 'case-studies', 'contact'];
-    const pageColors = {
-      'home': '#3B82F6',         // Blue
-      'about': '#8B5CF6',        // Purple  
-      'case-studies': '#06B6D4', // Cyan
-      'contact': '#10B981'       // Green
-    };
-    
-    const pageNames = {
-      'home': 'Home',
-      'about': 'About',
-      'case-studies': 'Case Studies',
-      'contact': 'Contact'
-    };
-    
-    const fromIndex = pages.indexOf(from);
-    const toIndex = pages.indexOf(to);
-    const direction = toIndex > fromIndex ? 'forward' : 'backward';
-    
-    return {
-      direction,
-      fromColor: pageColors[from as keyof typeof pageColors] || pageColors.home,
-      toColor: pageColors[to as keyof typeof pageColors] || pageColors.home,
-      fromName: pageNames[from as keyof typeof pageNames] || 'Home',
-      toName: pageNames[to as keyof typeof pageNames] || 'Home',
-      fromIndex,
-      toIndex
-    };
-  };
+  const timers = useRef<number[]>([]);
+  const isPresent = useIsPresent();
 
-  // Trigger transition when page changes
+  // Compute direction and palette
+  const meta = useMemo(() => {
+    const safe = (key: string) => PAGE_META[key] ?? PAGE_META.home;
+    const from = safe(displayPage);
+    const to = safe(currentPage);
+    const fromIdx = order.indexOf(displayPage);
+    const toIdx = order.indexOf(currentPage);
+    const dir: Direction =
+      toIdx === -1 || fromIdx === -1 ? "forward" : toIdx > fromIdx ? "forward" : "backward";
+    return { from, to, dir };
+  }, [currentPage, displayPage, order]);
+
+  // Interruptible transition
   useEffect(() => {
-    if (currentPage !== displayPage) {
-      const pageInfo = getPageInfo(displayPage, currentPage);
-      setTransitionDirection(pageInfo.direction);
-      setIsTransitioning(true);
-      onTransitionChange?.(true);
-      
-      // Force scroll to top immediately when transition starts
-      window.scrollTo({ top: 0, behavior: 'auto' });
-      
-      // Page switch timing - longer for full stinger effect
-      const switchDelay = prefersReducedMotion ? 500 : 1000;  // Switch at peak coverage
-      const endDelay = prefersReducedMotion ? 1000 : 2000;    // Full stinger duration - much longer
-      
-      setTimeout(() => {
+    if (currentPage === displayPage) return;
+
+    // Start
+    setDirection(meta.dir);
+    setIsTransitioning(true);
+    onTransitionChange?.(true);
+
+    // Prevent mid-scroll jank
+    window.scrollTo({ top: 0, behavior: "auto" });
+
+    // Swap content at peak coverage
+    timers.current.push(
+      window.setTimeout(() => {
         setDisplayPage(currentPage);
-        // Ensure scroll to top when content switches
-        window.scrollTo({ top: 0, behavior: 'auto' });
-      }, switchDelay);
-      
-      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }, SWITCH_AT) as unknown as number
+    );
+
+    // End overlay
+    timers.current.push(
+      window.setTimeout(() => {
         setIsTransitioning(false);
         onTransitionChange?.(false);
-        // Final scroll to top to ensure it sticks
-        window.scrollTo({ top: 0, behavior: 'auto' });
-      }, endDelay);
-    }
-  }, [currentPage, displayPage, prefersReducedMotion, onTransitionChange]);
+      }, TOTAL) as unknown as number
+    );
 
-  const pageInfo = getPageInfo(displayPage, currentPage);
+    // Cleanup if user navigates again during transition or component unmounts
+    return () => {
+      timers.current.forEach((t) => clearTimeout(t));
+      timers.current = [];
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]); // intentionally only on page change
+
+  // CSS variables piped down to motion elements
+  const cssVars: React.CSSProperties = {
+    // gradient endpoints
+    ["--from" as any]: meta.from.from,
+    ["--to" as any]: meta.to.to,
+    ["--accent" as any]: meta.to.accent,
+    // chroma accent for subtle RGB split
+    ["--accentSoft" as any]: hexWithAlpha(meta.to.accent, 0.25),
+    // reduce-motion friendly scale
+    ["--skew" as any]: prefersReducedMotion ? "0deg" : "10deg",
+  };
 
   return (
-    <div className="relative w-full h-full">
-      {/* Content stays mounted - no AnimatePresence */}
+    <div className="relative w-full h-full" style={{ contain: "paint layout" }}>
+      {/* Keep content mounted for SEO and state preservation */}
       {children}
 
-      {/* Full-Screen Stinger Transition Overlay */}
       <AnimatePresence>
         {isTransitioning && (
           <motion.div
-            className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden"
+            key={`overlay-${displayPage}-${currentPage}`}
+            className="fixed inset-0 z-[9999] pointer-events-none"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            exit={{ opacity: prefersReducedMotion ? 0 : 0.0001 }} // let curtains handle fade
+            transition={{ duration: prefersReducedMotion ? 0.12 : 0.18 }}
+            style={cssVars}
           >
-            {/* Main Stinger Shape - Diagonal Wipe */}
-            <motion.div
-              className="absolute inset-0"
-              style={{
-                background: `linear-gradient(135deg, 
-                  ${pageInfo.fromColor} 0%, 
-                  ${pageInfo.toColor} 50%,
-                  ${pageInfo.fromColor} 100%)`,
-                clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
-              }}
-              initial={{ 
-                clipPath: transitionDirection === 'forward' 
-                  ? 'polygon(0 0, 0 0, 0 100%, 0 100%)'
-                  : 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)'
-              }}
-              animate={{ 
-                clipPath: [
-                  transitionDirection === 'forward' 
-                    ? 'polygon(0 0, 0 0, 0 100%, 0 100%)'
-                    : 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)',
-                  'polygon(0 0, 100% 0, 100% 100%, 0 100%)',  // Full cover
-                  transitionDirection === 'forward'
-                    ? 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)'
-                    : 'polygon(0 0, 0 0, 0 100%, 0 100%)'
-                ]
-              }}
-              transition={{ 
-                duration: prefersReducedMotion ? 1.0 : 2.0,  // Much slower
-                ease: [0.25, 0.46, 0.45, 0.94],
-                times: [0, 0.5, 1]
-              }}
+            {/* Backdrop bloom + grain */}
+            {!prefersReducedMotion && (
+              <div className="absolute inset-0">
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backdropFilter: "blur(6px)",
+                    WebkitBackdropFilter: "blur(6px)",
+                  }}
+                />
+                <div
+                  className="absolute inset-0 opacity-60 mix-blend-screen pointer-events-none"
+                  style={{
+                    background:
+                      "radial-gradient(closest-side, rgba(255,255,255,0.15), rgba(255,255,255,0) 60%)",
+                  }}
+                />
+                <Grain />
+              </div>
+            )}
+
+            {/* Curtain panels */}
+            <Curtains
+              totalMs={TOTAL}
+              switchAt={SWITCH_AT}
+              direction={direction}
+              reduced={prefersReducedMotion}
             />
 
-            {/* Animated Geometric Patterns */}
-            {!prefersReducedMotion && (
-              <>
-                {/* Rotating Rings */}
-                {[...Array(3)].map((_, i) => (
-                  <motion.div
-                    key={`ring-${i}`}
-                    className="absolute border rounded-full"
-                    style={{
-                      width: `${200 + i * 100}px`,
-                      height: `${200 + i * 100}px`,
-                      borderColor: `${pageInfo.toColor}40`,
-                      borderWidth: '2px',
-                      left: '50%',
-                      top: '50%',
-                      marginLeft: `-${100 + i * 50}px`,
-                      marginTop: `-${100 + i * 50}px`
-                    }}
-                    initial={{ 
-                      scale: 0,
-                      rotate: 0,
-                      opacity: 0
-                    }}
-                    animate={{ 
-                      scale: [0, 1.2, 0],
-                      rotate: [0, 180, 360],
-                      opacity: [0, 0.6, 0]
-                    }}
-                    transition={{ 
-                      duration: 1.2,
-                      ease: "easeInOut",
-                      delay: i * 0.1
-                    }}
-                  />
-                ))}
+            {/* Center label chip + progress ring */}
+            <CenterLabel
+              title={PAGE_META[currentPage]?.name ?? "Page"}
+              totalMs={TOTAL}
+              reduced={prefersReducedMotion}
+            />
 
-                {/* Flowing Particles */}
-                {[...Array(20)].map((_, i) => (
-                  <motion.div
-                    key={`particle-${i}`}
-                    className="absolute w-3 h-3 rounded-full"
-                    style={{
-                      background: `linear-gradient(45deg, ${pageInfo.fromColor}, ${pageInfo.toColor})`,
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                      boxShadow: `0 0 20px ${pageInfo.toColor}80`
-                    }}
-                    initial={{ 
-                      scale: 0,
-                      opacity: 0,
-                      x: transitionDirection === 'forward' ? -100 : 100,
-                      y: Math.random() * 200 - 100
-                    }}
-                    animate={{
-                      scale: [0, 1.5, 0],
-                      opacity: [0, 1, 0],
-                      x: [
-                        transitionDirection === 'forward' ? -100 : 100,
-                        0,
-                        transitionDirection === 'forward' ? 100 : -100
-                      ],
-                      y: [
-                        Math.random() * 200 - 100,
-                        Math.random() * 100 - 50,
-                        Math.random() * 200 - 100
-                      ]
-                    }}
-                    transition={{ 
-                      duration: 2.0,  // Slower particles
-                      ease: "easeOut",
-                      delay: Math.random() * 0.5
-                    }}
-                  />
-                ))}
-              </>
-            )}
-
-            {/* Central Logo/Brand - FUSION INTERACTIVE */}
-            <motion.div
-              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
-              initial={{ 
-                scale: 0,
-                opacity: 0,
-                rotate: -10
-              }}
-              animate={{ 
-                scale: [0, 1.1, 1, 1, 0.8, 0],
-                opacity: [0, 1, 1, 1, 0.8, 0],
-                rotate: [
-                  transitionDirection === 'forward' ? -10 : 10,
-                  0,
-                  0,
-                  0,
-                  0,
-                  transitionDirection === 'forward' ? 10 : -10
-                ]
-              }}
-              transition={{ 
-                duration: prefersReducedMotion ? 1.0 : 2.0,
-                ease: [0.25, 0.46, 0.45, 0.94],
-                times: [0, 0.2, 0.4, 0.6, 0.8, 1]
-              }}
-            >
-              {/* Large FI Logo */}
-              <motion.div 
-                className="relative mb-6"
-                initial={{ scale: 0.8 }}
-                animate={{ 
-                  scale: [0.8, 1.2, 1.1, 1.1, 0.8],
-                  rotateY: [0, 0, 5, -5, 0]
-                }}
-                transition={{ 
-                  duration: 2.0,
-                  ease: "easeInOut",
-                  times: [0, 0.2, 0.4, 0.6, 1]
-                }}
-              >
-                {/* Glowing Background */}
-                <div 
-                  className="absolute inset-0 rounded-3xl blur-xl"
-                  style={{
-                    background: `linear-gradient(135deg, ${pageInfo.fromColor}60, ${pageInfo.toColor}60)`,
-                    transform: 'scale(1.3)'
-                  }}
-                />
-                
-                {/* Main Logo Container */}
-                <div className="relative w-32 h-32 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl rounded-3xl flex items-center justify-center border-2 border-white/30 shadow-2xl">
-                  {/* F Text Only */}
-                  <motion.div
-                    className="text-center"
-                    animate={{
-                      textShadow: [
-                        `0 0 20px ${pageInfo.toColor}80`,
-                        `0 0 40px ${pageInfo.toColor}ff`,
-                        `0 0 20px ${pageInfo.toColor}80`
-                      ]
-                    }}
-                    transition={{ 
-                      duration: 1.5,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    <span className="text-white font-bold text-6xl tracking-tight">F</span>
-                  </motion.div>
-                </div>
-              </motion.div>
-              
-              {/* FUSION INTERACTIVE Text */}
-              <motion.div
-                className="space-y-2"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ 
-                  y: [20, 0, 0, 0, 0, -20],
-                  opacity: [0, 1, 1, 1, 0.8, 0]
-                }}
-                transition={{ 
-                  duration: 2.0,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.2, 0.4, 0.6, 0.8, 1]
-                }}
-              >
-                {/* FUSION */}
-                <motion.div
-                  className="text-6xl font-light text-white tracking-wider"
-                  style={{ 
-                    textShadow: `0 0 30px ${pageInfo.toColor}80`,
-                    fontFamily: '"Inter", sans-serif'
-                  }}
-                  animate={{
-                    letterSpacing: ['0.1em', '0.15em', '0.1em']
-                  }}
-                  transition={{ 
-                    duration: 2.0,
-                    ease: "easeInOut"
-                  }}
-                >
-                  FUSION
-                </motion.div>
-                
-                {/* INTERACTIVE */}
-                <motion.div
-                  className="text-lg font-light tracking-[0.3em] text-white/90"
-                  style={{ 
-                    textShadow: `0 0 20px ${pageInfo.toColor}60`,
-                    fontFamily: '"Inter", sans-serif'
-                  }}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ 
-                    opacity: [0, 1, 1, 1, 0.8, 0],
-                    scale: [0.9, 1, 1, 1, 0.9, 0.8]
-                  }}
-                  transition={{ 
-                    duration: 2.0,
-                    ease: "easeInOut",
-                    times: [0, 0.3, 0.5, 0.6, 0.8, 1],
-                    delay: 0.2
-                  }}
-                >
-                  INTERACTIVE
-                </motion.div>
-              </motion.div>
-
-              {/* Destination Page Indicator */}
-              <motion.div
-                className="mt-8 bg-black/40 backdrop-blur-md rounded-full px-8 py-3 border border-white/20"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ 
-                  opacity: [0, 1, 1, 1, 0.8, 0],
-                  scale: [0.8, 1, 1, 1, 0.9, 0.8]
-                }}
-                transition={{ 
-                  duration: 2.0,
-                  ease: "easeInOut",
-                  times: [0, 0.4, 0.6, 0.7, 0.85, 1],
-                  delay: 0.5
-                }}
-              >
-                <motion.span 
-                  className="text-white text-xl font-medium"
-                  style={{ color: pageInfo.toColor }}
-                  animate={{ 
-                    textShadow: [
-                      `0 0 0px ${pageInfo.toColor}`,
-                      `0 0 20px ${pageInfo.toColor}80`,
-                      `0 0 30px ${pageInfo.toColor}ff`,
-                      `0 0 20px ${pageInfo.toColor}80`,
-                      `0 0 0px ${pageInfo.toColor}`
-                    ]
-                  }}
-                  transition={{ 
-                    duration: 2.0,
-                    ease: "easeInOut",
-                    times: [0, 0.2, 0.5, 0.8, 1]
-                  }}
-                >
-                  {pageInfo.toName}
-                </motion.span>
-              </motion.div>
-            </motion.div>
-
-            {/* Progress Bar */}
-            {!prefersReducedMotion && (
-              <motion.div
-                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-64 h-1 bg-white/20 rounded-full overflow-hidden"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <motion.div
-                  className="h-full rounded-full"
-                  style={{
-                    background: `linear-gradient(90deg, ${pageInfo.fromColor}, ${pageInfo.toColor})`
-                  }}
-                  initial={{ width: '0%' }}
-                  animate={{ width: '100%' }}
-                  transition={{ 
-                    duration: 1.2,
-                    ease: "easeInOut"
-                  }}
-                />
-              </motion.div>
-            )}
-
-            {/* Scan Lines Effect */}
-            {!prefersReducedMotion && (
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: `repeating-linear-gradient(
-                    0deg,
-                    transparent 0px,
-                    transparent 2px,
-                    ${pageInfo.toColor}10 2px,
-                    ${pageInfo.toColor}10 4px
-                  )`
-                }}
-                initial={{ opacity: 0 }}
-                animate={{ 
-                  opacity: [0, 0.3, 0],
-                  y: ['-100%', '0%', '100%']
-                }}
-                transition={{ 
-                  duration: 1.2,
-                  ease: "linear"
-                }}
-              />
-            )}
+            {/* Soft particles for depth */}
+            {!prefersReducedMotion && <Particles key={currentPage} direction={direction} />}
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
+}
+
+/* --------------------------------- Parts --------------------------------- */
+
+function Curtains({
+  totalMs,
+  switchAt,
+  direction,
+  reduced,
+}: {
+  totalMs: number;
+  switchAt: number;
+  direction: Direction;
+  reduced: boolean;
+}) {
+  // We split into two skewed panels that meet at center at switchAt, then exit
+  const enterPct = 0.5; // when fully covered
+  const exitPct = 1.0;
+
+  // Forward = left->right. Backward = right->left.
+  const dir = direction === "forward" ? 1 : -1;
+
+  const base = {
+    position: "absolute" as const,
+    inset: 0,
+    willChange: "transform, opacity",
+    transformStyle: "preserve-3d" as const,
+  };
+
+  const panelCommon =
+    "absolute top-0 h-full w-[60vw] origin-center will-change-transform rounded-[2.5rem] md:rounded-[4rem] overflow-hidden";
+
+  const enterDuration = reduced ? switchAt : switchAt * 0.92;
+  const exitDuration = reduced ? totalMs - switchAt : (totalMs - switchAt) * 0.88;
+
+  return (
+    <div style={base}>
+      {/* Leading panel */}
+      <motion.div
+        className={panelCommon}
+        style={{
+          left: dir === 1 ? "-65vw" : "auto",
+          right: dir === -1 ? "-65vw" : "auto",
+          background:
+            "linear-gradient(120deg, var(--from) 0%, var(--to) 100%)",
+          boxShadow: "0 30px 80px rgba(0,0,0,0.35)",
+          transform: `skewX(var(--skew))`,
+        }}
+        initial={{ x: 0 }}
+        animate={{ x: dir * 110 + "vw" }}
+        transition={{ type: "tween", ease: [0.22, 1, 0.36, 1], duration: enterDuration / 1000 }}
+      />
+
+      {/* Trailing panel with subtle glass */}
+      <motion.div
+        className={panelCommon}
+        style={{
+          left: dir === 1 ? "-20vw" : "auto",
+          right: dir === -1 ? "-20vw" : "auto",
+          background:
+            "linear-gradient(120deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06))",
+          backdropFilter: "blur(10px) saturate(110%)",
+          WebkitBackdropFilter: "blur(10px) saturate(110%)",
+          border: "1px solid rgba(255,255,255,0.2)",
+          transform: `skewX(var(--skew))`,
+        }}
+        initial={{ x: 0 }}
+        animate={{ x: dir * 140 + "vw" }}
+        transition={{ type: "tween", ease: [0.22, 1, 0.36, 1], duration: enterDuration / 1000 }}
+      />
+
+      {/* Exit wipe: slim accent bar that pulls out to edge */}
+      {!reduced && (
+        <motion.div
+          className="absolute top-0 h-full w-[10vw] rounded-[3rem]"
+          style={{
+            left: dir === 1 ? "50vw" : "auto",
+            right: dir === -1 ? "50vw" : "auto",
+            background:
+              "linear-gradient(180deg, transparent, var(--accentSoft), transparent)",
+            filter: "contrast(120%)",
+            transform: `skewX(var(--skew))`,
+          }}
+          initial={{ opacity: 0, scaleX: 0.8 }}
+          animate={{ opacity: 1, scaleX: 1, x: dir * 60 + "vw" }}
+          transition={{
+            delay: switchAt / 1000,
+            duration: exitDuration / 1000,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+        />
+      )}
+
+      {/* Subtle chromatic edge (feels premium on OLED) */}
+      {!reduced && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none"
+          initial={{ opacity: 0.0 }}
+          animate={{ opacity: 0.8 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          style={{
+            background:
+              "radial-gradient(60% 120% at 50% 50%, rgba(255,0,102,0.06), rgba(0,255,204,0.06) 40%, transparent 65%)",
+            mixBlendMode: "screen",
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
+function CenterLabel({
+  title,
+  totalMs,
+  reduced,
+}: {
+  title: string;
+  totalMs: number;
+  reduced: boolean;
+}) {
+  const ringDuration = Math.max(0.001, totalMs - 140);
+
+  return (
+    <motion.div
+      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+      initial={{ opacity: 0, scale: reduced ? 0.98 : 0.94 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: reduced ? 0.98 : 1.02 }}
+      transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div className="relative">
+        {/* Progress ring */}
+        {!reduced && (
+          <svg
+            width="132"
+            height="132"
+            viewBox="0 0 132 132"
+            className="absolute -left-[16px] -top-[16px]"
+          >
+            <circle
+              cx="66"
+              cy="66"
+              r="58"
+              stroke="rgba(255,255,255,0.2)"
+              strokeWidth="2"
+              fill="none"
+            />
+            <motion.circle
+              cx="66"
+              cy="66"
+              r="58"
+              stroke="url(#grad)"
+              strokeWidth="4"
+              strokeLinecap="round"
+              fill="none"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: ringDuration / 1000, ease: "easeInOut" }}
+            />
+            <defs>
+              <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="var(--from)" />
+                <stop offset="100%" stopColor="var(--to)" />
+              </linearGradient>
+            </defs>
+          </svg>
+        )}
+
+        {/* Label chip */}
+        <div
+          className="px-5 py-2 rounded-full border text-white/95 shadow-xl"
+          style={{
+            borderColor: "rgba(255,255,255,0.25)",
+            background:
+              "linear-gradient(180deg, rgba(20,20,20,0.75), rgba(10,10,10,0.55))",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            fontFamily: "Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif",
+          }}
+        >
+          <motion.span
+            initial={{ y: 8, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -8, opacity: 0 }}
+            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            style={{ letterSpacing: "0.12em" }}
+            className="text-sm font-medium tracking-widest"
+          >
+            {title.toUpperCase()}
+          </motion.span>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function Particles({ direction }: { direction: Direction }) {
+  const dir = direction === "forward" ? 1 : -1;
+  const N = 18;
+
+  return (
+    <div className="absolute inset-0 overflow-hidden">
+      {Array.from({ length: N }).map((_, i) => {
+        const delay = i * 0.02;
+        const y = rand(-40, 40);
+        const startX = dir === 1 ? -120 : 120;
+        const endX = dir === 1 ? 120 : -120;
+
+        return (
+          <motion.div
+            key={i}
+            className="absolute w-[6px] h-[6px] rounded-full"
+            style={{
+              top: `calc(50% + ${y}px)`,
+              left: "50%",
+              background:
+                "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(255,255,255,0.1))",
+              boxShadow: "0 0 24px var(--accentSoft)",
+              filter: "saturate(120%)",
+            }}
+            initial={{ x: startX, opacity: 0, scale: 0.6 }}
+            animate={{ x: endX, opacity: [0, 1, 0.0], scale: [0.6, 1, 0.8] }}
+            transition={{
+              delay,
+              duration: 0.8,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
+
+function Grain() {
+  // static grain layer for texture
+  return (
+    <div
+      className="absolute inset-0 opacity-25"
+      style={{
+        backgroundImage:
+          "url(\"data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'>\
+<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/>\
+<feColorMatrix type='saturate' values='0'/>\
+<feComponentTransfer><feFuncA type='table' tableValues='0 0.7'/></feComponentTransfer>\
+</filter>\
+<rect width='100%' height='100%' filter='url(%23n)' opacity='0.5'/>\
+</svg>\")",
+        backgroundSize: "auto",
+        mixBlendMode: "overlay",
+        pointerEvents: "none",
+      }}
+    />
+  );
+}
+
+/* --------------------------------- Utils --------------------------------- */
+
+function rand(min: number, max: number) {
+  return Math.random() * (max - min) + min;
+}
+
+function hexWithAlpha(hex: string, alpha: number) {
+  // Accepts #rrggbb
+  const c = hex.replace("#", "");
+  const r = parseInt(c.slice(0, 2), 16);
+  const g = parseInt(c.slice(2, 4), 16);
+  const b = parseInt(c.slice(4, 6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
