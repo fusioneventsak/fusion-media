@@ -46,16 +46,16 @@ export default function PageTransition({ currentPage, children, onTransitionChan
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'auto' });
     
-    // Start revealing content
+    // Start revealing content - INCREASED from 1800ms to 3000ms
     setTimeout(() => {
       setShowContent(true);
-    }, 1800);
+    }, 3000);
     
-    // End transition
+    // End transition - INCREASED from 2400ms to 3800ms
     setTimeout(() => {
       setIsTransitioning(false);
       onTransitionChange?.(false);
-    }, 2400);
+    }, 3800);
   }, [currentPage]);
 
   const pageInfo = getPageInfo(currentPage);
@@ -79,24 +79,24 @@ export default function PageTransition({ currentPage, children, onTransitionChan
     { id: 15, direction: 'from-left', hasLogo: false }
   ];
 
-  // Get animation delays for staggered effect
+  // Get animation delays for staggered effect - INCREASED delays for slower animation
   const getSquareDelay = (index: number) => {
     const delayMap = [
       0,     // square 1
-      0.1,   // square 2, 6
-      0.2,   // square 3, 7, 11
-      0.3,   // square 4, 8, 10, 12
-      0.4,   // square 5, 9, 13, 15
-      0.1,   // square 6 (same as 2)
-      0.2,   // square 7 (same as 3)
-      0.3,   // square 8 (same as 4)
-      0.4,   // square 9 (center)
-      0.3,   // square 10 (same as 4)
-      0.2,   // square 11 (same as 3)
-      0.3,   // square 12 (same as 4)
-      0.4,   // square 13 (same as 5)
-      0.5,   // square 14
-      0.4    // square 15 (same as 5)
+      0.15,  // square 2, 6 (increased from 0.1)
+      0.3,   // square 3, 7, 11 (increased from 0.2)
+      0.45,  // square 4, 8, 10, 12 (increased from 0.3)
+      0.6,   // square 5, 9, 13, 15 (increased from 0.4)
+      0.15,  // square 6 (same as 2)
+      0.3,   // square 7 (same as 3)
+      0.45,  // square 8 (same as 4)
+      0.6,   // square 9 (center)
+      0.45,  // square 10 (same as 4)
+      0.3,   // square 11 (same as 3)
+      0.45,  // square 12 (same as 4)
+      0.6,   // square 13 (same as 5)
+      0.75,  // square 14 (increased from 0.5)
+      0.6    // square 15 (same as 5)
     ];
     return delayMap[index] || 0;
   };
@@ -115,7 +115,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
           scale: showContent ? 1 : 0.95
         }}
         transition={{ 
-          duration: 0.6,
+          duration: 1.0, // INCREASED from 0.6 to 1.0 for smoother fade
           ease: [0.25, 0.46, 0.45, 0.94]
         }}
       >
@@ -195,10 +195,10 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     ]
                   }}
                   transition={{
-                    duration: 0.3,
-                    times: [0, 0.3, 0.7, 1],
+                    duration: 0.8, // INCREASED from 0.3 to 0.8 for slower square animation
+                    times: [0, 0.25, 0.75, 1], // Adjusted timing to hold squares longer
                     delay: getSquareDelay(index),
-                    ease: 'linear'
+                    ease: 'easeInOut' // Changed from 'linear' to smoother easing
                   }}
                 >
                   {/* Logo in center square */}
@@ -213,9 +213,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                         opacity: [0, 1, 1, 0]
                       }}
                       transition={{
-                        duration: 1.2,
-                        times: [0, 0.3, 0.7, 1],
-                        delay: 0.4
+                        duration: 2.0, // INCREASED from 1.2 to 2.0 for longer logo visibility
+                        times: [0, 0.2, 0.8, 1], // Hold logo visible longer
+                        delay: 0.6
                       }}
                     >
                       {/* F Logo */}
@@ -238,9 +238,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                           rotate: [0, 5, 0]
                         }}
                         transition={{
-                          duration: 1.2,
-                          times: [0, 0.5, 1],
-                          delay: 0.6
+                          duration: 1.8, // INCREASED from 1.2 to 1.8
+                          times: [0, 0.4, 1],
+                          delay: 0.8
                         }}
                       >
                         <span
@@ -270,8 +270,8 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                           letterSpacing: ['2px', '3px', '2px']
                         }}
                         transition={{
-                          duration: 1.5,
-                          delay: 0.8
+                          duration: 2.0, // INCREASED from 1.5 to 2.0
+                          delay: 1.0
                         }}
                       >
                         FUSION
@@ -290,7 +290,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                         }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 1.0 }}
+                        transition={{ delay: 1.2 }} // INCREASED from 1.0 to 1.2
                       >
                         INTERACTIVE
                       </motion.div>
@@ -307,7 +307,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                         }}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 1.2, duration: 0.4 }}
+                        transition={{ delay: 1.4, duration: 0.6 }} // INCREASED delay and duration
                       >
                         <span
                           style={{
@@ -340,10 +340,10 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     opacity: [0, 0.6, 0.6, 0]
                   }}
                   transition={{
-                    duration: 0.3,
-                    times: [0, 0.3, 0.7, 1],
+                    duration: 0.8, // INCREASED from 0.3 to 0.8 to match square animation
+                    times: [0, 0.25, 0.75, 1],
                     delay: getSquareDelay(index),
-                    ease: 'linear'
+                    ease: 'easeInOut'
                   }}
                 />
               </motion.div>
