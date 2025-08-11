@@ -134,9 +134,14 @@ export default function App() {
         />
       </div>
 
-      {/* Page Content - Temporarily Direct Render */}
+      {/* Page Content with Simplified Transition */}
       <div className="relative z-[100]">
-        {renderPage()}
+        <PageTransition 
+          currentPage={currentPage}
+          onTransitionChange={setIsTransitioning}
+        >
+          {renderPage()}
+        </PageTransition>
       </div>
 
       {/* Global Footer */}
