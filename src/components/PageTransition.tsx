@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface PageTransitionProps {
@@ -10,21 +10,17 @@ interface PageTransitionProps {
 export default function PageTransition({ currentPage, children, onTransitionChange }: PageTransitionProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [displayPage, setDisplayPage] = useState(currentPage);
+  const [logoComplete, setLogoComplete] = useState(false);
   const [transitionDirection, setTransitionDirection] = useState<'forward' | 'backward'>('forward');
   
-  // Check for reduced motion preference
-  const prefersReducedMotion = typeof window !== 'undefined' 
-    ? window.matchMedia('(prefers-reduced-motion: reduce)').matches 
-    : false;
-
-  // Get navigation direction and page info
+  // Page info
   const getPageInfo = (from: string, to: string) => {
     const pages = ['home', 'about', 'case-studies', 'contact'];
     const pageColors = {
-      'home': '#3B82F6',         // Blue
-      'about': '#8B5CF6',        // Purple  
-      'case-studies': '#06B6D4', // Cyan
-      'contact': '#10B981'       // Green
+      'home': '#3B82F6',
+      'about': '#8B5CF6',
+      'case-studies': '#06B6D4',
+      'contact': '#10B981'
     };
     
     const pageNames = {
@@ -42,75 +38,59 @@ export default function PageTransition({ currentPage, children, onTransitionChan
       direction,
       fromColor: pageColors[from as keyof typeof pageColors] || pageColors.home,
       toColor: pageColors[to as keyof typeof pageColors] || pageColors.home,
-      fromName: pageNames[from as keyof typeof pageNames] || 'Home',
-      toName: pageNames[to as keyof typeof pageNames] || 'Home',
-      fromIndex,
-      toIndex
+      toName: pageNames[to as keyof typeof pageNames] || 'Home'
     };
   };
 
-  const [logoComplete, setLogoComplete] = useState(false);
-
-  // Trigger transition when page changes
+  // Handle page changes
   useEffect(() => {
     if (currentPage !== displayPage) {
       const pageInfo = getPageInfo(displayPage, currentPage);
       setTransitionDirection(pageInfo.direction);
       setIsTransitioning(true);
-      setLogoComplete(false); // Reset logo state
+      setLogoComplete(false);
       onTransitionChange?.(true);
       
-      // Force scroll to top immediately when transition starts
       window.scrollTo({ top: 0, behavior: 'auto' });
       
-      // Logo completes at 1.2 seconds, then background exits
-      const logoCompleteDelay = prefersReducedMotion ? 800 : 1200;
-      setTimeout(() => {
-        setLogoComplete(true);
-      }, logoCompleteDelay);
+      // Logo completes at 1.2 seconds
+      setTimeout(() => setLogoComplete(true), 1200);
       
-      // Page switch timing - happens while logo is visible
-      const switchDelay = prefersReducedMotion ? 500 : 600;
+      // Page switches at 600ms
       setTimeout(() => {
         setDisplayPage(currentPage);
         window.scrollTo({ top: 0, behavior: 'auto' });
-      }, switchDelay);
+      }, 600);
       
-      // Total duration - background exits after logo is done
-      const endDelay = prefersReducedMotion ? 1200 : 1800;
+      // Total transition ends at 1.8 seconds
       setTimeout(() => {
         setIsTransitioning(false);
         onTransitionChange?.(false);
-        window.scrollTo({ top: 0, behavior: 'auto' });
-      }, endDelay);
+      }, 1800);
     }
-  }, [currentPage, displayPage, prefersReducedMotion, onTransitionChange]);
+  }, [currentPage, displayPage, onTransitionChange]);
 
   const pageInfo = getPageInfo(displayPage, currentPage);
 
   return (
-    <div className="relative w-full h-full">
-      {/* Content stays mounted - no AnimatePresence */}
+    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+      {/* Content stays mounted */}
       {children}
 
-      {/* Full-Screen Stinger Transition Overlay */}
+      {/* Transition Overlay */}
       <AnimatePresence>
         {isTransitioning && (
-          <motion.div
-            className="fixed inset-0 z-[9999] pointer-events-none overflow-hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {/* Main Stinger Shape - Diagonal Wipe */}
+          <>
+            {/* Background Wipe */}
             <motion.div
-              className="absolute inset-0"
               style={{
-                background: `linear-gradient(135deg, 
-                  ${pageInfo.fromColor} 0%, 
-                  ${pageInfo.toColor} 50%,
-                  ${pageInfo.fromColor} 100%)`,
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 9998,
+                background: `linear-gradient(135deg, ${pageInfo.fromColor} 0%, ${pageInfo.toColor} 50%, ${pageInfo.fromColor} 100%)`,
                 clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)'
               }}
               initial={{ 
@@ -119,311 +99,164 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   : 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)'
               }}
               animate={{ 
-                clipPath: [
-                  transitionDirection === 'forward' 
-                    ? 'polygon(0 0, 0 0, 0 100%, 0 100%)'
-                    : 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)',
-                  'polygon(0 0, 100% 0, 100% 100%, 0 100%)',  // Full cover
-                  transitionDirection === 'forward'
-                    ? 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)'
-                    : 'polygon(0 0, 0 0, 0 100%, 0 100%)'
-                ]
+                clipPath: logoComplete 
+                  ? (transitionDirection === 'forward'
+                      ? 'polygon(100% 0, 100% 0, 100% 100%, 100% 100%)'
+                      : 'polygon(0 0, 0 0, 0 100%, 0 100%)')
+                  : 'polygon(0 0, 100% 0, 100% 100%, 0 100%)'
               }}
               transition={{ 
-                duration: prefersReducedMotion ? 1.0 : 2.0,  // Much slower
-                ease: [0.25, 0.46, 0.45, 0.94],
-                times: [0, 0.5, 1]
+                duration: logoComplete ? 0.6 : 0.4,
+                ease: [0.25, 0.46, 0.45, 0.94]
               }}
             />
 
-            {/* Animated Geometric Patterns */}
-            {!prefersReducedMotion && (
-              <>
-                {/* Rotating Rings */}
-                {[...Array(3)].map((_, i) => (
-                  <motion.div
-                    key={`ring-${i}`}
-                    className="absolute border rounded-full"
-                    style={{
-                      width: `${200 + i * 100}px`,
-                      height: `${200 + i * 100}px`,
-                      borderColor: `${pageInfo.toColor}40`,
-                      borderWidth: '2px',
-                      left: '50%',
-                      top: '50%',
-                      marginLeft: `-${100 + i * 50}px`,
-                      marginTop: `-${100 + i * 50}px`
-                    }}
-                    initial={{ 
-                      scale: 0,
-                      rotate: 0,
-                      opacity: 0
-                    }}
-                    animate={{ 
-                      scale: [0, 1.2, 0],
-                      rotate: [0, 180, 360],
-                      opacity: [0, 0.6, 0]
-                    }}
-                    transition={{ 
-                      duration: 1.2,
-                      ease: "easeInOut",
-                      delay: i * 0.1
-                    }}
-                  />
-                ))}
-
-                {/* Flowing Particles */}
-                {[...Array(20)].map((_, i) => (
-                  <motion.div
-                    key={`particle-${i}`}
-                    className="absolute w-3 h-3 rounded-full"
-                    style={{
-                      background: `linear-gradient(45deg, ${pageInfo.fromColor}, ${pageInfo.toColor})`,
-                      left: `${Math.random() * 100}%`,
-                      top: `${Math.random() * 100}%`,
-                      boxShadow: `0 0 20px ${pageInfo.toColor}80`
-                    }}
-                    initial={{ 
-                      scale: 0,
-                      opacity: 0,
-                      x: transitionDirection === 'forward' ? -100 : 100,
-                      y: Math.random() * 200 - 100
-                    }}
-                    animate={{
-                      scale: [0, 1.5, 0],
-                      opacity: [0, 1, 0],
-                      x: [
-                        transitionDirection === 'forward' ? -100 : 100,
-                        0,
-                        transitionDirection === 'forward' ? 100 : -100
-                      ],
-                      y: [
-                        Math.random() * 200 - 100,
-                        Math.random() * 100 - 50,
-                        Math.random() * 200 - 100
-                      ]
-                    }}
-                    transition={{ 
-                      duration: 2.0,  // Slower particles
-                      ease: "easeOut",
-                      delay: Math.random() * 0.5
-                    }}
-                  />
-                ))}
-              </>
-            )}
-
-            {/* Central Logo/Brand - FUSION INTERACTIVE - Completes FIRST */}
-            <motion.div
-              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
-              initial={{ 
-                scale: 0,
-                opacity: 0,
-                rotate: -10
-              }}
-              animate={{ 
-                scale: logoComplete ? 0 : [0, 1.1, 1],
-                opacity: logoComplete ? 0 : [0, 1, 1],
-                rotate: logoComplete 
-                  ? (transitionDirection === 'forward' ? 15 : -15)
-                  : [transitionDirection === 'forward' ? -10 : 10, 0, 0]
-              }}
-              transition={{ 
-                duration: logoComplete ? 0.3 : 1.2, // Quick exit when logoComplete
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-              onAnimationComplete={() => {
-                // This ensures the logo animation is truly complete
-                if (!logoComplete) return;
+            {/* Logo Overlay - COMPLETELY SEPARATE */}
+            <div
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                zIndex: 9999,
+                pointerEvents: 'none'
               }}
             >
-              {/* Large FI Logo */}
-              <motion.div 
-                className="relative mb-6"
-                initial={{ scale: 0.8 }}
+              <motion.div
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  textAlign: 'center'
+                }}
+                initial={{ opacity: 0, scale: 0 }}
                 animate={{ 
-                  scale: [0.8, 1.2, 1.1, 1.1, 0.8],
-                  rotateY: [0, 0, 5, -5, 0]
+                  opacity: logoComplete ? 0 : 1,
+                  scale: logoComplete ? 0 : 1
                 }}
                 transition={{ 
-                  duration: 2.0,
-                  ease: "easeInOut",
-                  times: [0, 0.2, 0.4, 0.6, 1]
+                  duration: logoComplete ? 0.3 : 0.6,
+                  ease: 'easeInOut'
                 }}
               >
-                {/* Glowing Background */}
-                <div 
-                  className="absolute inset-0 rounded-3xl blur-xl"
+                {/* F Logo */}
+                <motion.div
                   style={{
-                    background: `linear-gradient(135deg, ${pageInfo.fromColor}60, ${pageInfo.toColor}60)`,
-                    transform: 'scale(1.3)'
+                    width: '120px',
+                    height: '120px',
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05))',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '2px solid rgba(255,255,255,0.3)',
+                    margin: '0 auto 24px auto',
+                    boxShadow: `0 25px 50px ${pageInfo.toColor}30`
                   }}
-                />
-                
-                {/* Main Logo Container */}
-                <div className="relative w-32 h-32 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl rounded-3xl flex items-center justify-center border-2 border-white/30 shadow-2xl">
-                  {/* F Text Only */}
-                  <motion.div
-                    className="text-center"
-                    animate={{
-                      textShadow: [
-                        `0 0 20px ${pageInfo.toColor}80`,
-                        `0 0 40px ${pageInfo.toColor}ff`,
-                        `0 0 20px ${pageInfo.toColor}80`
-                      ]
-                    }}
-                    transition={{ 
-                      duration: 1.5,
-                      repeat: Infinity,
-                      ease: "easeInOut"
+                  initial={{ scale: 0, rotate: -10 }}
+                  animate={{ 
+                    scale: logoComplete ? 0 : [0, 1.1, 1],
+                    rotate: logoComplete ? 15 : [transitionDirection === 'forward' ? -10 : 10, 0]
+                  }}
+                  transition={{ duration: logoComplete ? 0.3 : 1.0 }}
+                >
+                  <span
+                    style={{
+                      color: 'white',
+                      fontSize: '64px',
+                      fontWeight: 'bold',
+                      fontFamily: '"Inter", sans-serif'
                     }}
                   >
-                    <span className="text-white font-bold text-6xl tracking-tight">F</span>
-                  </motion.div>
-                </div>
-              </motion.div>
-              
-              {/* FUSION INTERACTIVE Text */}
-              <motion.div
-                className="space-y-2"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ 
-                  y: [20, 0, 0, 0, 0, -20],
-                  opacity: [0, 1, 1, 1, 0.8, 0]
-                }}
-                transition={{ 
-                  duration: 2.0,
-                  ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.2, 0.4, 0.6, 0.8, 1]
-                }}
-              >
-                {/* FUSION */}
+                    F
+                  </span>
+                </motion.div>
+
+                {/* FUSION Text */}
                 <motion.div
-                  className="text-6xl font-light text-white tracking-wider"
-                  style={{ 
+                  style={{
+                    fontSize: '64px',
+                    fontWeight: '300',
+                    color: 'white',
+                    letterSpacing: '6px',
+                    marginBottom: '8px',
                     textShadow: `0 0 30px ${pageInfo.toColor}80`,
                     fontFamily: '"Inter", sans-serif'
                   }}
-                  animate={{
-                    letterSpacing: ['0.1em', '0.15em', '0.1em']
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ 
+                    y: logoComplete ? -20 : 0,
+                    opacity: logoComplete ? 0 : 1
                   }}
                   transition={{ 
-                    duration: 2.0,
-                    ease: "easeInOut"
+                    duration: logoComplete ? 0.3 : 0.8,
+                    delay: logoComplete ? 0 : 0.2
                   }}
                 >
                   FUSION
                 </motion.div>
-                
-                {/* INTERACTIVE */}
+
+                {/* INTERACTIVE Text */}
                 <motion.div
-                  className="text-lg font-light tracking-[0.3em] text-white/90"
-                  style={{ 
+                  style={{
+                    fontSize: '16px',
+                    fontWeight: '300',
+                    color: 'rgba(255,255,255,0.9)',
+                    letterSpacing: '6px',
+                    marginBottom: '32px',
                     textShadow: `0 0 20px ${pageInfo.toColor}60`,
                     fontFamily: '"Inter", sans-serif'
                   }}
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ y: 20, opacity: 0 }}
                   animate={{ 
-                    opacity: [0, 1, 1, 1, 0.8, 0],
-                    scale: [0.9, 1, 1, 1, 0.9, 0.8]
+                    y: logoComplete ? -20 : 0,
+                    opacity: logoComplete ? 0 : 1
                   }}
                   transition={{ 
-                    duration: 2.0,
-                    ease: "easeInOut",
-                    times: [0, 0.3, 0.5, 0.6, 0.8, 1],
-                    delay: 0.2
+                    duration: logoComplete ? 0.3 : 0.8,
+                    delay: logoComplete ? 0 : 0.4
                   }}
                 >
                   INTERACTIVE
                 </motion.div>
-              </motion.div>
 
-              {/* Destination Page Indicator */}
-              <motion.div
-                className="mt-8 bg-black/40 backdrop-blur-md rounded-full px-8 py-3 border border-white/20"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ 
-                  opacity: [0, 1, 1, 1, 0.8, 0],
-                  scale: [0.8, 1, 1, 1, 0.9, 0.8]
-                }}
-                transition={{ 
-                  duration: 2.0,
-                  ease: "easeInOut",
-                  times: [0, 0.4, 0.6, 0.7, 0.85, 1],
-                  delay: 0.5
-                }}
-              >
-                <motion.span 
-                  className="text-white text-xl font-medium"
-                  style={{ color: pageInfo.toColor }}
+                {/* Page Name */}
+                <motion.div
+                  style={{
+                    background: 'rgba(0,0,0,0.4)',
+                    backdropFilter: 'blur(20px)',
+                    borderRadius: '50px',
+                    padding: '12px 24px',
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    display: 'inline-block'
+                  }}
+                  initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ 
-                    textShadow: [
-                      `0 0 0px ${pageInfo.toColor}`,
-                      `0 0 20px ${pageInfo.toColor}80`,
-                      `0 0 30px ${pageInfo.toColor}ff`,
-                      `0 0 20px ${pageInfo.toColor}80`,
-                      `0 0 0px ${pageInfo.toColor}`
-                    ]
+                    opacity: logoComplete ? 0 : 1,
+                    scale: logoComplete ? 0.7 : 1
                   }}
                   transition={{ 
-                    duration: 2.0,
-                    ease: "easeInOut",
-                    times: [0, 0.2, 0.5, 0.8, 1]
+                    duration: logoComplete ? 0.3 : 0.8,
+                    delay: logoComplete ? 0 : 0.6
                   }}
                 >
-                  {pageInfo.toName}
-                </motion.span>
+                  <span
+                    style={{
+                      color: pageInfo.toColor,
+                      fontSize: '18px',
+                      fontWeight: '500',
+                      fontFamily: '"Inter", sans-serif'
+                    }}
+                  >
+                    {pageInfo.toName}
+                  </span>
+                </motion.div>
               </motion.div>
-            </motion.div>
-
-            {/* Progress Bar */}
-            {!prefersReducedMotion && (
-              <motion.div
-                className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-64 h-1 bg-white/20 rounded-full overflow-hidden"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <motion.div
-                  className="h-full rounded-full"
-                  style={{
-                    background: `linear-gradient(90deg, ${pageInfo.fromColor}, ${pageInfo.toColor})`
-                  }}
-                  initial={{ width: '0%' }}
-                  animate={{ width: '100%' }}
-                  transition={{ 
-                    duration: 1.2,
-                    ease: "easeInOut"
-                  }}
-                />
-              </motion.div>
-            )}
-
-            {/* Scan Lines Effect */}
-            {!prefersReducedMotion && (
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: `repeating-linear-gradient(
-                    0deg,
-                    transparent 0px,
-                    transparent 2px,
-                    ${pageInfo.toColor}10 2px,
-                    ${pageInfo.toColor}10 4px
-                  )`
-                }}
-                initial={{ opacity: 0 }}
-                animate={{ 
-                  opacity: [0, 0.3, 0],
-                  y: ['-100%', '0%', '100%']
-                }}
-                transition={{ 
-                  duration: 1.2,
-                  ease: "linear"
-                }}
-              />
-            )}
-          </motion.div>
+            </div>
+          </>
         )}
       </AnimatePresence>
     </div>
