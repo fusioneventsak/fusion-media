@@ -153,8 +153,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
               pointerEvents: 'none',
               display: 'grid',
               gridTemplateColumns: 'repeat(5, 1fr)',
-              gridTemplateRows: 'repeat(3, 1fr)',
-              backgroundColor: '#000' // Black background to prevent content bleeding through
+              gridTemplateRows: 'repeat(3, 1fr)'
             }}
           >
             {squares.map((square, index) => (
