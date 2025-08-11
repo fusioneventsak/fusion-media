@@ -134,15 +134,10 @@ export default function App() {
         />
       </div>
 
-      {/* Page Content with Modern Transition */}
-      <PageTransition 
-        currentPage={currentPage}
-        onTransitionChange={setIsTransitioning}
-      >
-        <main className="relative z-[100]">
-          {renderPage()}
-        </main>
-      </PageTransition>
+      {/* Page Content - Temporarily Direct Render */}
+      <div className="relative z-[100]">
+        {renderPage()}
+      </div>
 
       {/* Global Footer */}
       <div style={{ position: 'relative', zIndex: 200 }}>
