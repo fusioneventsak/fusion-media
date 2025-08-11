@@ -129,15 +129,16 @@ export default function PageTransition({ currentPage, children, onTransitionChan
             {/* Logo Content */}
             <motion.div
               style={{ textAlign: 'center', color: 'white' }}
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.8, y: 20 }}
               animate={{ 
-                opacity: [0, 1, 1, 0],
-                scale: [0.8, 1, 1, 0.8]
+                opacity: [0, 1, 1, 1, 0],
+                scale: [0.8, 1.1, 1, 1, 0.8],
+                y: [20, 0, 0, 0, -20]
               }}
               transition={{
                 duration: 1.4,
                 ease: [0.25, 0.46, 0.45, 0.94],
-                times: [0, 0.2, 0.8, 1]
+                times: [0, 0.25, 0.5, 0.75, 1]
               }}
             >
               {/* F Logo */}
@@ -155,14 +156,15 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   margin: '0 auto 16px auto',
                   boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
                 }}
+                initial={{ scale: 0, rotate: -10 }}
                 animate={{
-                  scale: [1, 1.1, 1],
-                  rotate: [0, 5, 0]
+                  scale: [0, 1.2, 1, 1, 0],
+                  rotate: [-10, 5, 0, 0, 10]
                 }}
                 transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
+                  duration: 1.4,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                  times: [0, 0.25, 0.5, 0.75, 1]
                 }}
               >
                 <span
@@ -188,13 +190,16 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   textShadow: '0 0 20px rgba(255,255,255,0.5)',
                   fontFamily: '"Inter", sans-serif'
                 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{
-                  letterSpacing: ['3px', '4px', '3px']
+                  opacity: [0, 1, 1, 1, 0],
+                  y: [10, 0, 0, 0, -10],
+                  letterSpacing: ['3px', '4px', '3px', '3px', '2px']
                 }}
                 transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
+                  duration: 1.4,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                  times: [0, 0.2, 0.5, 0.8, 1]
                 }}
               >
                 FUSION
@@ -211,30 +216,52 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   textShadow: '0 0 10px rgba(255,255,255,0.3)',
                   fontFamily: '"Inter", sans-serif'
                 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{
+                  opacity: [0, 1, 1, 1, 0],
+                  y: [10, 0, 0, 0, -10]
+                }}
+                transition={{
+                  duration: 1.4,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                  times: [0, 0.25, 0.5, 0.75, 1],
+                  delay: 0.05
+                }}
               >
                 INTERACTIVE
               </motion.div>
 
-              {/* Page Name */}
+              {/* Page Name - DESTINATION */}
               <motion.div
                 style={{
                   background: 'rgba(255,255,255,0.15)',
                   backdropFilter: 'blur(20px)',
                   borderRadius: '20px',
-                  padding: '8px 16px',
+                  padding: '12px 24px',
                   border: '1px solid rgba(255,255,255,0.2)',
-                  display: 'inline-block'
+                  display: 'inline-block',
+                  marginTop: '8px'
                 }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
+                initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                animate={{ 
+                  opacity: [0, 1, 1, 1, 0],
+                  y: [10, 0, 0, 0, -10],
+                  scale: [0.9, 1, 1, 1, 0.9]
+                }}
+                transition={{ 
+                  duration: 1.4,
+                  ease: [0.25, 0.46, 0.45, 0.94],
+                  times: [0, 0.3, 0.5, 0.7, 1],
+                  delay: 0.1
+                }}
               >
                 <span
                   style={{
                     color: 'white',
-                    fontSize: '12px',
-                    fontWeight: '500',
-                    fontFamily: '"Inter", sans-serif'
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    fontFamily: '"Inter", sans-serif',
+                    textShadow: '0 0 10px rgba(255,255,255,0.3)'
                   }}
                 >
                   {pageInfo.name}
