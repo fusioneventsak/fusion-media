@@ -318,7 +318,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       ease: 'easeInOut'
                     }}
                   />
-                >
+
                   {/* Logo or Title content - step and repeat pattern */}
                   {square.type === 'logo' && (
                     <motion.div
@@ -481,6 +481,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                             ease: 'easeInOut'
                           }}
                         />
+                        
                         <motion.div
                           style={{
                             fontSize: '14px',
