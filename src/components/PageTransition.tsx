@@ -115,33 +115,120 @@ export default function PageTransition({ currentPage, children, onTransitionChan
     >
       {/* Main content - always visible, no AnimatePresence */}
       <div className="w-full h-full">
+        {/* Enhanced background effects during transition */}
         {!prefersReducedMotion && isTransitioning && (
-          <motion.div
-            className="fixed inset-0 pointer-events-none z-10"
-            style={{
-              background: `radial-gradient(ellipse at center, 
-                ${pageInfo.fromColor}08 0%, 
-                ${pageInfo.toColor}06 40%, 
-                transparent 70%)`
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.6, 0] }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-          />
+          <>
+            {/* Color morphing background */}
+            <motion.div
+              className="fixed inset-0 pointer-events-none z-10"
+              style={{
+                background: `radial-gradient(ellipse at center, 
+                  ${pageInfo.fromColor}15 0%, 
+                  ${pageInfo.toColor}10 40%, 
+                  transparent 70%)`
+              }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ 
+                opacity: [0, 0.8, 0],
+                scale: [0.8, 1.2, 0.8]
+              }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+            />
+
+            {/* Elegant particle flow */}
+            {[...Array(8)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="fixed w-2 h-2 rounded-full pointer-events-none z-15"
+                style={{
+                  background: `linear-gradient(45deg, ${pageInfo.fromColor}, ${pageInfo.toColor})`,
+                  left: `${20 + (i * 8) % 60}%`,
+                  top: `${30 + (i * 5) % 40}%`,
+                  boxShadow: `0 0 20px ${i % 2 === 0 ? pageInfo.fromColor : pageInfo.toColor}60`
+                }}
+                initial={{ 
+                  opacity: 0,
+                  scale: 0,
+                  x: transitionDirection === 'forward' ? -50 : 50
+                }}
+                animate={{
+                  opacity: [0, 1, 0.6, 0],
+                  scale: [0, 1.5, 1, 0],
+                  x: [
+                    transitionDirection === 'forward' ? -50 : 50,
+                    0,
+                    transitionDirection === 'forward' ? 50 : -50
+                  ]
+                }}
+                transition={{
+                  duration: 0.8,
+                  ease: "easeOut",
+                  delay: i * 0.05
+                }}
+              />
+            ))}
+
+            {/* Gradient sweep */}
+            <motion.div
+              className="fixed inset-0 pointer-events-none z-12"
+              style={{
+                background: `linear-gradient(${transitionDirection === 'forward' ? '120deg' : '240deg'}, 
+                  transparent 0%, 
+                  ${pageInfo.fromColor}20 30%,
+                  ${pageInfo.toColor}25 50%,
+                  ${pageInfo.fromColor}20 70%,
+                  transparent 100%)`
+              }}
+              initial={{ 
+                x: transitionDirection === 'forward' ? '-100%' : '100%',
+                opacity: 0
+              }}
+              animate={{ 
+                x: [
+                  transitionDirection === 'forward' ? '-100%' : '100%',
+                  '0%',
+                  transitionDirection === 'forward' ? '100%' : '-100%'
+                ],
+                opacity: [0, 0.7, 0.4, 0]
+              }}
+              transition={{ 
+                duration: 0.8,
+                ease: "easeInOut"
+              }}
+            />
+          </>
         )}
         
-        {/* Simple fade overlay instead of remounting content */}
+        {/* Loading indicator */}
         {isTransitioning && (
           <motion.div
-            className="fixed inset-0 pointer-events-none z-5"
-            style={{
-              background: 'rgba(0, 0, 0, 0.1)',
-              backdropFilter: 'blur(1px)'
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 0.3, 0] }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
-          />
+            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="bg-black/50 backdrop-blur-md rounded-full px-6 py-3 border border-white/30">
+              <div className="flex items-center space-x-3">
+                <motion.div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: pageInfo.toColor }}
+                  animate={{ 
+                    scale: [1, 1.5, 1],
+                    opacity: [0.6, 1, 0.6]
+                  }}
+                  transition={{ 
+                    duration: 0.6,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
+                <span className="text-white text-sm font-medium">
+                  Loading {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)}...
+                </span>
+              </div>
+            </div>
+          </motion.div>
         )}
         
         {/* Content stays mounted - no AnimatePresence */}
