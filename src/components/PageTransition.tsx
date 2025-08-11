@@ -215,10 +215,11 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                 rotate: -10
               }}
               animate={{ 
-                scale: [0, 1.1, 1, 1, 0],
-                opacity: [0, 1, 1, 1, 0],
+                scale: [0, 1.1, 1, 1, 0.8, 0],
+                opacity: [0, 1, 1, 1, 0.8, 0],
                 rotate: [
                   transitionDirection === 'forward' ? -10 : 10,
+                  0,
                   0,
                   0,
                   0,
@@ -228,7 +229,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
               transition={{ 
                 duration: prefersReducedMotion ? 1.0 : 2.0,
                 ease: [0.25, 0.46, 0.45, 0.94],
-                times: [0, 0.2, 0.4, 0.8, 1]
+                times: [0, 0.2, 0.4, 0.6, 0.8, 1]
               }}
             >
               {/* Large FI Logo */}
@@ -256,7 +257,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                 
                 {/* Main Logo Container */}
                 <div className="relative w-32 h-32 bg-gradient-to-br from-white/20 to-white/5 backdrop-blur-xl rounded-3xl flex items-center justify-center border-2 border-white/30 shadow-2xl">
-                  {/* FI Text */}
+                  {/* F Text Only */}
                   <motion.div
                     className="text-center"
                     animate={{
@@ -272,8 +273,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       ease: "easeInOut"
                     }}
                   >
-                    <span className="text-white font-bold text-5xl tracking-tight">F</span>
-                    <span className="text-white font-light text-3xl tracking-tight">I</span>
+                    <span className="text-white font-bold text-6xl tracking-tight">F</span>
                   </motion.div>
                 </div>
               </motion.div>
@@ -283,13 +283,13 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                 className="space-y-2"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ 
-                  y: [20, 0, 0, 0, -20],
-                  opacity: [0, 1, 1, 1, 0]
+                  y: [20, 0, 0, 0, 0, -20],
+                  opacity: [0, 1, 1, 1, 0.8, 0]
                 }}
                 transition={{ 
                   duration: 2.0,
                   ease: [0.25, 0.46, 0.45, 0.94],
-                  times: [0, 0.2, 0.4, 0.8, 1]
+                  times: [0, 0.2, 0.4, 0.6, 0.8, 1]
                 }}
               >
                 {/* FUSION */}
@@ -319,13 +319,13 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   }}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ 
-                    opacity: [0, 1, 1, 1, 0],
-                    scale: [0.9, 1, 1, 1, 0.9]
+                    opacity: [0, 1, 1, 1, 0.8, 0],
+                    scale: [0.9, 1, 1, 1, 0.9, 0.8]
                   }}
                   transition={{ 
                     duration: 2.0,
                     ease: "easeInOut",
-                    times: [0, 0.3, 0.5, 0.7, 1],
+                    times: [0, 0.3, 0.5, 0.6, 0.8, 1],
                     delay: 0.2
                   }}
                 >
@@ -338,13 +338,13 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                 className="mt-8 bg-black/40 backdrop-blur-md rounded-full px-8 py-3 border border-white/20"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ 
-                  opacity: [0, 1, 1, 1, 0],
-                  scale: [0.8, 1, 1, 1, 0.8]
+                  opacity: [0, 1, 1, 1, 0.8, 0],
+                  scale: [0.8, 1, 1, 1, 0.9, 0.8]
                 }}
                 transition={{ 
                   duration: 2.0,
                   ease: "easeInOut",
-                  times: [0, 0.4, 0.6, 0.8, 1],
+                  times: [0, 0.4, 0.6, 0.7, 0.85, 1],
                   delay: 0.5
                 }}
               >
