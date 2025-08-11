@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface PageTransitionProps {
@@ -12,141 +12,113 @@ export default function PageTransition({ currentPage, children, onTransitionChan
   const [displayPage, setDisplayPage] = useState(currentPage);
   const [transitionType, setTransitionType] = useState<'slide' | 'slideUp' | 'zoom' | 'flipX' | 'flipY' | 'fade'>('slide');
   
-  // Get page info and transition type
-  const getPageInfo = (from: string, to: string) => {
-    const pages = ['home', 'about', 'case-studies', 'contact'];
-    const pageColors = {
-      'home': '#461467',       // Purple
-      'about': '#ffba57',      // Orange
-      'case-studies': '#ff9d70', // Light orange
-      'contact': '#00bab0'     // Teal
-    };
-    
+  // Get transition type based on destination page
+  const getTransitionType = (to: string) => {
     const pageTransitions = {
       'home': 'slide',
       'about': 'slideUp', 
       'case-studies': 'zoom',
       'contact': 'flipX'
     };
-    
+    return pageTransitions[to as keyof typeof pageTransitions] || 'slide';
+  };
+
+  // Get direction for slide transitions
+  const getDirection = (from: string, to: string) => {
+    const pages = ['home', 'about', 'case-studies', 'contact'];
     const fromIndex = pages.indexOf(from);
     const toIndex = pages.indexOf(to);
-    const direction = toIndex > fromIndex ? 'forward' : 'backward';
-    
-    return {
-      direction,
-      fromColor: pageColors[from as keyof typeof pageColors] || pageColors.home,
-      toColor: pageColors[to as keyof typeof pageColors] || pageColors.home,
-      transition: pageTransitions[to as keyof typeof pageTransitions] || 'slide'
-    };
+    return toIndex > fromIndex ? 'forward' : 'backward';
   };
 
   // Handle page changes
   useEffect(() => {
     if (currentPage !== displayPage) {
-      const pageInfo = getPageInfo(displayPage, currentPage);
-      setTransitionType(pageInfo.transition as any);
+      setTransitionType(getTransitionType(currentPage) as any);
       setIsTransitioning(true);
       onTransitionChange?.(true);
       
       // Scroll to top
       window.scrollTo({ top: 0, behavior: 'auto' });
       
-      // Page switches at 600ms (middle of transition)
+      // Page switches immediately (let animation handle the timing)
       setTimeout(() => {
         setDisplayPage(currentPage);
         window.scrollTo({ top: 0, behavior: 'auto' });
-      }, 600);
+      }, 50);
       
-      // Total transition ends at 1200ms
+      // Transition ends
       setTimeout(() => {
         setIsTransitioning(false);
         onTransitionChange?.(false);
-      }, 1200);
+      }, 800);
     }
   }, [currentPage, displayPage, onTransitionChange]);
 
-  const pageInfo = getPageInfo(displayPage, currentPage);
-
-  // Transition variants based on type
+  // Get transition variants
   const getTransitionVariants = () => {
     const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
     const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+    const direction = getDirection(displayPage, currentPage);
     
     switch (transitionType) {
       case 'slide':
         return {
           initial: {
-            x: pageInfo.direction === 'forward' ? windowWidth * 1.5 : -windowWidth * 1.5,
-            scale: 0.8,
+            x: direction === 'forward' ? windowWidth : -windowWidth,
             opacity: 0.8
           },
           animate: {
-            x: [
-              pageInfo.direction === 'forward' ? windowWidth * 1.5 : -windowWidth * 1.5,
-              0,
-              0
-            ],
-            scale: [0.8, 0.9, 1],
-            opacity: [0.8, 0.9, 1]
+            x: 0,
+            opacity: 1
           },
           exit: {
-            x: pageInfo.direction === 'forward' ? -windowWidth * 1.5 : windowWidth * 1.5,
-            scale: 0.8,
-            opacity: 0
+            x: direction === 'forward' ? -windowWidth : windowWidth,
+            opacity: 0.8
           },
           transition: {
-            duration: 1.2,
-            ease: [0.25, 0.46, 0.45, 0.94],
-            times: [0, 0.6, 1]
+            duration: 0.6,
+            ease: [0.25, 0.46, 0.45, 0.94]
           }
         };
         
       case 'slideUp':
         return {
           initial: {
-            y: windowHeight * 1.5,
-            scale: 0.8,
+            y: windowHeight,
             opacity: 0.9
           },
           animate: {
-            y: [windowHeight * 1.5, 0, 0],
-            scale: [0.8, 0.9, 1],
-            opacity: [0.9, 0.95, 1]
+            y: 0,
+            opacity: 1
           },
           exit: {
-            y: -windowHeight * 1.5,
-            scale: 0.9,
-            opacity: 0
+            y: -windowHeight,
+            opacity: 0.8
           },
           transition: {
-            duration: 1.2,
-            ease: [0.25, 0.46, 0.45, 0.94],
-            times: [0, 0.6, 1]
+            duration: 0.6,
+            ease: [0.25, 0.46, 0.45, 0.94]
           }
         };
         
       case 'zoom':
         return {
           initial: {
-            scale: 2,
-            opacity: 0,
-            filter: 'blur(10px)'
+            scale: 1.5,
+            opacity: 0
           },
           animate: {
-            scale: [2, 1.1, 1],
-            opacity: [0, 0.8, 1],
-            filter: ['blur(10px)', 'blur(2px)', 'blur(0px)']
+            scale: 1,
+            opacity: 1
           },
           exit: {
-            scale: 0,
-            opacity: 0,
-            filter: 'blur(5px)'
+            scale: 0.8,
+            opacity: 0
           },
           transition: {
-            duration: 1.2,
-            ease: [0.25, 0.46, 0.45, 0.94],
-            times: [0, 0.7, 1]
+            duration: 0.5,
+            ease: [0.25, 0.46, 0.45, 0.94]
           }
         };
         
@@ -155,22 +127,19 @@ export default function PageTransition({ currentPage, children, onTransitionChan
           initial: {
             rotateX: 90,
             opacity: 0,
-            scale: 0.8
+            transformOrigin: '50% 50%'
           },
           animate: {
-            rotateX: [90, -5, 0],
-            opacity: [0, 0.8, 1],
-            scale: [0.8, 1.05, 1]
+            rotateX: 0,
+            opacity: 1
           },
           exit: {
             rotateX: -90,
-            opacity: 0,
-            scale: 0.8
+            opacity: 0
           },
           transition: {
-            duration: 1.2,
-            ease: [0.25, 0.46, 0.45, 0.94],
-            times: [0, 0.7, 1]
+            duration: 0.6,
+            ease: [0.25, 0.46, 0.45, 0.94]
           }
         };
         
@@ -179,22 +148,19 @@ export default function PageTransition({ currentPage, children, onTransitionChan
           initial: {
             rotateY: 90,
             opacity: 0,
-            scale: 0.8
+            transformOrigin: '50% 50%'
           },
           animate: {
-            rotateY: [90, -5, 0],
-            opacity: [0, 0.8, 1],
-            scale: [0.8, 1.05, 1]
+            rotateY: 0,
+            opacity: 1
           },
           exit: {
             rotateY: -90,
-            opacity: 0,
-            scale: 0.8
+            opacity: 0
           },
           transition: {
-            duration: 1.2,
-            ease: [0.25, 0.46, 0.45, 0.94],
-            times: [0, 0.7, 1]
+            duration: 0.6,
+            ease: [0.25, 0.46, 0.45, 0.94]
           }
         };
         
@@ -202,23 +168,19 @@ export default function PageTransition({ currentPage, children, onTransitionChan
         return {
           initial: {
             opacity: 0,
-            scale: 1.5,
-            filter: 'blur(5px)'
+            scale: 1.1
           },
           animate: {
-            opacity: [0, 0.8, 1],
-            scale: [1.5, 1.1, 1],
-            filter: ['blur(5px)', 'blur(1px)', 'blur(0px)']
+            opacity: 1,
+            scale: 1
           },
           exit: {
             opacity: 0,
-            scale: 0.8,
-            filter: 'blur(3px)'
+            scale: 0.95
           },
           transition: {
-            duration: 1.2,
-            ease: [0.25, 0.46, 0.45, 0.94],
-            times: [0, 0.7, 1]
+            duration: 0.4,
+            ease: [0.25, 0.46, 0.45, 0.94]
           }
         };
     }
@@ -232,179 +194,18 @@ export default function PageTransition({ currentPage, children, onTransitionChan
         <motion.div
           key={displayPage}
           style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            background: `linear-gradient(135deg, ${pageInfo.toColor}dd 0%, ${pageInfo.toColor}bb 100%)`,
-            zIndex: isTransitioning ? 9999 : 1,
-            transformStyle: 'preserve-3d',
-            perspective: '1000px'
+            width: '100%',
+            height: '100%',
+            transformStyle: 'preserve-3d'
           }}
           initial={variants.initial}
           animate={variants.animate}
           exit={variants.exit}
           transition={variants.transition}
         >
-          {/* Page Content Container */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '100%',
-              textAlign: 'center',
-              color: 'white',
-              zIndex: 10
-            }}
-          >
-            {/* FUSION INTERACTIVE Logo */}
-            <motion.div
-              style={{
-                marginBottom: '40px'
-              }}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ 
-                duration: 0.8, 
-                delay: 0.3,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-            >
-              {/* F Logo */}
-              <div
-                style={{
-                  width: '100px',
-                  height: '100px',
-                  background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05))',
-                  backdropFilter: 'blur(20px)',
-                  borderRadius: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '2px solid rgba(255,255,255,0.3)',
-                  margin: '0 auto 20px auto',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
-                }}
-              >
-                <span
-                  style={{
-                    color: 'white',
-                    fontSize: '48px',
-                    fontWeight: 'bold',
-                    fontFamily: '"Inter", sans-serif'
-                  }}
-                >
-                  F
-                </span>
-              </div>
-
-              {/* FUSION Text */}
-              <div
-                style={{
-                  fontSize: '48px',
-                  fontWeight: '300',
-                  color: 'white',
-                  letterSpacing: '4px',
-                  marginBottom: '8px',
-                  textShadow: '0 0 20px rgba(255,255,255,0.5)',
-                  fontFamily: '"Inter", sans-serif'
-                }}
-              >
-                FUSION
-              </div>
-
-              {/* INTERACTIVE Text */}
-              <div
-                style={{
-                  fontSize: '14px',
-                  fontWeight: '300',
-                  color: 'rgba(255,255,255,0.9)',
-                  letterSpacing: '4px',
-                  textShadow: '0 0 10px rgba(255,255,255,0.3)',
-                  fontFamily: '"Inter", sans-serif'
-                }}
-              >
-                INTERACTIVE
-              </div>
-            </motion.div>
-
-            {/* Page Name */}
-            <motion.div
-              style={{
-                background: 'rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(20px)',
-                borderRadius: '50px',
-                padding: '12px 24px',
-                border: '1px solid rgba(255,255,255,0.2)',
-                display: 'inline-block',
-                marginBottom: '20px'
-              }}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ 
-                duration: 0.6, 
-                delay: 0.6,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-            >
-              <span
-                style={{
-                  color: 'white',
-                  fontSize: '16px',
-                  fontWeight: '500',
-                  fontFamily: '"Inter", sans-serif',
-                  textTransform: 'capitalize'
-                }}
-              >
-                {currentPage === 'case-studies' ? 'Case Studies' : currentPage}
-              </span>
-            </motion.div>
-
-            {/* Transition Type Indicator */}
-            <motion.div
-              style={{
-                fontSize: '12px',
-                color: 'rgba(255,255,255,0.7)',
-                fontFamily: '"Inter", sans-serif',
-                textTransform: 'uppercase',
-                letterSpacing: '2px'
-              }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.8 }}
-            >
-              {transitionType} Transition
-            </motion.div>
-          </div>
-
-          {/* Background Pattern */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              background: `radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                          radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%)`,
-              pointerEvents: 'none'
-            }}
-          />
+          {children}
         </motion.div>
       </AnimatePresence>
-
-      {/* Original content (hidden during transition) */}
-      <div 
-        style={{ 
-          opacity: isTransitioning ? 0 : 1,
-          transition: 'opacity 0.3s ease'
-        }}
-      >
-        {children}
-      </div>
     </div>
   );
 }
