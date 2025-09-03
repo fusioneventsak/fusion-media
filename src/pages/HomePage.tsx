@@ -11,7 +11,7 @@ const horizontalPortfolioProjects = [
     subtitle: "Internal Tools & CRM Systems",
     url: "https://splendid-cannoli-324007.netlify.app/",
     category: "Web Applications",
-    technologies: ["React", "Node.js", "AI/ML", "MongoDB", "Analytics"],
+    technologies: ["Front End", "Back End", "DataBase", "Hosting"],
     description: "Tailored internal tools and CRM systems built specifically for your organization's workflow. Streamline operations, improve efficiency, and gain valuable insights with applications designed around your unique business needs and processes.",
     features: [
       'Custom CRM and database management systems',
@@ -269,7 +269,7 @@ const HorizontalProjectCard = ({ project, index }) => {
 
         {/* Website Preview Side */}
         <motion.div
-          className="relative"
+          className="relative flex items-center justify-center"
           initial={{ opacity: 0, scale: 0.8, x: 100 }}
           whileInView={{ opacity: 1, scale: 1, x: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -279,79 +279,91 @@ const HorizontalProjectCard = ({ project, index }) => {
             delay: 0.4
           }}
         >
-          {/* Main preview Frame */}
-          <div className="relative">
+          {/* Raw Images Only - No Containers */}
+          <div className="relative w-full flex items-center justify-center">
             <motion.div
-              className="relative rounded-2xl overflow-hidden shadow-xl border border-white/20 bg-black/20 backdrop-blur-sm"
               whileHover={{ 
-                scale: 1.02,
-                rotateY: 2,
-                rotateX: 2
+                scale: 1.05
               }}
               transition={{ duration: 0.3 }}
-              style={{
-                boxShadow: `0 20px 40px ${project.accentColor}20`,
-                transformPerspective: 1000,
-                maxHeight: '60vh'
-              }}
+              style={{ width: '150%', maxWidth: 'none' }}
             >
-              {/* Browser Chrome */}
-              <div className="bg-gray-800/80 backdrop-blur-sm px-3 py-2 flex items-center space-x-2 border-b border-white/10">
-                <div className="flex space-x-1.5">
-                  <div className="w-2.5 h-2.5 bg-red-500 rounded-full"></div>
-                  <div className="w-2.5 h-2.5 bg-yellow-500 rounded-full"></div>
-                  <div className="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
-                </div>
-                <div className="flex-1 bg-black/20 rounded-md px-2 py-1 mx-3">
-                  <span className="text-gray-300 text-xs truncate">{project.url}</span>
-                </div>
-              </div>
-
-              {/* Website Preview */}
-              <div style={{ position: 'relative', paddingBottom: '50%', height: 0, overflow: 'hidden' }}>
-                <iframe
-                  src={project.url}
+              {/* Raw Images Only - Full Size */}
+              {project.id === 1 ? (
+                <img
+                  src="/Website Images/Custom-business-applications.png"
+                  alt="Custom Business Applications"
                   style={{ 
-                    position: 'absolute', 
-                    top: 0, 
-                    left: 0, 
-                    width: '100%', 
-                    height: '100%',
+                    width: '100%',
+                    height: 'auto',
+                    objectFit: 'contain',
                     border: 'none'
                   }}
-                  loading="lazy"
                   onLoad={() => setIsLoaded(true)}
                 />
-                
-                {/* Loading overlay */}
-                {!isLoaded && (
-                  <div className="absolute inset-0 bg-gray-900 flex items-center justify-center">
-                    <div className={`w-6 h-6 border-2 border-t-transparent rounded-full animate-spin`} 
-                         style={{ borderColor: project.accentColor, borderTopColor: 'transparent' }}>
-                    </div>
+              ) : project.id === 2 ? (
+                <img
+                  src="/Website Images/urequestsongs.com.png"
+                  alt="Audience Engagement Platform"
+                  style={{ 
+                    width: '100%',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    border: 'none'
+                  }}
+                  onLoad={() => setIsLoaded(true)}
+                />
+              ) : project.id === 3 ? (
+                <img
+                  src="/Website Images/Custom-business-applications.png"
+                  alt="Interactive Widgets & Components"
+                  style={{ 
+                    width: '100%',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    border: 'none'
+                  }}
+                  onLoad={() => setIsLoaded(true)}
+                />
+              ) : project.id === 4 ? (
+                <img
+                  src="/Website Images/anthonywrightmusic.com.png"
+                  alt="Professional Website Development"
+                  style={{ 
+                    width: '100%',
+                    height: 'auto',
+                    objectFit: 'contain',
+                    border: 'none'
+                  }}
+                  onLoad={() => setIsLoaded(true)}
+                />
+              ) : (
+                <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden' }}>
+                  <iframe
+                    src={project.url}
+                    style={{ 
+                      position: 'absolute', 
+                      top: 0, 
+                      left: 0, 
+                      width: '100%', 
+                      height: '100%',
+                      border: 'none'
+                    }}
+                    loading="lazy"
+                    onLoad={() => setIsLoaded(true)}
+                  />
+                </div>
+              )}
+              
+              {/* Loading overlay */}
+              {!isLoaded && (
+                <div className="absolute inset-0 bg-gray-900/50 flex items-center justify-center">
+                  <div className={`w-6 h-6 border-2 border-t-transparent rounded-full animate-spin`} 
+                       style={{ borderColor: project.accentColor, borderTopColor: 'transparent' }}>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
-              {/* Overlay Controls */}
-              <div className="absolute bottom-3 right-3 flex space-x-2">
-                <motion.button
-                  onClick={() => window.open(project.url, '_blank')}
-                  className="w-8 h-8 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </motion.button>
-                <motion.button
-                  onClick={() => window.open(project.url, '_blank')}
-                  className="w-8 h-8 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-black/70 transition-all text-white border border-white/20"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                >
-                  <Maximize2 className="w-3.5 h-3.5" />
-                </motion.button>
-              </div>
             </motion.div>
 
             {/* Floating UI Elements - Smaller */}
@@ -375,6 +387,24 @@ const HorizontalProjectCard = ({ project, index }) => {
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             />
           </div>
+
+          {/* Enhanced Background Effects */}
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-purple-500 to-transparent opacity-30 blur-3xl pointer-events-none"
+            style={{
+              transform: `scale(1.6)`,
+              zIndex: -1
+            }}
+          ></div>
+         
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `radial-gradient(circle at 50% 50%, rgba(147, 51, 234, 0.2) 0%, transparent 50%)`,
+              transform: `scale(2.0)`,
+              zIndex: -2
+            }}
+          ></div>
         </motion.div>
       </div>
     </div>
