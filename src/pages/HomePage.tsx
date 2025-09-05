@@ -501,11 +501,15 @@ const HorizontalPortfolioSection = () => {
         const direction = e.deltaY > 0 ? 1 : -1;
         const nextProject = Math.max(0, Math.min(horizontalPortfolioProjects.length - 1, currentProject + direction));
         
-        if (nextProject !== currentProject) {
+        // Only allow sequential navigation - no skipping
+        if (nextProject !== currentProject && Math.abs(nextProject - currentProject) === 1) {
           navigateToProject(nextProject);
         }
         
         wheelCountRef.current = 0; // Reset counter after navigation
+      } else {
+        // Always prevent default scrolling when in horizontal section
+        e.preventDefault();
       }
     };
 
@@ -602,20 +606,22 @@ const HorizontalPortfolioSection = () => {
       anticipatePin: 1,
       invalidateOnRefresh: true,
       refreshPriority: -1,
+      pinSpacing: false, // Prevent spacing issues that might allow bypassing
+      fastScrollEnd: false, // Disable fast scroll end to prevent skipping
       snap: {
-        snapTo: (() => {
-          // Pre-calculate exact snap points for each section
+        snapTo: (progress) => {
+          // More restrictive snapping - users must progress sequentially
           const totalProjects = horizontalPortfolioProjects.length;
-          const snapPoints = [];
-          for (let i = 0; i < totalProjects; i++) {
-            snapPoints.push(i / (totalProjects - 1));
-          }
-          return snapPoints; // Return array of exact snap points
-        })(),
-        duration: 0.4, // Fixed short duration for quick snapping
-        delay: 0.05, // Minimal delay for immediate response
-        ease: "none", // Linear easing - no slow down or speed up
-        directional: false // Snap to closest point regardless of scroll direction
+          const currentSection = Math.round(progress * (totalProjects - 1));
+          
+          // Only allow snapping to the current section or next/previous
+          const snapValue = currentSection / (totalProjects - 1);
+          return snapValue;
+        },
+        duration: 0.6, // Slightly longer duration for more controlled snapping
+        delay: 0.1, // Slight delay to prevent accidental skipping
+        ease: "power2.inOut", // Smoother easing
+        directional: true // Directional snapping to prevent skipping sections
       },
       // Track progress for current project indicator
       onUpdate: (self) => {
@@ -625,6 +631,23 @@ const HorizontalPortfolioSection = () => {
         if (!isTransitioning) { // Only update if not transitioning via custom navigation
           setCurrentProject(newProject);
         }
+        
+        // Prevent bypassing by enforcing strict progress constraints
+        if (progress > 0 && progress < 0.98) {
+          // User is in the middle of the horizontal section - prevent normal scrolling
+          document.body.style.overflow = 'hidden';
+        } else if (progress >= 0.98) {
+          // User has completed the horizontal section - allow normal scrolling
+          document.body.style.overflow = 'auto';
+        }
+      },
+      onEnter: () => {
+        // When entering horizontal section, disable normal scrolling
+        document.body.style.overflow = 'hidden';
+      },
+      onLeave: () => {
+        // When leaving horizontal section, restore normal scrolling
+        document.body.style.overflow = 'auto';
       },
       animation: gsap.to(scrollContainer, {
         x: -totalScrollDistance,
@@ -649,6 +672,8 @@ const HorizontalPortfolioSection = () => {
       }
       scrollTriggerRef.current = null;
       window.removeEventListener('resize', handleResize);
+      // Restore body overflow on cleanup
+      document.body.style.overflow = 'auto';
     };
   }, [gsapLoaded]);
 
