@@ -414,6 +414,8 @@ const HorizontalPortfolioSection = () => {
   const wheelTimeoutRef = useRef(null);
   const lastWheelTimeRef = useRef(0);
   const scrollTriggerRef = useRef(null);
+  const accumulatedDeltaRef = useRef(0);
+  const isScrollingRef = useRef(false);
 
   useEffect(() => {
     // Load GSAP and ScrollTrigger
@@ -460,7 +462,7 @@ const HorizontalPortfolioSection = () => {
     
     gsap.to(scrollTriggerRef.current, {
       progress: targetProgress,
-      duration: 0.6,
+      duration: 0.4, // Faster navigation for better UX
       ease: "power2.out",
       onComplete: () => {
         setIsTransitioning(false);
@@ -468,57 +470,23 @@ const HorizontalPortfolioSection = () => {
     });
   }, [gsapLoaded, isTransitioning, horizontalPortfolioProjects.length]);
 
-  // Handle mouse wheel events
+  // Enhanced ScrollTrigger configuration with better snap sensitivity
   useEffect(() => {
     if (!containerRef.current || !gsapLoaded) return;
 
+    // Optional: Add a passive wheel listener for debugging if needed
     const handleWheel = (e) => {
-      const now = Date.now();
-      const timeDiff = now - lastWheelTimeRef.current;
-      
-      // Reset counter if too much time has passed
-      if (timeDiff > 500) {
-        wheelCountRef.current = 0;
-      }
-      
-      wheelCountRef.current += 1;
-      lastWheelTimeRef.current = now;
-      
-      // Clear existing timeout
-      if (wheelTimeoutRef.current) {
-        clearTimeout(wheelTimeoutRef.current);
-      }
-      
-      // Set timeout to reset counter
-      wheelTimeoutRef.current = setTimeout(() => {
-        wheelCountRef.current = 0;
-      }, 500);
-      
-      // Trigger navigation after 2 wheel events
-      if (wheelCountRef.current >= 2) {
-        e.preventDefault();
-        
-        const direction = e.deltaY > 0 ? 1 : -1;
-        const nextProject = Math.max(0, Math.min(horizontalPortfolioProjects.length - 1, currentProject + direction));
-        
-        if (nextProject !== currentProject) {
-          navigateToProject(nextProject);
-        }
-        
-        wheelCountRef.current = 0; // Reset counter after navigation
-      }
+      // Let GSAP ScrollTrigger handle the scrolling naturally
+      // This is just for potential debugging/tracking
     };
 
     const container = containerRef.current;
-    container.addEventListener('wheel', handleWheel, { passive: false });
+    container.addEventListener('wheel', handleWheel, { passive: true });
 
     return () => {
       container.removeEventListener('wheel', handleWheel);
-      if (wheelTimeoutRef.current) {
-        clearTimeout(wheelTimeoutRef.current);
-      }
     };
-  }, [gsapLoaded, currentProject, navigateToProject, horizontalPortfolioProjects.length]);
+  }, [gsapLoaded, currentProject, horizontalPortfolioProjects.length]);
 
   // Handle touch events for mobile
   useEffect(() => {
@@ -592,12 +560,12 @@ const HorizontalPortfolioSection = () => {
     // Calculate the total scroll distance needed
     const totalScrollDistance = (horizontalPortfolioProjects.length - 1) * window.innerWidth;
 
-    // Create the main horizontal scroll animation with improved snap behavior
+    // Create the main horizontal scroll animation with enhanced snap sensitivity
     const scrollTrigger = ScrollTrigger.create({
       trigger: container,
       start: "top top",
       end: () => `+=${totalScrollDistance}`,
-      scrub: 1,
+      scrub: 0.1, // Much more responsive - nearly instant response
       pin: true,
       anticipatePin: 1,
       invalidateOnRefresh: true,
@@ -612,11 +580,15 @@ const HorizontalPortfolioSection = () => {
           }
           return snapPoints; // Return array of exact snap points
         })(),
-        duration: 0.4, // Fixed short duration for quick snapping
-        delay: 0.05, // Minimal delay for immediate response
-        ease: "none", // Linear easing - no slow down or speed up
-        directional: false // Snap to closest point regardless of scroll direction
+        duration: 0.4, // Faster snap transitions
+        delay: 0.01, // Minimal delay for immediate response
+        ease: "power1.out", // Gentler easing for smoother feel
+        directional: false, // Snap to closest point regardless of scroll direction
+        // Make snapping more sensitive to small movements
+        inertia: false // Disable inertia for more predictable snapping
       },
+      // Enhanced sensitivity settings
+      fastScrollEnd: true, // End fast scrolling quickly
       // Track progress for current project indicator
       onUpdate: (self) => {
         const progress = self.progress;
@@ -1051,7 +1023,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 1.2 }} // Delayed to appear after logos
+            transition={{ duration: 0.8, delay: 0.2 }} // Reduced delay
           >
             <div className="relative">
               <motion.h2 
@@ -1059,7 +1031,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 1.4 }} // Title appears after logos complete
+                transition={{ duration: 0.8, delay: 1.1 }} // Appears after logos cascade
               >
                 Our <span className="font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Work</span>
               </motion.h2>
@@ -1071,7 +1043,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/Github.webp',
                   x: -480, 
                   y: -120,
-                  delay: 0.1, 
+                  delay: 0.0, 
                   color: '#333333' 
                 },
                 { 
@@ -1079,7 +1051,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/wordpress.webp',
                   x: -320, 
                   y: -220,
-                  delay: 0.3, 
+                  delay: 0.15, 
                   color: '#21759B' 
                 },
                 { 
@@ -1087,7 +1059,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/claude.png',
                   x: -160, 
                   y: -280,
-                  delay: 0.5, 
+                  delay: 0.3, 
                   color: '#FF6B35' 
                 },
                 { 
@@ -1095,7 +1067,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/openai.jpg',
                   x: 0, 
                   y: -320,
-                  delay: 0.7, 
+                  delay: 0.45, 
                   color: '#10A37F' 
                 },
                 { 
@@ -1103,7 +1075,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/Supabase.webp',
                   x: 160, 
                   y: -280,
-                  delay: 0.9, 
+                  delay: 0.6, 
                   color: '#3ECF8E' 
                 },
                 { 
@@ -1111,7 +1083,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/netlify-logo.webp',
                   x: 320, 
                   y: -220,
-                  delay: 1.1, 
+                  delay: 0.75, 
                   color: '#00C7B7' 
                 },
                 { 
@@ -1119,7 +1091,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/Bolt.jpg',
                   x: 480, 
                   y: -120,
-                  delay: 1.3, 
+                  delay: 0.9, 
                   color: '#FFD700' 
                 }
               ].map((tool, index) => {
@@ -1132,11 +1104,11 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                       top: `calc(50% + ${tool.y}px)`,
                       transform: 'translate(-50%, -50%)'
                     }}
-                    initial={{ opacity: 0, x: -50, scale: 0.6 }}
+                    initial={{ opacity: 0, x: -100, scale: 0.6 }}
                     whileInView={{ opacity: 1, x: 0, scale: 1 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{
-                      duration: 0.8,
+                      duration: 0.6,
                       delay: tool.delay,
                       ease: [0.25, 0.46, 0.45, 0.94]
                     }}
@@ -1177,7 +1149,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 1.6 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
             >
               Transforming ideas into powerful digital experiences with AI-assisted development
             </motion.p>
@@ -1186,7 +1158,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 1.8 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
