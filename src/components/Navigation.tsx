@@ -4,9 +4,10 @@ interface NavigationProps {
   currentPage: string;
   setCurrentPage: (page: string) => void;
   isTransitioning: boolean;
+  onGetStartedClick?: () => void;
 }
 
-export default function Navigation({ currentPage, setCurrentPage, isTransitioning }: NavigationProps) {
+export default function Navigation({ currentPage, setCurrentPage, isTransitioning, onGetStartedClick }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   
@@ -30,7 +31,8 @@ export default function Navigation({ currentPage, setCurrentPage, isTransitionin
   const navItems = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
-    { id: 'case-studies', label: 'Case Studies' },
+    { id: 'why-us', label: 'Why Us' },
+    { id: 'blog', label: 'Blog' },
     { id: 'contact', label: 'Contact' }
   ];
   
@@ -50,21 +52,15 @@ export default function Navigation({ currentPage, setCurrentPage, isTransitionin
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div 
-            className="cursor-pointer group"
+            className="cursor-pointer"
             onClick={() => handlePageChange('home')}
           >
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <span className="text-white font-bold text-lg">F</span>
-              </div>
-              <div>
-                <div className="text-2xl font-light text-white group-hover:text-blue-300 transition-colors duration-300">
-                  FUSION
-                </div>
-                <div className="text-xs font-light text-gray-400 -mt-1 tracking-wider">
-                  INTERACTIVE
-                </div>
-              </div>
+            <div className="flex items-center">
+              <img 
+                src="/logos/FI LOGO 6.png" 
+                alt="Fusion Interactive Logo" 
+                className="h-12 w-auto"
+              />
             </div>
           </div>
           
@@ -97,6 +93,7 @@ export default function Navigation({ currentPage, setCurrentPage, isTransitionin
                 isTransitioning ? 'opacity-50 pointer-events-none' : ''
               }`}
               disabled={isTransitioning}
+              onClick={onGetStartedClick}
             >
               Get Started
             </button>
@@ -156,6 +153,7 @@ export default function Navigation({ currentPage, setCurrentPage, isTransitionin
                   isTransitioning ? 'opacity-50 pointer-events-none' : ''
                 }`}
                 disabled={isTransitioning}
+                onClick={onGetStartedClick}
               >
                 Get Started
               </button>

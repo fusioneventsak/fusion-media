@@ -1,0 +1,104 @@
+{
+  "blogImages": {
+    "technical-seo-2024": {
+      "hero": {
+        "src": "/blog-images/technical-seo-hero.jpg",
+        "alt": "Technical SEO optimization dashboard showing Core Web Vitals metrics and performance improvements for Toronto web development",
+        "width": 1200,
+        "height": 630,
+        "description": "Dashboard interface displaying technical SEO metrics including Core Web Vitals, page speed scores, and optimization recommendations"
+      },
+      "core-web-vitals": {
+        "src": "/blog-images/core-web-vitals-chart.jpg",
+        "alt": "Core Web Vitals performance chart showing LCP, FID, and CLS improvements over time",
+        "width": 800,
+        "height": 400,
+        "description": "Analytics chart displaying improved Core Web Vitals scores after technical SEO optimization"
+      },
+      "mobile-optimization": {
+        "src": "/blog-images/mobile-seo-testing.jpg",
+        "alt": "Mobile-first indexing testing setup with multiple devices showing responsive web design",
+        "width": 800,
+        "height": 500,
+        "description": "Testing environment with various mobile devices displaying optimized website performance"
+      }
+    },
+    "llm-optimization": {
+      "hero": {
+        "src": "/blog-images/llm-optimization-hero.jpg",
+        "alt": "AI-powered web application architecture diagram showing LLM integration and cost optimization strategies",
+        "width": 1200,
+        "height": 630,
+        "description": "Technical diagram illustrating LLM integration architecture with caching layers and optimization techniques"
+      },
+      "cost-optimization": {
+        "src": "/blog-images/ai-cost-dashboard.jpg",
+        "alt": "AI API cost monitoring dashboard showing 73% reduction in LLM expenses through optimization",
+        "width": 800,
+        "height": 400,
+        "description": "Analytics dashboard displaying AI API cost reductions and usage optimization metrics"
+      },
+      "caching-strategy": {
+        "src": "/blog-images/semantic-caching-diagram.jpg",
+        "alt": "Semantic caching architecture diagram with vector similarity matching for LLM responses",
+        "width": 800,
+        "height": 500,
+        "description": "Technical diagram showing semantic caching implementation with vector embeddings"
+      }
+    },
+    "interactive-experiences": {
+      "hero": {
+        "src": "/blog-images/micro-interactions-hero.jpg",
+        "alt": "Interactive web interface showcasing micro-interactions and user engagement elements",
+        "width": 1200,
+        "height": 630,
+        "description": "Modern web interface displaying various micro-interactions including hover effects, form validation, and animated transitions"
+      },
+      "conversion-examples": {
+        "src": "/blog-images/conversion-ui-examples.jpg",
+        "alt": "Before and after comparison of web interfaces showing conversion optimization through micro-interactions",
+        "width": 800,
+        "height": 400,
+        "description": "Side-by-side comparison of web interfaces demonstrating improved conversion rates through strategic micro-interactions"
+      },
+      "react-components": {
+        "src": "/blog-images/react-interactive-components.jpg",
+        "alt": "React code editor showing interactive component implementation with Framer Motion animations",
+        "width": 800,
+        "height": 500,
+        "description": "Code editor interface displaying React component development for interactive user experiences"
+      }
+    },
+    "shared": {
+      "toronto-skyline": {
+        "src": "/blog-images/toronto-tech-skyline.jpg",
+        "alt": "Toronto skyline representing the city's thriving tech industry and web development market",
+        "width": 1000,
+        "height": 400,
+        "description": "Toronto downtown skyline highlighting the city's position as a major tech hub"
+      },
+      "performance-metrics": {
+        "src": "/blog-images/web-performance-metrics.jpg",
+        "alt": "Web performance analytics showing improved loading times and user engagement metrics",
+        "width": 800,
+        "height": 400,
+        "description": "Performance dashboard displaying website speed improvements and user experience metrics"
+      },
+      "ai-web-development": {
+        "src": "/blog-images/ai-web-development.jpg",
+        "alt": "Modern web development setup with AI integration tools and programming environment",
+        "width": 800,
+        "height": 500,
+        "description": "Development workspace showing AI-powered web application development tools and interfaces"
+      }
+    }
+  },
+  "seoOptimization": {
+    "imageFormats": ["WebP", "JPEG", "PNG"],
+    "responsiveSizes": [320, 640, 768, 1024, 1200, 1920],
+    "lazyLoading": true,
+    "compressionQuality": 85,
+    "altTextRequired": true,
+    "structuredData": true
+  }
+}

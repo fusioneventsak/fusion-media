@@ -15,17 +15,16 @@ export default function AnimatedHeroTitle() {
   }, []);
 
   return (
-    <h1 className="text-5xl md:text-7xl lg:text-8xl font-light mb-8 text-white leading-tight text-center">
+    <h1 className="text-5xl md:text-6xl lg:text-7xl font-light mb-4 text-white leading-tight text-center">
       We Make{' '}
       <span className="font-semibold text-white">
-        Kick-Ass
+        Kick-Ass{' '}
       </span>
-      <br />
-      <div className="overflow-hidden py-4 flex justify-center" style={{ minHeight: '1.2em' }}>
+      <span className="overflow-hidden inline-flex justify-center" style={{ minHeight: '1.2em', minWidth: '500px' }}>
         <AnimatePresence mode="wait">
           <motion.span
             key={currentWordIndex}
-            className="font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent inline-block leading-relaxed"
+            className="font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent inline-block leading-relaxed text-center"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
@@ -38,7 +37,7 @@ export default function AnimatedHeroTitle() {
             {words[currentWordIndex]}
           </motion.span>
         </AnimatePresence>
-      </div>
+      </span>
     </h1>
   );
 }

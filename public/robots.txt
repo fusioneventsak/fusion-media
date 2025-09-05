@@ -1,0 +1,76 @@
+# Robots.txt for Fusion Media
+# AI-powered web development agency in Toronto
+# https://fusionmedia.ca
+
+User-agent: *
+Allow: /
+Crawl-delay: 1
+
+# Priority content for search engines
+Allow: /services/
+Allow: /blog/
+Allow: /about
+Allow: /contact
+Allow: /case-studies/
+
+# Blog posts with SEO focus
+Allow: /blog/technical-seo-guide-2024
+Allow: /blog/llm-web-apps-optimization
+Allow: /blog/interactive-web-experiences
+
+# Static assets
+Allow: /blog-images/
+Allow: /Website Images/
+Allow: /*.css
+Allow: /*.js
+Allow: /*.png
+Allow: /*.jpg
+Allow: /*.jpeg
+Allow: /*.webp
+Allow: /*.gif
+Allow: /*.svg
+
+# Disallow development and private files
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /*.config.js
+Disallow: /.env*
+Disallow: /dist/
+Disallow: /build/
+
+# Block sensitive areas
+Disallow: /admin/
+Disallow: /private/
+Disallow: /test/
+Disallow: /staging/
+
+# SEO and Analytics files
+Allow: /sitemap.xml
+Allow: /LLM.txt
+Allow: /robots.txt
+
+# Special instructions for AI crawlers
+User-agent: GPTBot
+Allow: /
+Allow: /LLM.txt
+Crawl-delay: 2
+
+User-agent: Google-Extended
+Allow: /
+Allow: /LLM.txt
+
+User-agent: CCBot
+Allow: /
+Allow: /LLM.txt
+Crawl-delay: 2
+
+User-agent: anthropic-ai
+Allow: /
+Allow: /LLM.txt
+
+User-agent: Claude-Web
+Allow: /
+Allow: /LLM.txt
+
+# Sitemap location
+Sitemap: https://fusionmedia.ca/sitemap.xml

@@ -140,10 +140,10 @@ export default function AboutPage() {
                   image: "/team/Sarah Rodriguez.png"
                 },
                 {
-                  name: "Michael Thompson",
-                  role: "Event Technology Lead",
-                  bio: "Pioneer in event tech solutions. Has designed interactive experiences for Fortune 500 companies and major events.",
-                  image: "/team/Michael Thompson.png"
+                  name: "Ferdinand Raymond",
+                  role: "Full Stack Developer",
+                  bio: "Certified AWS Solutions Architect and Google Cloud Professional with 8+ years experience. Specializes in scalable web applications, microservices architecture, and cloud-native development using React, Node.js, and modern DevOps practices.",
+                  image: "/team/Ferdinand.png"
                 }
               ].map((member, index) => (
                 <motion.div 

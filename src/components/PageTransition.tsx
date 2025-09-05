@@ -17,10 +17,10 @@ export default function PageTransition({ currentPage, children, onTransitionChan
   // Get page info
   const getPageInfo = (to: string) => {
     const pageColors = {
-      'home': '#3B82F6',       // Blue
-      'about': '#8B5CF6',      // Purple
-      'case-studies': '#06B6D4', // Cyan
-      'contact': '#10B981'     // Green
+      'home': '#1E40AF',       // Deeper Blue
+      'about': '#6D28D9',      // Deeper Purple
+      'case-studies': '#0369A1', // Deeper Cyan
+      'contact': '#047857'     // Deeper Green
     };
     
     const pageNames = {
@@ -61,16 +61,16 @@ export default function PageTransition({ currentPage, children, onTransitionChan
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'auto' });
     
-    // Start revealing content - immediately when squares finish animating out
+    // Start revealing content - faster timing
     setTimeout(() => {
       setShowContent(true);
-    }, 4200); // Reduced from 4500ms - content appears right as squares finish
+    }, 2800); // Much faster - content appears quicker
     
-    // End transition - slightly after content appears for smooth handoff
+    // End transition - faster cleanup
     setTimeout(() => {
       setIsTransitioning(false);
       onTransitionChange?.(false);
-    }, 4300); // Reduced from 5200ms - quicker cleanup
+    }, 2900); // Much faster cleanup
   }, [currentPage]);
 
   const pageInfo = getPageInfo(currentPage);
@@ -94,24 +94,24 @@ export default function PageTransition({ currentPage, children, onTransitionChan
     { id: 15, direction: 'from-left', type: 'logo' }
   ];
 
-  // Get animation delays for staggered effect - INCREASED delays for slower animation
+  // Get animation delays for staggered effect - FASTER delays for quicker animation
   const getSquareDelay = (index: number) => {
     const delayMap = [
       0,     // square 1
-      0.15,  // square 2, 6 (increased from 0.1)
-      0.3,   // square 3, 7, 11 (increased from 0.2)
-      0.45,  // square 4, 8, 10, 12 (increased from 0.3)
-      0.6,   // square 5, 9, 13, 15 (increased from 0.4)
-      0.15,  // square 6 (same as 2)
-      0.3,   // square 7 (same as 3)
-      0.45,  // square 8 (same as 4)
-      0.6,   // square 9 (center)
-      0.45,  // square 10 (same as 4)
-      0.3,   // square 11 (same as 3)
-      0.45,  // square 12 (same as 4)
-      0.6,   // square 13 (same as 5)
-      0.75,  // square 14 (increased from 0.5)
-      0.6    // square 15 (same as 5)
+      0.08,  // square 2, 6 (much faster)
+      0.16,  // square 3, 7, 11 (much faster)
+      0.24,  // square 4, 8, 10, 12 (much faster)
+      0.32,  // square 5, 9, 13, 15 (much faster)
+      0.08,  // square 6 (same as 2)
+      0.16,  // square 7 (same as 3)
+      0.24,  // square 8 (same as 4)
+      0.32,  // square 9 (center)
+      0.24,  // square 10 (same as 4)
+      0.16,  // square 11 (same as 3)
+      0.24,  // square 12 (same as 4)
+      0.32,  // square 13 (same as 5)
+      0.4,   // square 14 (faster)
+      0.32   // square 15 (same as 5)
     ];
     return delayMap[index] || 0;
   };
@@ -180,13 +180,16 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     height: '100%',
                     marginRight: '-1px',
                     background: `linear-gradient(135deg, 
-                      ${pageInfo.color}cc 0%, 
-                      ${pageInfo.color}dd 25%, 
-                      ${pageInfo.color}aa 50%, 
-                      ${pageInfo.color}cc 75%, 
-                      ${pageInfo.color}bb 100%)`,
-                    backdropFilter: 'blur(20px) saturate(180%)',
-                    border: '1px solid rgba(255,255,255,0.18)',
+                      ${pageInfo.color}ff 0%, 
+                      #ffffff44 15%, 
+                      ${pageInfo.color}ee 30%, 
+                      #ffffff33 45%, 
+                      ${pageInfo.color}ff 60%, 
+                      #ffffff44 75%, 
+                      ${pageInfo.color}ff 100%)`,
+                    backdropFilter: 'blur(10px) saturate(180%) brightness(120%)',
+                    border: '1px solid rgba(255,255,255,0.4)',
+                    boxShadow: '0 0 20px rgba(255,255,255,0.3), inset 0 0 15px rgba(255,255,255,0.15)',
                     position: 'relative',
                     transformOrigin: square.direction === 'from-right' ? '100% 50% 0' :
                                     square.direction === 'from-left' ? '0% 50% 0' :
@@ -221,13 +224,13 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     ]
                   }}
                   transition={{
-                    duration: 3.5, // Total animation duration
-                    times: [0, 0.2, 0.5, 0.8, 1], // Animate in (0-0.2), hold (0.2-0.8), animate out (0.8-1)
+                    duration: 2.2, // Much faster total animation duration
+                    times: [0, 0.25, 0.5, 0.75, 1], // Animate in (0-0.25), hold (0.25-0.75), animate out (0.75-1)
                     delay: getSquareDelay(index),
                     ease: 'easeInOut'
                   }}
                 >
-                  {/* Floating water droplets */}
+                  {/* Bright metallic particles */}
                   <motion.div
                     style={{
                       position: 'absolute',
@@ -235,9 +238,10 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       left: '15%',
                       width: '8px',
                       height: '8px',
-                      background: 'rgba(255,255,255,0.4)',
+                      background: 'radial-gradient(circle, #ffffff 0%, rgba(255,255,255,0.8) 100%)',
                       borderRadius: '50%',
-                      filter: 'blur(1px)'
+                      filter: 'blur(0.5px)',
+                      boxShadow: '0 0 15px rgba(255,255,255,0.9), inset 0 0 8px rgba(255,255,255,0.6)'
                     }}
                     animate={{
                       y: [0, -10, 0],
@@ -258,9 +262,10 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       right: '25%',
                       width: '6px',
                       height: '6px',
-                      background: 'rgba(255,255,255,0.3)',
+                      background: 'radial-gradient(circle, #ffffff 0%, rgba(255,255,255,0.7) 100%)',
                       borderRadius: '50%',
-                      filter: 'blur(0.5px)'
+                      filter: 'blur(0.3px)',
+                      boxShadow: '0 0 12px rgba(255,255,255,0.8), inset 0 0 6px rgba(255,255,255,0.5)'
                     }}
                     animate={{
                       y: [0, 8, 0],
@@ -274,7 +279,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     }}
                   />
 
-                  {/* Ripple effects */}
+                  {/* Bright metallic ripple effects */}
                   <motion.div
                     style={{
                       position: 'absolute',
@@ -282,9 +287,10 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       left: '50%',
                       width: '40px',
                       height: '40px',
-                      border: '1px solid rgba(255,255,255,0.2)',
+                      border: '2px solid rgba(255,255,255,0.7)',
                       borderRadius: '50%',
-                      transform: 'translate(-50%, -50%)'
+                      transform: 'translate(-50%, -50%)',
+                      boxShadow: '0 0 20px rgba(255,255,255,0.6), inset 0 0 10px rgba(255,255,255,0.3)'
                     }}
                     animate={{
                       scale: [0.5, 2, 0.5],
@@ -297,7 +303,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     }}
                   />
 
-                  {/* Flowing gradient overlay */}
+                  {/* Bright metallic sweep overlay */}
                   <motion.div
                     style={{
                       position: 'absolute',
@@ -305,8 +311,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       left: '-100%',
                       width: '200%',
                       height: '100%',
-                      background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)',
-                      transform: 'skewX(-20deg)'
+                      background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 30%, rgba(255,255,255,0.6) 50%, rgba(255,255,255,0.3) 70%, transparent 100%)',
+                      transform: 'skewX(-20deg)',
+                      filter: 'blur(0.5px)'
                     }}
                     animate={{
                       x: ['0%', '100%']
@@ -347,67 +354,25 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                         delay: getSquareDelay(index) + 0.3
                       }}
                     >
-                      {/* F Logo */}
-                      <motion.div
+                      {/* Fusion Interactive Logo */}
+                      <motion.img 
+                        src="/logos/FI LOGO 6.png" 
+                        alt="Fusion Interactive Logo" 
                         style={{
-                          width: '50px',
-                          height: '50px',
-                          background: 'linear-gradient(to right, #3B82F6, #8B5CF6)',
-                          borderRadius: '12px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          border: '1px solid rgba(255,255,255,0.3)',
-                          boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)',
-                          backdropFilter: 'blur(8px)',
-                          position: 'relative',
-                          overflow: 'hidden'
+                          height: '36px',
+                          width: 'auto',
+                          filter: 'brightness(1.3) contrast(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5))'
                         }}
                         animate={{
                           scale: [0.8, 1.05, 1],
-                          rotate: [0, 3, 0]
+                          rotate: [0, 2, 0]
                         }}
                         transition={{
                           duration: 1.5,
                           times: [0, 0.6, 1],
                           delay: getSquareDelay(index) + 0.5
                         }}
-                      >
-                        {/* Water shimmer effect on logo */}
-                        <motion.div
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: '-100%',
-                            width: '200%',
-                            height: '100%',
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)',
-                            transform: 'skewX(-20deg)'
-                          }}
-                          animate={{
-                            x: ['0%', '100%']
-                          }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            delay: getSquareDelay(index) + 1,
-                            ease: 'easeInOut'
-                          }}
-                        />
-                        
-                        <span
-                          style={{
-                            color: 'white',
-                            fontSize: '24px',
-                            fontWeight: 'bold',
-                            fontFamily: '"Inter", sans-serif',
-                            position: 'relative',
-                            zIndex: 2
-                          }}
-                        >
-                          F
-                        </span>
-                      </motion.div>
+                      />
                     </motion.div>
                   )}
 
@@ -441,15 +406,15 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       {/* Title Text */}
                       <motion.div
                         style={{
-                          background: 'rgba(255,255,255,0.1)',
-                          backdropFilter: 'blur(20px) saturate(180%)',
+                          background: 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.2) 100%)',
+                          backdropFilter: 'blur(10px) saturate(180%) brightness(120%)',
                           borderRadius: '8px',
                           padding: '8px 12px',
-                          border: '1px solid rgba(255,255,255,0.2)',
+                          border: '1px solid rgba(255,255,255,0.4)',
                           display: 'inline-block',
                           position: 'relative',
                           overflow: 'hidden',
-                          boxShadow: '0 8px 32px rgba(31, 38, 135, 0.37)'
+                          boxShadow: '0 0 20px rgba(255,255,255,0.3), 0 8px 32px rgba(31, 38, 135, 0.37), inset 0 0 12px rgba(255,255,255,0.15)'
                         }}
                         animate={{
                           scale: [0.9, 1.05, 1]
@@ -460,7 +425,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                           delay: getSquareDelay(index) + 0.5
                         }}
                       >
-                        {/* Water shimmer on title container */}
+                        {/* Bright metallic shimmer on title container */}
                         <motion.div
                           style={{
                             position: 'absolute',
@@ -468,8 +433,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                             left: '-100%',
                             width: '200%',
                             height: '100%',
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)',
-                            transform: 'skewX(-15deg)'
+                            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 40%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0.5) 60%, transparent 100%)',
+                            transform: 'skewX(-15deg)',
+                            filter: 'blur(0.5px)'
                           }}
                           animate={{
                             x: ['0%', '100%']
@@ -527,28 +493,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                   )}
                 </motion.div>
 
-                {/* Square Overlay */}
-                <motion.div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    bottom: 0,
-                    left: 0,
-                    background: '#000',
-                    pointerEvents: 'none'
-                  }}
-                  initial={{ opacity: 0 }}
-                  animate={{
-                    opacity: [0, 0.6, 0.6, 0.6, 0]
-                  }}
-                  transition={{
-                    duration: 3.5, // Match square animation duration
-                    times: [0, 0.2, 0.5, 0.8, 1], // Sync with square timing
-                    delay: getSquareDelay(index),
-                    ease: 'easeInOut'
-                  }}
-                />
+                {/* Removed dark overlay for brighter effect */}
               </motion.div>
             ))}
           </div>

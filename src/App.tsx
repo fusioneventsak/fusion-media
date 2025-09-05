@@ -7,14 +7,20 @@ import Scene from './components/Scene';
 import PageTransition from './components/PageTransition';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
-import CaseStudiesPage from './pages/CaseStudiesPage';
+import WhyUsPage from './pages/WhyUsPage';
+import Blog from './pages/Blog';
 import ContactPage from './pages/ContactPage';
 import Footer from './components/Footer';
+import ContactModal from './components/ContactModal';
+import TechnicalSEOGuide2024 from './blog-posts/technical-seo-guide-2024';
+import LLMWebAppsOptimization from './blog-posts/llm-web-apps-optimization';
+import InteractiveWebExperiences from './blog-posts/interactive-web-experiences';
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [scrollY, setScrollY] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   
   // Mobile detection for performance optimizations
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -39,16 +45,28 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleGetStartedClick = () => {
+    setIsContactModalOpen(true);
+  };
+
   const renderPage = () => {
     switch (currentPage) {
       case 'about':
         return <AboutPage />;
-      case 'case-studies':
-        return <CaseStudiesPage />;
+      case 'why-us':
+        return <WhyUsPage onNavigate={setCurrentPage} onOpenContactModal={handleGetStartedClick} />;
+      case 'blog':
+        return <Blog onNavigate={setCurrentPage} />;
+      case 'blog/technical-seo-guide-2024':
+        return <TechnicalSEOGuide2024 onNavigate={setCurrentPage} />;
+      case 'blog/llm-web-apps-optimization':
+        return <LLMWebAppsOptimization onNavigate={setCurrentPage} />;
+      case 'blog/interactive-web-experiences':
+        return <InteractiveWebExperiences onNavigate={setCurrentPage} />;
       case 'contact':
         return <ContactPage />;
       default:
-        return <HomePage />;
+        return <HomePage onNavigate={setCurrentPage} />;
     }
   };
 
@@ -139,6 +157,7 @@ export default function App() {
           currentPage={currentPage} 
           setCurrentPage={setCurrentPage}
           isTransitioning={isTransitioning}
+          onGetStartedClick={handleGetStartedClick}
         />
       </div>
 
@@ -156,6 +175,14 @@ export default function App() {
       <div style={{ position: 'relative', zIndex: 200 }}>
         <Footer />
       </div>
+
+      {/* Global Contact Modal */}
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+        title="Get Started"
+        subtitle="Ready to transform your vision into reality? Let's discuss your project and how we can help."
+      />
     </div>
   );
 }

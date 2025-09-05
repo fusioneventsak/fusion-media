@@ -5,6 +5,7 @@ export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     company: '',
     project: '',
     budget: '',
@@ -19,11 +20,38 @@ export default function ContactPage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! We\'ll get back to you within 24 hours.');
+    
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          'form-name': 'contact-page',
+          ...formData
+        }).toString()
+      });
+
+      if (response.ok) {
+        alert('Thank you for your message! We\'ll get back to you within 24 hours.');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          company: '',
+          project: '',
+          budget: '',
+          timeline: '',
+          message: ''
+        });
+      } else {
+        throw new Error('Form submission failed');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('There was an error submitting the form. Please try again.');
+    }
   };
 
   return (
@@ -57,7 +85,18 @@ export default function ContactPage() {
               transition={{ duration: 0.8, delay: 0.4 }}
             >
               <h2 className="text-3xl font-bold mb-8 text-white">Start Your Project</h2>
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form 
+                onSubmit={handleSubmit} 
+                name="contact-page" 
+                netlify-honeypot="bot-field" 
+                data-netlify="true"
+                className="space-y-6"
+              >
+                {/* Hidden fields for Netlify */}
+                <input type="hidden" name="form-name" value="contact-page" />
+                <div className="hidden">
+                  <input name="bot-field" />
+                </div>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-gray-300 mb-2">Full Name *</label>
@@ -85,17 +124,32 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-gray-300 mb-2">Company</label>
-                  <input
-                    type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:outline-none transition-colors"
-                    placeholder="Your Company Name"
-                  />
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-gray-300 mb-2">Phone Number *</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      required
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:outline-none transition-colors"
+                      placeholder="(416) 123-4567"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 mb-2">Company</label>
+                    <input
+                      type="text"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:border-cyan-400 focus:outline-none transition-colors"
+                      placeholder="Your Company Name"
+                    />
+                  </div>
                 </div>
+
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
@@ -104,15 +158,15 @@ export default function ContactPage() {
                       name="project"
                       value={formData.project}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition-colors [&>option]:bg-gray-800 [&>option]:text-white"
                     >
-                      <option value="">Select Project Type</option>
-                      <option value="web-development">Web Development</option>
-                      <option value="mobile-app">Mobile Application</option>
-                      <option value="event-technology">Event Technology</option>
-                      <option value="ai-ml">AI/ML Solutions</option>
-                      <option value="vr-ar">VR/AR Experience</option>
-                      <option value="custom-solution">Custom Solution</option>
+                      <option value="" className="bg-gray-800 text-white">Select Project Type</option>
+                      <option value="web-development" className="bg-gray-800 text-white">Web Development</option>
+                      <option value="mobile-app" className="bg-gray-800 text-white">Mobile Application</option>
+                      <option value="event-technology" className="bg-gray-800 text-white">Event Technology</option>
+                      <option value="ai-ml" className="bg-gray-800 text-white">AI/ML Solutions</option>
+                      <option value="vr-ar" className="bg-gray-800 text-white">VR/AR Experience</option>
+                      <option value="custom-solution" className="bg-gray-800 text-white">Custom Solution</option>
                     </select>
                   </div>
                   <div>
@@ -121,13 +175,13 @@ export default function ContactPage() {
                       name="budget"
                       value={formData.budget}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition-colors"
+                      className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition-colors [&>option]:bg-gray-800 [&>option]:text-white"
                     >
-                      <option value="">Select Budget Range</option>
-                      <option value="10k-25k">$10K - $25K</option>
-                      <option value="25k-50k">$25K - $50K</option>
-                      <option value="50k-100k">$50K - $100K</option>
-                      <option value="100k+">$100K+</option>
+                      <option value="" className="bg-gray-800 text-white">Select Budget Range</option>
+                      <option value="10k-25k" className="bg-gray-800 text-white">$10K - $25K</option>
+                      <option value="25k-50k" className="bg-gray-800 text-white">$25K - $50K</option>
+                      <option value="50k-100k" className="bg-gray-800 text-white">$50K - $100K</option>
+                      <option value="100k+" className="bg-gray-800 text-white">$100K+</option>
                     </select>
                   </div>
                 </div>
@@ -138,14 +192,14 @@ export default function ContactPage() {
                     name="timeline"
                     value={formData.timeline}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white focus:border-cyan-400 focus:outline-none transition-colors [&>option]:bg-gray-800 [&>option]:text-white"
                   >
-                    <option value="">Select Timeline</option>
-                    <option value="asap">ASAP</option>
-                    <option value="1-3-months">1-3 Months</option>
-                    <option value="3-6-months">3-6 Months</option>
-                    <option value="6-12-months">6-12 Months</option>
-                    <option value="flexible">Flexible</option>
+                    <option value="" className="bg-gray-800 text-white">Select Timeline</option>
+                    <option value="asap" className="bg-gray-800 text-white">ASAP</option>
+                    <option value="1-3-months" className="bg-gray-800 text-white">1-3 Months</option>
+                    <option value="3-6-months" className="bg-gray-800 text-white">3-6 Months</option>
+                    <option value="6-12-months" className="bg-gray-800 text-white">6-12 Months</option>
+                    <option value="flexible" className="bg-gray-800 text-white">Flexible</option>
                   </select>
                 </div>
 
@@ -184,8 +238,8 @@ export default function ContactPage() {
                 <h2 className="text-3xl font-bold mb-6 text-cyan-300">Get In Touch</h2>
                 <div className="space-y-6">
                   {[
-                    { icon: '📧', title: 'Email Us', detail: 'hello@fusioninteractive.ca' },
-                    { icon: '📱', title: 'Call Us', detail: '+1 (555) 123-4567' },
+                    { icon: '📧', title: 'Email Us', detail: 'info@fusion-events.ca' },
+                    { icon: '📱', title: 'Call Us', detail: '416-825-4938' },
                     { icon: '📍', title: 'Visit Us', detail: 'Toronto, Ontario, Canada' },
                     { icon: '🌐', title: 'Website', detail: 'www.fusioninteractive.ca' }
                   ].map((contact, index) => (

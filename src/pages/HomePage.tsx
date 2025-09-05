@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Maximize2, Play, Code, Zap, Globe } from 'lucide-react';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
+import ContactModal from '../components/ContactModal';
 
 // Portfolio projects data for horizontal scroll
 const horizontalPortfolioProjects = [
@@ -567,18 +568,6 @@ const HorizontalPortfolioSection = () => {
           </div>
         </div>
 
-        {/* Scroll Instructions */}
-        <motion.div
-          className="fixed top-1/2 right-8 transform -translate-y-1/2 z-[110] text-white/70 text-sm"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 1 }}
-        >
-          <div className="flex flex-col items-center space-y-4">
-            <span className="transform rotate-90 whitespace-nowrap">Scroll Down</span>
-            <div className="w-px h-16 bg-gradient-to-b from-white/50 to-transparent"></div>
-          </div>
-        </motion.div>
 
         {/* Project Counter */}
         <div className="fixed top-8 right-8 z-[110] bg-black/50 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
@@ -591,12 +580,30 @@ const HorizontalPortfolioSection = () => {
   );
 };
 
-export default function HomePage() {
+interface HomePageProps {
+  onNavigate?: (page: string) => void;
+}
+
+export default function HomePage({ onNavigate }: HomePageProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isMobile, setIsMobile] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [contactModalConfig, setContactModalConfig] = useState({
+    title: "Schedule Consultation",
+    subtitle: "Let's discuss your project and how we can help bring your vision to life."
+  });
   const containerRef = useRef(null);
   const heroRef = useRef(null);
   const servicesRef = useRef(null);
   const ctaRef = useRef(null);
+  
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
   
   // Scroll progress tracking
   const { scrollYProgress } = useScroll({
@@ -609,10 +616,22 @@ export default function HomePage() {
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
   const heroY = useTransform(scrollYProgress, [0, 0.3], [-50, -150]);
   
-  // Event section parallax effects
-  const eventOpacity = useTransform(scrollYProgress, [0.15, 0.45], [1, 0]);
-  const eventScale = useTransform(scrollYProgress, [0.15, 0.45], [1, 0.95]);
-  const eventY = useTransform(scrollYProgress, [0.15, 0.45], [0, -100]);
+  // Event section parallax effects - Mobile-aware fade ranges
+  const eventOpacity = useTransform(
+    scrollYProgress, 
+    isMobile ? [0.35, 0.75] : [0.25, 0.65], 
+    [1, 0]
+  );
+  const eventScale = useTransform(
+    scrollYProgress, 
+    isMobile ? [0.35, 0.75] : [0.25, 0.65], 
+    [1, 0.98]
+  );
+  const eventY = useTransform(
+    scrollYProgress, 
+    isMobile ? [0.35, 0.75] : [0.25, 0.65], 
+    [0, isMobile ? -25 : -50]
+  );
   
   // Smooth spring animations
   const smoothScrollProgress = useSpring(scrollYProgress, {
@@ -621,10 +640,10 @@ export default function HomePage() {
     restDelta: 0.001
   });
   
-  // Services section in view detection
+  // Services section in view detection - More mobile-friendly
   const servicesInView = useInView(servicesRef, {
     once: true,
-    margin: "-20% 0px -20% 0px"
+    margin: "-10% 0px -10% 0px"
   });
   
   // CTA section mouse tracking
@@ -649,18 +668,60 @@ export default function HomePage() {
       }
     };
   }, []);
+
+  // Navigation helpers
+  const scrollToSection = (sectionRef: React.RefObject<HTMLElement>) => {
+    if (sectionRef.current) {
+      sectionRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
+  const handleSeeOurWork = () => {
+    // Scroll to horizontal portfolio section
+    const portfolioSection = document.querySelector('[data-section="portfolio"]');
+    if (portfolioSection) {
+      portfolioSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
+
+  const handleStartProject = () => {
+    if (onNavigate) {
+      onNavigate('contact');
+    }
+  };
+
+  const handleScheduleConsultation = () => {
+    setContactModalConfig({
+      title: "Schedule Consultation",
+      subtitle: "Let's discuss your project and how we can help bring your vision to life."
+    });
+    setIsContactModalOpen(true);
+  };
+
+  const handleGetQuote = () => {
+    setContactModalConfig({
+      title: "Get Project Quote",
+      subtitle: "Tell us about your project and we'll provide a detailed quote within 24 hours."
+    });
+    setIsContactModalOpen(true);
+  };
+
+  const handleGetStarted = () => {
+    setContactModalConfig({
+      title: "Get Started",
+      subtitle: "Let's discuss your project requirements and get started on your digital transformation."
+    });
+    setIsContactModalOpen(true);
+  };
   
   return (
     <div ref={containerRef} className="relative pointer-events-none">
-      {/* Scroll Progress Indicator */}
-      <div className="fixed bottom-8 left-8 z-50 pointer-events-none">
-        <div className="w-2 h-32 bg-white/20 rounded-full overflow-hidden backdrop-blur-sm border border-white/30">
-          <motion.div
-            className="w-full bg-gradient-to-t from-cyan-400 via-blue-500 to-purple-600 rounded-full origin-bottom"
-            style={{ scaleY: smoothScrollProgress }}
-          />
-        </div>
-      </div>
       
       {/* Hero Section with Parallax */}
       <motion.section
@@ -673,127 +734,170 @@ export default function HomePage() {
           willChange: 'transform, opacity, filter'
         }}
       >
-        {/* Hero Content */}
-        <div className="relative z-10 text-center max-w-6xl pointer-events-auto">
-          <motion.div
-            className="mb-6"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 1.2,
-              delay: 0.2,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-          >
-            <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
-              <div className="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
-              <span className="text-sm font-medium text-white">AI-Assisted Digital Agency</span>
-            </div>
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 1.4,
-              delay: 0.4,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-          >
-            <AnimatedHeroTitle />
-          </motion.h1>
-          <motion.p
-            className="text-lg md:text-xl text-white mb-8 max-w-4xl mx-auto leading-relaxed font-light"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 1.2,
-              delay: 0.6,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-          >
-            What once took months to produce—high-end websites with animations,
-            multiple pages, and complex functionality—we now deliver in weeks.
-            AI-powered productivity meets 25+ years of expertise in events,
-            entertainment, and technology.
-          </motion.p>
-          <motion.div
-            className="flex flex-col sm:flex-row justify-center gap-4 mb-12"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 1.2,
-              delay: 0.8,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-          >
-            <motion.button
-              className="px-8 py-3 bg-white text-gray-900 rounded-full font-medium hover:bg-gray-100 transition-all duration-300 shadow-lg"
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 20px 40px rgba(255,255,255,0.2)",
-                transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
-              }}
-              whileTap={{
-                scale: 0.95,
-                transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+        {/* Hero Content Container - Two Level Layout */}
+        <div className="relative z-10 w-full max-w-7xl pointer-events-auto">
+          
+          {/* Centered Badge and Title Section */}
+          <div className="text-center mb-8">
+            <motion.div
+              className="mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 1.2,
+                delay: 0.2,
+                ease: [0.25, 0.46, 0.45, 0.94]
               }}
             >
-              See Our Work
-            </motion.button>
-            <motion.button
-              className="px-8 py-3 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300"
-              whileHover={{
-                scale: 1.05,
-                boxShadow: "0 20px 40px rgba(255,255,255,0.1)",
-                transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
-              }}
-              whileTap={{
-                scale: 0.95,
-                transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+              <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
+                <div className="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
+                <span className="text-sm font-medium text-white">AI-Assisted Digital Agency</span>
+              </div>
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 1.4,
+                delay: 0.4,
+                ease: [0.25, 0.46, 0.45, 0.94]
               }}
             >
-              Start a Project
-            </motion.button>
-          </motion.div>
-          <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{
-              duration: 1.2,
-              delay: 1.0,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-          >
-            {[
-              { number: '10x', label: 'Faster Delivery', description: 'AI-powered development' },
-              { number: '25+', label: 'Years Experience', description: 'Events & entertainment' },
-              { number: '500+', label: 'Projects Delivered', description: 'Across all industries' },
-              { number: '98%', label: 'Client Satisfaction', description: 'Proven track record' }
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                className="text-center group"
+              <AnimatedHeroTitle />
+            </motion.h1>
+          </div>
+
+          {/* Content and Image Layout */}
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Text Content - Left of Image */}
+            <div className="text-left max-w-2xl">
+            <motion.p
+              className="text-lg md:text-xl lg:text-2xl text-white mb-6 leading-relaxed font-medium italic"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 1.2,
+                delay: 0.6,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
+              style={{
+                textShadow: '0 0 20px rgba(255,255,255,0.3), 0 0 40px rgba(147,51,234,0.2)',
+                background: 'linear-gradient(135deg, #ffffff 0%, #e5e7eb 25%, #d1d5db 50%, #9ca3af 75%, #6b7280 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              What once took <span className="font-bold not-italic bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">months to produce</span>—high-end websites with animations,
+              multiple pages, and complex functionality—we now deliver in <span className="font-bold not-italic bg-gradient-to-r from-green-300 to-emerald-400 bg-clip-text text-transparent">weeks</span>.
+              <br />
+              <span className="font-semibold not-italic bg-gradient-to-r from-purple-300 to-pink-400 bg-clip-text text-transparent">AI-powered productivity</span> meets <span className="font-bold not-italic bg-gradient-to-r from-amber-300 to-orange-400 bg-clip-text text-transparent">25+ years of expertise</span> in events,
+              entertainment, and technology.
+            </motion.p>
+            <motion.div
+              className="flex flex-col sm:flex-row gap-3 mb-8"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 1.2,
+                delay: 0.8,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
+            >
+              <motion.button
+                className="px-6 py-2.5 bg-white text-gray-900 rounded-full font-medium hover:bg-gray-100 transition-all duration-300 shadow-lg text-sm"
                 whileHover={{
                   scale: 1.05,
-                  y: -5,
-                  transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+                  boxShadow: "0 20px 40px rgba(255,255,255,0.2)",
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
                 }}
+                whileTap={{
+                  scale: 0.95,
+                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
+                onClick={handleSeeOurWork}
               >
-                <div className="text-2xl md:text-3xl font-light text-white mb-2 group-hover:text-blue-400 transition-colors">
-                  {stat.number}
-                </div>
-                <div className="text-sm text-white font-medium mb-1">{stat.label}</div>
-                <div className="text-xs text-gray-300">{stat.description}</div>
+                See Our Work
+              </motion.button>
+              <motion.button
+                className="px-6 py-2.5 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300 text-sm"
+                whileHover={{
+                  scale: 1.05,
+                  boxShadow: "0 20px 40px rgba(255,255,255,0.1)",
+                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
+                whileTap={{
+                  scale: 0.95,
+                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                }}
+                onClick={handleStartProject}
+              >
+                Start a Project
+              </motion.button>
+            </motion.div>
+            </div>
+
+            {/* Image Content - Right Side */}
+            <motion.div
+              className="relative flex items-center justify-center lg:justify-end"
+              initial={{ opacity: 0, scale: 0.8, x: 100 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{
+                duration: 1.2,
+                delay: 0.6,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
+            >
+              <div className="relative">
+                <motion.img
+                  src="/Website Images/Hero.png"
+                  alt="AI Photo Booth Technology - Interactive engagement platform"
+                  className="w-full max-w-2xl h-auto drop-shadow-2xl"
+                  style={{
+                    filter: `drop-shadow(0 25px 60px rgba(59, 130, 246, 0.3))`
+                  }}
+                  whileHover={{
+                    scale: 1.05,
+                    transition: { duration: 0.3 }
+                  }}
+                />
+                
+                {/* Floating UI Elements */}
+                <motion.div
+                  className="absolute -top-8 -left-8 w-16 h-16 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-2xl backdrop-blur-sm border border-blue-400/30 flex items-center justify-center shadow-lg"
+                  animate={{
+                    y: [0, -10, 0],
+                    rotate: [0, 5, -5, 0]
+                  }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <svg className="w-8 h-8 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </motion.div>
+                
+                <motion.div
+                  className="absolute -bottom-8 -right-8 w-12 h-12 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-xl backdrop-blur-sm border border-purple-400/30 flex items-center justify-center shadow-lg"
+                  animate={{
+                    x: [0, 10, 0],
+                    scale: [1, 1.2, 1]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                >
+                  <svg className="w-6 h-6 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                </svg>
               </motion.div>
-            ))}
+            </div>
           </motion.div>
+          </div>
         </div>
       </motion.section>
 
       {/* Section Introduction */}
       <motion.section
-        className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-hidden"
+        className="min-h-screen flex items-center justify-center px-8 py-32 pointer-events-auto relative overflow-visible"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
@@ -808,14 +912,124 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-5xl md:text-7xl font-light text-white mb-8 leading-tight">
-              Our <span className="font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Work</span>
-            </h2>
+            <div className="relative">
+              <h2 className="text-5xl md:text-7xl font-light text-white mb-8 leading-tight relative z-10">
+                Our <span className="font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Work</span>
+              </h2>
+              
+              {/* Semi-Circle Tool Logos Above Title */}
+              {[
+                { 
+                  name: 'GitHub', 
+                  logo: '/logos/Github.webp',
+                  x: -480, 
+                  y: -120,
+                  delay: 0.3, 
+                  color: '#333333' 
+                },
+                { 
+                  name: 'WordPress', 
+                  logo: '/logos/wordpress.webp',
+                  x: -320, 
+                  y: -220,
+                  delay: 0.8, 
+                  color: '#21759B' 
+                },
+                { 
+                  name: 'Claude', 
+                  logo: '/logos/claude.png',
+                  x: -160, 
+                  y: -280,
+                  delay: 0.5, 
+                  color: '#FF6B35' 
+                },
+                { 
+                  name: 'ChatGPT', 
+                  logo: '/logos/openai.jpg',
+                  x: 0, 
+                  y: -320,
+                  delay: 1.1, 
+                  color: '#10A37F' 
+                },
+                { 
+                  name: 'Supabase', 
+                  logo: '/logos/Supabase.webp',
+                  x: 160, 
+                  y: -280,
+                  delay: 0.2, 
+                  color: '#3ECF8E' 
+                },
+                { 
+                  name: 'Netlify', 
+                  logo: '/logos/netlify-logo.webp',
+                  x: 320, 
+                  y: -220,
+                  delay: 0.9, 
+                  color: '#00C7B7' 
+                },
+                { 
+                  name: 'Bolt.new', 
+                  logo: '/logos/Bolt.jpg',
+                  x: 480, 
+                  y: -120,
+                  delay: 0.6, 
+                  color: '#FFD700' 
+                }
+              ].map((tool, index) => {
+                return (
+                  <motion.div
+                    key={tool.name}
+                    className="absolute hidden lg:block pointer-events-none"
+                    style={{
+                      left: `calc(50% + ${tool.x}px)`,
+                      top: `calc(50% + ${tool.y}px)`,
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                    initial={{ opacity: 0, y: 30, scale: 0.8 }}
+                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{
+                      duration: 0.6,
+                      delay: tool.delay,
+                      ease: [0.25, 0.46, 0.45, 0.94]
+                    }}
+                  >
+                    <div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md p-1 bg-white/5">
+                      <img
+                        src={tool.logo}
+                        alt={`${tool.name} logo`}
+                        className="w-full h-full object-cover rounded-xl filter drop-shadow-lg"
+                        style={{ 
+                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' 
+                        }}
+                        onError={(e) => {
+                          // Fallback to a generic icon if image fails to load
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                      {/* Fallback content */}
+                      <div 
+                        className="w-full h-full items-center justify-center text-lg font-bold rounded-xl"
+                        style={{ 
+                          display: 'none',
+                          color: tool.color,
+                          backgroundColor: `${tool.color}20`
+                        }}
+                      >
+                        {tool.name.charAt(0)}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+            
             <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-light mb-8">
               Transforming ideas into powerful digital experiences with AI-assisted development
             </p>
-            <motion.div
-              className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20"
+            <motion.button
+              className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer"
               animate={{
                 scale: [1, 1.05, 1],
               }}
@@ -824,18 +1038,31 @@ export default function HomePage() {
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                const eventSection = document.querySelector('[data-section="event-engagement"]');
+                if (eventSection) {
+                  eventSection.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }
+              }}
             >
               <span className="text-white mr-3">Scroll to explore</span>
               <svg className="w-4 h-4 text-white animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
-            </motion.div>
+            </motion.button>
           </motion.div>
         </div>
+
       </motion.section>
 
       {/* Event Engagement Technology Section */}
       <motion.section
+        data-section="event-engagement"
         className="min-h-screen relative overflow-hidden pointer-events-auto"
         style={{
           opacity: eventOpacity,
@@ -855,7 +1082,7 @@ export default function HomePage() {
               className="space-y-8 lg:pr-8"
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{
                 duration: 1.2,
                 ease: [0.25, 0.46, 0.45, 0.94]
@@ -943,10 +1170,10 @@ export default function HomePage() {
                     className="flex items-start space-x-4"
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, amount: 0.1 }}
                     transition={{
                       duration: 0.8,
-                      delay: index * 0.1,
+                      delay: index * 0.05,
                       ease: [0.25, 0.46, 0.45, 0.94]
                     }}
                   >
@@ -991,6 +1218,7 @@ export default function HomePage() {
                     scale: 0.95,
                     transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
                   }}
+                  onClick={handleGetQuote}
                 >
                   <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center mr-2">
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1006,7 +1234,7 @@ export default function HomePage() {
               className="relative lg:pl-8"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{
                 duration: 1.2,
                 delay: 0.2,
@@ -1130,7 +1358,9 @@ export default function HomePage() {
       </motion.section>
 
       {/* HORIZONTAL SCROLLING PORTFOLIO SECTION */}
-      <HorizontalPortfolioSection />
+      <div data-section="portfolio">
+        <HorizontalPortfolioSection />
+      </div>
 
       {/* Technology & Process Section with Clip Path Reveal */}
       <section
@@ -1236,6 +1466,7 @@ export default function HomePage() {
                   scale: 0.95,
                   transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
                 }}
+                onClick={handleGetStarted}
               >
                 Get Started
               </motion.button>
@@ -1266,10 +1497,6 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{
-              duration: 1.2,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
             animate={{
               x: mousePosition.x * 10,
               y: mousePosition.y * 10,
@@ -1314,6 +1541,7 @@ export default function HomePage() {
                   stiffness: 200,
                   damping: 20
                 }}
+                onClick={handleStartProject}
               >
                 Start Your Project
               </motion.button>
@@ -1337,6 +1565,7 @@ export default function HomePage() {
                   stiffness: 180,
                   damping: 18
                 }}
+                onClick={handleScheduleConsultation}
               >
                 Schedule Consultation
               </motion.button>
@@ -1365,11 +1594,6 @@ export default function HomePage() {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{
-                    duration: 0.8,
-                    delay: 0.1 + index * 0.1,
-                    ease: [0.25, 0.46, 0.45, 0.94]
-                  }}
                   whileHover={{
                     scale: 1.05,
                     y: -5,
@@ -1396,6 +1620,14 @@ export default function HomePage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Contact Modal */}
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+        title={contactModalConfig.title}
+        subtitle={contactModalConfig.subtitle}
+      />
     </div>
   );
 }
