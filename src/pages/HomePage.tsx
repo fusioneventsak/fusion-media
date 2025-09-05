@@ -417,16 +417,16 @@ const MobileProjectCard = ({ project, index }) => {
   const Icon = iconMap[project.category] || Code;
 
   return (
-    <div className="w-full h-full flex items-center justify-center relative z-[105] overflow-hidden">
+    <div className="w-full h-screen flex items-center justify-center relative z-[105] overflow-hidden">
       {/* Static gradient overlay */}
       <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10`} />
 
-      {/* Mobile-optimized layout */}
-      <div className="relative z-10 w-full px-6 py-8 flex flex-col justify-center items-center h-full max-w-sm mx-auto">
+      {/* Mobile-optimized layout - Better viewport utilization with top padding */}
+      <div className="relative z-10 w-full px-4 pt-24 pb-4 flex flex-col justify-start items-center h-full max-w-sm mx-auto">
         
-        {/* Content Section - Mobile Optimized */}
+        {/* Content Section - Mobile Optimized with better spacing */}
         <motion.div
-          className="space-y-4 text-center w-full"
+          className="space-y-2 text-center w-full flex-shrink-0"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -438,7 +438,7 @@ const MobileProjectCard = ({ project, index }) => {
         >
           {/* Category Badge */}
           <motion.div
-            className="flex items-center justify-center space-x-2 mb-4"
+            className="flex items-center justify-center space-x-2 mb-2"
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
@@ -455,9 +455,9 @@ const MobileProjectCard = ({ project, index }) => {
             </span>
           </motion.div>
 
-          {/* Title */}
+          {/* Title - Smaller for better fit */}
           <motion.h2 
-            className="text-2xl font-light text-white mb-2 leading-tight"
+            className="text-xl font-light text-white mb-2 leading-tight"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -466,7 +466,7 @@ const MobileProjectCard = ({ project, index }) => {
             {project.title}
           </motion.h2>
           <motion.p 
-            className="text-base opacity-70 text-white font-light mb-3"
+            className="text-sm opacity-70 text-white font-light mb-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -475,9 +475,9 @@ const MobileProjectCard = ({ project, index }) => {
             {project.subtitle}
           </motion.p>
 
-          {/* Description - Condensed for mobile */}
+          {/* Description - More condensed for mobile viewport */}
           <motion.p
-            className="text-sm text-white opacity-70 leading-relaxed font-light mb-4 line-clamp-3"
+            className="text-xs text-white opacity-70 leading-relaxed font-light mb-3 line-clamp-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -486,9 +486,9 @@ const MobileProjectCard = ({ project, index }) => {
             {project.description}
           </motion.p>
 
-          {/* Key Features - Limited to 2 for mobile */}
+          {/* Key Features - Compact for mobile */}
           <motion.div 
-            className="space-y-2 mb-4"
+            className="space-y-1 mb-3"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -497,7 +497,7 @@ const MobileProjectCard = ({ project, index }) => {
             {project.features.slice(0, 2).map((feature, i) => (
               <motion.div
                 key={i}
-                className="flex items-start space-x-2"
+                className="flex items-center space-x-2 justify-center"
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -506,8 +506,8 @@ const MobileProjectCard = ({ project, index }) => {
                   delay: 0.7 + i * 0.1
                 }}
               >
-                <div className={`w-4 h-4 bg-gradient-to-br ${project.gradient} rounded-md flex items-center justify-center mt-0.5 shadow-lg flex-shrink-0`}>
-                  <svg className="w-2 h-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className={`w-3 h-3 bg-gradient-to-br ${project.gradient} rounded-md flex items-center justify-center shadow-lg flex-shrink-0`}>
+                  <svg className="w-1.5 h-1.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
@@ -518,39 +518,39 @@ const MobileProjectCard = ({ project, index }) => {
             ))}
           </motion.div>
 
-          {/* Action Buttons - Mobile optimized */}
+          {/* Action Buttons - Compact mobile version */}
           <motion.div 
-            className="flex flex-col gap-2 mb-6 w-full"
+            className="flex flex-row gap-2 mb-2 w-full"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.9 }}
           >
             <motion.button
-              className={`inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r ${project.gradient} text-white rounded-full font-medium shadow-lg hover:opacity-90 transition-all duration-300 text-sm w-full`}
+              className={`inline-flex items-center justify-center px-3 py-1.5 bg-gradient-to-r ${project.gradient} text-white rounded-full font-medium shadow-lg hover:opacity-90 transition-all duration-300 text-xs flex-1`}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => window.open(project.url, '_blank')}
             >
-              <ExternalLink className="w-3 h-3 mr-2" />
-              View Demo
+              <ExternalLink className="w-3 h-3 mr-1" />
+              Demo
             </motion.button>
             
             <motion.button
-              className="inline-flex items-center justify-center px-4 py-2 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300 text-sm w-full"
+              className="inline-flex items-center justify-center px-3 py-1.5 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300 text-xs flex-1"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => window.open(project.url, '_blank')}
             >
-              <Maximize2 className="w-3 h-3 mr-2" />
-              Full Screen
+              <Maximize2 className="w-3 h-3 mr-1" />
+              Full
             </motion.button>
           </motion.div>
         </motion.div>
 
-        {/* Image Section - Below content, mobile-sized */}
+        {/* Image Section - Optimized for mobile viewport with more height */}
         <motion.div
-          className="relative flex items-center justify-center w-full"
+          className="relative flex items-center justify-center w-full flex-1 min-h-0 mt-2"
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -560,7 +560,7 @@ const MobileProjectCard = ({ project, index }) => {
             delay: 0.4
           }}
         >
-          <div className="relative w-full max-w-xs">
+          <div className="relative w-full max-w-sm max-h-64 overflow-hidden">
             <motion.div
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.3 }}
@@ -569,7 +569,7 @@ const MobileProjectCard = ({ project, index }) => {
                 <img
                   src="/Website Images/Custom-business-applications.png"
                   alt="Custom Business Applications"
-                  className="w-full h-auto rounded-lg shadow-xl"
+                  className="w-full h-auto max-h-full object-contain rounded-lg shadow-xl"
                   style={{ 
                     filter: `drop-shadow(0 15px 40px ${project.accentColor}30)`
                   }}
@@ -579,7 +579,7 @@ const MobileProjectCard = ({ project, index }) => {
                 <img
                   src="/Website Images/urequestsongs.com.png"
                   alt="Audience Engagement Platform"
-                  className="w-full h-auto rounded-lg shadow-xl"
+                  className="w-full h-auto max-h-full object-contain rounded-lg shadow-xl"
                   style={{ 
                     filter: `drop-shadow(0 15px 40px ${project.accentColor}30)`
                   }}
@@ -589,7 +589,7 @@ const MobileProjectCard = ({ project, index }) => {
                 <img
                   src="/Website Images/Hero.png"
                   alt="Interactive Widgets & Components"
-                  className="w-full h-auto rounded-lg shadow-xl"
+                  className="w-full h-auto max-h-full object-contain rounded-lg shadow-xl"
                   style={{ 
                     filter: `drop-shadow(0 15px 40px ${project.accentColor}30)`
                   }}
@@ -599,7 +599,7 @@ const MobileProjectCard = ({ project, index }) => {
                 <img
                   src="/Website Images/anthonywrightmusic.com.png"
                   alt="Professional Website Development"
-                  className="w-full h-auto rounded-lg shadow-xl"
+                  className="w-full h-auto max-h-full object-contain rounded-lg shadow-xl"
                   style={{ 
                     filter: `drop-shadow(0 15px 40px ${project.accentColor}30)`
                   }}
@@ -777,15 +777,16 @@ const HorizontalPortfolioSection = () => {
     const scrollTriggerConfig = isMobile ? {
       trigger: container,
       start: "top top",
-      end: () => `+=${totalScrollDistance * 3}`, // Much longer scroll distance for mobile
-      scrub: 0.5, // More responsive for mobile touch
+      end: () => `+=${totalScrollDistance * 4}`, // Even longer scroll distance to ensure proper pinning
+      scrub: 1, // Slower, more controlled for mobile to prevent clash
       pin: true,
-      pinSpacing: false, // Prevent spacing issues
+      pinSpacing: true, // Keep spacing to prevent section clash
       anticipatePin: 1,
       invalidateOnRefresh: true,
       refreshPriority: -1,
       preventOverlaps: true,
       fastScrollEnd: false,
+      markers: false, // Remove any debug markers
       snap: {
         snapTo: (() => {
           const totalProjects = horizontalPortfolioProjects.length;
@@ -795,8 +796,8 @@ const HorizontalPortfolioSection = () => {
           }
           return snapPoints;
         })(),
-        duration: 0.8, // Longer for mobile
-        delay: 0.1,
+        duration: 1.0, // Even slower for mobile to ensure completion
+        delay: 0.2, // More delay to prevent premature snapping
         ease: "power2.out",
         directional: true,
         inertia: false
@@ -940,26 +941,7 @@ const HorizontalPortfolioSection = () => {
           </div>
         </div>
 
-        {/* Mobile Progress Indicator */}
-        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[110]">
-          <div className="flex space-x-2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-2 border border-white/20">
-            {horizontalPortfolioProjects.map((_, index) => (
-              <div
-                key={index}
-                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                  index === currentProject ? 'bg-white w-6' : 'bg-white/40'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile Project Counter */}
-        <div className="fixed top-8 right-8 z-[110] bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 border border-white/20">
-          <span className="text-white text-xs font-medium">
-            {String(currentProject + 1).padStart(2, '0')} / {String(horizontalPortfolioProjects.length).padStart(2, '0')}
-          </span>
-        </div>
+        {/* Mobile indicators removed for cleaner interface */}
       </div>
     );
   }
@@ -1382,105 +1364,148 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'GitHub', 
                   logo: '/logos/Github.webp',
-                  x: -480, 
-                  y: -120,
+                  x: { mobile: -210, desktop: -510 }, 
+                  y: { mobile: -80, desktop: -120 },
                   delay: 0.0, 
                   color: '#333333' 
                 },
                 { 
                   name: 'WordPress', 
                   logo: '/logos/wordpress.webp',
-                  x: -320, 
-                  y: -220,
+                  x: { mobile: -150, desktop: -350 }, 
+                  y: { mobile: -140, desktop: -220 },
                   delay: 0.15, 
                   color: '#21759B' 
                 },
                 { 
                   name: 'Claude', 
                   logo: '/logos/claude.png',
-                  x: -160, 
-                  y: -280,
+                  x: { mobile: -90, desktop: -190 }, 
+                  y: { mobile: -180, desktop: -280 },
                   delay: 0.3, 
                   color: '#FF6B35' 
                 },
                 { 
                   name: 'ChatGPT', 
                   logo: '/logos/openai.jpg',
-                  x: 0, 
-                  y: -320,
+                  x: { mobile: -30, desktop: -30 }, 
+                  y: { mobile: -200, desktop: -320 },
                   delay: 0.45, 
                   color: '#10A37F' 
                 },
                 { 
                   name: 'Supabase', 
                   logo: '/logos/Supabase.webp',
-                  x: 160, 
-                  y: -280,
+                  x: { mobile: 30, desktop: 130 }, 
+                  y: { mobile: -180, desktop: -280 },
                   delay: 0.6, 
                   color: '#3ECF8E' 
                 },
                 { 
                   name: 'Netlify', 
                   logo: '/logos/netlify-logo.webp',
-                  x: 320, 
-                  y: -220,
+                  x: { mobile: 90, desktop: 290 }, 
+                  y: { mobile: -140, desktop: -220 },
                   delay: 0.75, 
                   color: '#00C7B7' 
                 },
                 { 
                   name: 'Bolt.new', 
                   logo: '/logos/Bolt.jpg',
-                  x: 480, 
-                  y: -120,
+                  x: { mobile: 150, desktop: 450 }, 
+                  y: { mobile: -80, desktop: -120 },
                   delay: 0.9, 
                   color: '#FFD700' 
                 }
               ].map((tool, index) => {
                 return (
-                  <motion.div
-                    key={tool.name}
-                    className="absolute hidden lg:block pointer-events-none"
-                    style={{
-                      left: `calc(50% + ${tool.x}px)`,
-                      top: `calc(50% + ${tool.y}px)`,
-                      transform: 'translate(-50%, -50%)'
-                    }}
-                    initial={{ opacity: 0, x: -100, scale: 0.6 }}
-                    whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{
-                      duration: 0.6,
-                      delay: tool.delay,
-                      ease: [0.25, 0.46, 0.45, 0.94]
-                    }}
-                  >
-                    <div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md p-1 bg-white/5">
-                      <img
-                        src={tool.logo}
-                        alt={`${tool.name} logo`}
-                        className="w-full h-full object-cover rounded-xl filter drop-shadow-lg"
-                        style={{ 
-                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' 
-                        }}
-                        onError={(e) => {
-                          // Fallback to a generic icon if image fails to load
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
-                      />
-                      {/* Fallback content */}
-                      <div 
-                        className="w-full h-full items-center justify-center text-lg font-bold rounded-xl"
-                        style={{ 
-                          display: 'none',
+                  <>
+                    {/* Mobile Version */}
+                    <motion.div
+                      key={`${tool.name}-mobile`}
+                      className="absolute block lg:hidden pointer-events-none"
+                      style={{
+                        left: `calc(50% + ${tool.x.mobile}px)`,
+                        top: `calc(50% + ${tool.y.mobile}px)`,
+                        transform: 'translate(-50%, -50%)'
+                      }}
+                      initial={{ opacity: 0, x: -100, scale: 0.6 }}
+                      whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{
+                        duration: 0.6,
+                        delay: tool.delay,
+                        ease: [0.25, 0.46, 0.45, 0.94]
+                      }}
+                    >
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md p-1 bg-white/5">
+                        <img
+                          src={tool.logo}
+                          alt={`${tool.name} logo`}
+                          className="w-full h-full object-cover rounded-xl filter drop-shadow-lg"
+                          style={{ 
+                            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' 
+                          }}
+                        />
+                        <div
+                          className="w-full h-full items-center justify-center text-lg font-bold rounded-xl"
+                          style={{ 
+                            display: 'none',
+                            color: tool.color,
+                            backgroundColor: `${tool.color}20`
+                          }}
+                        >
+                          {tool.name.charAt(0)}
+                        </div>
+                      </div>
+                    </motion.div>
+                    
+                    {/* Desktop Version */}
+                    <motion.div
+                      key={`${tool.name}-desktop`}
+                      className="absolute hidden lg:block pointer-events-none"
+                      style={{
+                        left: `calc(50% + ${tool.x.desktop}px)`,
+                        top: `calc(50% + ${tool.y.desktop}px)`,
+                        transform: 'translate(-50%, -50%)'
+                      }}
+                      initial={{ opacity: 0, x: -100, scale: 0.6 }}
+                      whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{
+                        duration: 0.6,
+                        delay: tool.delay,
+                        ease: [0.25, 0.46, 0.45, 0.94]
+                      }}
+                    >
+                      <div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md p-1 bg-white/5">
+                        <img
+                          src={tool.logo}
+                          alt={`${tool.name} logo`}
+                          className="w-full h-full object-cover rounded-xl filter drop-shadow-lg"
+                          style={{ 
+                            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' 
+                          }}
+                          onError={(e) => {
+                            // Fallback to a generic icon if image fails to load
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                        {/* Fallback content */}
+                        <div 
+                          className="w-full h-full items-center justify-center text-lg font-bold rounded-xl"
+                          style={{ 
+                            display: 'none',
                           color: tool.color,
                           backgroundColor: `${tool.color}20`
                         }}
                       >
-                        {tool.name.charAt(0)}
+                          {tool.name.charAt(0)}
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
+                  </>
                 );
               })}
             </div>
@@ -1818,6 +1843,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           </div>
         </div>
       </motion.section>
+
 
       {/* HORIZONTAL SCROLLING PORTFOLIO SECTION */}
       <div data-section="portfolio">
