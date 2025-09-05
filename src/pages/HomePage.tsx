@@ -1204,10 +1204,10 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           </div>
 
           {/* Content and Image Layout */}
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-center">
             
             {/* Text Content - Left of Image */}
-            <div className="text-left max-w-2xl">
+            <div className="text-left max-w-2xl order-last lg:order-first">
             <motion.p
               className="text-lg md:text-xl lg:text-2xl text-white mb-6 leading-relaxed font-medium italic"
               initial={{ opacity: 0, y: 30 }}
@@ -1276,7 +1276,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
 
             {/* Image Content - Right Side */}
             <motion.div
-              className="relative flex items-center justify-center lg:justify-end"
+              className="relative flex items-center justify-center lg:justify-end order-first lg:order-last"
               initial={{ opacity: 0, scale: 0.8, x: 100 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               transition={{
