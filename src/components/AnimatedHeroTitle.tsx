@@ -26,13 +26,13 @@ export default function AnimatedHeroTitle() {
           minHeight: '1.2em', 
           minWidth: 'auto', // Remove fixed width for mobile
           width: '100%', // Full width on mobile
-          maxWidth: '500px' // Limit max width for desktop
+          maxWidth: '700px' // Increased max width for longer titles
         }}
       >
         <AnimatePresence mode="wait">
           <motion.span
             key={currentWordIndex}
-            className="font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent inline-block leading-relaxed text-center whitespace-nowrap sm:whitespace-normal"
+            className="font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent inline-block leading-relaxed text-center whitespace-nowrap"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}

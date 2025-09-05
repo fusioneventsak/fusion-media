@@ -1364,16 +1364,16 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'GitHub', 
                   logo: '/logos/Github.webp',
-                  x: { mobile: -210, desktop: -510 }, 
-                  y: { mobile: -80, desktop: -120 },
+                  x: { mobile: -170, desktop: -510 }, 
+                  y: { mobile: -100, desktop: -120 },
                   delay: 0.0, 
                   color: '#333333' 
                 },
                 { 
                   name: 'WordPress', 
                   logo: '/logos/wordpress.webp',
-                  x: { mobile: -150, desktop: -350 }, 
-                  y: { mobile: -140, desktop: -220 },
+                  x: { mobile: -70, desktop: -350 }, 
+                  y: { mobile: -100, desktop: -220 },
                   delay: 0.15, 
                   color: '#21759B' 
                 },
@@ -1388,15 +1388,15 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'ChatGPT', 
                   logo: '/logos/openai.jpg',
-                  x: { mobile: -30, desktop: -30 }, 
-                  y: { mobile: -200, desktop: -320 },
+                  x: { mobile: -20, desktop: -30 }, 
+                  y: { mobile: -240, desktop: -320 },
                   delay: 0.45, 
                   color: '#10A37F' 
                 },
                 { 
                   name: 'Supabase', 
                   logo: '/logos/Supabase.webp',
-                  x: { mobile: 30, desktop: 130 }, 
+                  x: { mobile: 50, desktop: 130 }, 
                   y: { mobile: -180, desktop: -280 },
                   delay: 0.6, 
                   color: '#3ECF8E' 
@@ -1404,16 +1404,16 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'Netlify', 
                   logo: '/logos/netlify-logo.webp',
-                  x: { mobile: 90, desktop: 290 }, 
-                  y: { mobile: -140, desktop: -220 },
+                  x: { mobile: 30, desktop: 290 }, 
+                  y: { mobile: -100, desktop: -220 },
                   delay: 0.75, 
                   color: '#00C7B7' 
                 },
                 { 
                   name: 'Bolt.new', 
                   logo: '/logos/Bolt.jpg',
-                  x: { mobile: 150, desktop: 450 }, 
-                  y: { mobile: -80, desktop: -120 },
+                  x: { mobile: 130, desktop: 450 }, 
+                  y: { mobile: -100, desktop: -120 },
                   delay: 0.9, 
                   color: '#FFD700' 
                 }
