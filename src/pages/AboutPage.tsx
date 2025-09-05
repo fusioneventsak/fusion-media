@@ -128,22 +128,22 @@ export default function AboutPage() {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
-                  name: "Alex Chen",
+                  name: "Arthur Kerekes",
                   role: "Chief Technology Officer",
                   bio: "15+ years in full-stack development. Expert in React, Node.js, and emerging technologies like WebGL and AI integration.",
-                  image: "👨‍💻"
+                  image: "/team/Arthur Kerekes.png"
                 },
                 {
                   name: "Sarah Rodriguez",
                   role: "Creative Director",
                   bio: "Award-winning designer specializing in immersive user experiences and interactive installations for events.",
-                  image: "👩‍🎨"
+                  image: "/team/Sarah Rodriguez.png"
                 },
                 {
                   name: "Michael Thompson",
                   role: "Event Technology Lead",
                   bio: "Pioneer in event tech solutions. Has designed interactive experiences for Fortune 500 companies and major events.",
-                  image: "🎪"
+                  image: "/team/Michael Thompson.png"
                 }
               ].map((member, index) => (
                 <motion.div 
@@ -156,7 +156,13 @@ export default function AboutPage() {
                     transition: { duration: 0.15 }
                   }}
                 >
-                  <div className="text-6xl mb-4">{member.image}</div>
+                  <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden bg-gradient-to-br from-purple-500 to-purple-700 p-1">
+                    <img 
+                      src={member.image} 
+                      alt={member.name}
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  </div>
                   <h3 className="text-xl font-semibold mb-2 text-white">{member.name}</h3>
                   <div className="text-cyan-400 font-medium mb-4">{member.role}</div>
                   <p className="text-gray-300 text-sm leading-relaxed">{member.bio}</p>
