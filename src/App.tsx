@@ -72,36 +72,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
-      {/* Fluid Cursor Effect - Behind everything but still visible */}
-      <div 
-        style={{ 
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 1,
-          pointerEvents: 'none'
-        }}
-      >
-        <SplashCursor 
-          SIM_RESOLUTION={64}
-          DYE_RESOLUTION={512}
-          DENSITY_DISSIPATION={8.0}
-          VELOCITY_DISSIPATION={7.0}
-          SPLAT_RADIUS={0.04}
-          SPLAT_FORCE={1500}
-          COLOR_UPDATE_SPEED={0}
-          CURL={1}
-          STABLE_COLORS={true}
-        />
-      </div>
-      
       {/* Enhanced 3D Background - Behind cursor but visible */}
       <div 
         className="fixed inset-0" 
         style={{ 
-          zIndex: 2,
+          zIndex: 1,
           pointerEvents: 'none'
         }}
       >
@@ -149,6 +124,31 @@ export default function App() {
         >
           <Scene currentPage={currentPage} />
         </Canvas>
+      </div>
+
+      {/* Fluid Cursor Effect - Above 3D background */}
+      <div 
+        style={{ 
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 50,
+          pointerEvents: 'none'
+        }}
+      >
+        <SplashCursor 
+          SIM_RESOLUTION={32}
+          DYE_RESOLUTION={256}
+          DENSITY_DISSIPATION={15.0}
+          VELOCITY_DISSIPATION={12.0}
+          SPLAT_RADIUS={0.02}
+          SPLAT_FORCE={800}
+          COLOR_UPDATE_SPEED={0}
+          CURL={0.5}
+          STABLE_COLORS={true}
+        />
       </div>
 
       {/* Navigation - Above backgrounds */}

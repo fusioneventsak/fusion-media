@@ -112,11 +112,11 @@ const HorizontalProjectCard = ({ project, index }) => {
         }}
       />
 
-      <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-center h-full px-6 py-8" style={{ maxHeight: 'calc(100vh - 80px)', marginTop: '80px' }}>
+      <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-2 gap-6 items-center min-h-screen px-6 py-4">
         
         {/* Content Side */}
         <motion.div
-          className="space-y-4"
+          className="space-y-3"
           initial={{ opacity: 0, x: -100 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -150,7 +150,7 @@ const HorizontalProjectCard = ({ project, index }) => {
           {/* Title */}
           <div>
             <motion.h2 
-              className="text-3xl md:text-4xl lg:text-5xl font-light text-white mb-3 leading-tight"
+              className="text-2xl md:text-3xl lg:text-4xl font-light text-white mb-2 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -159,7 +159,7 @@ const HorizontalProjectCard = ({ project, index }) => {
               {project.title}
             </motion.h2>
             <motion.p 
-              className="text-lg md:text-xl opacity-70 text-white font-light mb-4"
+              className="text-base md:text-lg opacity-70 text-white font-light mb-3"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -171,7 +171,7 @@ const HorizontalProjectCard = ({ project, index }) => {
 
           {/* Description */}
           <motion.p
-            className="text-base md:text-lg text-white opacity-70 leading-relaxed font-light"
+            className="text-sm md:text-base text-white opacity-70 leading-relaxed font-light"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -182,7 +182,7 @@ const HorizontalProjectCard = ({ project, index }) => {
 
           {/* Features */}
           <motion.div 
-            className="space-y-3"
+            className="space-y-2"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -234,7 +234,7 @@ const HorizontalProjectCard = ({ project, index }) => {
 
           {/* Action Buttons */}
           <motion.div 
-            className="flex flex-col sm:flex-row gap-3 pt-2"
+            className="flex flex-col sm:flex-row gap-2 pt-1"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -287,7 +287,7 @@ const HorizontalProjectCard = ({ project, index }) => {
                 scale: 1.05
               }}
               transition={{ duration: 0.3 }}
-              style={{ width: '150%', maxWidth: 'none' }}
+              style={{ width: '100%', maxWidth: '600px' }}
             >
               {/* Raw Images Only - Full Size */}
               {project.id === 1 ? (
@@ -316,8 +316,8 @@ const HorizontalProjectCard = ({ project, index }) => {
                 />
               ) : project.id === 3 ? (
                 <img
-                  src="/Website Images/Custom-business-applications.png"
-                  alt="Interactive Widgets & Components"
+                  src="/Website Images/Hero.png"
+                  alt="Interactive Widgets & Components - AI PhotoBooth Interface"
                   style={{ 
                     width: '100%',
                     height: 'auto',
@@ -526,7 +526,7 @@ const HorizontalPortfolioSection = () => {
         ref={containerRef} 
         className="relative"
         style={{ 
-          height: '100vh', 
+          minHeight: '100vh', 
           overflow: 'hidden',
           background: 'transparent',
           zIndex: 100, // Increased z-index to be above WebGL
