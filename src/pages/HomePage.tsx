@@ -403,19 +403,254 @@ const HorizontalProjectCard = ({ project, index }) => {
   );
 };
 
+// Mobile-Optimized Project Card Component for horizontal layout
+const MobileProjectCard = ({ project, index }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  const iconMap = {
+    "Web Applications": Code,
+    "Event Technology": Zap,
+    "Interactive Media": Play,
+    "Web Development": Globe
+  };
+
+  const Icon = iconMap[project.category] || Code;
+
+  return (
+    <div className="w-full h-full flex items-center justify-center relative z-[105] overflow-hidden">
+      {/* Static gradient overlay */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10`} />
+
+      {/* Mobile-optimized layout */}
+      <div className="relative z-10 w-full px-6 py-8 flex flex-col justify-center items-center h-full max-w-sm mx-auto">
+        
+        {/* Content Section - Mobile Optimized */}
+        <motion.div
+          className="space-y-4 text-center w-full"
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{
+            duration: 1.2,
+            ease: [0.25, 0.46, 0.45, 0.94],
+            delay: 0.2
+          }}
+        >
+          {/* Category Badge */}
+          <motion.div
+            className="flex items-center justify-center space-x-2 mb-4"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+          >
+            <div 
+              className={`w-8 h-8 bg-gradient-to-br ${project.gradient} rounded-lg flex items-center justify-center shadow-lg`}
+              style={{ boxShadow: `0 0 20px ${project.accentColor}30` }}
+            >
+              <Icon className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-xs font-medium tracking-wider uppercase" style={{ color: project.accentColor }}>
+              {project.category}
+            </span>
+          </motion.div>
+
+          {/* Title */}
+          <motion.h2 
+            className="text-2xl font-light text-white mb-2 leading-tight"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+          >
+            {project.title}
+          </motion.h2>
+          <motion.p 
+            className="text-base opacity-70 text-white font-light mb-3"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            {project.subtitle}
+          </motion.p>
+
+          {/* Description - Condensed for mobile */}
+          <motion.p
+            className="text-sm text-white opacity-70 leading-relaxed font-light mb-4 line-clamp-3"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+          >
+            {project.description}
+          </motion.p>
+
+          {/* Key Features - Limited to 2 for mobile */}
+          <motion.div 
+            className="space-y-2 mb-4"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            {project.features.slice(0, 2).map((feature, i) => (
+              <motion.div
+                key={i}
+                className="flex items-start space-x-2"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.6,
+                  delay: 0.7 + i * 0.1
+                }}
+              >
+                <div className={`w-4 h-4 bg-gradient-to-br ${project.gradient} rounded-md flex items-center justify-center mt-0.5 shadow-lg flex-shrink-0`}>
+                  <svg className="w-2 h-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span className="text-white opacity-90 font-medium leading-relaxed text-xs">
+                  {feature}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Action Buttons - Mobile optimized */}
+          <motion.div 
+            className="flex flex-col gap-2 mb-6 w-full"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+          >
+            <motion.button
+              className={`inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r ${project.gradient} text-white rounded-full font-medium shadow-lg hover:opacity-90 transition-all duration-300 text-sm w-full`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => window.open(project.url, '_blank')}
+            >
+              <ExternalLink className="w-3 h-3 mr-2" />
+              View Demo
+            </motion.button>
+            
+            <motion.button
+              className="inline-flex items-center justify-center px-4 py-2 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300 text-sm w-full"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => window.open(project.url, '_blank')}
+            >
+              <Maximize2 className="w-3 h-3 mr-2" />
+              Full Screen
+            </motion.button>
+          </motion.div>
+        </motion.div>
+
+        {/* Image Section - Below content, mobile-sized */}
+        <motion.div
+          className="relative flex items-center justify-center w-full"
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{
+            duration: 1.2,
+            ease: [0.25, 0.46, 0.45, 0.94],
+            delay: 0.4
+          }}
+        >
+          <div className="relative w-full max-w-xs">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              {project.id === 1 ? (
+                <img
+                  src="/Website Images/Custom-business-applications.png"
+                  alt="Custom Business Applications"
+                  className="w-full h-auto rounded-lg shadow-xl"
+                  style={{ 
+                    filter: `drop-shadow(0 15px 40px ${project.accentColor}30)`
+                  }}
+                  onLoad={() => setIsLoaded(true)}
+                />
+              ) : project.id === 2 ? (
+                <img
+                  src="/Website Images/urequestsongs.com.png"
+                  alt="Audience Engagement Platform"
+                  className="w-full h-auto rounded-lg shadow-xl"
+                  style={{ 
+                    filter: `drop-shadow(0 15px 40px ${project.accentColor}30)`
+                  }}
+                  onLoad={() => setIsLoaded(true)}
+                />
+              ) : project.id === 3 ? (
+                <img
+                  src="/Website Images/Hero.png"
+                  alt="Interactive Widgets & Components"
+                  className="w-full h-auto rounded-lg shadow-xl"
+                  style={{ 
+                    filter: `drop-shadow(0 15px 40px ${project.accentColor}30)`
+                  }}
+                  onLoad={() => setIsLoaded(true)}
+                />
+              ) : project.id === 4 ? (
+                <img
+                  src="/Website Images/anthonywrightmusic.com.png"
+                  alt="Professional Website Development"
+                  className="w-full h-auto rounded-lg shadow-xl"
+                  style={{ 
+                    filter: `drop-shadow(0 15px 40px ${project.accentColor}30)`
+                  }}
+                  onLoad={() => setIsLoaded(true)}
+                />
+              ) : null}
+              
+              {!isLoaded && (
+                <div className="absolute inset-0 bg-gray-900/50 flex items-center justify-center rounded-lg">
+                  <div className={`w-4 h-4 border-2 border-t-transparent rounded-full animate-spin`} 
+                       style={{ borderColor: project.accentColor, borderTopColor: 'transparent' }}>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
 // Main Horizontal Portfolio Section
 const HorizontalPortfolioSection = () => {
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
+  const mobileScrollRef = useRef(null);
   const [gsapLoaded, setGsapLoaded] = useState(false);
   const [currentProject, setCurrentProject] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const wheelCountRef = useRef(0);
   const wheelTimeoutRef = useRef(null);
   const lastWheelTimeRef = useRef(0);
   const scrollTriggerRef = useRef(null);
   const accumulatedDeltaRef = useRef(0);
   const isScrollingRef = useRef(false);
+
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Remove conflicting mobile touch handling - GSAP ScrollTrigger handles all scrolling
 
   useEffect(() => {
     // Load GSAP and ScrollTrigger
@@ -488,63 +723,41 @@ const HorizontalPortfolioSection = () => {
     };
   }, [gsapLoaded, currentProject, horizontalPortfolioProjects.length]);
 
-  // Handle touch events for mobile
+  // Handle touch events for mobile - Simplified to work with GSAP ScrollTrigger
   useEffect(() => {
-    if (!containerRef.current || !gsapLoaded) return;
+    if (!containerRef.current || !gsapLoaded || !isMobile) return;
 
-    let startX = 0;
     let startY = 0;
-    let isSwiping = false;
+    let isScrolling = false;
 
     const handleTouchStart = (e) => {
-      startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
-      isSwiping = false;
+      isScrolling = false;
     };
 
     const handleTouchMove = (e) => {
-      if (!isSwiping) {
-        const deltaX = Math.abs(e.touches[0].clientX - startX);
+      if (!isScrolling) {
         const deltaY = Math.abs(e.touches[0].clientY - startY);
         
-        // Determine if this is a horizontal swipe
-        if (deltaX > deltaY && deltaX > 30) {
-          isSwiping = true;
-          e.preventDefault();
-        }
-      }
-    };
-
-    const handleTouchEnd = (e) => {
-      if (!isSwiping) return;
-
-      const endX = e.changedTouches[0].clientX;
-      const deltaX = endX - startX;
-      
-      // Minimum swipe distance
-      if (Math.abs(deltaX) > 50) {
-        const direction = deltaX > 0 ? -1 : 1; // Reversed for natural feel
-        const nextProject = Math.max(0, Math.min(horizontalPortfolioProjects.length - 1, currentProject + direction));
-        
-        if (nextProject !== currentProject) {
-          navigateToProject(nextProject);
+        // If significant vertical movement, allow ScrollTrigger to handle
+        if (deltaY > 10) {
+          isScrolling = true;
         }
       }
       
-      isSwiping = false;
+      // Let GSAP ScrollTrigger handle all scrolling naturally
+      // Don't prevent default - let the scroll trigger work
     };
 
     const container = containerRef.current;
-    container.addEventListener('touchstart', handleTouchStart, { passive: false });
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
-    container.addEventListener('touchend', handleTouchEnd, { passive: false });
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
     return () => {
       container.removeEventListener('touchstart', handleTouchStart);
       container.removeEventListener('touchmove', handleTouchMove);
-      container.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [gsapLoaded, currentProject, navigateToProject, horizontalPortfolioProjects.length]);
+  }, [gsapLoaded, isMobile]);
 
   useEffect(() => {
     if (!gsapLoaded || !containerRef.current || !scrollContainerRef.current) return;
@@ -560,41 +773,40 @@ const HorizontalPortfolioSection = () => {
     // Calculate the total scroll distance needed
     const totalScrollDistance = (horizontalPortfolioProjects.length - 1) * window.innerWidth;
 
-    // Create the main horizontal scroll animation with enhanced snap sensitivity
-    const scrollTrigger = ScrollTrigger.create({
+    // Different configuration for mobile vs desktop
+    const scrollTriggerConfig = isMobile ? {
       trigger: container,
       start: "top top",
-      end: () => `+=${totalScrollDistance}`,
-      scrub: 0.1, // Much more responsive - nearly instant response
+      end: () => `+=${totalScrollDistance * 3}`, // Much longer scroll distance for mobile
+      scrub: 0.5, // More responsive for mobile touch
       pin: true,
+      pinSpacing: false, // Prevent spacing issues
       anticipatePin: 1,
       invalidateOnRefresh: true,
       refreshPriority: -1,
+      preventOverlaps: true,
+      fastScrollEnd: false,
       snap: {
         snapTo: (() => {
-          // Pre-calculate exact snap points for each section
           const totalProjects = horizontalPortfolioProjects.length;
           const snapPoints = [];
           for (let i = 0; i < totalProjects; i++) {
             snapPoints.push(i / (totalProjects - 1));
           }
-          return snapPoints; // Return array of exact snap points
+          return snapPoints;
         })(),
-        duration: 0.4, // Faster snap transitions
-        delay: 0.01, // Minimal delay for immediate response
-        ease: "power1.out", // Gentler easing for smoother feel
-        directional: false, // Snap to closest point regardless of scroll direction
-        // Make snapping more sensitive to small movements
-        inertia: false // Disable inertia for more predictable snapping
+        duration: 0.8, // Longer for mobile
+        delay: 0.1,
+        ease: "power2.out",
+        directional: true,
+        inertia: false
       },
-      // Enhanced sensitivity settings
-      fastScrollEnd: true, // End fast scrolling quickly
       // Track progress for current project indicator
       onUpdate: (self) => {
         const progress = self.progress;
         const totalProjects = horizontalPortfolioProjects.length;
         const newProject = Math.min(Math.round(progress * (totalProjects - 1)), totalProjects - 1);
-        if (!isTransitioning) { // Only update if not transitioning via custom navigation
+        if (!isTransitioning) {
           setCurrentProject(newProject);
         }
       },
@@ -602,10 +814,62 @@ const HorizontalPortfolioSection = () => {
         x: -totalScrollDistance,
         ease: "none"
       })
-    });
+    } : {
+      // Desktop configuration (original)
+      trigger: container,
+      start: "top top",
+      end: () => `+=${totalScrollDistance}`,
+      scrub: 0.1,
+      pin: true,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      refreshPriority: -1,
+      snap: {
+        snapTo: (() => {
+          const totalProjects = horizontalPortfolioProjects.length;
+          const snapPoints = [];
+          for (let i = 0; i < totalProjects; i++) {
+            snapPoints.push(i / (totalProjects - 1));
+          }
+          return snapPoints;
+        })(),
+        duration: 0.4,
+        delay: 0.01,
+        ease: "power1.out",
+        directional: false,
+        inertia: false
+      },
+      fastScrollEnd: true,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const totalProjects = horizontalPortfolioProjects.length;
+        const newProject = Math.min(Math.round(progress * (totalProjects - 1)), totalProjects - 1);
+        if (!isTransitioning) {
+          setCurrentProject(newProject);
+        }
+      },
+      animation: gsap.to(scrollContainer, {
+        x: -totalScrollDistance,
+        ease: "none"
+      })
+    };
+
+    // Create the scroll trigger with device-specific config
+    const scrollTrigger = ScrollTrigger.create(scrollTriggerConfig);
 
     // Store reference for custom navigation
     scrollTriggerRef.current = scrollTrigger;
+
+    // iOS-specific fixes for mobile
+    if (isMobile) {
+      // Prevent momentum scrolling on iOS that can cause issues
+      document.body.style.webkitOverflowScrolling = 'auto';
+      
+      // Force ScrollTrigger to refresh after a small delay on mobile
+      setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 100);
+    }
 
     // Handle resize
     const handleResize = () => {
@@ -621,10 +885,86 @@ const HorizontalPortfolioSection = () => {
       }
       scrollTriggerRef.current = null;
       window.removeEventListener('resize', handleResize);
-      // ScrollTrigger cleanup handles restoration automatically
     };
-  }, [gsapLoaded]);
+  }, [gsapLoaded, isMobile, horizontalPortfolioProjects.length]);
 
+  // Mobile rendering - use GSAP with mobile optimizations
+  if (isMobile) {
+    if (!gsapLoaded) {
+      return (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="relative">
+        {/* Mobile Horizontal Scrolling Container with GSAP */}
+        <div 
+          ref={containerRef} 
+          className="relative"
+          style={{ 
+            minHeight: '100vh', 
+            overflow: 'hidden',
+            background: 'transparent',
+            zIndex: 100,
+            position: 'relative',
+            pointerEvents: 'auto',
+            // Ensure this section takes up full viewport and blocks vertical scroll
+            width: '100vw',
+            left: '50%',
+            marginLeft: '-50vw'
+          }}
+        >
+          <div 
+            ref={scrollContainerRef}
+            className="flex h-full relative"
+            style={{ 
+              width: `${horizontalPortfolioProjects.length * 100}vw`,
+              willChange: 'transform',
+              zIndex: 101
+            }}
+          >
+            {horizontalPortfolioProjects.map((project, index) => (
+              <div 
+                key={project.id}
+                className="w-screen h-full flex-shrink-0"
+              >
+                <MobileProjectCard
+                  project={project}
+                  index={index}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Progress Indicator */}
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-[110]">
+          <div className="flex space-x-2 bg-black/60 backdrop-blur-sm rounded-full px-3 py-2 border border-white/20">
+            {horizontalPortfolioProjects.map((_, index) => (
+              <div
+                key={index}
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  index === currentProject ? 'bg-white w-6' : 'bg-white/40'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Mobile Project Counter */}
+        <div className="fixed top-8 right-8 z-[110] bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 border border-white/20">
+          <span className="text-white text-xs font-medium">
+            {String(currentProject + 1).padStart(2, '0')} / {String(horizontalPortfolioProjects.length).padStart(2, '0')}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Desktop rendering - horizontal scroll (existing logic)
   if (!gsapLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center">
