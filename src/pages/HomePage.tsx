@@ -1051,12 +1051,18 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, delay: 1.2 }} // Delayed to appear after logos
           >
             <div className="relative">
-              <h2 className="text-5xl md:text-7xl font-light text-white mb-8 leading-tight relative z-10">
+              <motion.h2 
+                className="text-5xl md:text-7xl font-light text-white mb-8 leading-tight relative z-10"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 1.4 }} // Title appears after logos complete
+              >
                 Our <span className="font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Work</span>
-              </h2>
+              </motion.h2>
               
               {/* Semi-Circle Tool Logos Above Title */}
               {[
@@ -1065,7 +1071,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/Github.webp',
                   x: -480, 
                   y: -120,
-                  delay: 0.3, 
+                  delay: 0.1, 
                   color: '#333333' 
                 },
                 { 
@@ -1073,7 +1079,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/wordpress.webp',
                   x: -320, 
                   y: -220,
-                  delay: 0.8, 
+                  delay: 0.3, 
                   color: '#21759B' 
                 },
                 { 
@@ -1089,7 +1095,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/openai.jpg',
                   x: 0, 
                   y: -320,
-                  delay: 1.1, 
+                  delay: 0.7, 
                   color: '#10A37F' 
                 },
                 { 
@@ -1097,7 +1103,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/Supabase.webp',
                   x: 160, 
                   y: -280,
-                  delay: 0.2, 
+                  delay: 0.9, 
                   color: '#3ECF8E' 
                 },
                 { 
@@ -1105,7 +1111,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/netlify-logo.webp',
                   x: 320, 
                   y: -220,
-                  delay: 0.9, 
+                  delay: 1.1, 
                   color: '#00C7B7' 
                 },
                 { 
@@ -1113,7 +1119,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/Bolt.jpg',
                   x: 480, 
                   y: -120,
-                  delay: 0.6, 
+                  delay: 1.3, 
                   color: '#FFD700' 
                 }
               ].map((tool, index) => {
@@ -1126,11 +1132,11 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                       top: `calc(50% + ${tool.y}px)`,
                       transform: 'translate(-50%, -50%)'
                     }}
-                    initial={{ opacity: 0, y: 30, scale: 0.8 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    initial={{ opacity: 0, x: -50, scale: 0.6 }}
+                    whileInView={{ opacity: 1, x: 0, scale: 1 }}
                     viewport={{ once: true, amount: 0.3 }}
                     transition={{
-                      duration: 0.6,
+                      duration: 0.8,
                       delay: tool.delay,
                       ease: [0.25, 0.46, 0.45, 0.94]
                     }}
@@ -1166,19 +1172,21 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               })}
             </div>
             
-            <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-light mb-8">
+            <motion.p 
+              className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed font-light mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 1.6 }}
+            >
               Transforming ideas into powerful digital experiences with AI-assisted development
-            </p>
+            </motion.p>
             <motion.button
               className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20 hover:bg-white/20 transition-all duration-300 cursor-pointer"
-              animate={{
-                scale: [1, 1.05, 1],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 1.8 }}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
