@@ -570,8 +570,6 @@ const HorizontalPortfolioSection = () => {
       anticipatePin: 1,
       invalidateOnRefresh: true,
       refreshPriority: -1,
-      pinSpacing: false, // Prevent spacing issues that might allow bypassing
-      fastScrollEnd: false, // Disable fast scroll end to prevent skipping
       snap: {
         snapTo: (() => {
           // Pre-calculate exact snap points for each section
@@ -599,23 +597,6 @@ const HorizontalPortfolioSection = () => {
         if (!isTransitioning) { // Only update if not transitioning via custom navigation
           setCurrentProject(newProject);
         }
-        
-        // Prevent bypassing by enforcing strict progress constraints
-        if (progress > 0 && progress < 0.98) {
-          // User is in the middle of the horizontal section - prevent normal scrolling
-          document.body.style.overflow = 'hidden';
-        } else if (progress >= 0.98) {
-          // User has completed the horizontal section - allow normal scrolling
-          document.body.style.overflow = 'auto';
-        }
-      },
-      onEnter: () => {
-        // When entering horizontal section, disable normal scrolling
-        document.body.style.overflow = 'hidden';
-      },
-      onLeave: () => {
-        // When leaving horizontal section, restore normal scrolling
-        document.body.style.overflow = 'auto';
       },
       animation: gsap.to(scrollContainer, {
         x: -totalScrollDistance,
@@ -640,8 +621,7 @@ const HorizontalPortfolioSection = () => {
       }
       scrollTriggerRef.current = null;
       window.removeEventListener('resize', handleResize);
-      // Restore body overflow on cleanup
-      document.body.style.overflow = 'auto';
+      // ScrollTrigger cleanup handles restoration automatically
     };
   }, [gsapLoaded]);
 
