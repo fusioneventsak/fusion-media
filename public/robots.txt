@@ -1,17 +1,18 @@
-# Robots.txt for Fusion Media
+# Robots.txt for Fusion Interactive
 # AI-powered web development agency in Toronto
-# https://fusionmedia.ca
+# https://fusioninteractive.agency
 
 User-agent: *
 Allow: /
 Crawl-delay: 1
 
-# Priority content for search engines
-Allow: /services/
-Allow: /blog/
+# Priority content for search engines - React Router paths
 Allow: /about
+Allow: /why-us
 Allow: /contact
-Allow: /case-studies/
+Allow: /blog
+Allow: /blog/
+Allow: /case-studies
 
 # Blog posts with SEO focus
 Allow: /blog/technical-seo-guide-2024
@@ -73,4 +74,4 @@ Allow: /
 Allow: /LLM.txt
 
 # Sitemap location
-Sitemap: https://fusionmedia.ca/sitemap.xml
+Sitemap: https://fusioninteractive.agency/sitemap.xml

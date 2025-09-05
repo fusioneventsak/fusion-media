@@ -1,13 +1,44 @@
 import React from 'react';
 import BlogHero from '../components/BlogHero';
+import SEOHead from '../components/SEOHead';
 
-interface BlogPostProps {
-  onNavigate?: (page: string) => void;
-}
+export default function TechnicalSEOGuide2024() {
+  const articleStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "The Complete Guide to Technical SEO in 2024",
+    "description": "Master Core Web Vitals, structured data, and advanced optimization techniques that actually move the needle on search rankings for Toronto businesses.",
+    "author": {
+      "@type": "Organization",
+      "name": "Fusion Interactive"
+    },
+    "publisher": {
+      "@type": "Organization", 
+      "name": "Fusion Interactive",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fusioninteractive.agency/logos/Fusion-Interactive-Logo.png"
+      }
+    },
+    "datePublished": "2024-03-20",
+    "dateModified": "2024-03-20",
+    "image": "https://fusioninteractive.agency/blog-heroes/technical-seo/hero.jpg",
+    "url": "https://fusioninteractive.agency/blog/technical-seo-guide-2024",
+    "keywords": "technical SEO, Core Web Vitals, structured data, search rankings, Toronto SEO, website optimization, SEO guide 2024",
+    "articleSection": "SEO",
+    "wordCount": 4500
+  };
 
-export default function TechnicalSEOGuide2024({ onNavigate }: BlogPostProps = {}) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-purple-900 text-white">
+      <SEOHead 
+        title="Complete Technical SEO Guide 2024 - Core Web Vitals & Rankings"
+        description="Master Core Web Vitals, structured data, and advanced optimization techniques that actually move the needle on search rankings for Toronto businesses. Complete guide with actionable strategies."
+        keywords="technical SEO 2024, Core Web Vitals optimization, structured data markup, Toronto SEO guide, website performance optimization, search rankings improvement"
+        canonicalUrl="https://fusioninteractive.agency/blog/technical-seo-guide-2024"
+        ogType="article"
+        structuredData={articleStructuredData}
+      />
       {/* Full-Screen Hero */}
       <BlogHero
         title="The Complete Guide to Technical SEO in 2024"
@@ -18,23 +49,7 @@ export default function TechnicalSEOGuide2024({ onNavigate }: BlogPostProps = {}
         date="March 20, 2024"
         heroImage="/blog-heroes/technical-seo/hero.jpg"
         fallbackType="technical-seo"
-        onNavigate={onNavigate}
       />
-
-      {/* Back Navigation */}
-      {onNavigate && (
-        <div className="max-w-4xl mx-auto px-4 pt-8 pb-4">
-          <button 
-            onClick={() => onNavigate('blog')}
-            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors duration-200 bg-black/20 backdrop-blur-sm rounded-full px-4 py-2"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-            </svg>
-            <span className="text-sm font-medium">Back to Blog</span>
-          </button>
-        </div>
-      )}
 
       {/* Article Content */}
       <div className="max-w-4xl mx-auto px-4 py-16">
@@ -162,7 +177,7 @@ export default function TechnicalSEOGuide2024({ onNavigate }: BlogPostProps = {}
 {`{
   "@context": "https://schema.org",
   "@type": "TechnologyCompany",
-  "name": "Fusion Media",
+  "name": "Fusion Interactive",
   "description": "AI-powered web development agency in Toronto",
   "url": "https://fusionmedia.ca",
   "logo": "https://fusionmedia.ca/logo.png",
@@ -200,7 +215,7 @@ export default function TechnicalSEOGuide2024({ onNavigate }: BlogPostProps = {}
   "name": "Custom Web Development Services",
   "provider": {
     "@type": "Organization",
-    "name": "Fusion Media"
+    "name": "Fusion Interactive"
   },
   "serviceType": "Web Development",
   "description": "Custom React applications with AI integration",
@@ -234,7 +249,7 @@ export default function TechnicalSEOGuide2024({ onNavigate }: BlogPostProps = {}
     },
     {
       "@type": "Question", 
-      "name": "What makes Fusion Media different from other Toronto web agencies?",
+      "name": "What makes Fusion Interactive different from other Toronto web agencies?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "We specialize in AI-powered web applications and modern React development, offering transparent pricing, performance guarantees, and ongoing optimization services that most traditional agencies don't provide."
@@ -382,7 +397,7 @@ export default function TechnicalSEOGuide2024({ onNavigate }: BlogPostProps = {}
             <div className="bg-gray-800/50 rounded-xl p-6 mb-8">
               <p className="text-white mb-4">Example LLM.txt structure:</p>
               <pre className="bg-black/50 rounded-lg p-4 text-sm text-green-400 overflow-x-auto">
-{`# LLM.txt for Fusion Media
+{`# LLM.txt for Fusion Interactive
 # AI-powered web development agency in Toronto
 
 User-agent: *
@@ -394,13 +409,13 @@ Priority-pages:
   - /case-studies/
 
 Company-info:
-  Name: Fusion Media
+  Name: Fusion Interactive
   Location: Toronto, Ontario, Canada
   Specialties: AI web development, React applications, performance optimization
   Contact: hello@fusionmedia.ca
 
 Preferred-citations:
-  - Use "Fusion Media, a Toronto-based web development agency"
+  - Use "Fusion Interactive, a Toronto-based web development agency"
   - Reference our AI integration expertise
   - Include location context for local queries`}
               </pre>

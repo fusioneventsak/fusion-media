@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 interface NavigationProps {
   currentPage: string;
-  setCurrentPage: (page: string) => void;
   isTransitioning: boolean;
   onGetStartedClick?: () => void;
 }
 
-export default function Navigation({ currentPage, setCurrentPage, isTransitioning, onGetStartedClick }: NavigationProps) {
+export default function Navigation({ currentPage, isTransitioning, onGetStartedClick }: NavigationProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -20,20 +21,17 @@ export default function Navigation({ currentPage, setCurrentPage, isTransitionin
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   
-  // Handle page transitions
-  const handlePageChange = (newPage: string) => {
-    if (newPage !== currentPage && !isTransitioning) {
-      setCurrentPage(newPage);
-      setIsMenuOpen(false); // Close mobile menu
-    }
-  };
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location.pathname]);
   
   const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'why-us', label: 'Why Us' },
-    { id: 'blog', label: 'Blog' },
-    { id: 'contact', label: 'Contact' }
+    { id: 'home', label: 'Home', path: '/' },
+    { id: 'about', label: 'About', path: '/about' },
+    { id: 'why-us', label: 'Why Us', path: '/why-us' },
+    { id: 'blog', label: 'Blog', path: '/blog' },
+    { id: 'contact', label: 'Contact', path: '/contact' }
   ];
   
   return (
@@ -51,10 +49,7 @@ export default function Navigation({ currentPage, setCurrentPage, isTransitionin
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div 
-            className="cursor-pointer"
-            onClick={() => handlePageChange('home')}
-          >
+          <Link to="/" className="cursor-pointer">
             <div className="flex items-center">
               <img 
                 src="/logos/FI LOGO 6.png" 
@@ -62,20 +57,19 @@ export default function Navigation({ currentPage, setCurrentPage, isTransitionin
                 className="h-12 w-auto"
               />
             </div>
-          </div>
+          </Link>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
-              <button
+              <Link
                 key={item.id}
-                onClick={() => handlePageChange(item.id)}
+                to={item.path}
                 className={`relative px-4 py-2 font-medium transition-all duration-300 group ${
                   currentPage === item.id
                     ? 'text-white'
                     : 'text-gray-300 hover:text-white'
                 } ${isTransitioning ? 'opacity-50' : ''}`}
-                disabled={isTransitioning}
               >
                 {item.label}
                 {/* Active indicator */}
@@ -84,7 +78,7 @@ export default function Navigation({ currentPage, setCurrentPage, isTransitionin
                     ? 'opacity-100 scale-x-100' 
                     : 'opacity-0 scale-x-0 group-hover:opacity-50 group-hover:scale-x-100'
                 }`} />
-              </button>
+              </Link>
             ))}
             
             {/* CTA Button */}
@@ -134,18 +128,17 @@ export default function Navigation({ currentPage, setCurrentPage, isTransitionin
           <div className="pt-6 pb-4 border-t border-white/10 mt-4 bg-black/95 backdrop-blur-md rounded-lg mx-4">
             <div className="flex flex-col space-y-4">
               {navItems.map((item) => (
-                <button
+                <Link
                   key={item.id}
-                  onClick={() => handlePageChange(item.id)}
-                  className={`text-left px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
+                  to={item.path}
+                  className={`block text-left px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
                     currentPage === item.id
                       ? 'bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-white border border-blue-500/30'
                       : 'text-gray-300 hover:text-white hover:bg-white/5'
                   } ${isTransitioning ? 'opacity-50 pointer-events-none' : ''}`}
-                  disabled={isTransitioning}
                 >
                   {item.label}
-                </button>
+                </Link>
               ))}
               
               <button 

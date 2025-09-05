@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import SEOHead from '../components/SEOHead';
 
 export default function AboutPage() {
   // Much simpler animation variants focused on readability
@@ -58,8 +59,48 @@ export default function AboutPage() {
     }
   };
 
+  const aboutStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Fusion Interactive - Toronto Web Development Agency",
+    "description": "Learn about Fusion Interactive's expert team of developers and designers specializing in AI-powered web development and interactive experiences in Toronto.",
+    "url": "https://fusioninteractive.agency/about",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Fusion Interactive",
+      "foundingDate": "2014",
+      "employee": [
+        {
+          "@type": "Person",
+          "name": "Arthur Kerekes",
+          "jobTitle": "Chief Technology Officer",
+          "description": "15+ years in full-stack development. Expert in React, Node.js, and emerging technologies like WebGL and AI integration."
+        },
+        {
+          "@type": "Person", 
+          "name": "Sarah Rodriguez",
+          "jobTitle": "Creative Director",
+          "description": "Award-winning designer specializing in immersive user experiences and interactive installations for events."
+        },
+        {
+          "@type": "Person",
+          "name": "Ferdinand Raymond", 
+          "jobTitle": "Full Stack Developer",
+          "description": "Certified AWS Solutions Architect and Google Cloud Professional with 8+ years experience. Specializes in scalable web applications, microservices architecture, and cloud-native development."
+        }
+      ]
+    }
+  };
+
   return (
     <div className="relative z-10 pointer-events-none">
+      <SEOHead 
+        title="About Us - Expert Toronto Web Development Team"
+        description="Learn about Fusion Interactive's expert team of developers and designers specializing in AI-powered web development, React applications, and interactive experiences in Toronto since 2014."
+        keywords="Toronto web development team, React developers Toronto, AI development experts, full stack developers, web design agency Toronto, interactive media specialists"
+        canonicalUrl="https://fusioninteractive.agency/about"
+        structuredData={aboutStructuredData}
+      />
       <section className="min-h-screen flex items-center justify-center px-8 pt-24">
         <motion.div 
           className="max-w-7xl w-full pointer-events-auto"
@@ -84,8 +125,8 @@ export default function AboutPage() {
               </p>
               <p className="text-lg text-gray-300 mb-6 leading-relaxed">
                 Our team of visionary developers, designers, and strategists doesn't just build applications – 
-                we craft digital experiences that captivate audiences, drive engagement, and deliver 
-                measurable business results.
+                we craft <a href="https://web.dev/user-centric-performance-metrics/" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 underline">digital experiences</a> that captivate audiences, drive engagement, and deliver 
+                measurable business results. <a href="/contact" className="text-purple-400 hover:text-purple-300 underline">Contact us</a> to learn how we can transform your vision into reality.
               </p>
             </motion.div>
             

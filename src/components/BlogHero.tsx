@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import StockImagePlaceholder from './StockImagePlaceholder';
 
 interface BlogHeroProps {
@@ -10,7 +11,6 @@ interface BlogHeroProps {
   date: string;
   heroImage: string;
   fallbackType: 'technical-seo' | 'llm-optimization' | 'micro-interactions';
-  onNavigate?: (page: string) => void;
 }
 
 export default function BlogHero({ 
@@ -21,8 +21,7 @@ export default function BlogHero({
   readTime, 
   date, 
   heroImage, 
-  fallbackType,
-  onNavigate 
+  fallbackType 
 }: BlogHeroProps) {
   const [imageError, setImageError] = React.useState(false);
 
@@ -62,6 +61,24 @@ export default function BlogHero({
         </div>
       </div>
 
+
+      {/* Breadcrumb Navigation */}
+      <div className="absolute top-24 left-8 z-20">
+        <Link
+          to="/blog"
+          className="flex items-center text-white/80 hover:text-white transition-colors duration-300 group"
+        >
+          <svg 
+            className="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform duration-300" 
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          <span className="text-sm font-medium">Back to Blog</span>
+        </Link>
+      </div>
 
       {/* Hero Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">

@@ -5,7 +5,7 @@ export const schemaData = {
   organization: {
     "@context": "https://schema.org",
     "@type": "WebDesignCompany",
-    "name": "Fusion Media",
+    "name": "Fusion Interactive",
     "alternateName": "Fusion Interactive",
     "description": "AI-powered web development agency in Toronto specializing in custom applications, interactive experiences, and performance optimization",
     "url": "https://fusionmedia.com",
@@ -34,7 +34,7 @@ export const schemaData = {
     "founders": [
       {
         "@type": "Person",
-        "name": "Fusion Media Team"
+        "name": "Fusion Interactive Team"
       }
     ],
     "numberOfEmployees": "5-10",
@@ -98,7 +98,7 @@ export const schemaData = {
       "description": "Professional custom web development services in Toronto using React, performance optimization, and modern best practices",
       "provider": {
         "@type": "Organization",
-        "name": "Fusion Media"
+        "name": "Fusion Interactive"
       },
       "areaServed": "Toronto, Ontario",
       "serviceType": "Web Development",
@@ -117,7 +117,7 @@ export const schemaData = {
       "description": "AI integration services including LLM implementation, machine learning consulting, and AI-powered web applications",
       "provider": {
         "@type": "Organization",
-        "name": "Fusion Media"
+        "name": "Fusion Interactive"
       },
       "serviceType": "AI Development",
       "category": "Artificial Intelligence Services",
@@ -137,12 +137,12 @@ export const schemaData = {
     "image": `https://fusionmedia.com/blog-images/${title.toLowerCase().replace(/\s+/g, '-')}.jpg`,
     "author": {
       "@type": "Organization",
-      "name": "Fusion Media",
+      "name": "Fusion Interactive",
       "url": "https://fusionmedia.com"
     },
     "publisher": {
       "@type": "Organization", 
-      "name": "Fusion Media",
+      "name": "Fusion Interactive",
       "logo": {
         "@type": "ImageObject",
         "url": "https://fusionmedia.com/logo.png"
@@ -161,7 +161,7 @@ export const schemaData = {
     "copyrightYear": "2024",
     "copyrightHolder": {
       "@type": "Organization",
-      "name": "Fusion Media"
+      "name": "Fusion Interactive"
     }
   })
 };
@@ -171,11 +171,11 @@ export const faqData = {
   webDevelopment: [
     {
       question: "How much does custom web development cost in Toronto?",
-      answer: "Custom web development in Toronto typically ranges from $25,000 to $150,000 depending on complexity. Factors include the number of features, integrations needed, design complexity, and ongoing maintenance requirements. At Fusion Media, we provide transparent pricing and detailed project scopes to ensure you understand the investment required for your specific needs."
+      answer: "Custom web development in Toronto typically ranges from $25,000 to $150,000 depending on complexity. Factors include the number of features, integrations needed, design complexity, and ongoing maintenance requirements. At Fusion Interactive, we provide transparent pricing and detailed project scopes to ensure you understand the investment required for your specific needs."
     },
     {
       question: "What's the difference between React and Vue.js for web applications?",
-      answer: "React offers a larger ecosystem and more job opportunities, making it ideal for complex applications and teams. Vue.js has a gentler learning curve and is perfect for rapid development. At Fusion Media, we primarily use React for its scalability, performance optimization capabilities, and extensive community support, especially for AI-powered applications."
+      answer: "React offers a larger ecosystem and more job opportunities, making it ideal for complex applications and teams. Vue.js has a gentler learning curve and is perfect for rapid development. At Fusion Interactive, we primarily use React for its scalability, performance optimization capabilities, and extensive community support, especially for AI-powered applications."
     },
     {
       question: "How long does it take to build a custom web application?", 
@@ -183,7 +183,7 @@ export const faqData = {
     },
     {
       question: "What makes a website load fast?",
-      answer: "Fast websites require optimized images (WebP format), efficient code splitting, CDN usage, minimal HTTP requests, and proper caching strategies. At Fusion Media, we implement Core Web Vitals optimization, achieving Lighthouse scores of 90+ through techniques like lazy loading, tree shaking, and performance monitoring."
+      answer: "Fast websites require optimized images (WebP format), efficient code splitting, CDN usage, minimal HTTP requests, and proper caching strategies. At Fusion Interactive, we implement Core Web Vitals optimization, achieving Lighthouse scores of 90+ through techniques like lazy loading, tree shaking, and performance monitoring."
     }
   ],
   aiServices: [

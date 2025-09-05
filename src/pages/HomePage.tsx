@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence 
 import { ExternalLink, Maximize2, Play, Code, Zap, Globe } from 'lucide-react';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
 import ContactModal from '../components/ContactModal';
+import SEOHead from '../components/SEOHead';
 
 // Portfolio projects data for horizontal scroll
 const horizontalPortfolioProjects = [
@@ -1156,8 +1157,55 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     setIsContactModalOpen(true);
   };
   
+  const homeStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Toronto Web Development Agency | AI-Powered Custom Applications",
+    "description": "Leading Toronto web development agency specializing in AI-powered applications, interactive experiences, and performance optimization.",
+    "url": "https://fusioninteractive.agency",
+    "mainEntity": {
+      "@type": "WebDesignCompany",
+      "name": "Fusion Interactive",
+      "description": "AI-powered web development agency in Toronto specializing in custom applications and interactive experiences",
+      "url": "https://fusioninteractive.agency",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Toronto",
+        "addressRegion": "ON",
+        "addressCountry": "CA"
+      },
+      "telephone": "416-825-4938",
+      "email": "info@fusion-events.ca",
+      "serviceArea": ["Toronto", "GTA", "Ontario", "Canada"],
+      "offers": [
+        {
+          "@type": "Service",
+          "name": "Custom Web Development",
+          "description": "Custom web applications built with React, Node.js, and modern technologies"
+        },
+        {
+          "@type": "Service", 
+          "name": "AI Integration Services",
+          "description": "AI-powered web applications with LLM integration and machine learning solutions"
+        },
+        {
+          "@type": "Service",
+          "name": "Interactive Event Technology",
+          "description": "Real-time audience engagement platforms and interactive event solutions"
+        }
+      ]
+    }
+  };
+
   return (
     <div ref={containerRef} className="relative pointer-events-none">
+      <SEOHead 
+        title="Toronto Web Development Agency | AI-Powered Custom Applications"
+        description="Leading Toronto web development agency specializing in AI-powered applications, interactive experiences, and performance optimization. Custom React development, event technology, and machine learning solutions."
+        keywords="Toronto web development agency, AI development services, custom web development Toronto, React development services, machine learning consulting, interactive web experiences, event technology solutions"
+        canonicalUrl="https://fusioninteractive.agency"
+        structuredData={homeStructuredData}
+      />
       
       {/* Hero Section with Parallax */}
       <motion.section

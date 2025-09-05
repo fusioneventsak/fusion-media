@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import StockImagePlaceholder from '../components/StockImagePlaceholder';
 
-interface BlogProps {
-  onNavigate?: (page: string) => void;
-}
-
-export default function Blog({ onNavigate }: BlogProps) {
-  const handleNavigation = (page: string) => {
-    if (onNavigate) {
-      onNavigate(page);
-    }
-  };
+export default function Blog() {
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
 
   useEffect(() => {
@@ -103,10 +95,10 @@ export default function Blog({ onNavigate }: BlogProps) {
           <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8">
             
             {/* Featured Article */}
-            <article 
-              className={`fade-in break-inside-avoid mb-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl overflow-hidden shadow-2xl hover:scale-105 transition-all duration-500 cursor-pointer ${visibleCards.has(1) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
+            <Link
+              to="/blog/technical-seo-guide-2024"
+              className={`fade-in break-inside-avoid mb-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl overflow-hidden shadow-2xl hover:scale-105 transition-all duration-500 cursor-pointer block ${visibleCards.has(1) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
               data-index="1"
-              onClick={() => handleNavigation('blog/technical-seo-guide-2024')}
             >
               <div className="relative h-64 overflow-hidden">
                 <img
@@ -145,13 +137,13 @@ export default function Blog({ onNavigate }: BlogProps) {
                   Read complete technical SEO guide →
                 </div>
               </div>
-            </article>
+            </Link>
 
             {/* LLM Article */}
-            <article 
-              className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer ${visibleCards.has(2) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
+            <Link
+              to="/blog/llm-web-apps-optimization"
+              className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer block ${visibleCards.has(2) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
               data-index="2"
-              onClick={() => handleNavigation('blog/llm-web-apps-optimization')}
             >
               <div className="relative h-48 overflow-hidden">
                 <img
@@ -190,13 +182,13 @@ export default function Blog({ onNavigate }: BlogProps) {
                   Explore LLM integration strategies →
                 </div>
               </div>
-            </article>
+            </Link>
 
             {/* Interactive Components */}
-            <article 
-              className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer ${visibleCards.has(3) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
+            <Link
+              to="/blog/interactive-web-experiences"
+              className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer block ${visibleCards.has(3) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
               data-index="3"
-              onClick={() => handleNavigation('blog/interactive-web-experiences')}
             >
               <div className="relative h-44 overflow-hidden">
                 <img
@@ -235,7 +227,7 @@ export default function Blog({ onNavigate }: BlogProps) {
                   Learn interactive design patterns →
                 </div>
               </div>
-            </article>
+            </Link>
 
             {/* Event Technology */}
             <article className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer ${visibleCards.has(4) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} data-index="4">

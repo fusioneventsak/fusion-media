@@ -1,11 +1,7 @@
 import React from 'react';
 import BlogHero from '../components/BlogHero';
 
-interface BlogPostProps {
-  onNavigate?: (page: string) => void;
-}
-
-export default function LLMWebAppsOptimization({ onNavigate }: BlogPostProps = {}) {
+export default function LLMWebAppsOptimization() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-purple-900 text-white">
       {/* Full-Screen Hero */}
@@ -18,23 +14,7 @@ export default function LLMWebAppsOptimization({ onNavigate }: BlogPostProps = {
         date="March 20, 2024"
         heroImage="/blog-heroes/llm-optimization/hero.jpg"
         fallbackType="llm-optimization"
-        onNavigate={onNavigate}
       />
-
-      {/* Back Navigation */}
-      {onNavigate && (
-        <div className="max-w-4xl mx-auto px-4 pt-8 pb-4">
-          <button 
-            onClick={() => onNavigate('blog')}
-            className="flex items-center gap-2 text-white/80 hover:text-white transition-colors duration-200 bg-black/20 backdrop-blur-sm rounded-full px-4 py-2"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
-            </svg>
-            <span className="text-sm font-medium">Back to Blog</span>
-          </button>
-        </div>
-      )}
 
       {/* Article Content */}
       <div className="max-w-4xl mx-auto px-4 py-16">

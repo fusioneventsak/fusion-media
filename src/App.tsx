@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
 import SplashCursor from './components/SplashCursor';
@@ -10,6 +11,7 @@ import AboutPage from './pages/AboutPage';
 import WhyUsPage from './pages/WhyUsPage';
 import Blog from './pages/Blog';
 import ContactPage from './pages/ContactPage';
+import CaseStudiesPage from './pages/CaseStudiesPage';
 import Footer from './components/Footer';
 import ContactModal from './components/ContactModal';
 import TechnicalSEOGuide2024 from './blog-posts/technical-seo-guide-2024';
@@ -17,7 +19,7 @@ import LLMWebAppsOptimization from './blog-posts/llm-web-apps-optimization';
 import InteractiveWebExperiences from './blog-posts/interactive-web-experiences';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const location = useLocation();
   const [scrollY, setScrollY] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
@@ -37,7 +39,7 @@ export default function App() {
     }, 100);
 
     return () => clearTimeout(scrollTimeout);
-  }, [currentPage]);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -49,26 +51,20 @@ export default function App() {
     setIsContactModalOpen(true);
   };
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'about':
-        return <AboutPage />;
-      case 'why-us':
-        return <WhyUsPage onNavigate={setCurrentPage} onOpenContactModal={handleGetStartedClick} />;
-      case 'blog':
-        return <Blog onNavigate={setCurrentPage} />;
-      case 'blog/technical-seo-guide-2024':
-        return <TechnicalSEOGuide2024 onNavigate={setCurrentPage} />;
-      case 'blog/llm-web-apps-optimization':
-        return <LLMWebAppsOptimization onNavigate={setCurrentPage} />;
-      case 'blog/interactive-web-experiences':
-        return <InteractiveWebExperiences onNavigate={setCurrentPage} />;
-      case 'contact':
-        return <ContactPage />;
-      default:
-        return <HomePage onNavigate={setCurrentPage} />;
-    }
+  // Get current page for 3D scene
+  const getCurrentPage = () => {
+    const path = location.pathname;
+    if (path === '/') return 'home';
+    if (path === '/about') return 'about';
+    if (path === '/why-us') return 'why-us';
+    if (path === '/blog') return 'blog';
+    if (path.startsWith('/blog/')) return 'blog';
+    if (path === '/contact') return 'contact';
+    if (path === '/case-studies') return 'case-studies';
+    return 'home';
   };
+
+  const currentPage = getCurrentPage();
 
   return (
     <div className="min-h-screen bg-black overflow-x-hidden">
@@ -159,19 +155,28 @@ export default function App() {
       <div style={{ position: 'relative', zIndex: 200 }}>
         <Navigation 
           currentPage={currentPage} 
-          setCurrentPage={setCurrentPage}
           isTransitioning={isTransitioning}
           onGetStartedClick={handleGetStartedClick}
         />
       </div>
 
-      {/* Page Content with Simplified Transition */}
+      {/* Page Content with Routes */}
       <div className="relative z-[100]">
         <PageTransition 
           currentPage={currentPage}
           onTransitionChange={setIsTransitioning}
         >
-          {renderPage()}
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/why-us" element={<WhyUsPage onOpenContactModal={handleGetStartedClick} />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/technical-seo-guide-2024" element={<TechnicalSEOGuide2024 />} />
+            <Route path="/blog/llm-web-apps-optimization" element={<LLMWebAppsOptimization />} />
+            <Route path="/blog/interactive-web-experiences" element={<InteractiveWebExperiences />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/case-studies" element={<CaseStudiesPage />} />
+          </Routes>
         </PageTransition>
       </div>
 

@@ -20,7 +20,7 @@ export const internalLinks = {
       keywords: ["technical blog", "development guides", "AI tutorials"]
     },
     about: {
-      title: "About Fusion Media",
+      title: "About Fusion Interactive",
       url: "#about",
       keywords: ["Toronto agency", "development team", "company expertise"]
     }

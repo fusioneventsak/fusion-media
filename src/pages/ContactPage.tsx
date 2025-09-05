@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import SEOHead from '../components/SEOHead';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -54,8 +55,43 @@ export default function ContactPage() {
     }
   };
 
+  const contactStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact Fusion Interactive - Toronto Web Development Agency",
+    "description": "Get in touch with Toronto's leading web development agency. Free consultation, custom quotes, and expert advice on your next project.",
+    "url": "https://fusioninteractive.agency/contact",
+    "mainEntity": {
+      "@type": "LocalBusiness",
+      "name": "Fusion Interactive",
+      "telephone": "416-825-4938",
+      "email": "info@fusion-events.ca",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Toronto",
+        "addressRegion": "ON",
+        "addressCountry": "CA"
+      },
+      "openingHours": "Mo-Fr 09:00-17:00",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "416-825-4938",
+        "contactType": "customer service",
+        "areaServed": "CA",
+        "availableLanguage": "English"
+      }
+    }
+  };
+
   return (
     <div className="relative z-10 pointer-events-none">
+      <SEOHead 
+        title="Contact Us - Get Your Custom Web Development Quote"
+        description="Ready to start your project? Contact Toronto's leading web development agency for a free consultation. We specialize in AI-powered applications, React development, and interactive experiences."
+        keywords="contact Toronto web developer, web development quote, free consultation Toronto, React development services, AI web development contact"
+        canonicalUrl="https://fusioninteractive.agency/contact"
+        structuredData={contactStructuredData}
+      />
       <section className="min-h-screen px-8 pt-24">
         <div className="max-w-7xl mx-auto pointer-events-auto">
           <motion.h1 

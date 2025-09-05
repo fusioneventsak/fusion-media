@@ -5,59 +5,44 @@
   
   <!-- Homepage -->
   <url>
-    <loc>https://fusionmedia.ca/</loc>
+    <loc>https://fusioninteractive.agency/</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   
-  <!-- Services Pages -->
+  <!-- Main Pages - React Router Structure -->
   <url>
-    <loc>https://fusionmedia.ca/services/web-development</loc>
+    <loc>https://fusioninteractive.agency/about</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://fusionmedia.ca/services/ai-integration</loc>
-    <lastmod>2024-03-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://fusionmedia.ca/services/event-technology</loc>
+    <loc>https://fusioninteractive.agency/why-us</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://fusionmedia.ca/services/performance-optimization</loc>
+    <loc>https://fusioninteractive.agency/contact</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
-  <!-- Company Pages -->
   <url>
-    <loc>https://fusionmedia.ca/about</loc>
+    <loc>https://fusioninteractive.agency/case-studies</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
-  <url>
-    <loc>https://fusionmedia.ca/contact</loc>
-    <lastmod>2024-03-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
   <!-- Blog Section -->
   <url>
-    <loc>https://fusionmedia.ca/blog/</loc>
+    <loc>https://fusioninteractive.agency/blog/</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -65,36 +50,36 @@
   
   <!-- Featured Blog Posts -->
   <url>
-    <loc>https://fusionmedia.ca/blog/technical-seo-guide-2024</loc>
+    <loc>https://fusioninteractive.agency/blog/technical-seo-guide-2024</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://fusionmedia.ca/blog-images/technical-seo-hero.jpg</image:loc>
+      <image:loc>https://fusioninteractive.agency/blog-images/technical-seo-hero.jpg</image:loc>
       <image:caption>Technical SEO optimization dashboard showing Core Web Vitals metrics and performance improvements for Toronto web development</image:caption>
       <image:title>Technical SEO Guide 2024</image:title>
     </image:image>
   </url>
   
   <url>
-    <loc>https://fusionmedia.ca/blog/llm-web-apps-optimization</loc>
+    <loc>https://fusioninteractive.agency/blog/llm-web-apps-optimization</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://fusionmedia.ca/blog-images/llm-optimization-hero.jpg</image:loc>
+      <image:loc>https://fusioninteractive.agency/blog-images/llm-optimization-hero.jpg</image:loc>
       <image:caption>AI-powered web application architecture diagram showing LLM integration and cost optimization strategies</image:caption>
       <image:title>LLM Web Apps Optimization</image:title>
     </image:image>
   </url>
   
   <url>
-    <loc>https://fusionmedia.ca/blog/interactive-web-experiences</loc>
+    <loc>https://fusioninteractive.agency/blog/interactive-web-experiences</loc>
     <lastmod>2024-03-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://fusionmedia.ca/blog-images/micro-interactions-hero.jpg</image:loc>
+      <image:loc>https://fusioninteractive.agency/blog-images/micro-interactions-hero.jpg</image:loc>
       <image:caption>Interactive web interface showcasing micro-interactions and user engagement elements</image:caption>
       <image:title>Creating Micro-Interactions That Convert</image:title>
     </image:image>
@@ -102,7 +87,7 @@
   
   <!-- Case Studies -->
   <url>
-    <loc>https://fusionmedia.ca/case-studies/</loc>
+    <loc>https://fusioninteractive.agency/case-studies/</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -110,14 +95,14 @@
   
   <!-- Additional SEO Files -->
   <url>
-    <loc>https://fusionmedia.ca/LLM.txt</loc>
+    <loc>https://fusioninteractive.agency/LLM.txt</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://fusionmedia.ca/robots.txt</loc>
+    <loc>https://fusioninteractive.agency/robots.txt</loc>
     <lastmod>2024-03-20</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
