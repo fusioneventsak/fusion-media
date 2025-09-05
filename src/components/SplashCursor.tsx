@@ -1143,6 +1143,7 @@ export default function SplashCursor({
 
     let lastUpdateTime = Date.now();
     let colorUpdateTimer = 0.0;
+    let cleanupTimer = 0.0;
     
     // Initialize with stable colors if requested
     if (STABLE_COLORS) {
@@ -1157,6 +1158,34 @@ export default function SplashCursor({
       if (!STABLE_COLORS) {
         updateColors(dt);
       }
+      
+      // Aggressive cleanup to prevent accumulation
+      cleanupTimer += dt;
+      if (cleanupTimer >= 3.0) { // Reset every 3 seconds
+        cleanupTimer = 0.0;
+        // Clear residual fluid effects more aggressively
+        clearProgram.bind();
+        if (clearProgram.uniforms.uTexture) {
+          gl.uniform1i(clearProgram.uniforms.uTexture, dye.read.attach(0));
+        }
+        if (clearProgram.uniforms.value) {
+          gl.uniform1f(clearProgram.uniforms.value, 0.8); // Clear 80% of residual more frequently
+        }
+        blit(dye.write);
+        dye.swap();
+        
+        // Also clear velocity accumulation
+        clearProgram.bind();
+        if (clearProgram.uniforms.uTexture) {
+          gl.uniform1i(clearProgram.uniforms.uTexture, velocity.read.attach(0));
+        }
+        if (clearProgram.uniforms.value) {
+          gl.uniform1f(clearProgram.uniforms.value, 0.9); // Clear velocity residuals
+        }
+        blit(velocity.write);
+        velocity.swap();
+      }
+      
       applyInputs();
       step(dt);
       render(null);

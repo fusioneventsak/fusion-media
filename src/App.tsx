@@ -126,30 +126,34 @@ export default function App() {
         </Canvas>
       </div>
 
-      {/* Fluid Cursor Effect - Above 3D background */}
-      <div 
-        style={{ 
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 50,
-          pointerEvents: 'none'
-        }}
-      >
-        <SplashCursor 
-          SIM_RESOLUTION={32}
-          DYE_RESOLUTION={256}
-          DENSITY_DISSIPATION={15.0}
-          VELOCITY_DISSIPATION={12.0}
-          SPLAT_RADIUS={0.02}
-          SPLAT_FORCE={800}
-          COLOR_UPDATE_SPEED={0}
-          CURL={0.5}
-          STABLE_COLORS={true}
-        />
-      </div>
+      {/* Fluid Cursor Effect - Above 3D background - Home page only */}
+      {currentPage === 'home' && (
+        <div 
+          style={{ 
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 50,
+            pointerEvents: 'none'
+          }}
+        >
+          <SplashCursor 
+            SIM_RESOLUTION={32}
+            DYE_RESOLUTION={256}
+            DENSITY_DISSIPATION={50.0}
+            VELOCITY_DISSIPATION={40.0}
+            SPLAT_RADIUS={0.012}
+            SPLAT_FORCE={400}
+            COLOR_UPDATE_SPEED={0}
+            CURL={0.1}
+            STABLE_COLORS={true}
+            PRESSURE={0.02}
+            PRESSURE_ITERATIONS={5}
+          />
+        </div>
+      )}
 
       {/* Navigation - Above backgrounds */}
       <div style={{ position: 'relative', zIndex: 200 }}>

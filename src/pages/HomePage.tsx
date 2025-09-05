@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Maximize2, Play, Code, Zap, Globe } from 'lucide-react';
 import AnimatedHeroTitle from '../components/AnimatedHeroTitle';
@@ -98,18 +98,9 @@ const HorizontalProjectCard = ({ project, index }) => {
 
   return (
     <div className="w-screen h-full flex items-center justify-center flex-shrink-0 relative z-[105]">
-      {/* Animated gradient overlay */}
-      <motion.div
+      {/* Static gradient overlay */}
+      <div
         className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-10`}
-        animate={{
-          scale: [1, 1.1, 1],
-          rotate: [0, 0.5, 0],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "linear"
-        }}
       />
 
       <div className="relative z-10 max-w-6xl mx-auto grid lg:grid-cols-2 gap-6 items-center min-h-screen px-6 py-4">
@@ -418,6 +409,11 @@ const HorizontalPortfolioSection = () => {
   const scrollContainerRef = useRef(null);
   const [gsapLoaded, setGsapLoaded] = useState(false);
   const [currentProject, setCurrentProject] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const wheelCountRef = useRef(0);
+  const wheelTimeoutRef = useRef(null);
+  const lastWheelTimeRef = useRef(0);
+  const scrollTriggerRef = useRef(null);
 
   useEffect(() => {
     // Load GSAP and ScrollTrigger
@@ -452,6 +448,136 @@ const HorizontalPortfolioSection = () => {
     loadGSAP();
   }, []);
 
+  // Function to navigate to specific project
+  const navigateToProject = useCallback((projectIndex) => {
+    if (!gsapLoaded || isTransitioning || !scrollTriggerRef.current) return;
+    
+    const targetProgress = projectIndex / (horizontalPortfolioProjects.length - 1);
+    const gsap = window.gsap;
+    
+    setIsTransitioning(true);
+    setCurrentProject(projectIndex);
+    
+    gsap.to(scrollTriggerRef.current, {
+      progress: targetProgress,
+      duration: 0.6,
+      ease: "power2.out",
+      onComplete: () => {
+        setIsTransitioning(false);
+      }
+    });
+  }, [gsapLoaded, isTransitioning, horizontalPortfolioProjects.length]);
+
+  // Handle mouse wheel events
+  useEffect(() => {
+    if (!containerRef.current || !gsapLoaded) return;
+
+    const handleWheel = (e) => {
+      const now = Date.now();
+      const timeDiff = now - lastWheelTimeRef.current;
+      
+      // Reset counter if too much time has passed
+      if (timeDiff > 500) {
+        wheelCountRef.current = 0;
+      }
+      
+      wheelCountRef.current += 1;
+      lastWheelTimeRef.current = now;
+      
+      // Clear existing timeout
+      if (wheelTimeoutRef.current) {
+        clearTimeout(wheelTimeoutRef.current);
+      }
+      
+      // Set timeout to reset counter
+      wheelTimeoutRef.current = setTimeout(() => {
+        wheelCountRef.current = 0;
+      }, 500);
+      
+      // Trigger navigation after 2 wheel events
+      if (wheelCountRef.current >= 2) {
+        e.preventDefault();
+        
+        const direction = e.deltaY > 0 ? 1 : -1;
+        const nextProject = Math.max(0, Math.min(horizontalPortfolioProjects.length - 1, currentProject + direction));
+        
+        if (nextProject !== currentProject) {
+          navigateToProject(nextProject);
+        }
+        
+        wheelCountRef.current = 0; // Reset counter after navigation
+      }
+    };
+
+    const container = containerRef.current;
+    container.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+      if (wheelTimeoutRef.current) {
+        clearTimeout(wheelTimeoutRef.current);
+      }
+    };
+  }, [gsapLoaded, currentProject, navigateToProject, horizontalPortfolioProjects.length]);
+
+  // Handle touch events for mobile
+  useEffect(() => {
+    if (!containerRef.current || !gsapLoaded) return;
+
+    let startX = 0;
+    let startY = 0;
+    let isSwiping = false;
+
+    const handleTouchStart = (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      isSwiping = false;
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isSwiping) {
+        const deltaX = Math.abs(e.touches[0].clientX - startX);
+        const deltaY = Math.abs(e.touches[0].clientY - startY);
+        
+        // Determine if this is a horizontal swipe
+        if (deltaX > deltaY && deltaX > 30) {
+          isSwiping = true;
+          e.preventDefault();
+        }
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      if (!isSwiping) return;
+
+      const endX = e.changedTouches[0].clientX;
+      const deltaX = endX - startX;
+      
+      // Minimum swipe distance
+      if (Math.abs(deltaX) > 50) {
+        const direction = deltaX > 0 ? -1 : 1; // Reversed for natural feel
+        const nextProject = Math.max(0, Math.min(horizontalPortfolioProjects.length - 1, currentProject + direction));
+        
+        if (nextProject !== currentProject) {
+          navigateToProject(nextProject);
+        }
+      }
+      
+      isSwiping = false;
+    };
+
+    const container = containerRef.current;
+    container.addEventListener('touchstart', handleTouchStart, { passive: false });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    container.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+      container.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [gsapLoaded, currentProject, navigateToProject, horizontalPortfolioProjects.length]);
+
   useEffect(() => {
     if (!gsapLoaded || !containerRef.current || !scrollContainerRef.current) return;
 
@@ -466,31 +592,48 @@ const HorizontalPortfolioSection = () => {
     // Calculate the total scroll distance needed
     const totalScrollDistance = (horizontalPortfolioProjects.length - 1) * window.innerWidth;
 
-    // Create the main horizontal scroll animation
-    const horizontalAnimation = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        start: "top top",
-        end: () => `+=${totalScrollDistance}`,
-        scrub: 1,
-        pin: true,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        refreshPriority: -1,
-        // Track progress for current project indicator
-        onUpdate: (self) => {
-          const progress = self.progress;
-          const newProject = Math.floor(progress * horizontalPortfolioProjects.length);
-          setCurrentProject(Math.min(newProject, horizontalPortfolioProjects.length - 1));
+    // Create the main horizontal scroll animation with improved snap behavior
+    const scrollTrigger = ScrollTrigger.create({
+      trigger: container,
+      start: "top top",
+      end: () => `+=${totalScrollDistance}`,
+      scrub: 1,
+      pin: true,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      refreshPriority: -1,
+      snap: {
+        snapTo: (() => {
+          // Pre-calculate exact snap points for each section
+          const totalProjects = horizontalPortfolioProjects.length;
+          const snapPoints = [];
+          for (let i = 0; i < totalProjects; i++) {
+            snapPoints.push(i / (totalProjects - 1));
+          }
+          return snapPoints; // Return array of exact snap points
+        })(),
+        duration: 0.4, // Fixed short duration for quick snapping
+        delay: 0.05, // Minimal delay for immediate response
+        ease: "none", // Linear easing - no slow down or speed up
+        directional: false // Snap to closest point regardless of scroll direction
+      },
+      // Track progress for current project indicator
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const totalProjects = horizontalPortfolioProjects.length;
+        const newProject = Math.min(Math.round(progress * (totalProjects - 1)), totalProjects - 1);
+        if (!isTransitioning) { // Only update if not transitioning via custom navigation
+          setCurrentProject(newProject);
         }
-      }
+      },
+      animation: gsap.to(scrollContainer, {
+        x: -totalScrollDistance,
+        ease: "none"
+      })
     });
 
-    // Animate the horizontal movement
-    horizontalAnimation.to(scrollContainer, {
-      x: -totalScrollDistance,
-      ease: "none"
-    });
+    // Store reference for custom navigation
+    scrollTriggerRef.current = scrollTrigger;
 
     // Handle resize
     const handleResize = () => {
@@ -501,13 +644,11 @@ const HorizontalPortfolioSection = () => {
 
     // Cleanup
     return () => {
-      horizontalAnimation.kill();
+      if (scrollTrigger) {
+        scrollTrigger.kill();
+      }
+      scrollTriggerRef.current = null;
       window.removeEventListener('resize', handleResize);
-      ScrollTrigger.getAll().forEach(trigger => {
-        if (trigger.trigger === container) {
-          trigger.kill();
-        }
-      });
     };
   }, [gsapLoaded]);
 
