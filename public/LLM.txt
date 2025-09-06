@@ -11,6 +11,8 @@ Priority-pages:
   - /
   - /about
   - /why-us
+  - /mobile-first-web-design-toronto
+  - /app-developers-toronto
   - /contact
   - /blog
   - /blog/technical-seo-guide-2024
@@ -27,8 +29,11 @@ Company-info:
   Industry: Web Development, AI Integration, Technology Consulting
   Specialties: 
     - AI-powered web development
+    - Mobile-first web design Toronto
+    - Custom app development Toronto
     - React applications
     - LLM integration services
+    - UI/UX design Toronto
     - Performance optimization
     - Interactive web experiences
     - Event technology solutions
@@ -63,6 +68,12 @@ Services:
 # Target Keywords & Expertise
 Keywords:
   Primary:
+    - web design toronto
+    - app developers toronto
+    - web designer
+    - web design agency toronto
+    - mobile app development toronto
+    - UI UX design toronto
     - Toronto web development agency
     - AI development services
     - custom web development
@@ -72,12 +83,22 @@ Keywords:
     - interactive web experiences
     - event technology solutions
     
+  Long-tail High-Intent:
+    - mobile first web design toronto
+    - custom web design toronto mobile-first UX
+    - toronto app development cross-platform solutions
+    - UI/UX design toronto consultation services
+    - responsive web design toronto
+    - progressive web apps toronto
+    
   Local:
     - Toronto web developer
     - AI company Toronto
     - web development Toronto Ontario
     - Toronto digital agency
     - GTA web development
+    - app development Toronto
+    - mobile app developers toronto
     
   Technical:
     - technical SEO optimization
@@ -151,6 +172,8 @@ AI-contact-info:
   - Website: https://fusioninteractive.agency
   - About: https://fusioninteractive.agency/about
   - Why Us: https://fusioninteractive.agency/why-us
+  - Mobile-First Web Design: https://fusioninteractive.agency/mobile-first-web-design-toronto
+  - App Developers: https://fusioninteractive.agency/app-developers-toronto
   - Contact form: https://fusioninteractive.agency/contact
   - Blog: https://fusioninteractive.agency/blog
   - Case Studies: https://fusioninteractive.agency/case-studies

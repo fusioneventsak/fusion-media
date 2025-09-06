@@ -17,6 +17,8 @@ import ContactModal from './components/ContactModal';
 import TechnicalSEOGuide2024 from './blog-posts/technical-seo-guide-2024';
 import LLMWebAppsOptimization from './blog-posts/llm-web-apps-optimization';
 import InteractiveWebExperiences from './blog-posts/interactive-web-experiences';
+import MobileFirstWebDesignPage from './pages/services/MobileFirstWebDesignPage';
+import AppDevelopmentPage from './pages/services/AppDevelopmentPage';
 
 export default function App() {
   const location = useLocation();
@@ -59,6 +61,7 @@ export default function App() {
     if (path === '/why-us') return 'why-us';
     if (path === '/blog') return 'blog';
     if (path.startsWith('/blog/')) return 'blog';
+    if (path.startsWith('/services/')) return 'services';
     if (path === '/contact') return 'contact';
     if (path === '/case-studies') return 'case-studies';
     return 'home';
@@ -174,6 +177,11 @@ export default function App() {
             <Route path="/blog/technical-seo-guide-2024" element={<TechnicalSEOGuide2024 />} />
             <Route path="/blog/llm-web-apps-optimization" element={<LLMWebAppsOptimization />} />
             <Route path="/blog/interactive-web-experiences" element={<InteractiveWebExperiences />} />
+            <Route path="/services/mobile-first-web-design" element={<MobileFirstWebDesignPage onOpenContactModal={handleGetStartedClick} />} />
+            <Route path="/services/app-development" element={<AppDevelopmentPage onOpenContactModal={handleGetStartedClick} />} />
+            {/* Legacy routes for backwards compatibility */}
+            <Route path="/mobile-first-web-design-toronto" element={<MobileFirstWebDesignPage onOpenContactModal={handleGetStartedClick} />} />
+            <Route path="/app-developers-toronto" element={<AppDevelopmentPage onOpenContactModal={handleGetStartedClick} />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/case-studies" element={<CaseStudiesPage />} />
           </Routes>

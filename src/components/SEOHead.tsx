@@ -14,9 +14,9 @@ interface SEOHeadProps {
 }
 
 export default function SEOHead({
-  title = "Toronto Web Development Agency | AI-Powered Custom Applications | Fusion Interactive",
-  description = "Leading Toronto web development agency specializing in AI-powered applications, interactive experiences, and performance optimization. Custom React development, event technology, and machine learning solutions.",
-  keywords = "Toronto web development agency, AI development services, custom web development, React development Toronto, machine learning consulting, interactive web experiences, event technology solutions",
+  title = "Web Design Toronto | Custom App Development & UI/UX Design | Fusion Interactive",
+  description = "Premier web design Toronto agency specializing in custom app development, mobile-first UX design, and AI-powered web solutions. Toronto's trusted web design agency for interactive experiences and high-performance websites.",
+  keywords = "web design toronto, app developers toronto, web designer, web design agency toronto, toronto web development, mobile app development toronto, UI UX design toronto, custom web design toronto mobile-first",
   canonicalUrl = "https://fusioninteractive.agency",
   ogType = "website",
   ogImage = "https://fusioninteractive.agency/logos/Fusion-Interactive-Logo.png",
