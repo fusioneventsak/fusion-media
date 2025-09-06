@@ -1412,7 +1412,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'GitHub', 
                   logo: '/logos/Github.webp',
-                  x: { mobile: -155, desktop: -510 }, 
+                  x: { mobile: -140, desktop: -510 }, 
                   y: { mobile: -100, desktop: -120 },
                   delay: 0.0, 
                   color: '#333333' 
@@ -1420,7 +1420,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'WordPress', 
                   logo: '/logos/wordpress.webp',
-                  x: { mobile: -65, desktop: -350 }, 
+                  x: { mobile: -60, desktop: -350 }, 
                   y: { mobile: -100, desktop: -220 },
                   delay: 0.15, 
                   color: '#21759B' 
@@ -1452,7 +1452,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'Netlify', 
                   logo: '/logos/netlify-logo.webp',
-                  x: { mobile: 25, desktop: 290 }, 
+                  x: { mobile: 20, desktop: 290 }, 
                   y: { mobile: -100, desktop: -220 },
                   delay: 0.75, 
                   color: '#00C7B7' 
@@ -1460,7 +1460,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'Bolt.new', 
                   logo: '/logos/Bolt.jpg',
-                  x: { mobile: 115, desktop: 450 }, 
+                  x: { mobile: 100, desktop: 450 }, 
                   y: { mobile: -100, desktop: -120 },
                   delay: 0.9, 
                   color: '#FFD700' 
