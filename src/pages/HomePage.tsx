@@ -1412,15 +1412,15 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'GitHub', 
                   logo: '/logos/Github.webp',
-                  x: { mobile: -120, desktop: -510 }, 
-                  y: { mobile: -80, desktop: -120 },
+                  x: { mobile: -155, desktop: -510 }, 
+                  y: { mobile: -100, desktop: -120 },
                   delay: 0.0, 
                   color: '#333333' 
                 },
                 { 
                   name: 'WordPress', 
                   logo: '/logos/wordpress.webp',
-                  x: { mobile: -70, desktop: -350 }, 
+                  x: { mobile: -65, desktop: -350 }, 
                   y: { mobile: -100, desktop: -220 },
                   delay: 0.15, 
                   color: '#21759B' 
@@ -1428,7 +1428,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'Claude', 
                   logo: '/logos/claude.png',
-                  x: { mobile: -90, desktop: -190 }, 
+                  x: { mobile: -110, desktop: -190 }, 
                   y: { mobile: -180, desktop: -280 },
                   delay: 0.3, 
                   color: '#FF6B35' 
@@ -1436,7 +1436,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'ChatGPT', 
                   logo: '/logos/openai.jpg',
-                  x: { mobile: -20, desktop: -30 }, 
+                  x: { mobile: -40, desktop: -30 }, 
                   y: { mobile: -240, desktop: -320 },
                   delay: 0.45, 
                   color: '#10A37F' 
@@ -1444,7 +1444,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'Supabase', 
                   logo: '/logos/Supabase.webp',
-                  x: { mobile: 50, desktop: 130 }, 
+                  x: { mobile: 30, desktop: 130 }, 
                   y: { mobile: -180, desktop: -280 },
                   delay: 0.6, 
                   color: '#3ECF8E' 
@@ -1452,7 +1452,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'Netlify', 
                   logo: '/logos/netlify-logo.webp',
-                  x: { mobile: 30, desktop: 290 }, 
+                  x: { mobile: 25, desktop: 290 }, 
                   y: { mobile: -100, desktop: -220 },
                   delay: 0.75, 
                   color: '#00C7B7' 
@@ -1460,7 +1460,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'Bolt.new', 
                   logo: '/logos/Bolt.jpg',
-                  x: { mobile: 130, desktop: 450 }, 
+                  x: { mobile: 115, desktop: 450 }, 
                   y: { mobile: -100, desktop: -120 },
                   delay: 0.9, 
                   color: '#FFD700' 
