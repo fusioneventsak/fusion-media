@@ -44,8 +44,22 @@ export default function Blog() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-16 px-4 overflow-hidden">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+        {/* Hero Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/blog-hero-background.jpeg"
+            alt="Digital network and data visualization background"
+            className="w-full h-full object-cover opacity-80"
+            onError={(e) => {
+              console.log('Hero background image failed to load');
+              (e.target as HTMLImageElement).style.display = 'none';
+            }}
+            onLoad={() => console.log('Hero background image loaded successfully')}
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/20 to-black/50" />
+        </div>
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <h1 className="text-5xl lg:text-6xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight">
@@ -64,15 +78,95 @@ export default function Blog() {
             </div>
             
             <div className="relative h-96 lg:h-[500px]">
-              <div className="floating-card absolute top-0 left-0 w-48 p-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl animate-float">
+              {/* Logo Pyramid - Increased arc and spacing */}
+              {[
+                { 
+                  name: 'Claude', 
+                  logo: '/logos/claude.png',
+                  x: { mobile: 0, desktop: 0 }, 
+                  y: { mobile: -80, desktop: -100 }
+                },
+                { 
+                  name: 'GitHub', 
+                  logo: '/logos/Github.webp',
+                  x: { mobile: -120, desktop: -180 }, 
+                  y: { mobile: -40, desktop: -60 }
+                },
+                { 
+                  name: 'OpenAI', 
+                  logo: '/logos/openai.jpg',
+                  x: { mobile: 120, desktop: 180 }, 
+                  y: { mobile: -40, desktop: -60 }
+                },
+                { 
+                  name: 'Supabase', 
+                  logo: '/logos/Supabase.webp',
+                  x: { mobile: -180, desktop: -280 }, 
+                  y: { mobile: 0, desktop: -10 }
+                },
+                { 
+                  name: 'Netlify', 
+                  logo: '/logos/netlify-logo.webp',
+                  x: { mobile: 180, desktop: 280 }, 
+                  y: { mobile: 0, desktop: -10 }
+                }
+              ].map((tool) => (
+                <div key={tool.name}>
+                  {/* Mobile Version */}
+                  <div
+                    className="absolute block lg:hidden pointer-events-none w-12 h-12 bg-white/15 backdrop-blur-sm rounded-xl p-0 hover:bg-white/25 transition-all duration-300"
+                    style={{
+                      left: `calc(50% + ${tool.x.mobile}px)`,
+                      top: `calc(50% + ${tool.y.mobile}px)`,
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                  >
+                    <img 
+                      src={tool.logo} 
+                      alt={tool.name} 
+                      className="w-full h-full object-cover rounded-xl"
+                    />
+                  </div>
+                  
+                  {/* Desktop Version */}
+                  <div
+                    className="absolute hidden lg:block pointer-events-none w-16 h-16 bg-white/15 backdrop-blur-sm rounded-xl p-0 hover:bg-white/25 transition-all duration-300"
+                    style={{
+                      left: `calc(50% + ${tool.x.desktop}px)`,
+                      top: `calc(50% + ${tool.y.desktop}px)`,
+                      transform: 'translate(-50%, -50%)'
+                    }}
+                  >
+                    <img 
+                      src={tool.logo} 
+                      alt={tool.name} 
+                      className="w-full h-full object-cover rounded-xl"
+                    />
+                  </div>
+                </div>
+              ))}
+
+              {/* Bottom row - Three cards with increased spacing */}
+              <div className="floating-card absolute w-40 p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl" 
+                   style={{ 
+                     left: 'calc(50% - 320px)', 
+                     bottom: '60px'
+                   }}>
                 <h4 className="font-bold text-lg mb-2">SEO Mastery</h4>
                 <p className="text-sm opacity-90">Boost rankings</p>
               </div>
-              <div className="floating-card absolute top-24 right-0 w-44 p-4 bg-gradient-to-r from-pink-500 to-red-500 rounded-xl animate-float-delay-1">
+
+              <div className="floating-card absolute left-1/2 transform -translate-x-1/2 w-44 p-3 bg-gradient-to-r from-pink-500 to-red-500 rounded-xl"
+                   style={{ bottom: '60px' }}>
                 <h4 className="font-bold text-lg mb-2">LLM Integration</h4>
                 <p className="text-sm opacity-90">AI-powered apps</p>
               </div>
-              <div className="floating-card absolute bottom-0 left-12 w-52 p-4 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-xl animate-float-delay-2">
+
+              <div className="floating-card absolute w-40 p-3 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-xl"
+                   style={{ 
+                     right: 'calc(50% - 320px)', 
+                     bottom: '60px'
+                   }}>
                 <h4 className="font-bold text-lg mb-2">Event Tech</h4>
                 <p className="text-sm opacity-90">Engage audiences</p>
               </div>
