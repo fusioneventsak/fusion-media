@@ -13,6 +13,17 @@ export default function PageTransition({ currentPage, children, onTransitionChan
   const [transitionKey, setTransitionKey] = useState(0);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [previousPage, setPreviousPage] = useState(currentPage);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  
+  // Handle window resize for responsive grid
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   
   // Get page info
   const getPageInfo = (to: string) => {
@@ -75,45 +86,74 @@ export default function PageTransition({ currentPage, children, onTransitionChan
 
   const pageInfo = getPageInfo(currentPage);
 
-  // Grid square configuration (5x3 = 15 squares) - alternating logo and title
-  const squares = [
+  // Grid square configuration - responsive for mobile vs desktop
+  const squares = isMobile ? [
+    // 3x3 grid for mobile (9 squares) - all logos for clean pattern
     { id: 1, direction: 'from-right', type: 'logo' },
-    { id: 2, direction: 'from-right', type: 'title' },
-    { id: 3, direction: 'from-right', type: 'logo' },
-    { id: 4, direction: 'from-bottom', type: 'title' },
-    { id: 5, direction: 'from-left', type: 'logo' },
-    { id: 6, direction: 'from-right', type: 'title' },
+    { id: 2, direction: 'from-bottom', type: 'logo' },
+    { id: 3, direction: 'from-left', type: 'logo' },
+    { id: 4, direction: 'from-right', type: 'logo' },
+    { id: 5, direction: 'from-bottom', type: 'logo' }, // center
+    { id: 6, direction: 'from-left', type: 'logo' },
     { id: 7, direction: 'from-right', type: 'logo' },
-    { id: 8, direction: 'from-right', type: 'title' },
+    { id: 8, direction: 'from-bottom', type: 'logo' },
+    { id: 9, direction: 'from-left', type: 'logo' }
+  ] : [
+    // 5x3 grid for desktop (15 squares) - all logos for clean pattern
+    { id: 1, direction: 'from-right', type: 'logo' },
+    { id: 2, direction: 'from-right', type: 'logo' },
+    { id: 3, direction: 'from-right', type: 'logo' },
+    { id: 4, direction: 'from-bottom', type: 'logo' },
+    { id: 5, direction: 'from-left', type: 'logo' },
+    { id: 6, direction: 'from-right', type: 'logo' },
+    { id: 7, direction: 'from-right', type: 'logo' },
+    { id: 8, direction: 'from-right', type: 'logo' },
     { id: 9, direction: 'from-bottom', type: 'logo' },
-    { id: 10, direction: 'from-left', type: 'title' },
+    { id: 10, direction: 'from-left', type: 'logo' },
     { id: 11, direction: 'from-right', type: 'logo' },
-    { id: 12, direction: 'from-right', type: 'title' },
+    { id: 12, direction: 'from-right', type: 'logo' },
     { id: 13, direction: 'from-right', type: 'logo' },
-    { id: 14, direction: 'from-bottom', type: 'title' },
+    { id: 14, direction: 'from-bottom', type: 'logo' },
     { id: 15, direction: 'from-left', type: 'logo' }
   ];
 
   // Get animation delays for staggered effect - FASTER delays for quicker animation
   const getSquareDelay = (index: number) => {
-    const delayMap = [
-      0,     // square 1
-      0.08,  // square 2, 6 (much faster)
-      0.16,  // square 3, 7, 11 (much faster)
-      0.24,  // square 4, 8, 10, 12 (much faster)
-      0.32,  // square 5, 9, 13, 15 (much faster)
-      0.08,  // square 6 (same as 2)
-      0.16,  // square 7 (same as 3)
-      0.24,  // square 8 (same as 4)
-      0.32,  // square 9 (center)
-      0.24,  // square 10 (same as 4)
-      0.16,  // square 11 (same as 3)
-      0.24,  // square 12 (same as 4)
-      0.32,  // square 13 (same as 5)
-      0.4,   // square 14 (faster)
-      0.32   // square 15 (same as 5)
-    ];
-    return delayMap[index] || 0;
+    if (isMobile) {
+      // 3x3 grid delay pattern - radial from center
+      const mobileDelayMap = [
+        0.16,  // square 1 (top-left)
+        0.08,  // square 2 (top-center)
+        0.16,  // square 3 (top-right)
+        0.08,  // square 4 (middle-left)
+        0,     // square 5 (center) - starts first
+        0.08,  // square 6 (middle-right)
+        0.16,  // square 7 (bottom-left)
+        0.08,  // square 8 (bottom-center)
+        0.16   // square 9 (bottom-right)
+      ];
+      return mobileDelayMap[index] || 0;
+    } else {
+      // Original 5x3 grid delay pattern
+      const desktopDelayMap = [
+        0,     // square 1
+        0.08,  // square 2, 6 (much faster)
+        0.16,  // square 3, 7, 11 (much faster)
+        0.24,  // square 4, 8, 10, 12 (much faster)
+        0.32,  // square 5, 9, 13, 15 (much faster)
+        0.08,  // square 6 (same as 2)
+        0.16,  // square 7 (same as 3)
+        0.24,  // square 8 (same as 4)
+        0.32,  // square 9 (center)
+        0.24,  // square 10 (same as 4)
+        0.16,  // square 11 (same as 3)
+        0.24,  // square 12 (same as 4)
+        0.32,  // square 13 (same as 5)
+        0.4,   // square 14 (faster)
+        0.32   // square 15 (same as 5)
+      ];
+      return desktopDelayMap[index] || 0;
+    }
   };
 
   return (
@@ -152,7 +192,7 @@ export default function PageTransition({ currentPage, children, onTransitionChan
               zIndex: 9999,
               pointerEvents: 'none',
               display: 'grid',
-              gridTemplateColumns: 'repeat(5, 1fr)',
+              gridTemplateColumns: isMobile ? 'repeat(3, 1fr)' : 'repeat(5, 1fr)',
               gridTemplateRows: 'repeat(3, 1fr)'
             }}
           >
@@ -326,171 +366,53 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     }}
                   />
 
-                  {/* Logo or Title content - step and repeat pattern */}
-                  {square.type === 'logo' && (
-                    <motion.div
-                      style={{ 
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        textAlign: 'center', 
-                        color: 'white',
-                        opacity: 0,
-                        zIndex: 10,
-                        width: '100%',
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center'
+                  {/* Logo content - clean pattern */}
+                  <motion.div
+                    style={{ 
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      textAlign: 'center', 
+                      color: 'white',
+                      opacity: 0,
+                      zIndex: 10,
+                      width: '100%',
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                    animate={{
+                      opacity: [0, 0, 1, 1, 1, 0]
+                    }}
+                    transition={{
+                      duration: 3.5,
+                      times: [0, 0.15, 0.25, 0.5, 0.75, 1],
+                      delay: getSquareDelay(index) + 0.3
+                    }}
+                  >
+                    {/* Fusion Interactive Logo */}
+                    <motion.img 
+                      src="/logos/FI LOGO 6.png" 
+                      alt="Fusion Interactive Logo" 
+                      style={{
+                        height: '36px',
+                        width: 'auto',
+                        filter: 'brightness(1.3) contrast(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5))'
                       }}
                       animate={{
-                        opacity: [0, 0, 1, 1, 1, 0]
+                        scale: [0.8, 1.05, 1],
+                        rotate: [0, 2, 0]
                       }}
                       transition={{
-                        duration: 3.5,
-                        times: [0, 0.15, 0.25, 0.5, 0.75, 1],
-                        delay: getSquareDelay(index) + 0.3
+                        duration: 1.5,
+                        times: [0, 0.6, 1],
+                        delay: getSquareDelay(index) + 0.5
                       }}
-                    >
-                      {/* Fusion Interactive Logo */}
-                      <motion.img 
-                        src="/logos/FI LOGO 6.png" 
-                        alt="Fusion Interactive Logo" 
-                        style={{
-                          height: '36px',
-                          width: 'auto',
-                          filter: 'brightness(1.3) contrast(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5))'
-                        }}
-                        animate={{
-                          scale: [0.8, 1.05, 1],
-                          rotate: [0, 2, 0]
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          times: [0, 0.6, 1],
-                          delay: getSquareDelay(index) + 0.5
-                        }}
-                      />
-                    </motion.div>
-                  )}
-
-                  {square.type === 'title' && (
-                    <motion.div
-                      style={{ 
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        textAlign: 'center', 
-                        color: 'white',
-                        opacity: 0,
-                        zIndex: 10,
-                        width: '100%',
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}
-                      animate={{
-                        opacity: [0, 0, 1, 1, 1, 0]
-                      }}
-                      transition={{
-                        duration: 3.5,
-                        times: [0, 0.15, 0.25, 0.5, 0.75, 1],
-                        delay: getSquareDelay(index) + 0.3
-                      }}
-                    >
-                      {/* Title Text */}
-                      <motion.div
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.2) 100%)',
-                          backdropFilter: 'blur(10px) saturate(180%) brightness(120%)',
-                          borderRadius: '8px',
-                          padding: '8px 12px',
-                          border: '1px solid rgba(255,255,255,0.4)',
-                          display: 'inline-block',
-                          position: 'relative',
-                          overflow: 'hidden',
-                          boxShadow: '0 0 20px rgba(255,255,255,0.3), 0 8px 32px rgba(31, 38, 135, 0.37), inset 0 0 12px rgba(255,255,255,0.15)'
-                        }}
-                        animate={{
-                          scale: [0.9, 1.05, 1]
-                        }}
-                        transition={{
-                          duration: 1.2,
-                          times: [0, 0.7, 1],
-                          delay: getSquareDelay(index) + 0.5
-                        }}
-                      >
-                        {/* Bright metallic shimmer on title container */}
-                        <motion.div
-                          style={{
-                            position: 'absolute',
-                            top: 0,
-                            left: '-100%',
-                            width: '200%',
-                            height: '100%',
-                            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 40%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0.5) 60%, transparent 100%)',
-                            transform: 'skewX(-15deg)',
-                            filter: 'blur(0.5px)'
-                          }}
-                          animate={{
-                            x: ['0%', '100%']
-                          }}
-                          transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            delay: getSquareDelay(index) + 1.2,
-                            ease: 'easeInOut'
-                          }}
-                        />
-                        
-                        <motion.div
-                          style={{
-                            fontSize: '14px',
-                            fontWeight: '600',
-                            color: 'white',
-                            letterSpacing: '1px',
-                            textShadow: '0 0 8px rgba(255,255,255,0.4)',
-                            fontFamily: '"Inter", sans-serif',
-                            position: 'relative',
-                            zIndex: 2
-                          }}
-                          animate={{
-                            letterSpacing: ['1px', '1.5px', '1px']
-                          }}
-                          transition={{
-                            duration: 2.0,
-                            delay: getSquareDelay(index) + 0.7
-                          }}
-                        >
-                          FUSION
-                        </motion.div>
-                        
-                        <motion.div
-                          style={{
-                            fontSize: '8px',
-                            fontWeight: '400',
-                            color: 'rgba(255,255,255,0.8)',
-                            letterSpacing: '2px',
-                            marginTop: '2px',
-                            textShadow: '0 0 6px rgba(255,255,255,0.3)',
-                            fontFamily: '"Inter", sans-serif',
-                            position: 'relative',
-                            zIndex: 2
-                          }}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: getSquareDelay(index) + 0.9 }}
-                        >
-                          INTERACTIVE
-                        </motion.div>
-                      </motion.div>
-                    </motion.div>
-                  )}
+                    />
+                  </motion.div>
                 </motion.div>
 
                 {/* Removed dark overlay for brighter effect */}

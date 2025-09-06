@@ -1412,8 +1412,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 { 
                   name: 'GitHub', 
                   logo: '/logos/Github.webp',
-                  x: { mobile: -170, desktop: -510 }, 
-                  y: { mobile: -100, desktop: -120 },
+                  x: { mobile: -120, desktop: -510 }, 
+                  y: { mobile: -80, desktop: -120 },
                   delay: 0.0, 
                   color: '#333333' 
                 },

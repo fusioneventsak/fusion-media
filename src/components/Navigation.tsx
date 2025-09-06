@@ -12,6 +12,7 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
   const location = useLocation();
   const servicesRef = useRef<HTMLDivElement>(null);
   
@@ -28,6 +29,7 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
   useEffect(() => {
     setIsMenuOpen(false);
     setIsServicesOpen(false);
+    setIsMobileServicesOpen(false);
   }, [location.pathname]);
 
   // Close services dropdown when clicking outside
@@ -219,70 +221,156 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
           </button>
         </div>
         
-        {/* Mobile Menu */}
-        <div className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
+        {/* Full Screen Mobile Menu */}
+        <div className={`md:hidden fixed inset-0 z-[998] transition-all duration-500 ease-in-out ${
           isMenuOpen 
-            ? 'max-h-96 opacity-100' 
-            : 'max-h-0 opacity-0'
+            ? 'opacity-100 visible' 
+            : 'opacity-0 invisible'
         }`}>
-          <div className="pt-6 pb-4 border-t border-white/10 mt-4 bg-black/95 backdrop-blur-md rounded-lg mx-4">
-            <div className="flex flex-col space-y-4">
-              {navItems.slice(0, 2).map((item) => (
-                <Link
-                  key={item.id}
-                  to={item.path}
-                  className={`block text-left px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
-                    currentPage === item.id
-                      ? 'bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-white border border-blue-500/30'
-                      : 'text-gray-300 hover:text-white hover:bg-white/5'
-                  } ${isTransitioning ? 'opacity-50 pointer-events-none' : ''}`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-
-              {/* Services Section in Mobile */}
-              <div className="py-2">
-                <div className="text-gray-400 text-sm font-medium px-4 pb-2">Services</div>
-                {serviceItems.map((service, index) => (
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/95 backdrop-blur-md" />
+          
+          {/* Menu Content */}
+          <div className="relative h-full flex flex-col">
+            {/* Header with Logo and Close */}
+            <div className="flex items-center justify-between p-6 border-b border-white/10">
+              <Link to="/" onClick={() => setIsMenuOpen(false)}>
+                <img 
+                  src="/logos/FI LOGO 6.png" 
+                  alt="Fusion Interactive Logo" 
+                  className="h-10 w-auto"
+                />
+              </Link>
+              
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 transition-colors"
+              >
+                <span className="sr-only">Close menu</span>
+                <div className="relative w-6 h-6">
+                  <span className="absolute block w-full h-0.5 bg-white top-3 rotate-45" />
+                  <span className="absolute block w-full h-0.5 bg-white top-3 -rotate-45" />
+                </div>
+              </button>
+            </div>
+            
+            {/* Navigation Items */}
+            <div className="flex-1 overflow-y-auto px-6 py-8">
+              <div className="space-y-6">
+                {/* Main Navigation Items (first 2) */}
+                {navItems.slice(0, 2).map((item, index) => (
                   <Link
-                    key={index}
-                    to={service.path}
-                    className={`block text-left px-6 py-3 rounded-lg font-medium transition-all duration-300 ${
+                    key={item.id}
+                    to={item.path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`block text-2xl font-semibold transition-all duration-300 group ${
+                      currentPage === item.id
+                        ? 'text-white'
+                        : 'text-gray-300 hover:text-white'
+                    } ${isTransitioning ? 'opacity-50 pointer-events-none' : ''}`}
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <div className="flex items-center justify-between py-4 border-b border-white/10">
+                      <span>{item.label}</span>
+                      {currentPage === item.id && (
+                        <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full" />
+                      )}
+                    </div>
+                  </Link>
+                ))}
+
+                {/* Services Dropdown */}
+                <div className="py-4 border-b border-white/10">
+                  <button
+                    onClick={() => setIsMobileServicesOpen(!isMobileServicesOpen)}
+                    className={`flex items-center justify-between w-full text-2xl font-semibold transition-all duration-300 ${
                       isServicesActive
-                        ? 'bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-white border border-blue-500/30'
-                        : 'text-gray-300 hover:text-white hover:bg-white/5'
+                        ? 'text-white'
+                        : 'text-gray-300 hover:text-white'
                     } ${isTransitioning ? 'opacity-50 pointer-events-none' : ''}`}
                   >
-                    <div className="font-medium">{service.label}</div>
-                    <div className="text-xs text-gray-400 mt-1">{service.description}</div>
+                    <span>Services</span>
+                    <div className="flex items-center space-x-3">
+                      {isServicesActive && (
+                        <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full" />
+                      )}
+                      <ChevronDown className={`w-6 h-6 transition-transform duration-300 ${
+                        isMobileServicesOpen ? 'rotate-180' : ''
+                      }`} />
+                    </div>
+                  </button>
+                  
+                  {/* Services Submenu */}
+                  <div className={`overflow-hidden transition-all duration-300 ${
+                    isMobileServicesOpen ? 'max-h-96 opacity-100 mt-4' : 'max-h-0 opacity-0'
+                  }`}>
+                    <div className="pl-6 space-y-4">
+                      {serviceItems.map((service, index) => (
+                        <Link
+                          key={index}
+                          to={service.path}
+                          onClick={() => {
+                            setIsMenuOpen(false);
+                            setIsMobileServicesOpen(false);
+                          }}
+                          className="block group transition-all duration-300"
+                        >
+                          <div className="text-lg font-medium text-gray-300 group-hover:text-white transition-colors">
+                            {service.label}
+                          </div>
+                          <div className="text-sm text-gray-400 mt-1 leading-relaxed">
+                            {service.description}
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Remaining Navigation Items */}
+                {navItems.slice(2).map((item, index) => (
+                  <Link
+                    key={item.id}
+                    to={item.path}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={`block text-2xl font-semibold transition-all duration-300 group ${
+                      currentPage === item.id
+                        ? 'text-white'
+                        : 'text-gray-300 hover:text-white'
+                    } ${isTransitioning ? 'opacity-50 pointer-events-none' : ''}`}
+                    style={{ animationDelay: `${(index + 3) * 100}ms` }}
+                  >
+                    <div className="flex items-center justify-between py-4 border-b border-white/10">
+                      <span>{item.label}</span>
+                      {currentPage === item.id && (
+                        <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full" />
+                      )}
+                    </div>
                   </Link>
                 ))}
               </div>
-
-              {navItems.slice(2).map((item) => (
-                <Link
-                  key={item.id}
-                  to={item.path}
-                  className={`block text-left px-4 py-3 rounded-lg font-medium transition-all duration-300 ${
-                    currentPage === item.id
-                      ? 'bg-gradient-to-r from-blue-500/20 to-purple-600/20 text-white border border-blue-500/30'
-                      : 'text-gray-300 hover:text-white hover:bg-white/5'
-                  } ${isTransitioning ? 'opacity-50 pointer-events-none' : ''}`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-              
+            </div>
+            
+            {/* Bottom Section with CTA */}
+            <div className="p-6 border-t border-white/10 bg-gradient-to-t from-black/50 to-transparent">
               <button 
-                className={`mt-4 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg font-medium text-white hover:scale-105 transition-all duration-300 ${
+                className={`w-full py-4 px-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl font-semibold text-white text-lg hover:scale-105 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 ${
                   isTransitioning ? 'opacity-50 pointer-events-none' : ''
                 }`}
                 disabled={isTransitioning}
-                onClick={onGetStartedClick}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  onGetStartedClick?.();
+                }}
               >
                 Get Started
               </button>
+              
+              <div className="mt-4 text-center">
+                <p className="text-gray-400 text-sm">
+                  Ready to transform your digital presence?
+                </p>
+              </div>
             </div>
           </div>
         </div>

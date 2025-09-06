@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { 
-  Rocket, 
   Zap, 
   Star, 
   ArrowUp, 
@@ -37,12 +37,11 @@ export default function Footer() {
   ];
 
   const company = [
-    'About Us',
-    'Case Studies',
-    'Our Process',
-    'Careers',
-    'Blog',
-    'Contact'
+    { label: 'About Us', path: '/about' },
+    { label: 'Case Studies', path: '/case-studies' },
+    { label: 'Why Us', path: '/why-us' },
+    { label: 'Blog', path: '/blog' },
+    { label: 'Contact', path: '/contact' }
   ];
 
   const socialLinks = [
@@ -77,13 +76,11 @@ export default function Footer() {
                   transition={{ duration: 0.6 }}
                 >
                   <div className="flex items-center space-x-3 mb-6">
-                    <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                      <Rocket className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-2xl font-light text-white">FUSION</div>
-                      <div className="text-xs font-light text-gray-400 -mt-1 tracking-wider">INTERACTIVE</div>
-                    </div>
+                    <img 
+                      src="/logos/FI LOGO 6.png" 
+                      alt="Fusion Interactive Logo" 
+                      className="h-16 w-auto"
+                    />
                   </div>
                   
                   <p className="text-gray-300 mb-6 leading-relaxed">
@@ -158,11 +155,11 @@ export default function Footer() {
                   <div className="space-y-4 mb-8">
                     <div className="flex items-center space-x-3 text-gray-300">
                       <Mail className="w-4 h-4 text-cyan-400" />
-                      <span className="text-sm">hello@fusioninteractive.ca</span>
+                      <span className="text-sm">info@fusion-events.ca</span>
                     </div>
                     <div className="flex items-center space-x-3 text-gray-300">
                       <Phone className="w-4 h-4 text-green-400" />
-                      <span className="text-sm">+1 (555) 123-4567</span>
+                      <span className="text-sm">416-825-4938</span>
                     </div>
                     <div className="flex items-center space-x-3 text-gray-300">
                       <MapPin className="w-4 h-4 text-red-400" />
@@ -175,11 +172,16 @@ export default function Footer() {
                     {company.map((item, index) => (
                       <motion.li
                         key={index}
-                        className="text-gray-300 hover:text-cyan-400 transition-colors cursor-pointer flex items-center group"
+                        className="flex items-center group"
                         whileHover={{ x: 5 }}
                       >
-                        <div className="w-2 h-2 bg-cyan-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        {item}
+                        <Link 
+                          to={item.path}
+                          className="text-gray-300 hover:text-cyan-400 transition-colors cursor-pointer flex items-center group"
+                        >
+                          <div className="w-2 h-2 bg-cyan-400 rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                          {item.label}
+                        </Link>
                       </motion.li>
                     ))}
                   </ul>

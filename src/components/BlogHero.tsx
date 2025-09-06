@@ -63,7 +63,7 @@ export default function BlogHero({
 
 
       {/* Breadcrumb Navigation */}
-      <div className="absolute top-24 left-8 z-20">
+      <div className="absolute top-20 sm:top-24 left-4 sm:left-8 z-20">
         <Link
           to="/blog"
           className="flex items-center text-white/80 hover:text-white transition-colors duration-300 group"
@@ -81,27 +81,27 @@ export default function BlogHero({
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center pt-16 sm:pt-0">
         {/* Category Badge */}
-        <div className="flex justify-center mb-6">
+        <div className="flex flex-col sm:flex-row justify-center items-center mb-6 space-y-2 sm:space-y-0">
           <span 
             className={`px-4 py-2 ${categoryColor} rounded-full text-sm font-semibold backdrop-blur-sm`}
           >
             {category}
           </span>
-          <span className="mx-4 text-white/60">•</span>
+          <span className="hidden sm:inline mx-4 text-white/60">•</span>
           <span className="text-white/80 text-sm">{date} • {readTime}</span>
         </div>
 
         {/* Main Title */}
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">
           <span className="bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
             {title}
           </span>
         </h1>
 
         {/* Subtitle */}
-        <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto mb-8">
+        <p className="text-lg sm:text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto mb-8">
           {subtitle}
         </p>
 

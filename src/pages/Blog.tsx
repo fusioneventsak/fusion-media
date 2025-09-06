@@ -44,7 +44,7 @@ export default function Blog() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center px-4 overflow-hidden pt-28 sm:pt-0">
         {/* Hero Background Image */}
         <div className="absolute inset-0 z-0">
           <img
@@ -62,10 +62,10 @@ export default function Blog() {
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
-              <h1 className="text-5xl lg:text-6xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight">
                 Crafting Digital Experiences That Convert
               </h1>
-              <p className="text-xl text-gray-300 leading-relaxed">
+              <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
                 Master modern web development with cutting-edge tutorials on SEO optimization, AI integration, 
                 interactive components, and event technology that drives real business results.
               </p>
@@ -146,29 +146,48 @@ export default function Blog() {
                 </div>
               ))}
 
-              {/* Bottom row - Three cards with increased spacing */}
-              <div className="floating-card absolute w-40 p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl" 
-                   style={{ 
-                     left: 'calc(50% - 320px)', 
-                     bottom: '60px'
-                   }}>
-                <h4 className="font-bold text-lg mb-2">SEO Mastery</h4>
-                <p className="text-sm opacity-90">Boost rankings</p>
+              {/* Bottom row - Three cards as final pyramid row on mobile */}
+              {/* Mobile: Horizontal rectangles as pyramid base */}
+              <div className="lg:hidden absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                <div className="w-20 p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg text-center">
+                  <h4 className="font-bold text-xs mb-1">SEO</h4>
+                  <p className="text-xs opacity-90">Mastery</p>
+                </div>
+                <div className="w-20 p-2 bg-gradient-to-r from-pink-500 to-red-500 rounded-lg text-center">
+                  <h4 className="font-bold text-xs mb-1">LLM</h4>
+                  <p className="text-xs opacity-90">Integration</p>
+                </div>
+                <div className="w-20 p-2 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-lg text-center">
+                  <h4 className="font-bold text-xs mb-1">Event</h4>
+                  <p className="text-xs opacity-90">Tech</p>
+                </div>
               </div>
+              
+              {/* Desktop: Original layout */}
+              <div className="hidden lg:block">
+                <div className="floating-card absolute w-40 p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl" 
+                     style={{ 
+                       left: 'calc(50% - 320px)', 
+                       bottom: '60px'
+                     }}>
+                  <h4 className="font-bold text-lg mb-2">SEO Mastery</h4>
+                  <p className="text-sm opacity-90">Boost rankings</p>
+                </div>
 
-              <div className="floating-card absolute left-1/2 transform -translate-x-1/2 w-44 p-3 bg-gradient-to-r from-pink-500 to-red-500 rounded-xl"
-                   style={{ bottom: '60px' }}>
-                <h4 className="font-bold text-lg mb-2">LLM Integration</h4>
-                <p className="text-sm opacity-90">AI-powered apps</p>
-              </div>
+                <div className="floating-card absolute left-1/2 transform -translate-x-1/2 w-44 p-3 bg-gradient-to-r from-pink-500 to-red-500 rounded-xl"
+                     style={{ bottom: '60px' }}>
+                  <h4 className="font-bold text-lg mb-2">LLM Integration</h4>
+                  <p className="text-sm opacity-90">AI-powered apps</p>
+                </div>
 
-              <div className="floating-card absolute w-40 p-3 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-xl"
-                   style={{ 
-                     right: 'calc(50% - 320px)', 
-                     bottom: '60px'
-                   }}>
-                <h4 className="font-bold text-lg mb-2">Event Tech</h4>
-                <p className="text-sm opacity-90">Engage audiences</p>
+                <div className="floating-card absolute w-40 p-3 bg-gradient-to-r from-cyan-500 to-teal-500 rounded-xl"
+                     style={{ 
+                       right: 'calc(50% - 320px)', 
+                       bottom: '60px'
+                     }}>
+                  <h4 className="font-bold text-lg mb-2">Event Tech</h4>
+                  <p className="text-sm opacity-90">Engage audiences</p>
+                </div>
               </div>
             </div>
           </div>

@@ -227,7 +227,7 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
         </section>
 
         {/* Toronto Market Stats */}
-        <section className="relative py-16 bg-white/90 backdrop-blur-sm z-10">
+        <section className="relative py-16 bg-white/5 backdrop-blur-md z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -235,7 +235,7 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
               transition={{ duration: 0.8 }}
               className="text-center mb-12"
             >
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 drop-shadow-sm">
                 Toronto's Mobile App Market
               </h2>
             </motion.div>
@@ -252,7 +252,7 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
                   <div className="text-3xl md:text-4xl font-bold text-indigo-600 mb-2">
                     {stat.number}
                   </div>
-                  <div className="text-gray-600 text-sm md:text-base">
+                  <div className="text-gray-100 text-sm md:text-base">
                     {stat.label}
                   </div>
                 </motion.div>
@@ -262,7 +262,7 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
         </section>
 
         {/* Services Section */}
-        <section className="relative py-20 bg-gray-50/90 backdrop-blur-sm z-10">
+        <section className="relative py-20 bg-gray-50/5 backdrop-blur-md z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -270,10 +270,10 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg mb-6">
                 Toronto App Development Services
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-100 max-w-3xl mx-auto">
                 Comprehensive mobile app development services tailored for Toronto businesses. 
                 From concept to launch and beyond. We also specialize in 
                 <a href="/services/mobile-first-web-design" className="text-indigo-600 hover:text-indigo-700 underline">mobile-first web design</a> 
@@ -288,17 +288,17 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-white/10 backdrop-blur-md rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <div className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl p-4 w-fit mb-6">
                     {service.icon}
                   </div>
                   
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  <h3 className="text-2xl font-bold text-white drop-shadow-lg mb-4">
                     {service.title}
                   </h3>
                   
-                  <p className="text-gray-600 mb-6 leading-relaxed">
+                  <p className="text-gray-100 mb-6 leading-relaxed">
                     {service.description}
                   </p>
 
@@ -306,7 +306,7 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
                     {service.features.map((feature, featureIndex) => (
                       <div key={featureIndex} className="flex items-center space-x-2">
                         <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
-                        <span className="text-sm text-gray-700">{feature}</span>
+                        <span className="text-sm text-gray-200">{feature}</span>
                       </div>
                     ))}
                   </div>
@@ -317,7 +317,7 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
         </section>
 
         {/* Development Process */}
-        <section className="relative py-20 bg-white/90 backdrop-blur-sm z-10">
+        <section className="relative py-20 bg-white/5 backdrop-blur-md z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -325,10 +325,10 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg mb-6">
                 Our App Development Process
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-100 max-w-3xl mx-auto">
                 Proven methodology that has delivered successful apps for Toronto businesses 
                 across various industries.
               </p>
@@ -371,7 +371,7 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
         </section>
 
         {/* Client Results */}
-        <section className="relative py-20 bg-gray-50/90 backdrop-blur-sm z-10">
+        <section className="relative py-20 bg-gray-50/5 backdrop-blur-md z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -379,7 +379,7 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg mb-6">
                 Proven Results for Toronto Businesses
               </h2>
             </motion.div>
@@ -391,15 +391,15 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg text-center"
+                  className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg text-center"
                 >
-                  <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                  <h3 className="text-lg font-semibold text-white mb-3">
                     {result.client}
                   </h3>
                   <div className="text-3xl font-bold text-indigo-600 mb-2">
                     {result.result}
                   </div>
-                  <div className="text-gray-600 text-sm">
+                  <div className="text-gray-100 text-sm">
                     {result.metric}
                   </div>
                 </motion.div>
@@ -409,7 +409,7 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
         </section>
 
         {/* Technologies */}
-        <section className="relative py-20 bg-white/90 backdrop-blur-sm z-10">
+        <section className="relative py-20 bg-white/5 backdrop-blur-md z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -417,10 +417,10 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg mb-6">
                 Technologies We Use
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-100 max-w-3xl mx-auto">
                 Cutting-edge technologies and frameworks to build robust, scalable apps
               </p>
             </motion.div>
@@ -432,7 +432,7 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
                   initial={{ opacity: 0, scale: 0.8 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="bg-gray-100/90 backdrop-blur-sm text-gray-800 px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-100 hover:text-indigo-800 transition-colors duration-200"
+                  className="bg-gray-100/20 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-indigo-100/30 hover:text-indigo-800 transition-colors duration-200"
                 >
                   {tech}
                 </motion.div>

@@ -174,7 +174,7 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
         </section>
 
         {/* Stats Section */}
-        <section className="relative py-16 bg-white/90 backdrop-blur-sm z-10">
+        <section className="relative py-16 bg-white/5 backdrop-blur-md z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {mobileStats.map((stat, index) => (
@@ -188,7 +188,7 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
                   <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-2">
                     {stat.number}
                   </div>
-                  <div className="text-gray-600 text-sm md:text-base">
+                  <div className="text-gray-100 text-sm md:text-base">
                     {stat.label}
                   </div>
                 </motion.div>
@@ -198,7 +198,7 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
         </section>
 
         {/* Benefits Section */}
-        <section className="relative py-20 bg-gray-50/90 backdrop-blur-sm z-10">
+        <section className="relative py-20 bg-gray-50/5 backdrop-blur-md z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -206,10 +206,10 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg mb-6">
                 Why Mobile-First Design Matters in Toronto
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-100 max-w-3xl mx-auto">
                 Toronto's tech-savvy population demands fast, intuitive mobile experiences. 
                 Mobile-first design ensures your website performs flawlessly on every device.
                 Learn more about our <a href="/blog/technical-seo-guide-2024" className="text-blue-600 hover:text-blue-700 underline">technical SEO optimization</a> and <a href="/services/app-development" className="text-blue-600 hover:text-blue-700 underline">app development services</a>.
@@ -223,15 +223,15 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-white/5 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300"
                 >
                   <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-lg p-3 w-fit mb-4">
                     {benefit.icon}
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h3 className="text-xl font-semibold text-white mb-3">
                     {benefit.title}
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-gray-100">
                     {benefit.description}
                   </p>
                 </motion.div>
@@ -241,7 +241,7 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
         </section>
 
         {/* Process Section */}
-        <section className="relative py-20 bg-white/90 backdrop-blur-sm z-10">
+        <section className="relative py-20 bg-white/5 backdrop-blur-md z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -249,10 +249,10 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
               transition={{ duration: 0.8 }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg mb-6">
                 Our Mobile-First Design Process
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-xl text-gray-100 max-w-3xl mx-auto">
                 Proven methodology for creating mobile-optimized websites that perform 
                 exceptionally across all devices and deliver results for Toronto businesses.
               </p>
@@ -285,7 +285,7 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
         </section>
 
         {/* Features Section */}
-        <section className="relative py-20 bg-gray-50/90 backdrop-blur-sm z-10">
+        <section className="relative py-20 bg-gray-50/5 backdrop-blur-md z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <motion.div
@@ -293,10 +293,10 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8 }}
               >
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                <h2 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg mb-6">
                   Comprehensive Mobile-First Features
                 </h2>
-                <p className="text-xl text-gray-600 mb-8">
+                <p className="text-xl text-gray-100 mb-8">
                   Every mobile-first website we design for Toronto businesses includes 
                   these essential features to ensure maximum performance and user engagement.
                 </p>
@@ -311,7 +311,7 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
                       className="flex items-center space-x-3"
                     >
                       <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
+                      <span className="text-gray-200">{feature}</span>
                     </motion.div>
                   ))}
                 </div>
