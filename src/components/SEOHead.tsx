@@ -19,7 +19,7 @@ export default function SEOHead({
   keywords = "web design toronto, app developers toronto, web designer, web design agency toronto, toronto web development, mobile app development toronto, UI UX design toronto, custom web design toronto mobile-first",
   canonicalUrl = "https://fusioninteractive.agency",
   ogType = "website",
-  ogImage = "https://fusioninteractive.agency/logos/Fusion-Interactive-Logo.png",
+  ogImage = "https://fusioninteractive.agency/Website%20Images/hero-og-image.png",
   twitterCard = "summary_large_image",
   structuredData,
   noIndex = false

@@ -1204,6 +1204,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         description="Leading Toronto web development agency specializing in AI-powered applications, interactive experiences, and performance optimization. Custom React development, event technology, and machine learning solutions."
         keywords="Toronto web development agency, AI development services, custom web development Toronto, React development services, machine learning consulting, interactive web experiences, event technology solutions"
         canonicalUrl="https://fusioninteractive.agency"
+        ogImage="https://fusioninteractive.agency/Website%20Images/hero-og-image.png"
         structuredData={homeStructuredData}
       />
       
