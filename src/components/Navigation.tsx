@@ -45,12 +45,12 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
   }, []);
   
   const navItems = [
-    { id: 'home', label: 'Home', path: '/' },
-    { id: 'about', label: 'About', path: '/about' },
-    { id: 'why-us', label: 'Why Us', path: '/why-us' },
-    { id: 'packages', label: 'Packages', path: '/packages' },
-    { id: 'blog', label: 'Blog', path: '/blog' },
-    { id: 'contact', label: 'Contact', path: '/contact' }
+    { id: 'home', label: 'Home', mobileLabel: 'Home', path: '/' },
+    { id: 'about', label: 'About', mobileLabel: 'About', path: '/about' },
+    { id: 'why-us', label: 'Why Us', mobileLabel: 'Why', path: '/why-us' },
+    { id: 'packages', label: 'Packages', mobileLabel: 'Packages', path: '/packages' },
+    { id: 'blog', label: 'Blog', mobileLabel: 'Blog', path: '/blog' },
+    { id: 'contact', label: 'Contact', mobileLabel: 'Contact', path: '/contact' }
   ];
 
   const serviceItems = [
@@ -106,7 +106,8 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
                     : 'text-gray-300 hover:text-white'
                 } ${isTransitioning ? 'opacity-50' : ''}`}
               >
-                {item.label}
+                <span className="hidden sm:inline">{item.label}</span>
+                <span className="sm:hidden">{item.mobileLabel || item.label}</span>
                 {/* Active indicator */}
                 <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 ${
                   currentPage === item.id 
@@ -174,7 +175,8 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
                     : 'text-gray-300 hover:text-white'
                 } ${isTransitioning ? 'opacity-50' : ''}`}
               >
-                {item.label}
+                <span className="hidden sm:inline">{item.label}</span>
+                <span className="sm:hidden">{item.mobileLabel || item.label}</span>
                 {/* Active indicator */}
                 <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 ${
                   currentPage === item.id 
@@ -272,7 +274,7 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <div className="flex items-center justify-between py-4 border-b border-white/10">
-                      <span>{item.label}</span>
+                      <span>{item.mobileLabel || item.label}</span>
                       {currentPage === item.id && (
                         <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full" />
                       )}
@@ -342,7 +344,7 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
                     style={{ animationDelay: `${(index + 5) * 100}ms` }}
                   >
                     <div className="flex items-center justify-between py-4 border-b border-white/10">
-                      <span>{item.label}</span>
+                      <span>{item.mobileLabel || item.label}</span>
                       {currentPage === item.id && (
                         <div className="w-2 h-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full" />
                       )}
