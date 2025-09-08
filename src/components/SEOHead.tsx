@@ -55,6 +55,7 @@ export default function SEOHead({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image:alt" content="Fusion Interactive - Toronto Web Development Agency Hero" />
       
       {/* Additional SEO tags */}
       <meta name="author" content="Fusion Interactive" />
