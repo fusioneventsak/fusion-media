@@ -11,7 +11,7 @@ const horizontalPortfolioProjects = [
     id: 1,
     title: "Custom Business Applications",
     subtitle: "Internal Tools & CRM Systems",
-    url: "https://splendid-cannoli-324007.netlify.app/",
+    url: "https://capable-alfajores-d0dff2.netlify.app/",
     category: "Web Applications",
     technologies: ["Front End", "Back End", "DataBase", "Hosting"],
     description: "Tailored internal tools and CRM systems built specifically for your organization's workflow. Streamline operations, improve efficiency, and gain valuable insights with applications designed around your unique business needs and processes.",
@@ -49,7 +49,7 @@ const horizontalPortfolioProjects = [
     id: 3,
     title: "Interactive Widgets & Components",
     subtitle: "Gamified Experiences",
-    url: "https://capable-alfajores-d0dff2.netlify.app/",
+    url: "https://bespoke-semifreddo-acdc93.netlify.app/",
     category: "Interactive Media",
     technologies: ["React", "Three.js", "WebGL", "Game Logic", "Animation"],
     description: "Gamified experiences and interactive elements that boost engagement on websites and at live events. From custom game shows to educational tools, we create interactive components that entertain, inform, and drive meaningful user participation.",
@@ -1747,7 +1747,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                     scale: 0.95,
                     transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
                   }}
-                  onClick={() => window.open('https://selfieholosphere.com/collage/1lr9qn', '_blank')}
+                  onClick={() => window.open('https://selfieholosphere.com/', '_blank')}
                 >
                   <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center mr-2">
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
