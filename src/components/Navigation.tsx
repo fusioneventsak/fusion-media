@@ -106,8 +106,8 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
                     : 'text-gray-300 hover:text-white'
                 } ${isTransitioning ? 'opacity-50' : ''}`}
               >
-                <span className="hidden sm:inline">{item.label}</span>
-                <span className="sm:hidden">{item.mobileLabel || item.label}</span>
+                <span className="hidden lg:inline">{item.label}</span>
+                <span className="lg:hidden">{item.mobileLabel || item.label}</span>
                 {/* Active indicator */}
                 <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 ${
                   currentPage === item.id 
@@ -175,8 +175,8 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
                     : 'text-gray-300 hover:text-white'
                 } ${isTransitioning ? 'opacity-50' : ''}`}
               >
-                <span className="hidden sm:inline">{item.label}</span>
-                <span className="sm:hidden">{item.mobileLabel || item.label}</span>
+                <span className="hidden lg:inline">{item.label}</span>
+                <span className="lg:hidden">{item.mobileLabel || item.label}</span>
                 {/* Active indicator */}
                 <div className={`absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 ${
                   currentPage === item.id 
