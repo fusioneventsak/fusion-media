@@ -1257,7 +1257,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             {/* Text Content - Left of Image */}
             <div className="text-left max-w-2xl order-last lg:order-first">
             <motion.p
-              className="text-lg md:text-xl lg:text-2xl text-white mb-6 leading-relaxed font-medium italic"
+              className="text-lg md:text-xl lg:text-2xl text-white mb-6 leading-relaxed font-medium italic text-center"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
@@ -1273,12 +1273,31 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 backgroundClip: 'text'
               }}
             >
-              While your competitors are <span className="font-bold not-italic bg-gradient-to-r from-red-500 to-rose-600 bg-clip-text text-transparent">stuck in development hell</span>, we're launching <span className="font-bold not-italic bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent">mind-blowing websites</span> in record time.
+              While your competitors are stuck in <motion.span 
+                className="font-bold not-italic"
+                style={{
+                  background: 'linear-gradient(180deg, #ff4500 0%, #ff6347 25%, #ffa500 50%, #ff8c00 75%, #dc143c 100%)',
+                  WebkitBackgroundClip: 'text',
+                  backgroundClip: 'text',
+                  color: 'transparent',
+                  backgroundSize: '100% 400%'
+                }}
+                animate={{
+                  backgroundPosition: ['0% 0%', '0% 50%', '0% 100%', '0% 50%', '0% 0%']
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                development hell
+              </motion.span>, we're launching <span className="font-bold not-italic bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent">mind-blowing websites</span> in record time.
               <br />
               Don't get left behind—join the <span className="font-bold not-italic bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent">AI revolution</span> and start <span className="font-bold not-italic bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">dominating your market</span> today.
             </motion.p>
             <motion.div
-              className="flex flex-col sm:flex-row gap-3 mb-8"
+              className="flex flex-col sm:flex-row gap-3 mb-8 justify-center items-center"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{
