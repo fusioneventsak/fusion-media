@@ -1273,11 +1273,10 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 backgroundClip: 'text'
               }}
             >
-              What once took <span className="font-bold not-italic bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">months to produce</span>—high-end websites with animations,
-              multiple pages, and complex functionality—we now deliver in <span className="font-bold not-italic bg-gradient-to-r from-green-300 to-emerald-400 bg-clip-text text-transparent">weeks</span>.
+              While your competitors are still <span className="font-bold not-italic bg-gradient-to-r from-red-300 to-rose-400 bg-clip-text text-transparent">stuck in development hell</span>, we're launching 
+              mind-blowing websites in <span className="font-bold not-italic bg-gradient-to-r from-green-300 to-emerald-400 bg-clip-text text-transparent">record time</span>.
               <br />
-              <span className="font-semibold not-italic bg-gradient-to-r from-purple-300 to-pink-400 bg-clip-text text-transparent">AI-powered productivity</span> meets <span className="font-bold not-italic bg-gradient-to-r from-amber-300 to-orange-400 bg-clip-text text-transparent">25+ years of expertise</span> in events,
-              entertainment, and technology.
+              Don't get left behind in the <span className="font-semibold not-italic bg-gradient-to-r from-purple-300 to-pink-400 bg-clip-text text-transparent">AI revolution</span>—join the smart businesses already <span className="font-bold not-italic bg-gradient-to-r from-cyan-300 to-blue-400 bg-clip-text text-transparent">dominating their markets</span>.
             </motion.p>
             <motion.div
               className="flex flex-col sm:flex-row gap-3 mb-8"
