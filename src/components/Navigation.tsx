@@ -48,6 +48,7 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
     { id: 'home', label: 'Home', path: '/' },
     { id: 'about', label: 'About', path: '/about' },
     { id: 'why-us', label: 'Why Us', path: '/why-us' },
+    { id: 'packages', label: 'Packages', path: '/packages' },
     { id: 'blog', label: 'Blog', path: '/blog' },
     { id: 'contact', label: 'Contact', path: '/contact' }
   ];
@@ -95,7 +96,7 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.slice(0, 2).map((item) => (
+            {navItems.slice(0, 4).map((item) => (
               <Link
                 key={item.id}
                 to={item.path}
@@ -163,7 +164,7 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
               </div>
             </div>
 
-            {navItems.slice(2).map((item) => (
+            {navItems.slice(4).map((item) => (
               <Link
                 key={item.id}
                 to={item.path}
@@ -257,8 +258,8 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
             {/* Navigation Items */}
             <div className="flex-1 overflow-y-auto px-6 py-8">
               <div className="space-y-6">
-                {/* Main Navigation Items (first 2) */}
-                {navItems.slice(0, 2).map((item, index) => (
+                {/* Main Navigation Items (first 4) */}
+                {navItems.slice(0, 4).map((item, index) => (
                   <Link
                     key={item.id}
                     to={item.path}
@@ -328,7 +329,7 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
                 </div>
 
                 {/* Remaining Navigation Items */}
-                {navItems.slice(2).map((item, index) => (
+                {navItems.slice(4).map((item, index) => (
                   <Link
                     key={item.id}
                     to={item.path}
@@ -338,7 +339,7 @@ export default function Navigation({ currentPage, isTransitioning, onGetStartedC
                         ? 'text-white'
                         : 'text-gray-300 hover:text-white'
                     } ${isTransitioning ? 'opacity-50 pointer-events-none' : ''}`}
-                    style={{ animationDelay: `${(index + 3) * 100}ms` }}
+                    style={{ animationDelay: `${(index + 5) * 100}ms` }}
                   >
                     <div className="flex items-center justify-between py-4 border-b border-white/10">
                       <span>{item.label}</span>
