@@ -28,17 +28,25 @@ export default function PageTransition({ currentPage, children, onTransitionChan
   // Get page info
   const getPageInfo = (to: string) => {
     const pageColors = {
-      'home': '#1E40AF',       // Deeper Blue
-      'about': '#6D28D9',      // Deeper Purple
-      'case-studies': '#0369A1', // Deeper Cyan
-      'contact': '#047857'     // Deeper Green
+      'home': '#1E3A8A',       // Richer, deeper blue
+      'about': '#581C87',      // Richer, deeper purple
+      'why-us': '#7C3AED',     // Vibrant violet/purple
+      'packages': '#166534',   // Rich emerald green
+      'blog': '#DC2626',       // Vibrant red
+      'case-studies': '#0C4A6E', // Richer, deeper cyan
+      'contact': '#064E3B',    // Richer, deeper green
+      'services': '#BE185D'    // Vibrant magenta/pink
     };
     
     const pageNames = {
       'home': 'Home',
       'about': 'About',
+      'why-us': 'Why Us',
+      'packages': 'Packages',
+      'blog': 'Blog',
       'case-studies': 'Case Studies',
-      'contact': 'Contact'
+      'contact': 'Contact',
+      'services': 'Services'
     };
     
     return {
@@ -220,14 +228,13 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     height: '100%',
                     marginRight: '-1px',
                     background: `linear-gradient(135deg, 
-                      ${pageInfo.color}ff 0%, 
-                      #ffffff44 15%, 
-                      ${pageInfo.color}ee 30%, 
-                      #ffffff33 45%, 
-                      ${pageInfo.color}ff 60%, 
-                      #ffffff44 75%, 
-                      ${pageInfo.color}ff 100%)`,
-                    backdropFilter: 'blur(10px) saturate(180%) brightness(120%)',
+                      ${pageInfo.color}f0 0%, 
+                      ${pageInfo.color}cc 20%, 
+                      ${pageInfo.color}e8 40%, 
+                      ${pageInfo.color}d4 60%, 
+                      ${pageInfo.color}f0 80%, 
+                      ${pageInfo.color}cc 100%)`,
+                    backdropFilter: 'blur(8px) saturate(150%) brightness(90%)',
                     border: '1px solid rgba(255,255,255,0.4)',
                     boxShadow: '0 0 20px rgba(255,255,255,0.3), inset 0 0 15px rgba(255,255,255,0.15)',
                     position: 'relative',
@@ -319,29 +326,6 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                     }}
                   />
 
-                  {/* Bright metallic ripple effects */}
-                  <motion.div
-                    style={{
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      width: '40px',
-                      height: '40px',
-                      border: '2px solid rgba(255,255,255,0.7)',
-                      borderRadius: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      boxShadow: '0 0 20px rgba(255,255,255,0.6), inset 0 0 10px rgba(255,255,255,0.3)'
-                    }}
-                    animate={{
-                      scale: [0.5, 2, 0.5],
-                      opacity: [0, 0.4, 0]
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      delay: getSquareDelay(index) + 1
-                    }}
-                  />
 
                   {/* Bright metallic sweep overlay */}
                   <motion.div
@@ -382,7 +366,9 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
-                      justifyContent: 'center'
+                      justifyContent: 'center',
+                      perspective: '200px',
+                      transformStyle: 'preserve-3d'
                     }}
                     animate={{
                       opacity: [0, 0, 1, 1, 1, 0]
@@ -400,11 +386,15 @@ export default function PageTransition({ currentPage, children, onTransitionChan
                       style={{
                         height: '36px',
                         width: 'auto',
-                        filter: 'brightness(1.3) contrast(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5))'
+                        filter: 'brightness(1.3) contrast(1.2) drop-shadow(0 0 10px rgba(255,255,255,0.5)) drop-shadow(0 4px 8px rgba(0,0,0,0.3)) drop-shadow(0 2px 4px rgba(0,0,0,0.2))',
+                        transform: 'translateZ(20px)',
+                        position: 'relative',
+                        zIndex: 15
                       }}
                       animate={{
                         scale: [0.8, 1.05, 1],
-                        rotate: [0, 2, 0]
+                        rotate: [0, 2, 0],
+                        y: [0, -2, 0]
                       }}
                       transition={{
                         duration: 1.5,
