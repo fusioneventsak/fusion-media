@@ -1428,13 +1428,13 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               
               {/* Semi-Circle Tool Logos Above Title */}
               {[
-                { 
-                  name: 'GitHub', 
-                  logo: '/logos/Github.webp',
-                  x: { mobile: -140, desktop: -510 }, 
+                {
+                  name: 'GitHub',
+                  logo: '/logos/Github.png',
+                  x: { mobile: -140, desktop: -510 },
                   y: { mobile: -100, desktop: -120 },
-                  delay: 0.0, 
-                  color: '#333333' 
+                  delay: 0.0,
+                  color: '#333333'
                 },
                 { 
                   name: 'WordPress', 
@@ -1505,18 +1505,24 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                         ease: [0.25, 0.46, 0.45, 0.94]
                       }}
                     >
-                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md p-1 bg-white/5">
+                      <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md p-2 bg-white/5">
                         <img
                           src={tool.logo}
                           alt={`${tool.name} logo`}
-                          className="w-full h-full object-cover rounded-xl filter drop-shadow-lg"
-                          style={{ 
-                            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' 
+                          className="w-full h-full object-contain rounded-xl filter drop-shadow-lg"
+                          loading="lazy"
+                          style={{
+                            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
+                          }}
+                          onError={(e) => {
+                            // Fallback to a generic icon if image fails to load
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
                           }}
                         />
                         <div
                           className="w-full h-full items-center justify-center text-lg font-bold rounded-xl"
-                          style={{ 
+                          style={{
                             display: 'none',
                             color: tool.color,
                             backgroundColor: `${tool.color}20`
@@ -1545,13 +1551,14 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                         ease: [0.25, 0.46, 0.45, 0.94]
                       }}
                     >
-                      <div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md p-1 bg-white/5">
+                      <div className="w-20 h-20 rounded-2xl flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md p-2 bg-white/5">
                         <img
                           src={tool.logo}
                           alt={`${tool.name} logo`}
-                          className="w-full h-full object-cover rounded-xl filter drop-shadow-lg"
-                          style={{ 
-                            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' 
+                          className="w-full h-full object-contain rounded-xl filter drop-shadow-lg"
+                          loading="lazy"
+                          style={{
+                            filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.3))'
                           }}
                           onError={(e) => {
                             // Fallback to a generic icon if image fails to load
