@@ -1430,7 +1430,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               {[
                 {
                   name: 'GitHub',
-                  logo: '/logos/GitLogo.png',
+                  logo: '/logos/Git3.png',
                   x: { mobile: -140, desktop: -510 },
                   y: { mobile: -100, desktop: -120 },
                   delay: 0.0,
