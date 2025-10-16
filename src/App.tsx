@@ -83,7 +83,7 @@ export default function App() {
       >
         <Canvas
           camera={{ 
-            position: [15, 3, 15], 
+            position: [15, 25, 15], 
             fov: 45,
             near: 0.1,
             far: 200

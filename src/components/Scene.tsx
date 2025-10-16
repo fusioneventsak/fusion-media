@@ -11,11 +11,12 @@ export default function Scene({ currentPage }: SceneProps) {
   const { camera, gl } = useThree();
   
   useEffect(() => {
-    // EXACT CAMERA SETTINGS FROM YOUR REFERENCE
-    camera.position.set(15, 3, 15);
+    // RAISED CAMERA SETTINGS FOR BETTER HORIZON VIEW
+    camera.position.set(15, 25, 15);
     camera.fov = 45;
     camera.near = 0.1;
     camera.far = 200;
+    camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
     
     // CRITICAL RENDERER SETTINGS FOR SHARP PARTICLES
