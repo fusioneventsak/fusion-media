@@ -78,15 +78,15 @@ export default function ParticleField() {
           if (distanceToCenter > 0.5) discard;
           
           ${isIOS ? `
-          // Simplified fragment shader for iOS
+          // Simplified fragment shader for iOS - BRIGHTER
           float circle = 1.0 - distanceToCenter * 2.0;
-          float intensity = circle * 0.8;
+          float intensity = circle * 1.2;
           ` : `
-          // Full fragment shader for desktop
+          // Full fragment shader for desktop - BRIGHTER
           float circle = 1.0 - smoothstep(0.0, 0.5, distanceToCenter);
           float core = 1.0 - smoothstep(0.0, 0.2, distanceToCenter);
           float glow = 1.0 - smoothstep(0.2, 0.5, distanceToCenter);
-          float intensity = core * 0.8 + glow * 0.4;
+          float intensity = core * 1.2 + glow * 0.7;
           `}
           
           vec3 finalColor = vColor * intensity * vGlow;
@@ -175,23 +175,23 @@ export default function ParticleField() {
       mainVelocities[i * 3 + 1] = (Math.random() - 0.5) * (velocityScale * 0.5);
       mainVelocities[i * 3 + 2] = (Math.random() - 0.5) * velocityScale;
       
-      // Simplified color generation for mobile
+      // Simplified color generation for mobile - BRIGHTENED
       const colorType = Math.random();
       if (colorType < 0.5) {
-        // Blue stars
-        mainColors[i * 3] = 0.7;
-        mainColors[i * 3 + 1] = 0.8;
+        // Blue stars - brighter
+        mainColors[i * 3] = 0.85;
+        mainColors[i * 3 + 1] = 0.95;
         mainColors[i * 3 + 2] = 1.0;
       } else {
-        // White/cyan stars
-        mainColors[i * 3] = 0.6;
-        mainColors[i * 3 + 1] = 0.8;
+        // White/cyan stars - brighter
+        mainColors[i * 3] = 0.8;
+        mainColors[i * 3 + 1] = 0.95;
         mainColors[i * 3 + 2] = 1.0;
       }
-      
-      // Simplified size distribution
-      mainSizes[i] = isIOS ? (0.5 + Math.random() * 1.0) : (0.5 + Math.random() * 1.5);
-      mainAlphas[i] = isIOS ? (0.4 + Math.random() * 0.4) : (0.6 + Math.random() * 0.4);
+
+      // Simplified size distribution - slightly larger
+      mainSizes[i] = isIOS ? (0.6 + Math.random() * 1.2) : (0.7 + Math.random() * 1.8);
+      mainAlphas[i] = isIOS ? (0.6 + Math.random() * 0.4) : (0.8 + Math.random() * 0.2);
     }
     
     // Dust cloud particles (much fewer for mobile)
