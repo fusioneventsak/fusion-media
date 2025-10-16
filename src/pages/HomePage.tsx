@@ -1243,12 +1243,39 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               >
                 AI-powered websites and apps that feel effortless for your team and your audience.
               </motion.h1>
+              <motion.div
+                className="flex flex-col items-center gap-4 lg:hidden"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <motion.div
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs sm:text-sm backdrop-blur"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                  <span className="inline-flex h-1.5 w-1.5 rounded-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 shadow-[0_0_10px_rgba(34,197,94,0.55)]" />
+                  <span className="font-semibold tracking-[0.28em] uppercase text-white/70">
+                    AI & Digital Agency
+                  </span>
+                </motion.div>
+
+                <motion.img
+                  src="/Website Images/Hero.png"
+                  alt="AI-enabled interactive experience interface"
+                  className="w-full max-w-sm rounded-[1.75rem]"
+                  style={{ filter: 'drop-shadow(0 20px 55px rgba(96, 165, 250, 0.35))' }}
+                  whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
+                />
+              </motion.div>
+
 
               <motion.div
                 className="flex flex-wrap items-center justify-center gap-2 text-sm text-white/70 lg:justify-start"
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: 0.9, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 <span>We help ship</span>
                 <AnimatedHeroTitle />
@@ -1259,7 +1286,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 className="max-w-2xl text-base sm:text-lg md:text-xl text-white/80 leading-relaxed mx-auto lg:mx-0"
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9, delay: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+                transition={{ duration: 0.9, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
                 We plan the roadmap, design every screen, weave in the right AI touches, and build the whole experience with you. No jargon. No guesswork. Just a friendly team that keeps you in the loop from kickoff to launch.
               </motion.p>
@@ -1311,7 +1338,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               </motion.div>
             </div>
             <motion.div
-              className="order-3 lg:order-2 lg:col-start-2 relative flex flex-col items-center"
+              className="order-3 lg:order-2 lg:col-start-2 relative hidden lg:flex flex-col items-center"
               initial={{ opacity: 0, scale: 0.85, x: 120 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               transition={{ duration: 1.1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
