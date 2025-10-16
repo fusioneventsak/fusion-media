@@ -1,51 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const words = ['Quick App MVPs', 'Websites', 'Digital Experiences', 'Custom Solutions'];
+const phrases = [
+  'websites & app builds',
+  'AI features that feel natural',
+  'interactive brand moments'
+];
 
 export default function AnimatedHeroTitle() {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentWordIndex((prev) => (prev + 1) % words.length);
-    }, 3000); // Slower word changes for smoother experience
+    const interval = window.setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % phrases.length);
+    }, 3200);
 
-    return () => clearInterval(interval);
+    return () => window.clearInterval(interval);
   }, []);
 
   return (
-    <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light mb-4 text-white leading-tight text-center px-4">
-      We Make{' '}
-      <span className="font-semibold text-white">
-        Kick-Ass{' '}
-      </span>
-      <span 
-        className="overflow-hidden inline-flex justify-center" 
-        style={{ 
-          minHeight: '1.2em', 
-          minWidth: 'auto', // Remove fixed width for mobile
-          width: '100%', // Full width on mobile
-          maxWidth: '700px' // Increased max width for longer titles
-        }}
-      >
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={currentWordIndex}
-            className="font-semibold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent inline-block leading-relaxed text-center whitespace-nowrap"
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            transition={{ 
-              duration: 0.6,
-              ease: [0.25, 0.46, 0.45, 0.94] // Custom cubic-bezier for ultra-smooth motion
-            }}
-            style={{ paddingBottom: '0.1em' }}
-          >
-            {words[currentWordIndex]}
-          </motion.span>
-        </AnimatePresence>
-      </span>
-    </h1>
+    <span
+      className="relative inline-grid min-h-[1.2em] items-center overflow-hidden"
+      aria-live="polite"
+    >
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={phrases[activeIndex]}
+          className="inline-flex items-center whitespace-nowrap rounded-full border border-white/15 bg-white/5 px-3 py-1 text-sm font-semibold text-white/80 shadow-[0_10px_25px_rgba(15,23,42,0.35)] backdrop-blur"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -24 }}
+          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+            {phrases[activeIndex]}
+          </span>
+        </motion.span>
+      </AnimatePresence>
+    </span>
   );
 }

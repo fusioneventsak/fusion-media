@@ -1053,6 +1053,12 @@ export default function HomePage({ onNavigate }: HomePageProps) {
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95]);
   const heroY = useTransform(scrollYProgress, [0, 0.3], [-50, -150]);
   
+  const heroPills = [
+    'Strategy & planning',
+    'Design & build',
+    'AI features that make sense'
+  ];
+
   // Event section parallax effects - Mobile-aware fade ranges
   const eventOpacity = useTransform(
     scrollYProgress, 
@@ -1207,11 +1213,11 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         ogImage="https://fusioninteractive.agency/Website%20Images/hero-og-image.png"
         structuredData={homeStructuredData}
       />
-      
+
       {/* Hero Section with Parallax */}
       <motion.section
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center px-8 pt-32 pb-16 pointer-events-none"
+        className="relative min-h-[100svh] overflow-hidden px-6 sm:px-8 pt-32 sm:pt-40 pb-16 pointer-events-none"
         style={{
           opacity: heroOpacity,
           scale: heroScale,
@@ -1219,180 +1225,148 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           willChange: 'transform, opacity, filter'
         }}
       >
-        {/* Hero Content Container - Two Level Layout */}
-        <div className="relative z-10 w-full max-w-7xl pointer-events-auto">
-          
-          {/* Centered Badge and Title Section */}
-          <div className="text-center mb-8">
-            <motion.div
-              className="mb-6"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 1.2,
-                delay: 0.2,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-            >
-              <div className="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-md rounded-full border border-white/20">
-                <div className="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
-                <span className="text-sm font-medium text-white">AI-Assisted Digital Agency</span>
-              </div>
-            </motion.div>
-            <motion.h1
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 1.4,
-                delay: 0.4,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-            >
-              <AnimatedHeroTitle />
-            </motion.h1>
-          </div>
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute -top-[18rem] left-1/2 h-[30rem] w-[30rem] -translate-x-1/2 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.23),_transparent_65%)] blur-3xl" />
+          <div className="absolute bottom-[-6rem] right-[-4rem] h-[24rem] w-[24rem] bg-[radial-gradient(circle_at_bottom,_rgba(168,85,247,0.2),_transparent_70%)] blur-3xl" />
+          <div className="absolute inset-0 rounded-[3rem] border border-white/10 opacity-40 mix-blend-screen" />
+        </div>
 
-          {/* Content and Image Layout */}
-          <div className="flex flex-col lg:grid lg:grid-cols-2 gap-12 items-center">
-            
-            {/* Text Content - Left of Image */}
-            <div className="text-left max-w-2xl order-last lg:order-first">
-            <motion.p
-              className="text-lg md:text-xl lg:text-2xl text-white mb-6 leading-relaxed font-medium italic text-center"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 1.2,
-                delay: 0.6,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-              style={{
-                textShadow: '0 0 20px rgba(255,255,255,0.3), 0 0 40px rgba(147,51,234,0.2)',
-                background: 'linear-gradient(135deg, #ffffff 0%, #e5e7eb 25%, #d1d5db 50%, #9ca3af 75%, #6b7280 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text'
-              }}
-            >
-              While your competitors are stuck in <motion.span 
-                className="font-bold not-italic"
-                style={{
-                  background: 'linear-gradient(180deg, #ff4500 0%, #ff6347 25%, #ffa500 50%, #ff8c00 75%, #dc143c 100%)',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  color: 'transparent',
-                  backgroundSize: '100% 400%'
-                }}
-                animate={{
-                  backgroundPosition: ['0% 0%', '0% 50%', '0% 100%', '0% 50%', '0% 0%']
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              >
-                development hell
-              </motion.span>, we're launching <span className="font-bold not-italic bg-gradient-to-r from-emerald-500 to-green-600 bg-clip-text text-transparent">mind-blowing websites</span> in record time.
-              <br />
-              Don't get left behind—join the <span className="font-bold not-italic bg-gradient-to-r from-purple-500 to-pink-600 bg-clip-text text-transparent">AI revolution</span> and start <span className="font-bold not-italic bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">dominating your market</span> today.
-            </motion.p>
-            <motion.div
-              className="flex flex-col sm:flex-row gap-3 mb-8 justify-center items-center"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 1.2,
-                delay: 0.8,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-            >
-              <motion.button
-                className="px-6 py-2.5 bg-white text-gray-900 rounded-full font-medium hover:bg-gray-100 transition-all duration-300 shadow-lg text-sm"
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(255,255,255,0.2)",
-                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-                whileTap={{
-                  scale: 0.95,
-                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-                onClick={handleSeeOurWork}
-              >
-                See Our Work
-              </motion.button>
-              <motion.button
-                className="px-6 py-2.5 border border-white/30 text-white rounded-full font-medium hover:bg-white/10 transition-all duration-300 text-sm"
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 20px 40px rgba(255,255,255,0.1)",
-                  transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-                whileTap={{
-                  scale: 0.95,
-                  transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
-                }}
-                onClick={handleStartProject}
-              >
-                Start a Project
-              </motion.button>
-            </motion.div>
-            </div>
+        <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-center pointer-events-auto">
+          <div className="grid items-center gap-y-1 sm:gap-y-1.5 lg:gap-y-4 lg:gap-x-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
 
-            {/* Image Content - Right Side */}
-            <motion.div
-              className="relative flex items-center justify-center lg:justify-end order-first lg:order-last"
-              initial={{ opacity: 0, scale: 0.8, x: 100 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{
-                duration: 1.2,
-                delay: 0.6,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-            >
-              <div className="relative">
-                <motion.img
-                  src="/Website Images/Hero.png"
-                  alt="AI Photo Booth Technology - Interactive engagement platform"
-                  className="w-full max-w-2xl h-auto drop-shadow-2xl"
-                  style={{
-                    filter: `drop-shadow(0 25px 60px rgba(59, 130, 246, 0.3))`
-                  }}
+            <div className="order-2 lg:order-2 lg:col-start-1 mt-4 sm:mt-6 lg:mt-0 flex flex-col gap-3 sm:gap-4 text-center lg:text-left">
+              <motion.h1
+                className="text-4xl sm:text-5xl md:text-[3.25rem] lg:text-[3.75rem] font-light leading-tight text-white"
+                initial={{ opacity: 0, y: 28 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                AI-powered websites and apps that feel effortless for your team and your audience.
+              </motion.h1>
+
+              <motion.div
+                className="flex flex-wrap items-center justify-center gap-2 text-sm text-white/70 lg:justify-start"
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <span>We help ship</span>
+                <AnimatedHeroTitle />
+                <span>with clear steps and calm guidance.</span>
+              </motion.div>
+
+              <motion.p
+                className="max-w-2xl text-base sm:text-lg md:text-xl text-white/80 leading-relaxed mx-auto lg:mx-0"
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                We plan the roadmap, design every screen, weave in the right AI touches, and build the whole experience with you. No jargon. No guesswork. Just a friendly team that keeps you in the loop from kickoff to launch.
+              </motion.p>
+
+              <motion.div
+                className="flex flex-col sm:flex-row sm:items-center gap-3 justify-center lg:justify-start"
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.65, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <motion.button
+                  className="w-full sm:w-auto rounded-full bg-white px-8 py-3 text-base font-semibold text-gray-900 shadow-[0_20px_45px_rgba(255,255,255,0.25)] transition-all duration-300 hover:bg-gray-100"
                   whileHover={{
-                    scale: 1.05,
-                    transition: { duration: 0.3 }
+                    scale: 1.04,
+                    boxShadow: '0 28px 70px rgba(255,255,255,0.32)'
                   }}
-                />
-                
-                {/* Floating UI Elements */}
-                <motion.div
-                  className="absolute -top-8 -left-8 w-16 h-16 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-2xl backdrop-blur-sm border border-blue-400/30 flex items-center justify-center shadow-lg"
-                  animate={{
-                    y: [0, -10, 0],
-                    rotate: [0, 5, -5, 0]
-                  }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleStartProject}
                 >
-                  <svg className="w-8 h-8 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </motion.div>
-                
-                <motion.div
-                  className="absolute -bottom-8 -right-8 w-12 h-12 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-xl backdrop-blur-sm border border-purple-400/30 flex items-center justify-center shadow-lg"
-                  animate={{
-                    x: [0, 10, 0],
-                    scale: [1, 1.2, 1]
+                  Start a project
+                </motion.button>
+                <motion.button
+                  className="w-full sm:w-auto rounded-full border border-white/25 px-8 py-3 text-base font-semibold text-white transition-all duration-300 hover:bg-white/10"
+                  whileHover={{
+                    scale: 1.04,
+                    boxShadow: '0 24px 60px rgba(148,163,184,0.3)'
                   }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={handleSeeOurWork}
                 >
-                  <svg className="w-6 h-6 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                </svg>
+                  See recent work
+                </motion.button>
+              </motion.div>
+
+              <motion.div
+                className="flex flex-wrap justify-center lg:justify-start gap-2"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 0.75, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                {heroPills.map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-medium text-white/70"
+                  >
+                    {item}
+                  </span>
+                ))}
               </motion.div>
             </div>
-          </motion.div>
+            <motion.div
+              className="order-3 lg:order-2 lg:col-start-2 relative flex flex-col items-center"
+              initial={{ opacity: 0, scale: 0.85, x: 120 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ duration: 1.1, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <motion.div
+                className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-xs sm:text-sm backdrop-blur"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <span className="inline-flex h-1.5 w-1.5 rounded-full bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 shadow-[0_0_10px_rgba(34,197,94,0.55)]" />
+                <span className="font-semibold tracking-[0.28em] uppercase text-white/70">
+                  AI & Digital Agency
+                </span>
+              </motion.div>
+
+              <div className="relative">
+                <div className="absolute inset-0 -z-10 scale-[1.24] rounded-[3.5rem] bg-[radial-gradient(circle_at_center,_rgba(96,165,250,0.42),_transparent_70%)] blur-[130px]" />
+                <motion.img
+                  src="/Website Images/Hero.png"
+                  alt="AI-enabled interactive experience interface"
+                  className="relative z-10 mx-auto h-auto w-full max-w-3xl lg:max-w-[46rem]"
+                  style={{
+                    filter: 'drop-shadow(0 25px 80px rgba(96, 165, 250, 0.45))'
+                  }}
+                  whileHover={{
+                    scale: 1.03,
+                    transition: { duration: 0.4 }
+                  }}
+                />
+
+                <motion.div
+                  className="absolute left-1/2 bottom-[-4.5rem] sm:bottom-[-5rem] z-20 w-64 sm:w-80 -translate-x-1/2 rounded-2xl border border-white/10 bg-black/70 p-5 text-left shadow-[0_18px_50px_rgba(15,23,42,0.45)] backdrop-blur-xl"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
+                >
+                  <p className="text-xs font-semibold uppercase tracking-[0.3em] text-white/50">Project playbook</p>
+                  <ul className="mt-4 space-y-2 text-sm text-white/80">
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                      Roadmap &amp; sprint planning
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-purple-400" />
+                      Design systems ready to scale
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      AI features tested with real users
+                    </li>
+                  </ul>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </motion.section>
@@ -1429,7 +1403,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               {[
                 { 
                   name: 'GitHub', 
-                  logo: '/logos/Github.png',
+                  logo: '/logos/Github.webp',
                   x: { mobile: -140, desktop: -510 }, 
                   y: { mobile: -100, desktop: -120 },
                   delay: 0.0, 
@@ -2185,3 +2159,5 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     </div>
   );
 }
+
+
