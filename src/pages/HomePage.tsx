@@ -1487,22 +1487,14 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               ].map((tool, index) => {
                 return (
                   <>
-                    {/* Mobile Version */}
-                    <motion.div
+                    {/* Mobile Version - No animation, just show immediately */}
+                    <div
                       key={`${tool.name}-mobile`}
                       className="absolute block lg:hidden pointer-events-none"
                       style={{
                         left: `calc(50% + ${tool.x.mobile}px)`,
                         top: `calc(50% + ${tool.y.mobile}px)`,
                         transform: 'translate(-50%, -50%)'
-                      }}
-                      initial={{ opacity: 0, x: -100, scale: 0.6 }}
-                      whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                      viewport={{ once: false, amount: 0.1, margin: "0px 0px -200px 0px" }}
-                      transition={{
-                        duration: 0.6,
-                        delay: tool.delay,
-                        ease: [0.25, 0.46, 0.45, 0.94]
                       }}
                     >
                       <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center shadow-xl border border-white/20 backdrop-blur-md p-2 bg-white/5">
@@ -1531,8 +1523,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                           {tool.name.charAt(0)}
                         </div>
                       </div>
-                    </motion.div>
-                    
+                    </div>
+
                     {/* Desktop Version */}
                     <motion.div
                       key={`${tool.name}-desktop`}
