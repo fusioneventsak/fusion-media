@@ -529,11 +529,11 @@ const MobileProjectCard = ({ project, index }) => {
           className="space-y-2 text-center w-full flex-shrink-0"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.1 }}
           transition={{
-            duration: 1.2,
+            duration: 0.4,
             ease: [0.25, 0.46, 0.45, 0.94],
-            delay: 0.2
+            delay: 0
           }}
         >
           {/* Category Badge */}
@@ -542,7 +542,7 @@ const MobileProjectCard = ({ project, index }) => {
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            transition={{ duration: 0.3, delay: 0 }}
           >
             <div 
               className={`w-8 h-8 bg-gradient-to-br ${project.gradient} rounded-lg flex items-center justify-center shadow-lg`}
@@ -556,21 +556,21 @@ const MobileProjectCard = ({ project, index }) => {
           </motion.div>
 
           {/* Title - Smaller for better fit */}
-          <motion.h2 
+          <motion.h2
             className="text-xl font-light text-white mb-2 leading-tight"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.3, delay: 0 }}
           >
             {project.title}
           </motion.h2>
-          <motion.p 
+          <motion.p
             className="text-sm opacity-70 text-white font-light mb-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.3, delay: 0.05 }}
           >
             {project.subtitle}
           </motion.p>
@@ -581,18 +581,18 @@ const MobileProjectCard = ({ project, index }) => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
           >
             {project.description}
           </motion.p>
 
           {/* Key Features - Compact for mobile */}
-          <motion.div 
+          <motion.div
             className="space-y-1 mb-3"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.3, delay: 0.15 }}
           >
             {project.features.slice(0, 2).map((feature, i) => (
               <motion.div
@@ -619,12 +619,12 @@ const MobileProjectCard = ({ project, index }) => {
           </motion.div>
 
           {/* Action Buttons - Compact mobile version */}
-          <motion.div 
+          <motion.div
             className="flex flex-row gap-2 mb-2 w-full"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.9 }}
+            transition={{ duration: 0.3, delay: 0.3 }}
           >
             <motion.button
               className={`inline-flex items-center justify-center px-3 py-1.5 bg-gradient-to-r ${project.gradient} text-white rounded-full font-medium shadow-lg hover:opacity-90 transition-all duration-300 text-xs flex-1`}
@@ -653,11 +653,11 @@ const MobileProjectCard = ({ project, index }) => {
           className="relative flex items-center justify-center w-full flex-1 min-h-0 mt-2"
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.1 }}
           transition={{
-            duration: 1.2,
+            duration: 0.4,
             ease: [0.25, 0.46, 0.45, 0.94],
-            delay: 0.4
+            delay: 0
           }}
         >
           <div className="relative w-full max-w-sm max-h-64 overflow-hidden">
