@@ -49,7 +49,7 @@ const horizontalPortfolioProjects = [
     id: 3,
     title: "Interactive Widgets & Components",
     subtitle: "Gamified Experiences",
-    url: "https://bespoke-semifreddo-acdc93.netlify.app/",
+    url: "https://bananacam.ai",
     category: "Interactive Media",
     technologies: ["React", "Three.js", "WebGL", "Game Logic", "Animation"],
     description: "Gamified experiences and interactive elements that boost engagement on websites and at live events. From custom game shows to educational tools, we create interactive components that entertain, inform, and drive meaningful user participation.",
@@ -68,7 +68,7 @@ const horizontalPortfolioProjects = [
     id: 4,
     title: "Professional Website Development",
     subtitle: "High-Performance Websites",
-    url: "https://www.fusion-events.ca",
+    url: "https://dmpcreative.llc",
     category: "Web Development",
     technologies: ["React", "SEO", "CMS", "Analytics", "Performance"],
     description: "Beautiful, high-performance websites that drive real business results. Built with modern HTML, CSS, and JavaScript, optimized for speed, SEO, and conversions. Perfect for service businesses, corporate brands, and growing organizations.",
@@ -320,9 +320,9 @@ const HorizontalProjectCard = ({ project, index }) => {
                 />
               ) : project.id === 4 ? (
                 <img
-                  src="/Website Images/anthonywrightmusic.com.png"
+                  src="/Website Images/dmp.png"
                   alt="Professional Website Development"
-                  style={{ 
+                  style={{
                     width: '100%',
                     height: 'auto',
                     objectFit: 'contain',
@@ -598,10 +598,10 @@ const MobileProjectCard = ({ project, index }) => {
                 />
               ) : project.id === 4 ? (
                 <img
-                  src="/Website Images/anthonywrightmusic.com.png"
+                  src="/Website Images/dmp.png"
                   alt="Professional Website Development"
                   className="w-full h-auto max-h-full object-contain rounded-lg shadow-xl"
-                  style={{ 
+                  style={{
                     filter: `drop-shadow(0 15px 40px ${project.accentColor}30)`
                   }}
                   onLoad={() => setIsLoaded(true)}
@@ -797,9 +797,9 @@ const HorizontalPortfolioSection = () => {
           }
           return snapPoints;
         })(),
-        duration: 1.0, // Even slower for mobile to ensure completion
-        delay: 0.2, // More delay to prevent premature snapping
-        ease: "power2.out",
+        duration: 0.5, // Faster snap duration for smoother experience
+        delay: 0.5, // Longer delay to allow free scrolling into section
+        ease: "power1.out", // Gentler easing
         directional: true,
         inertia: false
       },
@@ -835,8 +835,8 @@ const HorizontalPortfolioSection = () => {
           }
           return snapPoints;
         })(),
-        duration: 0.4,
-        delay: 0.01,
+        duration: 0.3, // Faster snap duration
+        delay: 0.3, // Longer delay to allow smooth entry
         ease: "power1.out",
         directional: false,
         inertia: false
