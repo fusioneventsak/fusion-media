@@ -111,11 +111,11 @@ const HorizontalProjectCard = ({ project, index }) => {
           className="space-y-3"
           initial={{ opacity: 0, x: -100 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.1 }}
           transition={{
-            duration: 1.2,
+            duration: 0.4,
             ease: [0.25, 0.46, 0.45, 0.94],
-            delay: 0.2
+            delay: 0
           }}
         >
           {/* Category Badge */}
@@ -124,7 +124,7 @@ const HorizontalProjectCard = ({ project, index }) => {
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1 }}
+            transition={{ duration: 0.3, delay: 0 }}
           >
             <div 
               className={`w-10 h-10 bg-gradient-to-br ${project.gradient} rounded-lg flex items-center justify-center shadow-lg`}
@@ -141,21 +141,21 @@ const HorizontalProjectCard = ({ project, index }) => {
 
           {/* Title */}
           <div>
-            <motion.h2 
+            <motion.h2
               className="text-2xl md:text-3xl lg:text-4xl font-light text-white mb-2 leading-tight"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
+              transition={{ duration: 0.3, delay: 0 }}
             >
               {project.title}
             </motion.h2>
-            <motion.p 
+            <motion.p
               className="text-base md:text-lg opacity-70 text-white font-light mb-3"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.4 }}
+              transition={{ duration: 0.3, delay: 0.05 }}
             >
               {project.subtitle}
             </motion.p>
@@ -167,18 +167,18 @@ const HorizontalProjectCard = ({ project, index }) => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
           >
             {project.description}
           </motion.p>
 
           {/* Features */}
-          <motion.div 
+          <motion.div
             className="space-y-2"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
+            transition={{ duration: 0.3, delay: 0.15 }}
           >
             {project.features.slice(0, 3).map((feature, i) => (
               <motion.div
@@ -188,8 +188,8 @@ const HorizontalProjectCard = ({ project, index }) => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{
-                  duration: 0.6,
-                  delay: 0.7 + i * 0.1
+                  duration: 0.3,
+                  delay: 0.2 + i * 0.05
                 }}
               >
                 <div 
@@ -207,12 +207,12 @@ const HorizontalProjectCard = ({ project, index }) => {
           </motion.div>
 
           {/* Technology Tags */}
-          <motion.div 
+          <motion.div
             className="flex flex-wrap gap-1.5"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            transition={{ duration: 0.3, delay: 0.25 }}
           >
             {project.technologies.map((tech, i) => (
               <span
@@ -225,12 +225,12 @@ const HorizontalProjectCard = ({ project, index }) => {
           </motion.div>
 
           {/* Action Buttons */}
-          <motion.div 
+          <motion.div
             className="flex flex-col sm:flex-row gap-2 pt-1"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.9 }}
+            transition={{ duration: 0.3, delay: 0.3 }}
           >
             <motion.button
               className={`inline-flex items-center px-6 py-3 bg-gradient-to-r ${project.gradient} text-white rounded-full font-medium shadow-lg hover:opacity-90 transition-all duration-300 text-sm`}
@@ -265,11 +265,11 @@ const HorizontalProjectCard = ({ project, index }) => {
           className="relative flex items-center justify-center"
           initial={{ opacity: 0, scale: 0.8, x: 100 }}
           whileInView={{ opacity: 1, scale: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
+          viewport={{ once: true, amount: 0.1 }}
           transition={{
-            duration: 1.2,
+            duration: 0.4,
             ease: [0.25, 0.46, 0.45, 0.94],
-            delay: 0.4
+            delay: 0
           }}
         >
           {/* Raw Images Only - No Containers */}
@@ -503,8 +503,8 @@ const MobileProjectCard = ({ project, index }) => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{
-                  duration: 0.6,
-                  delay: 0.7 + i * 0.1
+                  duration: 0.3,
+                  delay: 0.2 + i * 0.05
                 }}
               >
                 <div className={`w-3 h-3 bg-gradient-to-br ${project.gradient} rounded-md flex items-center justify-center shadow-lg flex-shrink-0`}>
@@ -1413,15 +1413,15 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }} // Reduced delay
+            transition={{ duration: 0.4, delay: 0 }}
           >
             <div className="relative">
-              <motion.h2 
+              <motion.h2
                 className="text-5xl md:text-7xl font-light text-white mb-8 leading-tight relative z-10"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 1.1 }} // Appears after logos cascade
+                transition={{ duration: 0.4, delay: 0.35 }}
               >
                 Our <span className="font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Work</span>
               </motion.h2>
@@ -1441,7 +1441,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/wordpress.webp',
                   x: { mobile: -30, desktop: -350 },
                   y: { mobile: -100, desktop: -220 },
-                  delay: 0.15,
+                  delay: 0.05,
                   color: '#21759B'
                 },
                 {
@@ -1449,7 +1449,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/claude.png',
                   x: { mobile: -80, desktop: -190 },
                   y: { mobile: -180, desktop: -280 },
-                  delay: 0.3,
+                  delay: 0.1,
                   color: '#FF6B35'
                 },
                 {
@@ -1457,7 +1457,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/openai.jpg',
                   x: { mobile: -10, desktop: -30 },
                   y: { mobile: -240, desktop: -320 },
-                  delay: 0.45,
+                  delay: 0.15,
                   color: '#10A37F'
                 },
                 {
@@ -1465,7 +1465,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/Supabase.webp',
                   x: { mobile: 60, desktop: 130 },
                   y: { mobile: -180, desktop: -280 },
-                  delay: 0.6,
+                  delay: 0.2,
                   color: '#3ECF8E'
                 },
                 {
@@ -1473,7 +1473,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/netlify-logo.webp',
                   x: { mobile: 50, desktop: 290 },
                   y: { mobile: -100, desktop: -220 },
-                  delay: 0.75,
+                  delay: 0.25,
                   color: '#00C7B7'
                 },
                 {
@@ -1481,7 +1481,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   logo: '/logos/Bolt.jpg',
                   x: { mobile: 130, desktop: 450 },
                   y: { mobile: -100, desktop: -120 },
-                  delay: 0.9,
+                  delay: 0.3,
                   color: '#FFD700'
                 }
               ].map((tool, index) => {
@@ -1538,7 +1538,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                       whileInView={{ opacity: 1, x: 0, scale: 1 }}
                       viewport={{ once: false, amount: 0.1, margin: "0px 0px -200px 0px" }}
                       transition={{
-                        duration: 0.6,
+                        duration: 0.3,
                         delay: tool.delay,
                         ease: [0.25, 0.46, 0.45, 0.94]
                       }}
