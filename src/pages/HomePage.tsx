@@ -359,26 +359,125 @@ const HorizontalProjectCard = ({ project, index }) => {
 
             </motion.div>
 
-            {/* Floating UI Elements - Smaller */}
-            <motion.div
-              className={`absolute -top-2 -left-2 w-12 h-12 bg-gradient-to-br ${project.gradient} opacity-20 rounded-xl backdrop-blur-sm border border-white/10`}
-              animate={{
-                y: [0, -8, 0],
-                rotate: [0, 5, -5, 0],
-                scale: [1, 1.1, 1]
-              }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            />
-            
-            <motion.div
-              className={`absolute -bottom-3 -right-3 w-10 h-10 bg-gradient-to-br ${project.gradient} opacity-15 rounded-lg backdrop-blur-sm border border-white/10`}
-              animate={{
-                x: [0, 8, 0],
-                scale: [1, 1.2, 1],
-                rotate: [0, -5, 0]
-              }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            />
+            {/* Project-Specific Floating Icons */}
+            {project.id === 1 && (
+              <>
+                {/* Custom Business Apps - Database & Code Icons */}
+                <motion.div
+                  className="absolute -top-4 -left-4 text-5xl"
+                  style={{ filter: 'drop-shadow(0 4px 12px rgba(139, 92, 246, 0.4))' }}
+                  animate={{
+                    y: [0, -10, 0],
+                    rotate: [0, 5, -5, 0],
+                  }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  💾
+                </motion.div>
+                <motion.div
+                  className="absolute -bottom-4 -right-4 text-4xl"
+                  style={{ filter: 'drop-shadow(0 4px 12px rgba(139, 92, 246, 0.4))' }}
+                  animate={{
+                    x: [0, 10, 0],
+                    rotate: [0, -8, 0],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                >
+                  ⚙️
+                </motion.div>
+                <motion.div
+                  className="absolute -top-4 -right-4 text-4xl"
+                  style={{ filter: 'drop-shadow(0 4px 12px rgba(139, 92, 246, 0.4))' }}
+                  animate={{
+                    y: [0, -8, 0],
+                    rotate: [0, 8, 0],
+                  }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                >
+                  📊
+                </motion.div>
+              </>
+            )}
+
+            {project.id === 3 && (
+              <>
+                {/* Interactive Widgets - Game & Fun Icons */}
+                <motion.div
+                  className="absolute -top-4 -left-4 text-5xl"
+                  style={{ filter: 'drop-shadow(0 4px 12px rgba(6, 182, 212, 0.4))' }}
+                  animate={{
+                    y: [0, -12, 0],
+                    rotate: [0, 10, -10, 0],
+                    scale: [1, 1.15, 1],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  🎮
+                </motion.div>
+                <motion.div
+                  className="absolute -bottom-4 -right-4 text-5xl"
+                  style={{ filter: 'drop-shadow(0 4px 12px rgba(6, 182, 212, 0.4))' }}
+                  animate={{
+                    x: [0, 12, 0],
+                    rotate: [0, -12, 0],
+                    scale: [1, 1.2, 1],
+                  }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                >
+                  🎯
+                </motion.div>
+                <motion.div
+                  className="absolute -top-4 -right-4 text-4xl"
+                  style={{ filter: 'drop-shadow(0 4px 12px rgba(6, 182, 212, 0.4))' }}
+                  animate={{
+                    y: [0, -10, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                >
+                  ✨
+                </motion.div>
+              </>
+            )}
+
+            {project.id === 4 && (
+              <>
+                {/* Professional Websites - Web & Design Icons */}
+                <motion.div
+                  className="absolute -top-4 -left-4 text-5xl"
+                  style={{ filter: 'drop-shadow(0 4px 12px rgba(139, 92, 246, 0.4))' }}
+                  animate={{
+                    y: [0, -10, 0],
+                    rotate: [0, 6, -6, 0],
+                  }}
+                  transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  🌐
+                </motion.div>
+                <motion.div
+                  className="absolute -bottom-4 -right-4 text-4xl"
+                  style={{ filter: 'drop-shadow(0 4px 12px rgba(139, 92, 246, 0.4))' }}
+                  animate={{
+                    x: [0, 10, 0],
+                    rotate: [0, -10, 0],
+                  }}
+                  transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.2 }}
+                >
+                  🎨
+                </motion.div>
+                <motion.div
+                  className="absolute -top-4 -right-4 text-4xl"
+                  style={{ filter: 'drop-shadow(0 4px 12px rgba(139, 92, 246, 0.4))' }}
+                  animate={{
+                    y: [0, -8, 0],
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
+                >
+                  🚀
+                </motion.div>
+              </>
+            )}
           </div>
 
           {/* Enhanced Background Effects */}
