@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* iOS Safari Fixes */
+html, body {
+  overflow-x: hidden;
+}
+
+/* iOS Safari backdrop-filter support */
+.backdrop-blur-md {
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
 /* Custom scrollbar styles for modals */
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;

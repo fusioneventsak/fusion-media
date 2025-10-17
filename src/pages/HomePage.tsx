@@ -1498,7 +1498,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                       }}
                       initial={{ opacity: 0, x: -100, scale: 0.6 }}
                       whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                      viewport={{ once: true, amount: 0.3 }}
+                      viewport={{ once: true, amount: 0.1 }}
                       transition={{
                         duration: 0.6,
                         delay: tool.delay,
@@ -1544,7 +1544,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                       }}
                       initial={{ opacity: 0, x: -100, scale: 0.6 }}
                       whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                      viewport={{ once: true, amount: 0.3 }}
+                      viewport={{ once: true, amount: 0.1 }}
                       transition={{
                         duration: 0.6,
                         delay: tool.delay,
