@@ -10,18 +10,22 @@ Crawl-delay: 1
 Allow: /about
 Allow: /why-us
 Allow: /contact
+Allow: /packages
 Allow: /blog
 Allow: /blog/
 Allow: /case-studies
 
-# Blog posts with SEO focus
+# Blog posts with SEO focus (newest first)
+Allow: /blog/vibe-coding-revolution
 Allow: /blog/technical-seo-guide-2024
 Allow: /blog/llm-web-apps-optimization
 Allow: /blog/interactive-web-experiences
 
 # Static assets
 Allow: /blog-images/
+Allow: /blog-heroes/
 Allow: /Website Images/
+Allow: /logos/
 Allow: /*.css
 Allow: /*.js
 Allow: /*.png
