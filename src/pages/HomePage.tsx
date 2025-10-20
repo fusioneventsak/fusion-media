@@ -1359,8 +1359,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
   return (
     <div ref={containerRef} className="relative pointer-events-none">
       <SEOHead
-        title="Web Design Toronto | Custom App Development & AI Integration | Fusion Interactive"
-        description="Toronto's premier web design and AI consulting agency. We build custom React applications, AI-powered websites, and provide tech consulting for businesses. $100-149/hr. Free consultation."
+        title="Web Design Toronto | App Development & AI"
+        description="Toronto web agency for custom apps, mobile-first design, and AI solutions. 300%+ traffic growth. Free consultation: 416-825-4938."
         keywords="web design toronto, toronto web development, app developers toronto, web design agency toronto, custom web design toronto, mobile app development toronto, AI consulting toronto, react developer toronto, UI UX design toronto"
         canonicalUrl="https://fusioninteractive.agency"
         ogImage="https://fusioninteractive.agency/Website%20Images/Open%20Graph.png"
