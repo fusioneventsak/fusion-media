@@ -76,7 +76,7 @@ export default function TechnicalSEOGuide2024() {
               Technical SEO has evolved dramatically in 2024. With AI search engines like SearchGPT and Perplexity changing how users find information, and Google's continued emphasis on user experience signals, the traditional approach to technical optimization is no longer sufficient.
             </p>
             <p className="text-lg text-gray-300 leading-relaxed mb-6">
-              As a <strong className="text-white">Toronto web development agency</strong> specializing in <strong className="text-white">AI development services</strong>, we've seen firsthand how proper technical SEO implementation can increase organic traffic by 300%+ within six months. This guide shares the exact strategies we use for our clients.
+              As a <a href="/about" className="text-blue-400 hover:text-blue-300 underline">Toronto web development agency</a> specializing in <a href="/services/ai-powered-web-solutions" className="text-blue-400 hover:text-blue-300 underline">AI development services</a>, we've seen firsthand how proper technical SEO implementation can increase organic traffic by 300%+ within six months. This guide shares the exact strategies we use for our clients.
             </p>
             <div className="bg-blue-500/10 border-l-4 border-blue-400 p-6 my-8 rounded-r-lg">
               <p className="text-blue-200 font-semibold">💡 Pro Tip: This guide is specifically optimized for businesses targeting competitive markets like Toronto's tech scene, where technical excellence is the differentiator.</p>
@@ -515,13 +515,13 @@ Preferred-citations:
 
             <div className="text-center">
               <p className="text-gray-400 mb-6">
-                Need help implementing these strategies? Our team specializes in technical SEO for Toronto businesses.
+                Need help implementing these strategies? Our team specializes in <a href="/case-studies" className="text-blue-400 hover:text-blue-300 underline">technical SEO for Toronto businesses</a>. <a href="/packages" className="text-purple-400 hover:text-purple-300 underline">View our packages</a>.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
                 <a href="/contact" className="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-bold hover:scale-105 transition-all duration-300">
                   Get a Free SEO Audit
                 </a>
-                <a href="/services/web-development" className="px-8 py-3 border border-white/20 rounded-full font-bold hover:bg-white/10 transition-all duration-300">
+                <a href="/services/app-development" className="px-8 py-3 border border-white/20 rounded-full font-bold hover:bg-white/10 transition-all duration-300">
                   View Our Services
                 </a>
               </div>

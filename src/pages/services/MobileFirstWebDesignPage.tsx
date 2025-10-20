@@ -77,10 +77,14 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
     "@type": "Service",
     "name": "Mobile-First Web Design Toronto",
     "description": "Professional mobile-first web design services in Toronto. Responsive, fast-loading websites optimized for mobile devices and local Toronto market.",
+    "url": "https://fusioninteractive.agency/services/mobile-first-web-design",
     "provider": {
       "@type": "WebDesignCompany",
       "name": "Fusion Interactive",
-      "url": "https://fusioninteractive.agency"
+      "url": "https://fusioninteractive.agency",
+      "telephone": "416-825-4938",
+      "email": "info@fusion-events.ca",
+      "priceRange": "$100-149 per hour"
     },
     "areaServed": {
       "@type": "City",
@@ -124,8 +128,8 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
     <>
       <SEOHead
         title="Mobile-First Web Design Toronto | Responsive Design Agency | Fusion Interactive"
-        description="Expert mobile-first web design services in Toronto. Responsive, fast-loading websites optimized for mobile devices. Professional Toronto web designers specializing in mobile UX and performance."
-        keywords="mobile first web design toronto, responsive web design toronto, mobile web design, toronto mobile website design, mobile optimized websites toronto, progressive web apps toronto, mobile UX design"
+        description="Expert mobile-first web design services in Toronto. Responsive, fast-loading websites optimized for mobile devices. Professional Toronto web designers specializing in mobile UX and performance. $100-149/hr. Free consultation."
+        keywords="mobile first web design toronto, responsive web design toronto, mobile web design, web design toronto, toronto mobile website design, mobile optimized websites toronto, progressive web apps toronto, mobile UX design, custom web design toronto"
         canonicalUrl="https://fusioninteractive.agency/services/mobile-first-web-design"
         structuredData={structuredData}
       />
@@ -148,8 +152,8 @@ const MobileFirstWebDesignPage: React.FC<MobileFirstWebDesignPageProps> = ({ onO
                 </span>
               </h1>
               <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
-                Professional mobile-first web design services optimized for Toronto's mobile-first audience. 
-                Lightning-fast, responsive websites that convert on every device.
+                Professional mobile-first web design services optimized for Toronto's mobile-first audience.
+                Lightning-fast, responsive websites that convert on every device. <a href="/why-us" className="text-yellow-300 hover:text-yellow-200 underline">Why choose us?</a>
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <motion.button

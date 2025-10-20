@@ -122,10 +122,14 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
     "@type": "ProfessionalService",
     "name": "App Development Services Toronto - Fusion Interactive",
     "description": "Professional mobile app development services in Toronto. Custom iOS and Android app development, React Native, Flutter, and AI-powered applications for Toronto businesses.",
+    "url": "https://fusioninteractive.agency/services/app-development",
     "provider": {
       "@type": "WebDesignCompany",
       "name": "Fusion Interactive",
       "url": "https://fusioninteractive.agency",
+      "telephone": "416-825-4938",
+      "email": "info@fusion-events.ca",
+      "priceRange": "$100-149 per hour",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Toronto",
@@ -177,8 +181,8 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
     <>
       <SEOHead
         title="App Development Toronto | Mobile App Development Services | Fusion Interactive"
-        description="Leading app developers in Toronto specializing in iOS, Android, React Native, and Flutter development. Custom mobile apps for Toronto businesses with proven results and ongoing support."
-        keywords="app development toronto, mobile app development toronto, ios developers toronto, android developers toronto, react native developers, flutter development toronto, toronto app development company"
+        description="Leading app developers in Toronto specializing in iOS, Android, React Native, and Flutter development. Custom mobile apps for Toronto businesses with proven results. $100-149/hr. Free consultation."
+        keywords="app development toronto, mobile app development toronto, app developers toronto, ios developers toronto, android developers toronto, react native developers, flutter development toronto, toronto app development company, custom mobile apps toronto"
         canonicalUrl="https://fusioninteractive.agency/services/app-development"
         structuredData={structuredData}
       />
@@ -201,8 +205,8 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
                 </span>
               </h1>
               <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto leading-relaxed">
-                Custom mobile app development for iOS, Android, and cross-platform solutions. 
-                Toronto's trusted app development team with proven results and ongoing support.
+                Custom mobile app development for iOS, Android, and cross-platform solutions.
+                Toronto's trusted app development team with proven results and ongoing support. <a href="/why-us" className="text-yellow-300 hover:text-yellow-200 underline">Why choose us?</a>
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <motion.button
@@ -274,10 +278,10 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
                 Toronto App Development Services
               </h2>
               <p className="text-xl text-gray-100 max-w-3xl mx-auto">
-                Comprehensive mobile app development services tailored for Toronto businesses. 
-                From concept to launch and beyond. We also specialize in 
-                <a href="/services/mobile-first-web-design" className="text-indigo-600 hover:text-indigo-700 underline">mobile-first web design</a> 
-                and <a href="/blog/interactive-web-experiences" className="text-indigo-600 hover:text-indigo-700 underline">interactive web experiences</a>.
+                Comprehensive mobile app development services tailored for Toronto businesses.
+                From concept to launch and beyond. We also specialize in
+                <a href="/services/mobile-first-web-design" className="text-yellow-300 hover:text-yellow-200 underline ml-1">mobile-first web design</a>
+                and <a href="/packages" className="text-yellow-300 hover:text-yellow-200 underline ml-1">fixed-price packages</a>.
               </p>
             </motion.div>
 
@@ -463,8 +467,8 @@ const AppDevelopmentPage: React.FC<AppDevelopmentPageProps> = ({ onOpenContactMo
                 Ready to Build Your App?
               </h2>
               <p className="text-xl mb-8 max-w-2xl mx-auto">
-                Join successful Toronto businesses that have transformed their operations 
-                with custom mobile applications. Let's discuss your app idea today.
+                Join successful Toronto businesses that have transformed their operations
+                with custom mobile applications. <a href="/contact" className="text-yellow-300 hover:text-yellow-200 underline">Contact our Toronto team</a> or <a href="/case-studies" className="text-yellow-300 hover:text-yellow-200 underline">view our portfolio</a>.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

@@ -270,11 +270,11 @@ export default function ContactModal({
                         className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white focus:outline-none focus:border-blue-400 focus:bg-white/15 transition-all [&>option]:bg-gray-800 [&>option]:text-white"
                       >
                         <option value="" className="bg-gray-800 text-white">Select budget range</option>
-                        <option value="under-5k" className="bg-gray-800 text-white">Under $5,000</option>
-                        <option value="5k-15k" className="bg-gray-800 text-white">$5,000 - $15,000</option>
-                        <option value="15k-35k" className="bg-gray-800 text-white">$15,000 - $35,000</option>
-                        <option value="35k-75k" className="bg-gray-800 text-white">$35,000 - $75,000</option>
-                        <option value="75k-plus" className="bg-gray-800 text-white">$75,000+</option>
+                        <option value="1500-2500" className="bg-gray-800 text-white">$1,500 - $2,500</option>
+                        <option value="2500-5000" className="bg-gray-800 text-white">$2,500 - $5,000</option>
+                        <option value="5000-8000" className="bg-gray-800 text-white">$5,000 - $8,000</option>
+                        <option value="8000-10000" className="bg-gray-800 text-white">$8,000 - $10,000</option>
+                        <option value="10000-plus" className="bg-gray-800 text-white">$10,000+</option>
                         <option value="discuss" className="bg-gray-800 text-white">Let's discuss</option>
                       </select>
                     </div>

@@ -1264,52 +1264,106 @@ export default function HomePage({ onNavigate }: HomePageProps) {
   
   const homeStructuredData = {
     "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "Toronto Web Development Agency | AI-Powered Custom Applications",
-    "description": "Leading Toronto web development agency specializing in AI-powered applications, interactive experiences, and performance optimization.",
+    "@type": "LocalBusiness",
+    "@id": "https://fusioninteractive.agency",
+    "name": "Fusion Interactive",
+    "alternateName": "Fusion Interactive Agency",
+    "description": "Toronto's premier web design and AI consulting agency. We build custom React applications, AI-powered websites, and provide tech consulting for businesses.",
     "url": "https://fusioninteractive.agency",
-    "mainEntity": {
-      "@type": "WebDesignCompany",
-      "name": "Fusion Interactive",
-      "description": "AI-powered web development agency in Toronto specializing in custom applications and interactive experiences",
-      "url": "https://fusioninteractive.agency",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Toronto",
-        "addressRegion": "ON",
-        "addressCountry": "CA"
+    "logo": "https://fusioninteractive.agency/logos/Fusion-Interactive-Logo.png",
+    "image": "https://fusioninteractive.agency/Website%20Images/Open%20Graph.png",
+    "telephone": "416-825-4938",
+    "email": "info@fusion-events.ca",
+    "priceRange": "$100-149 per hour",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Toronto",
+      "addressRegion": "ON",
+      "addressCountry": "CA"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "43.6532",
+      "longitude": "-79.3832"
+    },
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Toronto"
       },
-      "telephone": "416-825-4938",
-      "email": "info@fusion-events.ca",
-      "serviceArea": ["Toronto", "GTA", "Ontario", "Canada"],
-      "offers": [
+      {
+        "@type": "State",
+        "name": "Ontario"
+      },
+      {
+        "@type": "Country",
+        "name": "Canada"
+      }
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Web Design & Development Services",
+      "itemListElement": [
         {
-          "@type": "Service",
-          "name": "Custom Web Development",
-          "description": "Custom web applications built with React, Node.js, and modern technologies"
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Custom Web Design Toronto",
+            "description": "Mobile-first responsive web design with modern UX/UI principles",
+            "serviceType": "Web Design"
+          }
         },
         {
-          "@type": "Service", 
-          "name": "AI Integration Services",
-          "description": "AI-powered web applications with LLM integration and machine learning solutions"
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "App Development Toronto",
+            "description": "Custom mobile and web application development with React and modern frameworks",
+            "serviceType": "Mobile App Development"
+          }
         },
         {
-          "@type": "Service",
-          "name": "Interactive Event Technology",
-          "description": "Real-time audience engagement platforms and interactive event solutions"
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "UI/UX Design Toronto",
+            "description": "User experience design and interface optimization for maximum conversions",
+            "serviceType": "UX Design"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "AI Integration & Consulting",
+            "description": "Machine learning integration and AI-enhanced web applications",
+            "serviceType": "AI Development"
+          }
         }
       ]
-    }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "ratingCount": "150",
+      "bestRating": "5",
+      "worstRating": "1"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/company/fusion-interactive",
+      "https://twitter.com/fusioninteract",
+      "https://clutch.co/profile/fusion-interactive"
+    ]
   };
 
   return (
     <div ref={containerRef} className="relative pointer-events-none">
-      <SEOHead 
-        title="Toronto Web Development Agency | AI-Powered Custom Applications"
-        description="Leading Toronto web development agency specializing in AI-powered applications, interactive experiences, and performance optimization. Custom React development, event technology, and machine learning solutions."
-        keywords="Toronto web development agency, AI development services, custom web development Toronto, React development services, machine learning consulting, interactive web experiences, event technology solutions"
+      <SEOHead
+        title="Web Design Toronto | Custom App Development & AI Integration | Fusion Interactive"
+        description="Toronto's premier web design and AI consulting agency. We build custom React applications, AI-powered websites, and provide tech consulting for businesses. $100-149/hr. Free consultation."
+        keywords="web design toronto, toronto web development, app developers toronto, web design agency toronto, custom web design toronto, mobile app development toronto, AI consulting toronto, react developer toronto, UI UX design toronto"
         canonicalUrl="https://fusioninteractive.agency"
-        ogImage="https://fusioninteractive.agency/Website%20Images/hero-og-image.png"
+        ogImage="https://fusioninteractive.agency/Website%20Images/Open%20Graph.png"
         structuredData={homeStructuredData}
       />
 
@@ -1340,7 +1394,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
-                AI-powered websites and apps that feel effortless for your team and your audience.
+                Toronto Web Design & App Development That Feels Effortless
               </motion.h1>
               <motion.div
                 className="flex flex-col items-center gap-4 lg:hidden"
@@ -1362,7 +1416,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
 
                 <motion.img
                   src="/Website Images/Hero.png"
-                  alt="AI-enabled interactive experience interface"
+                  alt="Toronto web design and app development services - custom mobile and web applications"
                   className="w-full max-w-sm rounded-[1.75rem]"
                   style={{ filter: 'drop-shadow(0 20px 55px rgba(96, 165, 250, 0.35))' }}
                   whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
@@ -1387,7 +1441,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.9, delay: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               >
-                We plan the roadmap, design every screen, weave in the right AI touches, and build the whole experience with you. No jargon. No guesswork. Just a friendly team that keeps you in the loop from kickoff to launch.
+                Premier Toronto web design agency specializing in custom app development, mobile-first UX design, and AI-powered web solutions. We plan the roadmap, design every screen, and build the whole experience with you. No jargon. No guesswork.
               </motion.p>
 
               <motion.div
@@ -1458,7 +1512,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 <div className="absolute inset-0 -z-10 scale-[1.24] rounded-[3.5rem] bg-[radial-gradient(circle_at_center,_rgba(96,165,250,0.42),_transparent_70%)] blur-[130px]" />
                 <motion.img
                   src="/Website Images/Hero.png"
-                  alt="AI-enabled interactive experience interface"
+                  alt="Toronto web design and app development services - custom mobile and web applications"
                   className="relative z-10 mx-auto h-auto w-full max-w-3xl lg:max-w-[46rem]"
                   style={{
                     filter: 'drop-shadow(0 25px 80px rgba(96, 165, 250, 0.45))'
@@ -1846,7 +1900,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                     scale: 0.95,
                     transition: { duration: 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
                   }}
-                  onClick={() => window.open('https://selfieholosphere.com/', '_blank')}
+                  onClick={() => window.open('https://selfiephotosphere.com/', '_blank')}
                 >
                   <div className="w-5 h-5 bg-white/20 rounded-full flex items-center justify-center mr-2">
                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2039,14 +2093,13 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             }}
           >
             <h2 className="text-4xl md:text-6xl font-light text-white mb-8 leading-tight">
-              How we{' '}
+              Toronto's{' '}
               <span className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                work faster
+                Fastest Web Development
               </span>
             </h2>
             <p className="text-xl text-white max-w-3xl mx-auto leading-relaxed font-light">
-              Our AI-assisted approach combines cutting-edge tools with decades of experience
-              to deliver exceptional results in record time.
+              Our AI-assisted web design and app development approach combines cutting-edge tools with decades of Toronto web development experience to deliver exceptional custom websites and mobile apps in record time.
             </p>
           </motion.div>
           <div className="grid md:grid-cols-3 gap-12 mb-20">
@@ -2170,8 +2223,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             </h2>
            
             <p className="text-xl text-white mb-12 max-w-3xl mx-auto leading-relaxed font-light">
-              Let's discuss how our AI-assisted approach can deliver exceptional
-              results for your next project—faster and more efficiently than ever before.
+              Let's discuss how our Toronto web design and app development services can deliver exceptional results for your next project—faster and more efficiently than ever before. <a href="/services/app-development" className="text-blue-400 hover:text-blue-300 underline">Explore our app development services</a> or <a href="/blog" className="text-purple-400 hover:text-purple-300 underline">read our latest insights</a>.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16">
               <motion.button

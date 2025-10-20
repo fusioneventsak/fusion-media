@@ -14,12 +14,12 @@ interface SEOHeadProps {
 }
 
 export default function SEOHead({
-  title = "Web Design Toronto | Custom App Development & UI/UX Design | Fusion Interactive",
-  description = "Premier web design Toronto agency specializing in custom app development, mobile-first UX design, and AI-powered web solutions. Toronto's trusted web design agency for interactive experiences and high-performance websites.",
-  keywords = "web design toronto, app developers toronto, web designer, web design agency toronto, toronto web development, mobile app development toronto, UI UX design toronto, custom web design toronto mobile-first",
+  title = "Web Design Toronto | Custom App Development & AI Integration | Fusion Interactive",
+  description = "Toronto's premier web design and AI consulting agency. We build custom React applications, AI-powered websites, and provide tech consulting for businesses. $100-149/hr. Free consultation.",
+  keywords = "web design toronto, toronto web development, app developers toronto, web design agency toronto, custom web design toronto, mobile app development toronto, AI consulting toronto, react developer toronto, UI UX design toronto",
   canonicalUrl = "https://fusioninteractive.agency",
   ogType = "website",
-  ogImage = "https://fusioninteractive.agency/Website%20Images/hero-og-image.png",
+  ogImage = "https://fusioninteractive.agency/Website%20Images/Open%20Graph.png",
   twitterCard = "summary_large_image",
   structuredData,
   noIndex = false

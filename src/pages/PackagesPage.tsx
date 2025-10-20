@@ -200,8 +200,8 @@ export default function PackagesPage() {
     <>
       <SEOHead
         title="Web Development Packages | Custom Websites & Apps | Fusion Interactive"
-        description="Professional web development packages starting at $1,500. One-page websites, multi-page enterprise sites, and app MVP development in Toronto. Rush jobs available."
-        keywords="web development packages, website packages toronto, app development, mvp development, custom websites, web design packages"
+        description="Professional web development packages starting at $1,500. One-page websites, multi-page enterprise sites, and app MVP development in Toronto. Rush jobs available. $100-149/hr. Free consultation."
+        keywords="web development packages, website packages toronto, app development, mvp development, custom websites, web design packages, toronto web development, web design toronto"
         canonicalUrl="https://fusioninteractive.agency/packages"
         structuredData={structuredData}
       />
@@ -227,13 +227,13 @@ export default function PackagesPage() {
               className="text-center mb-20"
             >
               <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-                Choose Your{' '}
+                Toronto Web Design{' '}
                 <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                  Package
+                  Packages
                 </span>
               </h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-8">
-                Professional web development solutions tailored to your needs. From stunning one-page sites to complete app MVPs.
+                Professional Toronto web design and app development packages tailored to your needs. From stunning one-page websites to complete app MVPs. <a href="/why-us" className="text-blue-400 hover:text-blue-300 underline">Why choose us?</a>
               </p>
               
               {/* Rush Jobs Notice */}
@@ -271,11 +271,11 @@ export default function PackagesPage() {
               className="text-center bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-white/10 rounded-2xl p-12"
             >
               <h2 className="text-3xl font-bold text-white mb-4">
-                Need Something Custom?
+                Need a Custom Toronto Web Design Solution?
               </h2>
               <p className="text-gray-300 mb-8 max-w-2xl mx-auto">
-                Have a unique project in mind? We love working on custom solutions. 
-                Get in touch and let's discuss how we can bring your vision to life.
+                Have a unique project in mind? Our Toronto web development team loves working on custom solutions.
+                <a href="/contact" className="text-blue-400 hover:text-blue-300 underline ml-1">Get in touch</a> and let's discuss how we can bring your vision to life. <a href="/case-studies" className="text-purple-400 hover:text-purple-300 underline">See our work</a>.
               </p>
               <button
                 onClick={() => handleGetStarted('Custom Project')}

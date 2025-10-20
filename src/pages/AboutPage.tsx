@@ -62,13 +62,29 @@ export default function AboutPage() {
   const aboutStructuredData = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
-    "name": "About Fusion Interactive - Toronto Web Development Agency",
-    "description": "Learn about Fusion Interactive's expert team of developers and designers specializing in AI-powered web development and interactive experiences in Toronto.",
+    "name": "About Fusion Interactive - Toronto Web Design & AI Consulting Agency",
+    "description": "Toronto's premier web design and AI consulting agency. Expert team specializing in custom React applications, mobile-first design, and AI integration since 2014.",
     "url": "https://fusioninteractive.agency/about",
     "mainEntity": {
       "@type": "Organization",
       "name": "Fusion Interactive",
+      "alternateName": "Fusion Interactive Agency",
       "foundingDate": "2014",
+      "url": "https://fusioninteractive.agency",
+      "logo": "https://fusioninteractive.agency/logos/Fusion-Interactive-Logo.png",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Toronto",
+        "addressRegion": "ON",
+        "addressCountry": "CA"
+      },
+      "telephone": "416-825-4938",
+      "email": "info@fusion-events.ca",
+      "priceRange": "$100-149 per hour",
+      "numberOfEmployees": {
+        "@type": "QuantitativeValue",
+        "value": "10-50"
+      },
       "employee": [
         {
           "@type": "Person",
@@ -77,14 +93,14 @@ export default function AboutPage() {
           "description": "15+ years in full-stack development. Expert in React, Node.js, and emerging technologies like WebGL and AI integration."
         },
         {
-          "@type": "Person", 
+          "@type": "Person",
           "name": "Sarah Rodriguez",
           "jobTitle": "Creative Director",
           "description": "Award-winning designer specializing in immersive user experiences and interactive installations for events."
         },
         {
           "@type": "Person",
-          "name": "Ferdinand Raymond", 
+          "name": "Ferdinand Raymond",
           "jobTitle": "Full Stack Developer",
           "description": "Certified AWS Solutions Architect and Google Cloud Professional with 8+ years experience. Specializes in scalable web applications, microservices architecture, and cloud-native development."
         }
@@ -94,10 +110,10 @@ export default function AboutPage() {
 
   return (
     <div className="relative z-10 pointer-events-none">
-      <SEOHead 
-        title="About Us - Expert Toronto Web Development Team"
-        description="Learn about Fusion Interactive's expert team of developers and designers specializing in AI-powered web development, React applications, and interactive experiences in Toronto since 2014."
-        keywords="Toronto web development team, React developers Toronto, AI development experts, full stack developers, web design agency Toronto, interactive media specialists"
+      <SEOHead
+        title="About Us | Toronto Web Design & AI Consulting Agency | Fusion Interactive"
+        description="Toronto's premier web design and AI consulting agency. Expert team specializing in custom React applications, mobile-first design, and AI integration since 2014. $100-149/hr. Free consultation."
+        keywords="web design toronto, toronto web development, web design agency toronto, React developers Toronto, AI consulting toronto, full stack developers, custom web design toronto, app developers toronto"
         canonicalUrl="https://fusioninteractive.agency/about"
         structuredData={aboutStructuredData}
       />
@@ -108,25 +124,21 @@ export default function AboutPage() {
           initial="hidden"
           animate="visible"
         >
-          <motion.h1 
+          <motion.h1
             className="text-6xl font-bold text-center mb-8 bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent"
             variants={itemVariants}
           >
-            About Fusion Interactive
+            Toronto Web Design & App Development Agency
           </motion.h1>
           
           <div className="grid lg:grid-cols-2 gap-16 items-center mb-16">
             <motion.div variants={itemVariants}>
               <h2 className="text-3xl font-bold mb-6 text-white">Pioneering Digital Excellence Since 2014</h2>
               <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-                Fusion Interactive was born from a simple belief: technology should transform businesses, 
-                not complicate them. We've spent over a decade pushing the boundaries of what's possible 
-                in web development, event technology, and immersive digital experiences.
+                Fusion Interactive is Toronto's premier web design and app development agency, born from a simple belief: technology should transform businesses, not complicate them. Since 2014, we've been pushing the boundaries of what's possible in <a href="/services/app-development" className="text-blue-400 hover:text-blue-300 underline">custom app development</a>, <a href="/services/mobile-first-web-design" className="text-purple-400 hover:text-purple-300 underline">mobile-first web design</a>, and AI-powered digital experiences for Toronto businesses.
               </p>
               <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-                Our team of visionary developers, designers, and strategists doesn't just build applications – 
-                we craft <a href="https://web.dev/user-centric-performance-metrics/" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 underline">digital experiences</a> that captivate audiences, drive engagement, and deliver 
-                measurable business results. <a href="/contact" className="text-purple-400 hover:text-purple-300 underline">Contact us</a> to learn how we can transform your vision into reality.
+                Our team of visionary Toronto web developers, designers, and strategists doesn't just build applications – we craft <a href="https://web.dev/user-centric-performance-metrics/" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300 underline">high-performance digital experiences</a> that captivate audiences, drive engagement, and deliver measurable business results. <a href="/contact" className="text-purple-400 hover:text-purple-300 underline">Contact our Toronto team</a> to learn how we can transform your vision into reality.
               </p>
             </motion.div>
             
@@ -153,18 +165,18 @@ export default function AboutPage() {
           </div>
 
           {/* Team Section */}
-          <motion.div 
+          <motion.div
             className="mb-16"
             variants={staggerContainerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            <motion.h2 
+            <motion.h2
               className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-pink-400 to-red-500 bg-clip-text text-transparent"
               variants={itemVariants}
             >
-              Meet Our Expert Team
+              Meet Our Toronto Web Development Team
             </motion.h2>
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -172,19 +184,22 @@ export default function AboutPage() {
                   name: "Arthur Kerekes",
                   role: "Chief Technology Officer",
                   bio: "15+ years in full-stack development. Expert in React, Node.js, and emerging technologies like WebGL and AI integration.",
-                  image: "/team/Arthur Kerekes.png"
+                  image: "/team/Arthur Kerekes.png",
+                  alt: "Arthur Kerekes - Toronto CTO and full-stack developer specializing in React and AI integration"
                 },
                 {
                   name: "Sarah Rodriguez",
                   role: "Creative Director",
                   bio: "Award-winning designer specializing in immersive user experiences and interactive installations for events.",
-                  image: "/team/Sarah Rodriguez.png"
+                  image: "/team/Sarah Rodriguez.png",
+                  alt: "Sarah Rodriguez - Toronto Creative Director specializing in UX design and interactive experiences"
                 },
                 {
                   name: "Ferdinand Raymond",
                   role: "Full Stack Developer",
                   bio: "Certified AWS Solutions Architect and Google Cloud Professional with 8+ years experience. Specializes in scalable web applications, microservices architecture, and cloud-native development using React, Node.js, and modern DevOps practices.",
-                  image: "/team/Ferdinand.png"
+                  image: "/team/Ferdinand.png",
+                  alt: "Ferdinand Raymond - Toronto full-stack developer and AWS Solutions Architect"
                 }
               ].map((member, index) => (
                 <motion.div 
@@ -198,9 +213,9 @@ export default function AboutPage() {
                   }}
                 >
                   <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden bg-gradient-to-br from-purple-500 to-purple-700 p-1">
-                    <img 
-                      src={member.image} 
-                      alt={member.name}
+                    <img
+                      src={member.image}
+                      alt={member.alt}
                       className="w-full h-full object-cover rounded-full"
                     />
                   </div>
@@ -213,18 +228,18 @@ export default function AboutPage() {
           </motion.div>
 
           {/* Values Section */}
-          <motion.div 
+          <motion.div
             className="mb-16"
             variants={staggerContainerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            <motion.h2 
+            <motion.h2
               className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-green-400 to-teal-500 bg-clip-text text-transparent"
               variants={itemVariants}
             >
-              Our Core Values
+              Toronto Web Design Agency Core Values
             </motion.h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
@@ -274,11 +289,11 @@ export default function AboutPage() {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
           >
-            <motion.h2 
+            <motion.h2
               className="text-4xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent"
               variants={itemVariants}
             >
-              Our Technology Stack
+              Toronto Web Development Technology Stack
             </motion.h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[

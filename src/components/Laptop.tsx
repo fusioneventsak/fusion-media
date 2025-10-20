@@ -312,7 +312,7 @@ export default function FullWidthLaptopShowcase({
 
   // Create fallback content for sites that block embedding
   const createFallbackContent = () => {
-    if (url.includes('selfieholosphere.com')) {
+    if (url.includes('selfiephotosphere.com')) {
       return (
         <div className="h-full bg-gradient-to-br from-gray-900 via-purple-900 to-black relative overflow-hidden">
           {/* Animated background particles */}

@@ -1,7 +1,46 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import SEOHead from '../components/SEOHead';
 
 export default function CaseStudiesPage() {
+  const caseStudiesStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Case Studies | Fusion Interactive Toronto Web Design & Development",
+    "description": "Explore successful web design, app development, and AI integration projects by Fusion Interactive. Real results for Toronto businesses across healthcare, e-commerce, events, and more.",
+    "url": "https://fusioninteractive.agency/case-studies",
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": [
+        {
+          "@type": "Article",
+          "position": 1,
+          "name": "Global Tech Conference - Interactive Event Platform",
+          "description": "Immersive virtual event platform for 50,000+ attendees with 300% increase in engagement"
+        },
+        {
+          "@type": "Article",
+          "position": 2,
+          "name": "E-commerce Revolution - AI-Powered Shopping Platform",
+          "description": "AI-driven personalization platform with 250% increase in conversion rates"
+        },
+        {
+          "@type": "Article",
+          "position": 3,
+          "name": "Healthcare Platform - Telemedicine Solution",
+          "description": "HIPAA-compliant telemedicine platform with 10,000+ patients onboarded"
+        }
+      ]
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fusion Interactive",
+      "url": "https://fusioninteractive.agency",
+      "telephone": "416-825-4938",
+      "email": "info@fusion-events.ca"
+    }
+  };
+
   // Simplified animation variants for better performance and readability
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -110,6 +149,13 @@ export default function CaseStudiesPage() {
 
   return (
     <div className="relative z-10 pointer-events-none">
+      <SEOHead
+        title="Case Studies | Toronto Web Design & App Development Success Stories | Fusion Interactive"
+        description="Explore successful web design, app development, and AI integration projects by Fusion Interactive. Real results for Toronto businesses including 300% engagement increases, HIPAA-compliant platforms, and award-winning solutions. $100-149/hr."
+        keywords="web design toronto case studies, app development toronto, web development portfolio, toronto web design agency, successful web projects, client success stories, toronto app developers"
+        canonicalUrl="https://fusioninteractive.agency/case-studies"
+        structuredData={caseStudiesStructuredData}
+      />
       <section className="min-h-screen px-8 pt-24">
         <motion.div 
           className="max-w-7xl mx-auto pointer-events-auto"
@@ -117,18 +163,18 @@ export default function CaseStudiesPage() {
           initial="hidden"
           animate="visible"
         >
-          <motion.h1 
+          <motion.h1
             className="text-6xl font-bold text-center mb-8 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent"
             variants={itemVariants}
           >
-            Case Studies
+            Toronto Web Design Case Studies
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-xl text-center text-gray-300 mb-16 max-w-4xl mx-auto"
             variants={itemVariants}
           >
-            Discover how we've transformed businesses across industries with innovative technology solutions 
-            that drive engagement, increase conversions, and deliver measurable results.
+            Discover how our Toronto web design and app development agency has transformed businesses across industries with <a href="/services/ai-powered-web-solutions" className="text-purple-400 hover:text-purple-300 underline">innovative technology solutions</a>
+            that drive engagement, increase conversions, and deliver measurable results. <a href="/contact" className="text-blue-400 hover:text-blue-300 underline">Start your project</a>.
           </motion.p>
 
           <div className="space-y-16">
@@ -231,9 +277,9 @@ export default function CaseStudiesPage() {
           >
             <div className="bg-gradient-to-r from-blue-900/50 to-purple-900/50 backdrop-blur-sm rounded-2xl p-8 border border-blue-500/30">
               <div className="bg-gradient-to-r from-blue-900/60 to-purple-900/60 bg-black/40 rounded-2xl p-8 border border-blue-500/30">
-                <h2 className="text-3xl font-bold mb-4 text-blue-300">Ready to Create Your Success Story?</h2>
+                <h2 className="text-3xl font-bold mb-4 text-blue-300">Ready to Create Your Toronto Web Design Success Story?</h2>
                 <p className="text-gray-300 mb-6 text-lg">
-                  Join these successful companies and transform your business with our innovative technology solutions.
+                  Join these successful companies and transform your business with our <a href="/services/app-development" className="text-blue-200 hover:text-white underline">Toronto web design and app development solutions</a>. <a href="/packages" className="text-purple-200 hover:text-white underline">View our packages</a>.
                 </p>
                 <motion.button 
                   className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full font-semibold"

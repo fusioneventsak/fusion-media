@@ -1,8 +1,79 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import StockImagePlaceholder from '../components/StockImagePlaceholder';
+import SEOHead from '../components/SEOHead';
 
 export default function Blog() {
+  const blogStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Fusion Interactive Blog - Web Design & AI Consulting Insights",
+    "description": "Expert tutorials on web design Toronto, React development, SEO optimization, AI integration, and modern web development best practices from Toronto's leading agency.",
+    "url": "https://fusioninteractive.agency/blog",
+    "inLanguage": "en-CA",
+    "author": {
+      "@type": "Organization",
+      "name": "Fusion Interactive",
+      "url": "https://fusioninteractive.agency",
+      "logo": "https://fusioninteractive.agency/logos/Fusion-Interactive-Logo.png"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Fusion Interactive",
+      "url": "https://fusioninteractive.agency",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://fusioninteractive.agency/logos/Fusion-Interactive-Logo.png"
+      }
+    },
+    "blogPost": [
+      {
+        "@type": "BlogPosting",
+        "headline": "The Vibe Coding Revolution: Build Software by Describing What You Want",
+        "url": "https://fusioninteractive.agency/blog/vibe-coding-revolution",
+        "datePublished": "2025-10-20",
+        "image": "https://fusioninteractive.agency/blog-heroes/vibe-coding/hero.jpg",
+        "author": {
+          "@type": "Organization",
+          "name": "Fusion Interactive"
+        }
+      },
+      {
+        "@type": "BlogPosting",
+        "headline": "The Complete Guide to Technical SEO in 2024",
+        "url": "https://fusioninteractive.agency/blog/technical-seo-guide-2024",
+        "datePublished": "2024-03-20",
+        "image": "https://fusioninteractive.agency/blog-heroes/technical-seo/hero.jpg",
+        "author": {
+          "@type": "Organization",
+          "name": "Fusion Interactive"
+        }
+      },
+      {
+        "@type": "BlogPosting",
+        "headline": "Building LLM-Powered Web Apps: Performance & Cost Optimization",
+        "url": "https://fusioninteractive.agency/blog/llm-web-apps-optimization",
+        "datePublished": "2024-03-20",
+        "image": "https://fusioninteractive.agency/blog-heroes/llm-optimization/hero.jpg",
+        "author": {
+          "@type": "Organization",
+          "name": "Fusion Interactive"
+        }
+      },
+      {
+        "@type": "BlogPosting",
+        "headline": "Creating Micro-Interactions That Convert",
+        "url": "https://fusioninteractive.agency/blog/interactive-web-experiences",
+        "datePublished": "2024-03-18",
+        "image": "https://fusioninteractive.agency/blog-heroes/micro-interactions/hero.jpg",
+        "author": {
+          "@type": "Organization",
+          "name": "Fusion Interactive"
+        }
+      }
+    ]
+  };
+
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set());
 
   useEffect(() => {
@@ -31,6 +102,13 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-purple-900 text-white">
+      <SEOHead
+        title="Blog | Web Design & AI Consulting Insights | Fusion Interactive"
+        description="Expert tutorials on web design Toronto, React development, SEO optimization, AI integration, and modern web development best practices. Learn from Toronto's premier agency."
+        keywords="web design toronto blog, toronto web development tutorials, React development guides, SEO optimization tips, AI integration blog, web development best practices, toronto web design agency insights"
+        canonicalUrl="https://fusioninteractive.agency/blog"
+        structuredData={blogStructuredData}
+      />
       {/* Background Animation */}
       <div className="fixed inset-0 opacity-5 z-0">
         <div 
@@ -206,17 +284,17 @@ export default function Blog() {
 
           {/* Masonry Grid */}
           <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-8 space-y-8">
-            
-            {/* Featured Article */}
+
+            {/* Featured Article - Vibe Coding Revolution */}
             <Link
-              to="/blog/technical-seo-guide-2024"
-              className={`fade-in break-inside-avoid mb-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl overflow-hidden shadow-2xl hover:scale-105 transition-all duration-500 cursor-pointer block ${visibleCards.has(1) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
+              to="/blog/vibe-coding-revolution"
+              className={`fade-in break-inside-avoid mb-8 bg-gradient-to-br from-purple-500 to-cyan-600 rounded-2xl overflow-hidden shadow-2xl hover:scale-105 transition-all duration-500 cursor-pointer block ${visibleCards.has(1) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
               data-index="1"
             >
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src="/blog-heroes/technical-seo/hero.jpg"
-                  alt="Technical SEO optimization dashboard showing Core Web Vitals metrics and performance improvements"
+                  src="/blog-heroes/vibe-coding/hero.jpg"
+                  alt="AI-powered vibe coding interface showing conversational development and natural language programming"
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
@@ -225,29 +303,74 @@ export default function Blog() {
                   }}
                 />
                 <div className="hidden">
-                  <StockImagePlaceholder 
-                    type="technical-seo"
+                  <StockImagePlaceholder
+                    type="llm-optimization"
                     className="w-full h-full"
-                    alt="Technical SEO optimization dashboard showing Core Web Vitals metrics and performance improvements"
+                    alt="AI-powered vibe coding interface showing conversational development"
                   />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-black/40" />
               </div>
               <div className="p-6">
                 <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-sm font-semibold">SEO</span>
+                  <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm font-semibold">AI/Vibe Coding</span>
                   <span className="px-3 py-1 bg-white/20 text-white rounded-full text-sm font-semibold">Featured</span>
                 </div>
-                <h3 className="text-2xl font-bold mb-4 text-white">The Complete Guide to Technical SEO in 2024</h3>
+                <h3 className="text-2xl font-bold mb-4 text-white">The Vibe Coding Revolution: Build Software by Describing What You Want</h3>
                 <p className="text-white/80 mb-6 leading-relaxed">
-                  Master Core Web Vitals, structured data, and advanced optimization techniques that actually move the needle on search rankings for Toronto businesses.
+                  Discover how AI-powered vibe coding is democratizing software development. Build custom tools and apps by simply describing your ideas—no computer science degree required.
                 </p>
                 <div className="flex justify-between items-center mb-4 text-white/70 text-sm">
-                  <span>15 min read</span>
-                  <span>2.4k views</span>
+                  <span>12 min read</span>
+                  <span>1.5k views</span>
                 </div>
                 <div className="text-white font-semibold hover:underline">
-                  Read complete technical SEO guide →
+                  Learn vibe coding strategies →
+                </div>
+              </div>
+            </Link>
+
+            {/* Technical SEO */}
+            <Link
+              to="/blog/technical-seo-guide-2024"
+              className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer block ${visibleCards.has(2) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+              data-index="2"
+            >
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src="/blog-heroes/technical-seo/hero.jpg"
+                  alt="Technical SEO audit dashboard showing site performance metrics and optimization opportunities"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    target.nextElementSibling?.classList.remove('hidden');
+                  }}
+                />
+                <div className="hidden">
+                  <StockImagePlaceholder
+                    type="technical-seo"
+                    className="w-full h-full"
+                    alt="Technical SEO audit dashboard showing site performance metrics"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/40 to-purple-500/40" />
+              </div>
+              <div className="p-6">
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm font-semibold">SEO</span>
+                  <span className="text-gray-500 text-sm">March 20, 2024</span>
+                </div>
+                <h3 className="text-xl font-bold mb-3 text-white">The Complete Guide to Technical SEO in 2024</h3>
+                <p className="text-gray-300 mb-4">
+                  Master technical SEO Toronto strategies. From Core Web Vitals to schema markup—boost your search rankings with our comprehensive guide.
+                </p>
+                <div className="flex justify-between items-center mb-4 text-gray-500 text-sm">
+                  <span>15 min read</span>
+                  <span>3.2k views</span>
+                </div>
+                <div className="text-blue-400 font-semibold hover:underline">
+                  Master technical SEO →
                 </div>
               </div>
             </Link>
@@ -255,8 +378,8 @@ export default function Blog() {
             {/* LLM Article */}
             <Link
               to="/blog/llm-web-apps-optimization"
-              className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer block ${visibleCards.has(2) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
-              data-index="2"
+              className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer block ${visibleCards.has(3) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+              data-index="3"
             >
               <div className="relative h-48 overflow-hidden">
                 <img
@@ -270,7 +393,7 @@ export default function Blog() {
                   }}
                 />
                 <div className="hidden">
-                  <StockImagePlaceholder 
+                  <StockImagePlaceholder
                     type="llm-optimization"
                     className="w-full h-full"
                     alt="AI-powered web application architecture diagram showing LLM integration and cost optimization"
@@ -300,8 +423,8 @@ export default function Blog() {
             {/* Interactive Components */}
             <Link
               to="/blog/interactive-web-experiences"
-              className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer block ${visibleCards.has(3) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} 
-              data-index="3"
+              className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer block ${visibleCards.has(4) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
+              data-index="4"
             >
               <div className="relative h-44 overflow-hidden">
                 <img
@@ -315,7 +438,7 @@ export default function Blog() {
                   }}
                 />
                 <div className="hidden">
-                  <StockImagePlaceholder 
+                  <StockImagePlaceholder
                     type="micro-interactions"
                     className="w-full h-full"
                     alt="Interactive web interface showcasing micro-interactions and user engagement elements"
@@ -341,114 +464,6 @@ export default function Blog() {
                 </div>
               </div>
             </Link>
-
-            {/* Event Technology */}
-            <article className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer ${visibleCards.has(4) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} data-index="4">
-              <div className="h-56 bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-5xl">
-                🎪
-              </div>
-              <div className="p-6">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="px-3 py-1 bg-yellow-500/20 text-yellow-300 rounded-full text-sm font-semibold">Event Tech</span>
-                  <span className="text-gray-500 text-sm">March 15, 2024</span>
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-white">Custom Event Platforms: Engaging Attendees with Interactive Technology</h3>
-                <p className="text-gray-300 mb-4">
-                  Build immersive event experiences with real-time polling, networking features, and gamification.
-                </p>
-                <div className="flex justify-between items-center mb-4 text-gray-500 text-sm">
-                  <span>18 min read</span>
-                  <span>2.1k views</span>
-                </div>
-                <a href="#" className="text-blue-400 font-semibold hover:underline">Explore Ideas →</a>
-              </div>
-            </article>
-
-            {/* Performance Article */}
-            <article className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer ${visibleCards.has(5) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} data-index="5">
-              <div className="h-48 bg-gradient-to-br from-pink-500 to-orange-500 flex items-center justify-center text-4xl">
-                ⚡
-              </div>
-              <div className="p-6">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="px-3 py-1 bg-green-500/20 text-green-300 rounded-full text-sm font-semibold">Performance</span>
-                  <span className="text-gray-500 text-sm">March 12, 2024</span>
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-white">Lighthouse Score 100: A Step-by-Step Optimization Journey</h3>
-                <p className="text-gray-300 mb-4">
-                  Achieve perfect Lighthouse scores with proven optimization techniques and performance monitoring strategies.
-                </p>
-                <div className="flex justify-between items-center mb-4 text-gray-500 text-sm">
-                  <span>10 min read</span>
-                  <span>3.2k views</span>
-                </div>
-                <a href="#" className="text-blue-400 font-semibold hover:underline">Optimize Now →</a>
-              </div>
-            </article>
-
-            {/* CSS Article */}
-            <article className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer ${visibleCards.has(6) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} data-index="6">
-              <div className="h-40 bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-4xl">
-                🎨
-              </div>
-              <div className="p-6">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm font-semibold">CSS</span>
-                  <span className="text-gray-500 text-sm">March 10, 2024</span>
-                </div>
-                <h3 className="text-lg font-bold mb-3 text-white">CSS Container Queries: The Future is Here</h3>
-                <p className="text-gray-300 mb-4">Revolutionary responsive design patterns with container queries.</p>
-                <div className="flex justify-between items-center mb-4 text-gray-500 text-sm">
-                  <span>6 min read</span>
-                  <span>980 views</span>
-                </div>
-                <a href="#" className="text-blue-400 font-semibold hover:underline">Learn →</a>
-              </div>
-            </article>
-
-            {/* WebGL Article */}
-            <article className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer ${visibleCards.has(7) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} data-index="7">
-              <div className="h-52 bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-5xl">
-                🌐
-              </div>
-              <div className="p-6">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm font-semibold">WebGL</span>
-                  <span className="text-gray-500 text-sm">March 8, 2024</span>
-                </div>
-                <h3 className="text-xl font-bold mb-3 text-white">3D Product Showcases: WebGL for E-commerce</h3>
-                <p className="text-gray-300 mb-4">
-                  Create immersive 3D product experiences that boost conversion rates and reduce return rates.
-                </p>
-                <div className="flex justify-between items-center mb-4 text-gray-500 text-sm">
-                  <span>14 min read</span>
-                  <span>1.8k views</span>
-                </div>
-                <a href="#" className="text-blue-400 font-semibold hover:underline">Build 3D →</a>
-              </div>
-            </article>
-
-            {/* Mobile SEO Article */}
-            <article className={`fade-in break-inside-avoid mb-8 bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-700/50 overflow-hidden hover:scale-105 transition-all duration-500 cursor-pointer ${visibleCards.has(8) ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} data-index="8">
-              <div className="h-40 bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-4xl">
-                📱
-              </div>
-              <div className="p-6">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  <span className="px-3 py-1 bg-red-500/20 text-red-300 rounded-full text-sm font-semibold">Mobile SEO</span>
-                  <span className="text-gray-500 text-sm">March 5, 2024</span>
-                </div>
-                <h3 className="text-lg font-bold mb-3 text-white">Mobile-First Indexing: What Developers Need to Know</h3>
-                <p className="text-gray-300 mb-4">
-                  Essential mobile optimization strategies for better search visibility.
-                </p>
-                <div className="flex justify-between items-center mb-4 text-gray-500 text-sm">
-                  <span>7 min read</span>
-                  <span>1.1k views</span>
-                </div>
-                <a href="#" className="text-blue-400 font-semibold hover:underline">Optimize →</a>
-              </div>
-            </article>
 
           </div>
         </div>

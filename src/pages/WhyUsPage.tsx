@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
+import SEOHead from '../components/SEOHead';
 
 interface WhyUsPageProps {
   onNavigate?: (page: string) => void;
@@ -7,6 +8,34 @@ interface WhyUsPageProps {
 }
 
 export default function WhyUsPage({ onNavigate, onOpenContactModal }: WhyUsPageProps = {}) {
+  const whyUsStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "Why Choose Fusion Interactive - Toronto Web Design & Development Agency",
+    "description": "Discover why Toronto businesses choose Fusion Interactive for web design, app development, and AI integration. Premium quality, fast delivery, and affordable pricing.",
+    "url": "https://fusioninteractive.agency/why-us",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Fusion Interactive",
+      "url": "https://fusioninteractive.agency",
+      "telephone": "416-825-4938",
+      "email": "info@fusion-events.ca",
+      "priceRange": "$100-149 per hour",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Toronto",
+        "addressRegion": "ON",
+        "addressCountry": "CA"
+      },
+      "description": "Toronto's premier web design and AI consulting agency specializing in custom React applications, mobile-first design, and AI integration.",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "ratingCount": "150"
+      }
+    }
+  };
+
   const heroRef = useRef(null);
   const reasonsRef = useRef(null);
   const processRef = useRef(null);
@@ -55,6 +84,13 @@ export default function WhyUsPage({ onNavigate, onOpenContactModal }: WhyUsPageP
 
   return (
     <div className="relative z-10 pointer-events-none">
+      <SEOHead
+        title="Why Choose Us | Toronto Web Design & App Development | Fusion Interactive"
+        description="Discover why Toronto businesses choose Fusion Interactive for web design, app development, and AI integration. Premium quality, fast delivery, affordable pricing. $100-149/hr. Free consultation."
+        keywords="web design toronto, app development toronto, toronto web development, why choose fusion interactive, web design agency toronto, mobile app development, AI consulting toronto, custom web design"
+        canonicalUrl="https://fusioninteractive.agency/why-us"
+        structuredData={whyUsStructuredData}
+      />
       {/* Hero Section */}
       <section ref={heroRef} className="min-h-screen flex items-center justify-center px-8 pt-24 relative pointer-events-auto">
         {/* Animated Background */}
@@ -84,11 +120,11 @@ export default function WhyUsPage({ onNavigate, onOpenContactModal }: WhyUsPageP
             </span>
           </motion.div>
           
-          <motion.h1 
+          <motion.h1
             className="text-5xl md:text-7xl font-bold mb-8 leading-tight text-white"
             variants={itemVariants}
           >
-            Beautiful Solutions.
+            Toronto Web Design & App Development.
             <br />
             <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
               Lightning Fast.
@@ -97,12 +133,12 @@ export default function WhyUsPage({ onNavigate, onOpenContactModal }: WhyUsPageP
             Surprisingly Affordable.
           </motion.h1>
           
-          <motion.p 
+          <motion.p
             className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-12 leading-relaxed"
             variants={itemVariants}
           >
-            We don't just build websites and apps — we craft digital experiences that captivate your audience, 
-            drive real business results, and get delivered faster than you thought possible.
+            Toronto's premier web design and app development agency. We don't just build websites and apps — we craft <a href="/services/mobile-first-web-design" className="text-blue-400 hover:text-blue-300 underline">custom digital experiences</a> that captivate your audience,
+            drive real business results, and get delivered faster than you thought possible. <a href="/packages" className="text-purple-400 hover:text-purple-300 underline">View our packages</a>.
           </motion.p>
 
           <motion.div
@@ -131,17 +167,17 @@ export default function WhyUsPage({ onNavigate, onOpenContactModal }: WhyUsPageP
             initial="hidden"
             animate={reasonsInView ? "visible" : "hidden"}
           >
-            <motion.h2 
+            <motion.h2
               className="text-4xl md:text-5xl font-bold mb-6 text-white"
               variants={itemVariants}
             >
-              Four Pillars of Excellence
+              Why Toronto Businesses Choose Fusion Interactive
             </motion.h2>
-            <motion.p 
+            <motion.p
               className="text-xl text-gray-300 max-w-3xl mx-auto"
               variants={itemVariants}
             >
-              What sets us apart from every other development agency
+              What sets our Toronto web design and app development agency apart
             </motion.p>
           </motion.div>
 
@@ -162,11 +198,11 @@ export default function WhyUsPage({ onNavigate, onOpenContactModal }: WhyUsPageP
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-white">Creative Development</h3>
+              <h3 className="text-2xl font-bold mb-4 text-white">Creative Toronto Web Development</h3>
               <p className="text-gray-300 mb-6 leading-relaxed">
-                We don't build cookie-cutter websites. Every project gets custom design thinking, 
-                innovative interactions, and creative solutions that make your brand unforgettable. 
-                From 3D animations to AI-powered features — we push boundaries.
+                We don't build cookie-cutter websites. Every Toronto web design project gets custom design thinking,
+                innovative interactions, and creative solutions that make your brand unforgettable.
+                From 3D animations to <a href="/services/ai-powered-web-solutions" className="text-blue-400 hover:text-blue-300 underline">AI-powered features</a> — we push boundaries.
               </p>
               <ul className="space-y-3">
                 {[
@@ -194,10 +230,10 @@ export default function WhyUsPage({ onNavigate, onOpenContactModal }: WhyUsPageP
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-white">Bespoke Business Solutions</h3>
+              <h3 className="text-2xl font-bold mb-4 text-white">Custom App Development for Toronto Businesses</h3>
               <p className="text-gray-300 mb-6 leading-relaxed">
-                Your business is unique, so your technology should be too. We analyze your workflow, 
-                understand your challenges, and build custom solutions that fit like a glove. 
+                Your business is unique, so your technology should be too. Our <a href="/services/app-development" className="text-purple-400 hover:text-purple-300 underline">Toronto app development team</a> analyzes your workflow,
+                understands your challenges, and builds custom web and mobile solutions that fit like a glove.
                 No forcing square pegs into round holes.
               </p>
               <ul className="space-y-3">
@@ -291,17 +327,17 @@ export default function WhyUsPage({ onNavigate, onOpenContactModal }: WhyUsPageP
             initial="hidden"
             animate={processInView ? "visible" : "hidden"}
           >
-            <motion.h2 
+            <motion.h2
               className="text-4xl md:text-5xl font-bold mb-6 text-white"
               variants={itemVariants}
             >
-              Our Process
+              Our Toronto Web Design Process
             </motion.h2>
-            <motion.p 
+            <motion.p
               className="text-xl text-gray-300"
               variants={itemVariants}
             >
-              From concept to launch in record time
+              From concept to launch — Toronto's fastest web development process
             </motion.p>
           </motion.div>
 
@@ -403,10 +439,10 @@ export default function WhyUsPage({ onNavigate, onOpenContactModal }: WhyUsPageP
       <section className="py-32 px-8 bg-gradient-to-r from-blue-600 to-purple-700 pointer-events-auto">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-6xl font-bold mb-8 text-white">
-            Ready to Build Something Amazing?
+            Ready to Start Your Toronto Web Design Project?
           </h2>
           <p className="text-xl md:text-2xl mb-12 text-blue-100">
-            Let's turn your vision into a digital reality that drives real results
+            Let's turn your vision into a digital reality that drives real results. <a href="/case-studies" className="text-blue-200 hover:text-white underline">View our case studies</a> or <a href="/contact" className="text-blue-200 hover:text-white underline">contact our Toronto team</a>.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <motion.button 

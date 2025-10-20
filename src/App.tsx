@@ -17,6 +17,7 @@ import ContactModal from './components/ContactModal';
 import TechnicalSEOGuide2024 from './blog-posts/technical-seo-guide-2024';
 import LLMWebAppsOptimization from './blog-posts/llm-web-apps-optimization';
 import InteractiveWebExperiences from './blog-posts/interactive-web-experiences';
+import VibeCodingRevolution from './blog-posts/vibe-coding-revolution';
 import MobileFirstWebDesignPage from './pages/services/MobileFirstWebDesignPage';
 import AppDevelopmentPage from './pages/services/AppDevelopmentPage';
 import PackagesPage from './pages/PackagesPage';
@@ -179,6 +180,7 @@ export default function App() {
             <Route path="/blog/technical-seo-guide-2024" element={<TechnicalSEOGuide2024 />} />
             <Route path="/blog/llm-web-apps-optimization" element={<LLMWebAppsOptimization />} />
             <Route path="/blog/interactive-web-experiences" element={<InteractiveWebExperiences />} />
+            <Route path="/blog/vibe-coding-revolution" element={<VibeCodingRevolution />} />
             <Route path="/services/mobile-first-web-design" element={<MobileFirstWebDesignPage onOpenContactModal={handleGetStartedClick} />} />
             <Route path="/services/app-development" element={<AppDevelopmentPage onOpenContactModal={handleGetStartedClick} />} />
             <Route path="/packages" element={<PackagesPage />} />
